@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/electronicPayment")
-public class ElectronicPaymentController {
+@RequestMapping("/electronicSignature")
+public class ElectronicSignatureController {
 	// 전자결재 컨트롤러
 }
