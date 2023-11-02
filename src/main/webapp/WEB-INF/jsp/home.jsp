@@ -16,45 +16,45 @@
 	
 		<!-- MainNavi -->
 		<div class="mainNavi">
-            <div class="mainNavi__items">
-                <c:forEach var="i" items="${menu}">
-                    <div class="items__item"}>
-                        <div class="item__curcle">
-                            <FontAwesomeIcon icon={menuIcon[i]} class="curcle__icon" />
+            <div class="mainNavi__naviItems">
+                <c:forEach var="test" begin="1" end="7" step="1">
+                    <div class="naviItems__naviItem">
+                        <div class="naviItem__itemCurcle">
+                            <!-- <FontAwesomeIcon icon={menuIcon[i]} class="itemCurcle__Icon" /> -->
                         </div>
-                        <div class="item__title">
-                            i
+                        <div class="naviItem__title">
+                            ${test }
                         </div>
                     </div>
                 </c:forEach>
             </div>
         </div>
         
-        <!-- MainContents -->
+        <!-- MainContents  -->
         <div class="mainContents">
-        	<div class="mainContents__left">
-        		
-        		<!-- WorkCheck -->
-        		<div class="workCheck">
-		            <div class="contents__title">근무체크</div>
-		            <div class="contents__box">
-		                <div class="box__date">10월 26일 (목)</div>
-		                <div class="box__timeline">
+            <div class="mainContents__left">
+            
+            	<!-- WorkCheck -->
+                <div class="workCheck">
+		            <div class="mainContents__title">근무체크</div>
+		            <div class="mainContents__contentBox">
+		                <div class="contentBox__date">10월 26일 (목)</div>
+		                <div class="contentBox__timeline">
 		                    <div class="timeline__time">15:03:48</div>
 		                    <div class="timeline__status">출근전</div>
 		                </div>
-		                <div class="box__commute">
+		                <div class="contentBox__commute">
 		                    <div class="commute__work">
 		                        <div class="work__text">출근하기</div>
 		                        <div class="work__time">00:00:00</div>
 		                    </div>
-		                    <div class="contents__line"></div>
+		                    <div class="mainContents__line"></div>
 		                    <div class="commute__work">
 		                        <div class="work__text">퇴근하기</div>
 		                        <div class="work__time">00:00:00</div>
 		                    </div>
 		                </div>
-		                <div class="box__btns">
+		                <div class="contentBox__btns">
 		                    <div class="btns__line">
 		                        <button>업무</button>
 		                        <button>외출</button>
@@ -66,12 +66,12 @@
 		                </div>
 		            </div>
 		        </div>
-		        
-		        <!-- Approval -->
-                <div class="approval">
-		            <div class="contents__title">전자결재</div>
-		            <div class="contents__box">
-		                <div class="box__btns">
+
+				<!-- Approval -->
+                <div class="approval"> 
+		            <div class="mainContents__title">전자결재</div>
+		            <div class="mainContents__contentBox">
+		                <div class="contentBox__btns">
 		                    <div class="btns__line">
 		                        <button>대기</button>
 		                        <button>확인</button>
@@ -83,47 +83,47 @@
 		                </div>
 		            </div>
 		        </div>
-		        
-		        <!-- Mail -->
-		        <div class="mail">
-		            <div class="contents__title">메일함 바로가기</div>
-		            <div class="contents__box">
-		                <div class="box__mailTitle">받은 메일함</div>
-		                <div class="box__mailTitle">예약 메일함</div>
+
+				<!-- Mail -->
+				<div class="mail">
+		            <div class="mainContents__title">메일함 바로가기</div>
+		            <div class="mainContents__contentBox">
+		                <div class="contentBox__mailTitle">받은 메일함</div>
+		                <div class="contentBox__mailTitle">예약 메일함</div>
 		                <hr></hr>
-		                <div class="box__mailTitle">오늘 온 메일함</div>
-		                <div class="box__mailTitle">중요 메일함</div>
+		                <div class="contentBox__mailTitle">오늘 온 메일함</div>
+		                <div class="contentBox__mailTitle">중요 메일함</div>
 		            </div>
 		        </div>
 		        
-        	</div>
-        	<div class="mainContents__right">
-        	
-        		<!-- Schedule -->
-        		<div class="schedule">
-		            <div class="contents__title">일정</div>
-		            <div class="contents__box">
-		                <div class="box__calendar"></div>
+            </div>
+            <div class="mainContents__right">
+            
+            	<!-- Schedule -->
+                <div class="schedule">
+		            <div class="mainContents__title">일정</div>
+		            <div class="mainContents__contentBox">
+		                <div class="contentBox__calendar"></div>
 		                <hr></hr>
-		                <div class="box__scheduleList">
-		                    {planDateNum.map((e, i) => (
-		                        <div key={i} class="scheduleList__item">
-		                            <div class="item__date">
-		                                <div class="date__dayNum">{e}</div>
-		                                <div class="date__dayText">{planDateText[i]}</div>
+		                <div class="contentBox__scheduleList">
+		                    <c:forEach var="test" begin="1" end="3" step="1">
+		                        <div class="scheduleList__scheduleItem">
+		                            <div class="scheduleItem__date">
+		                                <div class="date__dayNum">${test }</div>
+		                                <div class="date__dayText">${test }</div>
 		                            </div>
-		                            <div class="contents__line"></div>
-		                            <div class="item__plan">
-		                                <div class="plan__title">{planTitle[i]}</div>
-		                                <div class="plan__time">{planTime[i]}</div>
+		                            <div class="mainContents__line"></div>
+		                            <div class="scheduleItem__plan">
+		                                <div class="plan__title">${test }</div>
+		                                <div class="plan__time">${test }</div>
 		                            </div>
 		                        </div>
-		                    ))}
+		                    </c:forEach>
 		                </div>
 		            </div>
 		        </div>
 		        
-        	</div>
+            </div>
         </div>
 	</div>
 </body>
