@@ -48,6 +48,10 @@ input[type=checkbox] {
 	font-size: 16px;
 }
 
+.inBox__mailList:hover {
+	background-color: #DCEDD4;
+}
+
 .mailList__name {
 	margin-left: 15px;
 }
