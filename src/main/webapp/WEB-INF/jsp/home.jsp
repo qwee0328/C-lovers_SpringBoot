@@ -14,6 +14,17 @@
 <body>
 	<div class="container">
 	
+	<!-- 채팅 테스트용 conflict 날 시 지워도 상관없음. -->
+	<button id="goChat">채팅 열기</button>
+	<script>
+		$("#goChat").on("click",function(){
+			let option ="height=700, width=400";
+	        let openUrl = "/chat/goMain";
+	        window.open(openUrl,"chatMain",option);
+		})
+	</script>
+	<!-- 채팅 테스트용 여기까지임.-->
+	
 		<!-- MainNavi -->
 		<div class="mainNavi">
             <div class="mainNavi__naviItems">
