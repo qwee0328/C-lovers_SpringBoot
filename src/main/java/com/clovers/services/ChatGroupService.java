@@ -29,12 +29,13 @@ public class ChatGroupService {
 	}
 	
 	public Map<String,Object> selectByChatId(){
-		ChatGroupDTO dto = new ChatGroupDTO();
-		dto.setChat_id(1);
-		dto.setName("채팅방1");
-		dto.setEmp_cnt(3);
+		Map<String,Object> group = new HashMap<>();
+		group.put("chat_id", 1);
+		group.put("name", "채팅방1");
+		group.put("emp_cnt", 3);
+		
 		Map<String,Object> list = new HashMap<>();
-		list.put("group", dto);
+		list.put("group", group);
 		
 		List<ChatMessageDTO> msg = new ArrayList<>();
 		for(int i=1; i<5; i++) {
