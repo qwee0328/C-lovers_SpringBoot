@@ -1,0 +1,30 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.naviBar {
+  background-color: #f3f7f1;
+  width: 250px;
+  height: calc(100vh - 60px);
+  padding-top: 20px;
+}
+
+.test {
+  background-color: pink;
+}
+
+.naviConp {
+  display: flex;
+  padding: 10px 15px;
+  font-size: 18px;
+  margin: 0px 20px 5px 20px;
+}
+
+.naviConp__icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
