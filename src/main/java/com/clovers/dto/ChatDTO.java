@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ChatDTO {
-	private int id;
-	private int state;
+	private int id;		// 채팅 아이디
+	private int state;	// 채팅 상태
 
 }
