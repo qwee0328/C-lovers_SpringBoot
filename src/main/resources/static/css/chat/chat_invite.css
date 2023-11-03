@@ -1,0 +1,172 @@
+@charset "UTF-8";
+
+.invite__modal {
+    padding: 0;
+    height:465px;
+    width:350px;
+    display: none;
+}
+
+.invite__header {
+    border-bottom: 1px solid #7d7d7d20;
+    padding: 10px 15px;
+}
+
+.invite__name {
+    width: 95%;
+}
+
+.invite__cancel {
+    width: 5%;
+}
+
+.invite__input {
+    margin: 10px 15px;
+    font-size: 12px;
+    padding: 8px;
+    height: 50px;
+    border: 1px solid #7d7d7d20;
+    outline: none;
+    overflow-y: auto;
+}
+
+.invite__input::-webkit-scrollbar {
+    display: none;
+}
+
+.invite_margin {
+    width: 10px;
+}
+
+.invite__footer>button {
+    width: 80px;
+    height: 30px;
+    border: 0px;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.invite__submitBtn {
+    background-color: #75B47D;
+    color: #FFFFFF;
+}
+
+.invite-search{
+    height: 30px;
+    border: 1px solid #7d7d7d20;
+}
+
+.invite-search__icon{
+    height: 100%;
+    width:35px;
+
+}
+.invite-search__icon>i{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color:#B5B5BB;
+}
+.invite-search__txt{
+    height: 100%;
+    border: 0;
+    width:285px;
+   
+}
+
+.invite-search__txt:focus{outline: none;}
+
+.invite__selectList{
+    background-color: #F3F7F1;
+    height: 60px;
+    padding:5px;
+    overflow-y: auto;
+}
+
+.invite__selectList::-webkit-scrollbar {
+    width: 20px;
+    
+}
+.invite__selectList::-webkit-scrollbar-thumb{
+    background-color: #7d7d7d20;
+    border-radius: 10px; 
+
+    border: 7px solid #F3F7F1 /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.invite__selectList::-webkit-scrollbar-track{
+    background-color: #F3F7F1/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+
+.invite__allList{
+    padding: 5px 10px;
+}
+.allList__companyName{
+    height: 20px;
+    color: #095544;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.allList__list{
+    height: 230px;
+    overflow-y: auto;
+}
+
+.allList__list::-webkit-scrollbar {
+    width: 20px;
+    
+}
+.allList__list::-webkit-scrollbar-thumb{
+    background-color: #7d7d7d20;
+    border-radius: 10px; 
+
+    border: 7px solid #FFFFFF /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.allList__list::-webkit-scrollbar-track{
+    background-color: #FFFFFF/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.allList__employee{
+    padding: 5px 0;
+    border-bottom: 2px solid #7d7d7d20;
+    align-items: center;
+}
+
+.allList__empProfileImgCover{
+    width: 35px;
+    margin-right: 10px;
+}
+.allList__empProfileImg{
+    background-color: #095544;
+    width:35px;
+    height:35px;
+    border-radius: 50px;
+}
+.allList__empName{
+    font-size: 12px;
+    width: 235px;
+}
+
+.allList__empcheckBox{
+    margin-left: 10px;
+    width: 15px;
+}
+
+.allList__empcheckBox>input{
+    zoom:1.3;
+    accent-color:#095544;
+}
+
+.invite__selectEmp{
+    font-size: 12px;
+    background-color: #DCEDD4;
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 3px;
+}
+
+.invite__selectEmp>i{
+    color:#FFFFFF;
+    margin-left: 5px;
+}

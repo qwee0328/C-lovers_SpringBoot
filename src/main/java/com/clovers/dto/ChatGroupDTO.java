@@ -1,5 +1,9 @@
 package com.clovers.dto;
 
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +23,9 @@ public class ChatGroupDTO {
 	private int msg_end_id;		// 이 필드는 사용자가 그룹에서 받은 마지막 메시지의 식별자
 	private String name;		// 채팅방 이름(각자 바꿀 수 있음)
 
+	// chat_list_info 라는 view용으로, 위 속성과 함께 채팅 목록 출력 시 사용됨.
+	@JsonFormat(pattern="MM월 dd일 HH:mm", timezone="Asia/Seoul")
+	private Timestamp write_date; // (그룹별) 가장 최신 채팅 전송 일자 
+	private String content; // (그룹별) 가장 최신 채팅 내용 
+	private int emp_cnt; // (그룹별) 채팅방 인원 수
 }
