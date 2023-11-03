@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.clovers.dao.ChatGroupDAO;
 import com.clovers.dto.ChatGroupDTO;
 import com.clovers.dto.ChatMessageDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -24,7 +25,8 @@ public class ChatGroupService {
 	@Autowired
 	private HttpSession session;
 	
-	public List<ChatGroupDTO> selectByEmpId() {
+	
+	public List<Map<String, Object>> selectByEmpId() {
 		return dao.selectByEmpId((String)session.getAttribute("loginID"));
 	}
 	

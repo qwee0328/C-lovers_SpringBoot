@@ -63,7 +63,7 @@ public class ChatController {
 	
 	@ResponseBody
 	@RequestMapping("/chat/chatListLoad")
-	public List<ChatGroupDTO> selectByEmpId() {
+	public List<Map<String, Object>> selectByEmpId() {
 		return cgService.selectByEmpId();
 	}
 	
