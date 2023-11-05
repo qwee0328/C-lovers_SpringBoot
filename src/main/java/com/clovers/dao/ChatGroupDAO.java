@@ -1,5 +1,7 @@
 package com.clovers.dao;
 
+
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -41,5 +43,10 @@ public class ChatGroupDAO {
 	public int closeChatGroup(int chat_id) {
 		return db.delete("ChatGroup.closeChatGroup", chat_id);
 	}
+	
+	public List<Map<String, Object>> selectByEmpId(String emp_id) {
+		return db.selectList("Chat.selectByEmpId",emp_id);
+	}
+
 
 }

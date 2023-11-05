@@ -18,5 +18,4 @@ public class ChatGroupDTO {
 	private int msg_start_id;	// 이 필드는 사용자가 그룹에 참여한 후 받은 첫 번째 메시지의 식별자
 	private int msg_end_id;		// 이 필드는 사용자가 그룹에서 받은 마지막 메시지의 식별자
 	private String name;		// 채팅방 이름(각자 바꿀 수 있음)
-
 }
