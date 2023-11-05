@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+.reName__modal{
+    width: 300px;
+    display: none;
+    padding: 0;  
+}
+
+.reName__header{
+    border-bottom:1px solid #7d7d7d20;
+    padding:10px 15px;
+}
+
+.reName__name{
+    width: 95%;
+}
+.reName__cancel{
+    width: 5%;
+}
+.reName__input{
+    margin: 10px 15px;
+    font-size: 12px;
+    padding: 8px;
+    height: 50px;
+    border:1px solid #7d7d7d20;
+    outline: none;
+    overflow-y: auto;
+}
+
+.reName__input::-webkit-scrollbar {
+    display: none;
+}
+
+.reName_margin{
+    width: 10px;
+}
+.reName__footer>button{
+    width:80px;
+    height: 30px;
+    border:0px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.reName__submitBtn{
+    background-color: #75B47D;
+    color:#FFFFFF;
+}
