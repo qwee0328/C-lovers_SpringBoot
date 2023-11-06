@@ -24,13 +24,17 @@ body {
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 13px;
-	font-size: 18px;
 }
 
 .send__btns button {
 	border: none;
-	background-color: none;
+	background-color: #FFFFFF;
 	color: #095544;
+	font-size: 18px;
+}
+
+.send__btns button:hover {
+	cursor: pointer;
 }
 
 .sendReserve__icon {

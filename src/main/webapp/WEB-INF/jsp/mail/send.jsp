@@ -9,6 +9,11 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
+<!-- summernote -->
+<script src="/js/summernote/summernote-lite.js"></script>
+<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+
 <link rel="stylesheet" href="/css/mail/send.css">
 </head>
 <body>
@@ -33,7 +38,7 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
-					<input type="text" name="temporary" class="inputLine__input"/>
+					<input type="text" class="inputLine__input"/>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">제목</div>
@@ -45,9 +50,23 @@
 					<div class="inputLine__fileList"></div>
 				</div>
 				<div class="send__contentBox">
-					<textarea name="content" class="contentBox__content"></textarea>
+					<textarea id="summernote" name="content" class="contentBox__content"></textarea>
 				</div>
 			</form>
+			
+			<script>
+				$(document).ready(function() {
+					$('#summernote').summernote({
+						  height: 500px,                 // 에디터 높이
+						  minHeight: null,             // 최소 높이
+						  maxHeight: null,             // 최대 높이
+						  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+						  lang: "ko-KR",					// 한글 설정
+						  placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+				          
+					});
+				});
+			</script>
 		</div>
 	</div>
 </body>

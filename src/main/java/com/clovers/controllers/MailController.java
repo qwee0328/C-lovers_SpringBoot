@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.clovers.dto.EmailDTO;
+import com.clovers.services.MailService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -13,6 +16,9 @@ public class MailController {
 	
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	MailService mservice;
 	
 	// 메인 화면 (받은 메일함)
 	@RequestMapping(value = {"", "/inBox"})
@@ -44,9 +50,9 @@ public class MailController {
 	
 	// 보내기 (메일 발송)
 	@RequestMapping(value="submitSend")
-	public String submitSend() {
+	public String submitSend(EmailDTO dto) {
+		mservice.submitSend(dto);
 		
-		
-		return "/mail";
+		return "redirect:/mail";
 	}
 }
