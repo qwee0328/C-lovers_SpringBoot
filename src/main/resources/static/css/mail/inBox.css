@@ -1,0 +1,106 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+body {
+	margin: 0px !important;
+}
+
+.container {
+	display: flex;
+}
+
+.container__inBox {
+	width: 1190px;
+}
+
+.container__inBox div {
+  	font-weight: 400;
+}
+
+.inBox__allCheck {
+	display: flex;
+	margin: 38px 30px 15px;
+}
+
+input[type=checkbox] {
+	accent-color:#095544;
+}
+
+.allCheck__checkNum {
+	margin-left: 10px;
+	font-size: 15px;
+	color: #095544;
+}
+
+.allCheck__delete {
+	margin-left: 15px;
+	font-size: 16px;
+}
+
+.inBox__mailList {
+	display: flex;
+	padding: 0px 30px;
+	height: 34px;
+	align-items: center;
+}
+
+.inBox__mailList div {
+	font-size: 16px;
+}
+
+.inBox__mailList:hover {
+	background-color: #DCEDD4;
+}
+
+.mailList__name {
+	margin-left: 15px;
+}
+
+.mailList__title {
+	margin-left: 150px;
+}
+
+.mailList__right {
+	display: flex;
+	margin-left: auto;
+}
+
+.right__file {
+	color: #B5B5BB;
+}
+
+.right__time {
+	margin-left: 20px;
+}
+
+hr {
+	margin: 7px 0px 18px;
+}
+
+.inBox__bottom {
+	display: flex;
+}
+
+.bottom__mailNum {
+	margin-left: 30px;
+	font-size: 14px;
+}
+
+.bottom__pageNavi {
+	display: flex;
+	margin: auto;
+	align-items: center;
+}
+
+.pageNavi__circle {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	color: #ffffff;
+	background-color: #75B47D;
+	text-align: center;
+}

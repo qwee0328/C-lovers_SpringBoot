@@ -1,0 +1,63 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.header {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 24px;
+  background-color: #f3f7f1;
+}
+
+.headerLeft,
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.headerLeft__logo {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #095544;
+}
+
+.headerLeft__dropNav {
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+.headerLeft__dropNav:hover {
+  background-color: #dcedd4;
+}
+
+.dropNav__icon {
+  margin-left: 5px;
+}
+
+.dropNav__icon:hover {
+	cursor: pointer;
+}
+
+.headerRight * {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+
+  font-size: 25px;
+  color: #b5b5bb;
+}
+.headerRight div:not(:first-child) {
+  margin-left: 18px;
+}
+.profileImg {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
