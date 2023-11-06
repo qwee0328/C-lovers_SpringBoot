@@ -21,15 +21,17 @@
                         <input class="saveBox" type="checkbox"><p>사번 저장</p>
                     </div>
                 </div>
-                <div class="loginBox__idBox">
-                    <input class="idBox" type="text" placeholder="  사번">
-                </div>
-                <div class="loginBox__pwBox">
-                    <input class="pwBox" type="password" placeholder="  비밀번호">
-                </div>
-                <div class="loginBox__loginBtn">
-                    <button class="loginBtn">로그인</button>
-                </div>
+                <form action="/members/login" method="post">
+	                <div class="loginBox__idBox">
+	                    <input class="idBox" name="id" type="text" placeholder="  사번">
+	                </div>
+	                <div class="loginBox__pwBox">
+	                    <input class="pwBox" name="pw" type="password" placeholder="  비밀번호">
+	                </div>
+	                <div class="loginBox__loginBtn">
+	                    <button class="loginBtn">로그인</button>
+	                </div>
+                </form>
                 <div class="loginBox__findPw">
                     <button class="findPwBtn">비밀번호 찾기</button>
                 </div>
