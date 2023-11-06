@@ -1,0 +1,235 @@
+@charset "UTF-8";
+
+body {
+	width: 100%;
+	height: 100%;
+}
+
+.header {
+	height: 60px;
+	background-color: #F3F7F1;
+}
+
+.header__text {
+	height: 100%;
+	margin-left: 25px;
+	display: flex;
+	align-items: center;
+	font-size: 20px;
+	font-weight: 900;
+}
+
+
+.myInfo {
+	height: 55px;
+	align-items: center;
+	margin: 10px 0 10px 10px;
+}
+
+.profileImg__cover {
+	position: relative;
+	width: 55px;
+	height: 55px;
+}
+
+/* .profileModalImg__cover {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            margin-right: 27px;
+            margin-left: 5px;
+        } */
+
+.profileImg__img {
+	width: 100%;
+	height: 100%;
+}
+
+.profileImg__state {
+	width: 15px;
+	height: 15px;
+	border-radius: 50px;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+
+.profileImgSmall__state {
+	width: 12px;
+	height: 12px;
+	border-radius: 50px;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+
+.myInfo__infoTxt {
+	margin-left: 17px;
+	font-size: 12px;
+	height: 100%;
+	font-weight: 500;
+	align-items: end;
+}
+
+.chat-nav {
+	height: 65px;
+}
+
+.chat-nav>a {
+	width: 100%;
+	height: 100%;
+}
+
+.chat-nav>a>div {
+	width: 100%;
+	height: 100%;
+}
+
+.chat-nav>a>div>i {
+	font-size: 30px;
+	color: #FFFFFF50;
+}
+
+.chat-nav>a>div>i.nav-selected {
+	color: #FFFFFF;
+}
+
+.chat-search {
+	height: 50px;
+}
+
+.chat-search__icon {
+	height: 100%;
+	width: 35px;
+}
+
+.chat-search__icon>i {
+	font-size: 20px;
+}
+
+.chat-search__txt {
+	height: 100%;
+	border: 0;
+	width: 335px;
+}
+
+.chat-search__txt:focus {
+	outline: none;
+}
+
+.chat-search__cancel {
+	font-size: 20px;
+	height: 100%;
+	width: 35px;
+	display: none;
+}
+
+.chat-search__cancel>i {
+	color: #6C6C72;
+}
+
+.userListChevronUp {
+	display: flex;
+	align-items: center;
+	margin-right: 10px;
+}
+
+.userListChevronDown {
+	display: flex;
+	align-items: center;
+	margin-right: 10px;
+}
+
+.chat-userList {
+	overflow-y: auto;
+	height: 460px;
+}
+
+.chat-userList::-webkit-scrollbar {
+	width: 20px;
+
+}
+
+.chat-userList::-webkit-scrollbar-thumb {
+	background-color: #7d7d7d20;
+	border-radius: 10px;
+
+	border: 7px solid #FFFFFF
+		/* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+
+.chat-userList::-webkit-scrollbar-track {
+	background-color: #FFFFFF
+		/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.chat-userList__chat-company,
+.chat-userList__chat-dept,
+.chat-userList__chat-team {
+	width: 100%;
+	border-top: 2px solid #7d7d7d20;
+	border-bottom: 2px solid #7d7d7d20;
+	font-size: 13px;
+	padding: 5px 0 5px 10px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.chat-userList__chat-team {
+	border-top: 0px;
+}
+
+.chat-userList__chatUserInfo {
+	margin: 10px 0 10px 10px;
+}
+
+.chatUserInfo__profileImg {
+	position: relative;
+	width: 40px;
+	height: 40px;
+}
+
+.chatUserInfo__txt {
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.chatUserInfo__txt>div {
+	padding: 10px 15px;
+}
+
+.ctxMenuBox {
+	width: 80px;
+	position: absolute;
+	border-radius: 3px;
+	border: 1px solid #7d7d7d20;
+	background-color: #FFFFFF;
+
+}
+
+.ctxMenuBox__ctxMenuList {
+	width: 100%;
+	list-style: none;
+	padding: 0;
+	margin: 0px;
+	font-size: 13px;
+}
+
+.ctxMenuBox__ctxMenuList li {
+	width: 100%;
+	cursor: pointer;
+	padding: 3px 0 3px 5px;
+}
+
+.ctxMenuBox__ctxMenuList li:hover {
+	background-color: #DCEDD4;
+}
+
+
+
+/* profile 모달 */
+.profile__modal {
+	width: 350px;
+	padding: 0px;
+	display: none;
+}

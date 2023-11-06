@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
 	private HttpSession session;
 	
@@ -20,7 +20,8 @@ public class HomeController {
 		String title = "오피스 홈";
 		
 		session.setAttribute("title", title);
-		
+		session.setAttribute("loginID", "test"); // 채팅 테스트 하려고 로그인 정보 넣음
+
 		return "home";
 	}
 	
