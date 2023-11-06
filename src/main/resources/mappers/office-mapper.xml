@@ -3,5 +3,29 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Office">
-	<!-- 오피스 관리 매퍼 -->
+	<resultMap type="com.clovers.dto.DeptTaskDTO" id="dept_task">
+		<result column="id" property="id"/>
+		<result column="task_name" property="task_name"/>
+	</resultMap>
+	
+	<select id="selectDeptTaskAll" resultMap="dept_task">
+		select * from dept_task;
+	</select>
+	
+	<resultMap type="com.clovers.dto.JobDTO" id="job">
+		<result column="id" property="id"/>
+		<result column="job_name" property="job_name"/>
+	</resultMap>
+	
+	<select id="selectPositionAll" resultMap="job">
+		select * from job;
+	</select>
+	
+	<select id="selectEmpCount" resultType="int">
+		select count(*) from employee;
+	</select>
+	
+	<insert id="insertUser">
+		insert into employee values (#{id},#{name}, #{pw}, #{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id}, #{dept_task_id},"재직", #{profile_img}, "정상1");
+	</insert>
 </mapper>

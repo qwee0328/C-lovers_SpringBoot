@@ -16,6 +16,8 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 		session.setAttribute("loginID", "test"); // 채팅 테스트 하려고 로그인 정보 넣음
+		System.out.println(System.getenv("DB_NAME"));
+		System.out.println(System.getenv("DB_Username"));
 		return "home";
 	}
 	
