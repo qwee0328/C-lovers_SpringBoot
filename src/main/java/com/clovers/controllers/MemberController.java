@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.clovers.commons.EncryptionUtils;
 import com.clovers.services.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -16,7 +17,7 @@ public class MemberController {
 	// 멤버 로그인, 비밀번호 확인
 	
 	@Autowired
-	private HttpSession hsession;
+	private HttpSession session;
 	
 	@Autowired
 	private MemberService mservice;
@@ -32,10 +33,15 @@ public class MemberController {
 	@RequestMapping(value="login", method = RequestMethod.POST)
 	public boolean login(String id, String pw) {
 		
+//		암호화한거
+//		String pwEnc = EncryptionUtils.getSHA512(pw);
+//		boolean result = mservice.login(id, pwEnc);
+		
 		boolean result = mservice.login(id, pw);
 		
 		if(result) {
-			hsession.setAttribute("loginID", id);
+			session.setAttribute("loginID", id);
+			System.out.println("login( ) : "+ session.getAttribute("loginID"));
 		}
 		
 		return result;
