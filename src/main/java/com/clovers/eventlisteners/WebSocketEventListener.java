@@ -13,7 +13,6 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import com.clovers.model.ChatMessageModel;
 
 
-
 @Component
 public class WebSocketEventListener {
 
