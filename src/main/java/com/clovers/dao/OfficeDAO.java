@@ -1,6 +1,7 @@
 package com.clovers.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +16,34 @@ public class OfficeDAO {
 	// 오피스 관리 DAO
 	@Autowired
 	private SqlSession db;
-	
-	public List<DeptTaskDTO> selectDeptTaskAll(){
+
+	// 부서 명 불러오기
+	public List<DeptTaskDTO> selectDeptTaskAll() {
 		return db.selectList("Office.selectDeptTaskAll");
 	}
-	
-	public List<JobDTO> selectPositionAll(){
+
+	// 직급 명 불러오기
+	public List<JobDTO> selectPositionAll() {
 		return db.selectList("Office.selectPositionAll");
 	}
-	
+
+	// 사용자 수 불러오기
 	public int selectEmpCount() {
 		return db.selectOne("Office.selectEmpCount");
 	}
-	
+
+	// 사용자 리스트 불러오기
+	public List<Map<String, String>> selectUserList() {
+		return db.selectList("Office.selectUserList");
+	}
+
+	// 사용자 등록하기
 	public int insertUser(MemberDTO dto) {
 		return db.insert("Office.insertUser", dto);
+	}
+	
+	// 사용자 삭제하기
+	public int deleteUser(List<String> userID) {
+		return db.delete("Office.deleteUser", userID);
 	}
 }
