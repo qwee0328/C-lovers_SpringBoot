@@ -28,6 +28,7 @@ public class ChatController {
 		return "chat/chatList";
 	}
 	
+	
 	@RequestMapping("/chat/fileList")
 	public String goFileList() {
 		return "chat/fileList";
