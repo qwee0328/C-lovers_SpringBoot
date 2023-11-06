@@ -10,4 +10,5 @@ public class Constants {
 	public static int REPLY_COUNT_PER_PAGE = 5;
 	// 한 페이지에 몇개의 댓글 페이지 네이션을 출력할 것인지
 	public static int REPLY_NAVI_COUNT_PER_PAGE = 5;
+	
 }

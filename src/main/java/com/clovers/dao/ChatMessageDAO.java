@@ -4,16 +4,18 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.clovers.dto.EmailDTO;
+import com.clovers.dto.ChatMessageDTO;
 
 @Repository
-public class MailDAO {
-	// 메일 DAO
+public class ChatMessageDAO {
 	
 	@Autowired
 	private SqlSession db;
 	
-	public int submitSend(EmailDTO dto) {
-		return db.insert("Mail.submitSend", dto);
-	}
+	
+	// 채팅 그룹에 채팅을 남기기
+	public int insert(ChatMessageDTO cdto) {
+		return db.insert("ChatMessage.insert", cdto);
+	}	
+
 }

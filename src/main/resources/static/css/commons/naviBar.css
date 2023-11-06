@@ -1,0 +1,59 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.naviBar {
+  background-color: #f3f7f1;
+  width: 250px;
+  /* height: calc(100vh - 60px); */
+  padding-top: 20px;
+}
+
+.naviBtn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0px 20px 16px;
+	height: 40px;
+	border-radius: 5px;
+	color: #FFFFFF;
+	background-color: #75B47D;
+}
+
+.naviBtn:hover {
+	cursor: pointer;
+}
+
+.naviBtn__icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 26px;
+	height: 25px;
+	font-size: 20px;
+}
+
+.naviBtn__text {
+	font-size: 18px;
+}
+
+.naviConp {
+  display: flex;
+  padding: 10px 15px;
+  font-size: 18px;
+  margin: 0px 20px 5px 20px;
+}
+
+.naviConp:hover {
+	cursor: pointer;
+	background-color: #DCEDD4;
+}
+
+.naviConp__icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
