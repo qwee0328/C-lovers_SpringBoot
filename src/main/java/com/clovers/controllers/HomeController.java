@@ -21,7 +21,6 @@ public class HomeController {
 		
 		session.setAttribute("title", title);
 		session.setAttribute("loginID", "test"); // 채팅 테스트 하려고 로그인 정보 넣음
-
 		return "home";
 	}
 	
