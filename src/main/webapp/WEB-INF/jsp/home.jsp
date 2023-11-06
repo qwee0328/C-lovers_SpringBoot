@@ -79,6 +79,14 @@
 				</div>
 			</div>
 		</div>
+		
+		<script>
+			$(document).on("click", ".naviItem__itemCurcle", function() {
+				if($(this).siblings().html() == "메일") {
+					location.href = "/mail";
+				}
+			})
+		</script>
 
 		<!-- MainContents  -->
 		<div class="mainContents">

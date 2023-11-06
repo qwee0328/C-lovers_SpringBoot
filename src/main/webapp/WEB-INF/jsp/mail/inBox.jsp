@@ -87,35 +87,37 @@
 				$(".mailList__checkbox").parent().css("background-color", "#DCEDD4");
 			} else {
 				$(".mailList__checkbox").prop("checked", false);
-				$(".mailList__checkbox").parent().css("background-color", "#FFFFFF");
+				$(".mailList__checkbox").parent().css("background-color", "");
 			}
 		})
+		
+		
 		
 		// 체크박스 개별 클릭 시
 		$(document).on("change", ".mailList__checkbox", function() {
 			let check = $(this).is(":checked");
-			console.log(check);
+			console.log("체크박스 클릭: " + check);
 			if(check) {
 				$(this).prop("checked", true);
 				$(this).parent().css("background-color", "#DCEDD4");
 			} else {
 				$(this).prop("checked", false);
-				$(this).parent().css("background-color", "#FFFFFF");
+				$(this).parent().css("background-color", "");
 			}
 		})
 		
-		// 메일리스트 개별 클릭 시
+/* 		// 메일리스트 개별 클릭 시
 		$(document).on("click", ".inBox__mailList", function() {
 			let check = $(this).children(".mailList__checkbox").is(":checked");
-			console.log(check);
+			console.log("메일리스트 클릭: " + check);
 			if(!check) {
 				$(this).children(".mailList__checkbox").prop("checked", true);
 				$(this).css("background-color", "#DCEDD4");
 			} else {
 				$(this).children(".mailList__checkbox").prop("checked", false);
-				$(this).css("background-color", "#FFFFFF");
+				$(this).css("background-color", "");
 			}
-		})
+		}) */
 	</script>
 </body>
 </html>

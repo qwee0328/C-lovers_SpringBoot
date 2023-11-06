@@ -10,40 +10,36 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <link rel="stylesheet" href="/css/commons/naviBar.css">
-
 </head>
 <body>
 	<div class="naviBar">
-		<div class="naviConp">
-			<div class="naviConp__icon">
-				<i class="fa-solid fa-inbox"></i>
+		
+		<c:if test="${naviBtn != '' }">
+			<div class="naviBtn">
+				<i class="fa-solid fa-plus naviBtn__icon"></i>
+				<div class="naviBtn__text">${naviBtn }</div>
+				<input type="hidden" id="location" value="${naviBtnLocation }" />
 			</div>
-			<div class="naviConp__title">받은 편지함</div>
-		</div>
-		<div class="naviConp">
-			<div class="naviConp__icon">
-				<i class="fa-solid fa-paper-plane"></i>
+		</c:if>
+		<c:forEach var="i" begin="0" end="${naviMenuLength - 1 }">
+			<div class="naviConp">
+				<div class="naviConp__icon">
+					<i class="fa-solid ${naviIcon[i] }"></i>
+				</div>
+				<div class="naviConp__title">${naviMenu[i] }</div>
 			</div>
-			<div class="naviConp__title">보낸 편지함</div>
-		</div>
-		<div class="naviConp">
-			<div class="naviConp__icon">
-				<i class="fa-solid fa-box-archive"></i>
-			</div>
-			<div class="naviConp__title">임시 편지함</div>
-		</div>
-		<div class="naviConp">
-			<div class="naviConp__icon">
-				<i class="fa-solid fa-clock"></i>
-			</div>
-			<div class="naviConp__title">보낼 편지함</div>
-		</div>
-		<div class="naviConp">
-			<div class="naviConp__icon">
-				<i class="fa-solid fa-trash"></i>
-			</div>
-			<div class="naviConp__title">휴지통</div>
-		</div>
+		</c:forEach>
+		<input type="hidden" id="currentMenu" value="${currentMenu }" />
 	</div>
 </body>
+
+<script>
+	for(let i = 0; i < ${naviMenuLength}; i++) {
+		
+	}
+
+	$(".naviBtn").on("click", function() {
+		location.href = "/mail/" + $("#location").val();
+	})
+</script>
 </html>
