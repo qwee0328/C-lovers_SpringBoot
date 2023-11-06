@@ -33,6 +33,7 @@
 	    width: 420px;
 	    height: 50px;
 	    margin: 10px 0px;
+	    padding: 10px;
 	}
 	.loginBtn{
 	    width: 420px;
@@ -53,6 +54,10 @@
 	.findPwBtn{
 	    border: none;
 	    background-color: white;
+	}
+	
+	.loginFail{
+		color: red;
 	}
 	
 	@media(max-width: 786px){
@@ -98,4 +103,5 @@
 	        margin-bottom: 60px;
 	    }
 	}
+	
 	
