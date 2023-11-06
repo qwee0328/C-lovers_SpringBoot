@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clovers.dao.ChatGroupDAO;
-import com.clovers.dto.ChatGroupDTO;
 import com.clovers.dto.ChatMessageDTO;
-import com.clovers.dto.ChatMessageDTO.ChatMessageStates;
-import com.clovers.model.ChatMessageModel.MessageType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.servlet.http.HttpSession;
 

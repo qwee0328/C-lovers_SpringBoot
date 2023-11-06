@@ -48,6 +48,10 @@
 	    border-radius: 50%;
 	}
 	
+	.naviItem__itemCurcle:hover {
+		cursor: pointer;
+	}
+	
 	.itemCurcle__Icon {
 	    margin: auto;
 	    font-size: 28px;
