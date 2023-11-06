@@ -5,7 +5,15 @@
 <mapper namespace="Mail">
 	<!-- 메일 매퍼 -->
 	
-	<insert id="submitSend">
+	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
 		insert into email value(0, #{send_id}, 'test', #{title}, #{content}, default, default, null, default)
 	</insert>
+	
+	<insert id="submitFile">
+		insert into email_file value(0, #{email_id}, #{ori_name}, #{sys_name})
+	</insert>
+	
+	<select id="selectByReceiveId" resultType="com.kdt.dto.EmailDTO">
+		select * from email where receive_id = #{receive_id}
+	</select>
 </mapper>

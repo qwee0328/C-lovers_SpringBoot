@@ -1,8 +1,11 @@
 package com.clovers.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.dto.EmailDTO;
 import com.clovers.services.MailService;
@@ -28,6 +31,7 @@ public class MailController {
 		String naviBtnLocation = "send";
 		String[] naviIcon = {"fa-inbox", "fa-paper-plane", "fa-box-archive", "fa-clock", "fa-trash"};
 		String[] naviMenu = {"받은 편지함", "보낸 편지함", "임시 편지함", "보낼 편지함", "휴지통"}; 
+		String [] naviMenuLocation = {"inBox", "sentBox", "tempBox", "outBox", "trash"};
 		int naviMenuLength = naviMenu.length;
 		String currentMenu = "받은 편지함";
 		
@@ -36,10 +40,18 @@ public class MailController {
 		session.setAttribute("naviBtnLocation", naviBtnLocation);
 		session.setAttribute("naviIcon", naviIcon);
 		session.setAttribute("naviMenu", naviMenu);
+		session.setAttribute("naviMenuLocation", naviMenuLocation);
 		session.setAttribute("naviMenuLength", naviMenuLength);
 		session.setAttribute("currentMenu", currentMenu);
 		
 		return "mail/inBox";
+	}
+	
+	// 받은 메일 리스트
+	@RequestMapping(value="inBoxList")
+	public List<EmailDTO> selectByReceiveId() {
+		String recieve_id = (String) session.getAttribute("loginID");
+		return mservice.selectByReceiveId(recieve_id);
 	}
 	
 	// 편지 쓰기 (메일 작성)
@@ -50,8 +62,8 @@ public class MailController {
 	
 	// 보내기 (메일 발송)
 	@RequestMapping(value="submitSend")
-	public String submitSend(EmailDTO dto) {
-		mservice.submitSend(dto);
+	public String submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
+		int email_id = mservice.submitSend(dto, files);
 		
 		return "redirect:/mail";
 	}

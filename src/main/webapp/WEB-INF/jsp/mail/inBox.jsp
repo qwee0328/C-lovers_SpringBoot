@@ -79,6 +79,16 @@
 	</div>
 	
 	<script>
+		window.onload = function() {
+			$.ajax({
+				url: "/mail/inBoxList"
+			}).done(function(resp){
+				for(let i = 0; i < resp.length; i++) {
+					console.log(resp[i].title);
+				}
+			})
+		}
+	
 		//	체크박스 전체 선택 클릭 시 
 		$(document).on("change", ".allCheck__checkbox", function() {
 			let checkAll = $(this).is(":checked");
@@ -90,8 +100,6 @@
 				$(".mailList__checkbox").parent().css("background-color", "");
 			}
 		})
-		
-		
 		
 		// 체크박스 개별 클릭 시
 		$(document).on("change", ".mailList__checkbox", function() {
@@ -105,19 +113,6 @@
 				$(this).parent().css("background-color", "");
 			}
 		})
-		
-/* 		// 메일리스트 개별 클릭 시
-		$(document).on("click", ".inBox__mailList", function() {
-			let check = $(this).children(".mailList__checkbox").is(":checked");
-			console.log("메일리스트 클릭: " + check);
-			if(!check) {
-				$(this).children(".mailList__checkbox").prop("checked", true);
-				$(this).css("background-color", "#DCEDD4");
-			} else {
-				$(this).children(".mailList__checkbox").prop("checked", false);
-				$(this).css("background-color", "");
-			}
-		}) */
 	</script>
 </body>
 </html>

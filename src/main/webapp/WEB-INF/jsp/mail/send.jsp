@@ -9,11 +9,13 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
-<!-- summernote -->
-<script src="/js/summernote/summernote-lite.js"></script>
-<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
-<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+<!-- summernote cdn -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+<!-- send.css -->
 <link rel="stylesheet" href="/css/mail/send.css">
 </head>
 <body>
@@ -34,7 +36,7 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">받는 사람</div>
-					<input type="text" name="send_id" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<input type="text" name="receive_id" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
@@ -46,24 +48,22 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">파일 첨부</div>
-						<input type="file" name="file" multiple/>
+						<input type="file" name="files" multiple/>
 					<div class="inputLine__fileList"></div>
 				</div>
 				<div class="send__contentBox">
 					<textarea id="summernote" name="content" class="contentBox__content"></textarea>
 				</div>
+				<input type="hidden" name="send_id" value=${loginID } />
 			</form>
 			
 			<script>
 				$(document).ready(function() {
 					$('#summernote').summernote({
-						  height: 500px,                 // 에디터 높이
-						  minHeight: null,             // 최소 높이
-						  maxHeight: null,             // 최대 높이
-						  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-						  lang: "ko-KR",					// 한글 설정
-						  placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
-				          
+						height: 500,                 // set editor height
+						  minHeight: null,             // set minimum height of editor
+						  maxHeight: null,             // set maximum height of editor
+						  focus: true 
 					});
 				});
 			</script>
