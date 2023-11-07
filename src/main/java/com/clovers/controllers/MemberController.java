@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.clovers.commons.EncryptionUtils;
 import com.clovers.services.MemberService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -46,5 +46,20 @@ public class MemberController {
 		
 		return result;
 	}
+	
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request) {
+		
+		session.invalidate();
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping("goFindPW")
+	public String goFindPW() {
+		System.out.println("goFindPW ( )");
+		return "member/findPW";
+	}
+	
 
 }

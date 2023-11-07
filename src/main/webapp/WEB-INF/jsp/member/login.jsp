@@ -83,8 +83,6 @@
 			
 		});
 	
-
-		
 // 		cookie
 		$("#id").val(Cookies.get('key'));
     	if($("#id").val() != ""){
@@ -106,6 +104,10 @@
     		}
     	});
     	
+//     	비밀번호찾기 이동
+    	$(".findPwBtn").click(function(){
+    		location.href="/members/goFindPW";
+    	})
     	
     	
 	    </script>
