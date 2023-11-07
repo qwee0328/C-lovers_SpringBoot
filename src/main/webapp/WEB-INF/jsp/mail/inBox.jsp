@@ -49,6 +49,7 @@
 				for(let i = 0; i < resp.length; i++) {
 					let mailListDiv = $("<div>");
 					mailListDiv.addClass("inBox__mailList");
+					mailListDiv.attr("seq", resp[i].id);
 					
 					let checkboxDiv = $("<input type='checkbox'>");
 					checkboxDiv.attr("name", "selectedMails");
@@ -113,6 +114,12 @@
 				$(this).prop("checked", false);
 				$(this).parent().css("background-color", "");
 			}
+		})
+		
+		// 메일 리스트 클릭 시
+		$(document).on("click", ".inBox__mailList", function() {
+			let seq = $(this).attr("seq");
+			console.log(seq);
 		})
 		
 		// 삭제 버튼 클릭 시
