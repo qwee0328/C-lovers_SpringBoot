@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>받은 메일함</title>
+<title>보낸 메일함</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
@@ -21,13 +21,13 @@
 			<div class="inBox__allCheck">
 				<input type="checkbox" class="allCheck__checkbox" />
 				<div class="allCheck__checkNum"></div>
-				<button type="submit" id="restoreMail" class="allCheck__buttons">메일함으로 이동</button>
-				<button type="submit" class="allCheck__buttons">완전삭제</button>
+				<button type="submit" id="deleteMail" class="allCheck__buttons">삭제</button>
+				<button type="submit" id="perDeleteMail" class="allCheck__buttons">완전삭제</button>
 			</div>
 			<div class="inBox__mailListBox"></div>
 			<hr>
 			<div class="inBox__bottom">
-				<div class="bottom__mailNum">편지 수 : </div>
+				<div class="bottom__mailNum"></div>
 				<div class="bottom__pageNavi">
 					<div class="pageNavi__circle">1</div>
 				</div>
@@ -37,10 +37,10 @@
 	
 	<script>
 		let mailCount;
-		
+	
 		window.onload = function() {
 			$.ajax({
-				url: "/mail/trashList",
+				url: "/mail/sentBoxList",
 				type: 'POST'
 			}).done(function(resp){
 				mailCount = resp.length;
@@ -116,8 +116,8 @@
 			}
 		})
 		
-		// 메일함으로 이동 버튼 클릭 시
-		$("#restoreMail").on("click", function() {
+		// 삭제 버튼 클릭 시
+		$("#deleteMail").on("click", function() {
 			let selectedMails = [];
 			$(".mailList__checkbox:checked").each(function() {
 				selectedMails.push($(this).val());
@@ -126,15 +126,15 @@
 			if(selectedMails.length > 0) {
 				$.ajax({
 					type: "POST",
-					url: "/mail/restoreMail",
+					url: "/mail/deleteMail",
 					data: { selectedMails : selectedMails }
 				}).done(function(){
 					location.reload();
 				}).done(function(){
-					alert("선택한 메일이 메일함으로 이동되었습니다.");
+					alert("선택한 메일이 휴지통으로 이동되었습니다.");
 				});
 			} else {
-				alert("이동할 메일을 선택해주세요.");
+				alert("삭제할 메일을 선택해주세요.");
 			}
 		})
 		

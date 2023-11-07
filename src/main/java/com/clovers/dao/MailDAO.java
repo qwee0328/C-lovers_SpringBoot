@@ -25,8 +25,8 @@ public class MailDAO {
 		return db.insert("Mail.submitFile", dto);
 	}
 	
-	public List<EmailDTO> inboxList(String recieve_id) {
-		return db.selectList("Mail.inboxList", recieve_id);
+	public List<EmailDTO> inBoxList(String recieve_id) {
+		return db.selectList("Mail.inBoxList", recieve_id);
 	}
 	
 	public boolean selectFileByEmailId(String email_id) {
@@ -48,11 +48,15 @@ public class MailDAO {
 		return db.delete("Mail.perDeleteMail", id);
 	}
 	
-	public List<EmailDTO> trashList(String recieve_id) {
-		return db.selectList("Mail.trashList", recieve_id);
+	public List<EmailDTO> trashList(String id) {
+		return db.selectList("Mail.trashList", id);
 	}
 	
 	public int restoreMail(int id) {
 		return db.update("Mail.restoreMail", id);
+	}
+	
+	public List<EmailDTO> sentBoxList(String send_id) {
+		return db.selectList("Mail.sentBoxList", send_id);
 	}
 }

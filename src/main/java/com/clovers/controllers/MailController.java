@@ -25,8 +25,10 @@ public class MailController {
 	@Autowired
 	MailService mservice;
 	
-	// 메인 화면 (받은 메일함)
-	@RequestMapping(value = {"", "/inBox"})
+	// ---------- sideNavi ----------
+	
+	// 메인 화면
+	@RequestMapping("")
 	public String main() {
 		String title = "메일";
 		String naviBtn = "편지 쓰기";
@@ -49,22 +51,6 @@ public class MailController {
 		return "mail/inBox";
 	}
 	
-	// 받은 메일 리스트
-	@ResponseBody
-	@RequestMapping("/inBoxList")
-	public List<EmailDTO> inboxList() {
-		String recieve_id = (String) session.getAttribute("loginID");
-		return mservice.inboxList(recieve_id);
-	}
-	
-	// 파일 유무
-	@ResponseBody
-	@RequestMapping("/haveFile")
-	public boolean haveFile(@RequestParam("email_id") String email_id) {
-		boolean result = mservice.selectFileByEmailId(email_id);
-		return result;
-	}
-	
 	// 편지 쓰기 (메일 작성)
 	@RequestMapping("/send")
 	public String send() {
@@ -77,6 +63,35 @@ public class MailController {
 		int email_id = mservice.submitSend(dto, files);
 		
 		return "redirect:/mail";
+	}
+	
+	// 받은 메일함으로 이동
+	@RequestMapping("/inBox")
+	public String inBox() {
+		return "/mail/inBox";
+	}
+	
+	// 보낸 메일함으로 이동
+	@RequestMapping("/sentBox")
+	public String sentBox() {
+		return "/mail/sentBox";
+	}
+	
+	// 휴지통으로 이동
+	@RequestMapping("/trash")
+	public String trash() {
+		return "mail/trash";
+	}
+	
+	
+	// ---------- commons ----------
+	
+	// 파일 유무
+	@ResponseBody
+	@RequestMapping("/haveFile")
+	public boolean haveFile(@RequestParam("email_id") String email_id) {
+		boolean result = mservice.selectFileByEmailId(email_id);
+		return result;
 	}
 	
 	// 삭제 (휴지통)
@@ -99,18 +114,37 @@ public class MailController {
 		return "redirect:/mail";
 	}
 	
-	// 휴지통으로 이동
-	@RequestMapping("/trash")
-	public String trash() {
-		return "mail/trash";
+	
+	// ---------- inBox ----------
+	
+	// 받은 메일 리스트
+	@ResponseBody
+	@RequestMapping("/inBoxList")
+	public List<EmailDTO> inboxList() {
+		String recieve_id = (String) session.getAttribute("loginID");
+		return mservice.inBoxList(recieve_id);
 	}
+	
+	
+	// ---------- sentBox ----------
+	
+	// 받은 메일 리스트
+	@ResponseBody
+	@RequestMapping("/sentBoxList")
+	public List<EmailDTO> sentboxList() {
+		String send_id = (String) session.getAttribute("loginID");
+		return mservice.sentBoxList(send_id);
+	}
+	
+	
+	// ---------- trash ----------
 	
 	// 휴지통 리스트
 	@ResponseBody
 	@RequestMapping("/trashList")
 	public List<EmailDTO> trashList() {
-		String recieve_id = (String) session.getAttribute("loginID");
-		return mservice.trashList(recieve_id);
+		String id = (String) session.getAttribute("loginID");
+		return mservice.trashList(id);
 	}
 	
 	// 복원 (휴지통 -> 받은 메일함)

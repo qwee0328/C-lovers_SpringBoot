@@ -39,8 +39,8 @@ public class MailService {
 		return email_id;
 	}
 	
-	public List<EmailDTO> inboxList(String recieve_id) {
-		return dao.inboxList(recieve_id);
+	public List<EmailDTO> inBoxList(String recieve_id) {
+		return dao.inBoxList(recieve_id);
 	}
 	
 	public boolean selectFileByEmailId(String email_id) {
@@ -55,12 +55,16 @@ public class MailService {
 		return dao.perDeleteMail(id);
 	}
 	
-	public List<EmailDTO> trashList(String recieve_id) {
-		return dao.trashList(recieve_id);
+	public List<EmailDTO> trashList(String id) {
+		return dao.trashList(id);
 	}
 	
 	public int restoreMail(int id) {
 		return dao.restoreMail(id);
+	}
+	
+	public List<EmailDTO> sentBoxList(String send_id) {
+		return dao.sentBoxList(send_id);
 	}
 	
 }
