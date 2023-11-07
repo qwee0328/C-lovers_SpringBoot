@@ -28,5 +28,5 @@ public class MemberDTO {
 	private String emp_status_id;
 	private String profile_img;
 	private String daily_work_rule_id;
-	
+	private String company_email;
 }

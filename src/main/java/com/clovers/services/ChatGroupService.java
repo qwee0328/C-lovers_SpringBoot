@@ -39,13 +39,13 @@ public class ChatGroupService {
 		
 		List<ChatMessageDTO> msg = new ArrayList<>();
 		for(int i=1; i<5; i++) {
-			msg.add(new ChatMessageDTO(i,1,"test","내용이에요ㅋㅋㅋㅋㅋㅋㅋㅋ"+i,new Timestamp(System.currentTimeMillis()),0));
+			msg.add(new ChatMessageDTO(i,1,"test","내용이에요ㅋㅋㅋㅋㅋㅋㅋㅋ"+i,new Timestamp(System.currentTimeMillis()),ChatMessageDTO.ChatMessageStates.CHAT));
 		}
 		for(int i=5; i<10; i++) {
-			msg.add(new ChatMessageDTO(i,1,"another","내용이에요ㅋㅋㅋㅋㅋㅋㅋㅋ"+i,new Timestamp(System.currentTimeMillis()),0));
+			msg.add(new ChatMessageDTO(i,1,"another","내용이에요ㅋㅋㅋㅋㅋㅋㅋㅋ"+i,new Timestamp(System.currentTimeMillis()),ChatMessageDTO.ChatMessageStates.CHAT));
 		}
-		msg.add(new ChatMessageDTO(9,1,"test","file",new Timestamp(System.currentTimeMillis()),0));
-		msg.add(new ChatMessageDTO(10,1,"another","file",new Timestamp(System.currentTimeMillis()),0));
+		msg.add(new ChatMessageDTO(9,1,"test","file",new Timestamp(System.currentTimeMillis()),ChatMessageDTO.ChatMessageStates.CHAT));
+		msg.add(new ChatMessageDTO(10,1,"another","file",new Timestamp(System.currentTimeMillis()),ChatMessageDTO.ChatMessageStates.CHAT));
 		list.put("chat", msg);
 		
 		list.put("loginID",(String)session.getAttribute("loginID"));
