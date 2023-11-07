@@ -65,7 +65,7 @@
 .findPwBox__line{
     width: 420px;
     border-bottom: 1px solid black;
-    margin: 25px 30px;
+    margin: 20px 30px;
 }
 /* 비밀번호 변경버튼 */
 .findPwBox__changePwBtnBox{
