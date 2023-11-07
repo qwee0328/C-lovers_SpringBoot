@@ -14,7 +14,11 @@ public class MemberDAO {
 	
 	public boolean login(Map<String,String> param) {
 		
-		return db.selectOne("member.logintry",param);
+		return db.selectOne("member.login",param);
+	}
+	
+	public int updatePW(Map<String, String> param) {
+		return db.update("member.updatePW",param);
 	}
 	
 }
