@@ -8,7 +8,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <!-- 쿠키 관련 -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-<script src="${contextPath}/resources/js/js.cookie.js"></script>
 
 <title>로그인</title>
 </head>
