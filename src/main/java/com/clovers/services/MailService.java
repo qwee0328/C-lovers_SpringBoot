@@ -39,7 +39,16 @@ public class MailService {
 		return email_id;
 	}
 	
-	public List<EmailDTO> selectByReceiveId(String recieve_id) {
-		return dao.selectByReceiveId(recieve_id);
+	public List<EmailDTO> inboxList(String recieve_id) {
+		return dao.inboxList(recieve_id);
 	}
+	
+	public boolean selectFileByEmailId(String email_id) {
+		return dao.selectFileByEmailId(email_id);
+	}
+	
+	public int deleteMail(int id) {
+		return dao.deleteMail(id);
+	}
+	
 }

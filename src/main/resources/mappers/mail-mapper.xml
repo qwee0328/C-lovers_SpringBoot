@@ -13,7 +13,15 @@
 		insert into email_file value(0, #{email_id}, #{ori_name}, #{sys_name})
 	</insert>
 	
-	<select id="selectByReceiveId" resultType="com.kdt.dto.EmailDTO">
-		select * from email where receive_id = #{receive_id}
+	<select id="selectByReceiveId" resultType="com.clovers.dto.EmailDTO">
+		select * from email where receive_id = #{receive_id} and trash = false order by id desc
 	</select>
+	
+	<select id="selectFileByEmailId" resultType="boolean">
+		select email_id from email_file group by email_id having email_id = ${email_id}
+	</select>
+	
+	<update id="deleteById">
+		update email set trash = true where id = ${id}
+	</update>
 </mapper>

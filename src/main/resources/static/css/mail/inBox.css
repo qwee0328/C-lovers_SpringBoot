@@ -38,7 +38,13 @@ input[type=checkbox] {
 
 .allCheck__delete {
 	margin-left: 15px;
+	border: none;
 	font-size: 16px;
+	background-color: #FFFFFF;
+}
+
+.allCheck__delete:hover {
+	cursor: pointer;
 }
 
 .inBox__mailList {

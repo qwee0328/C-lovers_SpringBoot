@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.dto.EmailDTO;
@@ -48,23 +50,46 @@ public class MailController {
 	}
 	
 	// 받은 메일 리스트
-	@RequestMapping(value="inBoxList")
-	public List<EmailDTO> selectByReceiveId() {
+	@ResponseBody
+	@RequestMapping("inBoxList")
+	public List<EmailDTO> inboxList() {
 		String recieve_id = (String) session.getAttribute("loginID");
-		return mservice.selectByReceiveId(recieve_id);
+		return mservice.inboxList(recieve_id);
+	}
+	
+	// 파일 유무
+	@ResponseBody
+	@RequestMapping("haveFile")
+	public boolean haveFile(@RequestParam("email_id") String email_id) {
+		boolean result = mservice.selectFileByEmailId(email_id);
+		System.out.println(result);
+		return result;
 	}
 	
 	// 편지 쓰기 (메일 작성)
-	@RequestMapping(value="send")
+	@RequestMapping("send")
 	public String send() {
 		return "mail/send";
 	}
 	
 	// 보내기 (메일 발송)
-	@RequestMapping(value="submitSend")
+	@RequestMapping("submitSend")
 	public String submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
 		int email_id = mservice.submitSend(dto, files);
 		
 		return "redirect:/mail";
 	}
+	
+	// 삭제 (휴지통)
+	@RequestMapping("deleteMail")
+	public String deleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+		for(int i = 0; i < selectedMails.size(); i++) {
+			int id = Integer.parseInt(selectedMails.get(i));
+			mservice.deleteMail(id);
+		}
+		
+		return "redirect:/mail";
+	}
+	
+	
 }

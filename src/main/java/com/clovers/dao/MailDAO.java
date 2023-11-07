@@ -25,7 +25,22 @@ public class MailDAO {
 		return db.insert("Mail.submitFile", dto);
 	}
 	
-	public List<EmailDTO> selectByReceiveId(String recieve_id) {
+	public List<EmailDTO> inboxList(String recieve_id) {
 		return db.selectList("Mail.selectByReceiveId", recieve_id);
+	}
+	
+	public boolean selectFileByEmailId(String email_id) {
+		Object result = db.selectOne("Mail.selectFileByEmailId", email_id);
+		boolean exist;
+		if(result != null) {
+			exist = true;
+		} else {
+			exist = false;
+		}
+		return exist;
+	}
+	
+	public int deleteMail(int id) {
+		return db.update("Mail.deleteById", id);
 	}
 }
