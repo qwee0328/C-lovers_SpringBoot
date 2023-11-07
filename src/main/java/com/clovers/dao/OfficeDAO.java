@@ -51,4 +51,9 @@ public class OfficeDAO {
 	public int updateUserJob(MemberDTO dto) {
 		return db.update("Office.updateUserJob", dto);
 	}
+	
+	// 사용자 소속 조직 수정하기
+	public int updateUserDeptTask(MemberDTO dto) {
+		return db.update("Office.updateUserDeptTask",dto);
+	}
 }

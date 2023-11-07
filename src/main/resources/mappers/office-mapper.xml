@@ -48,4 +48,9 @@
 	<update id="updateUserJob">
 		update employee set job_id=#{job_id} where id =#{id};
 	</update>
+	
+	<!-- // 사용자 소속 조직 수정 -->
+	<update id="updateUserDeptTask">
+		update employee set dept_task_id=#{dept_task_id} where id=#{id};
+	</update>
 </mapper>

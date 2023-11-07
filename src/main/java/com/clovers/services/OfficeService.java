@@ -74,4 +74,11 @@ public class OfficeService {
 			dao.updateUserJob(dto);
 		}
 	}
+	
+	// 사용자 소속 조직 수정하기
+	public void updateUserDeptTask(List<MemberDTO> dtoList) {
+		for(MemberDTO dto:dtoList) {
+			dao.updateUserDeptTask(dto);
+		}
+	}
 }

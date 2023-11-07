@@ -74,4 +74,13 @@ public class OfficeController {
 		return ResponseEntity.ok().build();
 	}
 	
+	// 사용자 소속 조직 수정하기
+	@PostMapping("/updateUserDeptTask")
+	public ResponseEntity<Integer> updateUserDeptTask(@RequestBody List<MemberDTO> dtoList){
+		for(MemberDTO dto:dtoList) {
+			System.out.println(dto.toString());
+		}
+		oservice.updateUserDeptTask(dtoList);
+		return ResponseEntity.ok().build();
+	}
 }
