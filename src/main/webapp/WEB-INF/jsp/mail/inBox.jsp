@@ -21,8 +21,8 @@
 			<div class="inBox__allCheck">
 				<input type="checkbox" class="allCheck__checkbox" />
 				<div class="allCheck__checkNum">1</div>
-				<button type="submit" id="deleteMail" class="allCheck__delete">삭제</button>
-				<button type="submit" class="allCheck__delete">완전삭제</button>
+				<button type="submit" id="deleteMail" class="allCheck__buttons">삭제</button>
+				<button type="submit" id="perDeleteMail" class="allCheck__buttons">완전삭제</button>
 			</div>
 			<div class="inBox__mailListBox"></div>
 			<hr>
@@ -129,11 +129,40 @@
 					type: "POST",
 					url: "/mail/deleteMail",
 					data: { selectedMails : selectedMails }
+				}).done(function(){
+					location.reload();
+				}).done(function(){
+					alert("선택한 메일이 휴지통으로 이동되었습니다.");
 				});
 			} else {
 				alert("삭제할 메일을 선택해주세요.");
 			}
 		})
+		
+		// 완전 삭제 버튼 클릭 시
+		$("#perDeleteMail").on("click", function() {
+			let result = confirm("완전삭제 하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
+			if(result) {
+				let selectedMails = [];
+				$(".mailList__checkbox:checked").each(function() {
+					selectedMails.push($(this).val());
+				});
+				
+				if(selectedMails.length > 0) {
+					$.ajax({
+						type: "POST",
+						url: "/mail/perDeleteMail",
+						data: { selectedMails : selectedMails }
+					}).done(function(){
+						location.reload();
+					}).done(function(){
+						alert("선택한 메일이 완전삭제 되었습니다.");
+					});
+				} else {
+					alert("완전삭제할 메일을 선택해주세요.");
+				}
+			}
+		});
 		
 		
 	</script>

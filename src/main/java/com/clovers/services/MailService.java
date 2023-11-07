@@ -51,4 +51,16 @@ public class MailService {
 		return dao.deleteMail(id);
 	}
 	
+	public int perDeleteMail(int id) {
+		return dao.perDeleteMail(id);
+	}
+	
+	public List<EmailDTO> trashList(String recieve_id) {
+		return dao.trashList(recieve_id);
+	}
+	
+	public int restoreMail(int id) {
+		return dao.restoreMail(id);
+	}
+	
 }

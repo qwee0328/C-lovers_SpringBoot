@@ -41,7 +41,7 @@
 	
 	$(document).on("click", ".naviConp", function() {
 		let location = $(this).children(".naviLocation").val();
-		location.href = "/mail/" + location;
+		window.location.href = "/mail/" + location;
 	})
 </script>
 </html>

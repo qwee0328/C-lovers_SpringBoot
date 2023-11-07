@@ -13,7 +13,7 @@
 		insert into email_file value(0, #{email_id}, #{ori_name}, #{sys_name})
 	</insert>
 	
-	<select id="selectByReceiveId" resultType="com.clovers.dto.EmailDTO">
+	<select id="inboxList" resultType="com.clovers.dto.EmailDTO">
 		select * from email where receive_id = #{receive_id} and trash = false order by id desc
 	</select>
 	
@@ -21,7 +21,19 @@
 		select email_id from email_file group by email_id having email_id = ${email_id}
 	</select>
 	
-	<update id="deleteById">
+	<update id="deleteMail">
 		update email set trash = true where id = ${id}
+	</update>
+	
+	<delete id="perDeleteMail">
+		delete from email where id = ${id}
+	</delete>
+	
+	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
+		select * from email where receive_id = #{receive_id} and trash = true order by id desc
+	</select>
+	
+	<update id="restoreMail">
+		update email set trash = false where id = ${id}
 	</update>
 </mapper>

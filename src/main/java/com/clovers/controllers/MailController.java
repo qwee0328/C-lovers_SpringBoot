@@ -51,7 +51,7 @@ public class MailController {
 	
 	// 받은 메일 리스트
 	@ResponseBody
-	@RequestMapping("inBoxList")
+	@RequestMapping("/inBoxList")
 	public List<EmailDTO> inboxList() {
 		String recieve_id = (String) session.getAttribute("loginID");
 		return mservice.inboxList(recieve_id);
@@ -59,21 +59,20 @@ public class MailController {
 	
 	// 파일 유무
 	@ResponseBody
-	@RequestMapping("haveFile")
+	@RequestMapping("/haveFile")
 	public boolean haveFile(@RequestParam("email_id") String email_id) {
 		boolean result = mservice.selectFileByEmailId(email_id);
-		System.out.println(result);
 		return result;
 	}
 	
 	// 편지 쓰기 (메일 작성)
-	@RequestMapping("send")
+	@RequestMapping("/send")
 	public String send() {
 		return "mail/send";
 	}
 	
 	// 보내기 (메일 발송)
-	@RequestMapping("submitSend")
+	@RequestMapping("/submitSend")
 	public String submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
 		int email_id = mservice.submitSend(dto, files);
 		
@@ -81,15 +80,46 @@ public class MailController {
 	}
 	
 	// 삭제 (휴지통)
-	@RequestMapping("deleteMail")
+	@RequestMapping("/deleteMail")
 	public String deleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
 		for(int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
 			mservice.deleteMail(id);
 		}
-		
 		return "redirect:/mail";
 	}
 	
+	// 완전삭제
+	@RequestMapping("/perDeleteMail")
+	public String perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+		for(int i = 0; i < selectedMails.size(); i++) {
+			int id = Integer.parseInt(selectedMails.get(i));
+			mservice.perDeleteMail(id);
+		}
+		return "redirect:/mail";
+	}
 	
+	// 휴지통으로 이동
+	@RequestMapping("/trash")
+	public String trash() {
+		return "mail/trash";
+	}
+	
+	// 휴지통 리스트
+	@ResponseBody
+	@RequestMapping("/trashList")
+	public List<EmailDTO> trashList() {
+		String recieve_id = (String) session.getAttribute("loginID");
+		return mservice.trashList(recieve_id);
+	}
+	
+	// 복원 (휴지통 -> 받은 메일함)
+	@RequestMapping("/restoreMail")
+	public String restoreMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+		for(int i = 0; i < selectedMails.size(); i++) {
+			int id = Integer.parseInt(selectedMails.get(i));
+			mservice.restoreMail(id);
+		}
+		return "redirect:/mail";
+	}
 }

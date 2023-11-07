@@ -36,14 +36,14 @@ input[type=checkbox] {
 	color: #095544;
 }
 
-.allCheck__delete {
+.allCheck__buttons {
 	margin-left: 15px;
 	border: none;
 	font-size: 16px;
 	background-color: #FFFFFF;
 }
 
-.allCheck__delete:hover {
+.allCheck__buttons:hover {
 	cursor: pointer;
 }
 
