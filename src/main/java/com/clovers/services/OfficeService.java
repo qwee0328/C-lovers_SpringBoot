@@ -81,4 +81,9 @@ public class OfficeService {
 			dao.updateUserDeptTask(dto);
 		}
 	}
+	
+	// 사용자 이름, id 검색하기
+	public List<Map<String, String>> searchUser(String keyword){
+		return dao.searchUser(keyword);
+	}
 }
