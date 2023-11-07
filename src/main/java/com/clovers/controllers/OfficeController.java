@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,5 +83,16 @@ public class OfficeController {
 		}
 		oservice.updateUserDeptTask(dtoList);
 		return ResponseEntity.ok().build();
+	}
+	
+	// 사용자 이름, id 검색하기
+	@GetMapping("/searchUser")
+	public ResponseEntity<List<Map<String, String>>> searchUser(String keyword){
+		System.out.println(keyword);
+		List<Map<String, String>> list = oservice.searchUser(keyword);
+		for(Map<String,String>d :list) {
+			System.out.println(d.toString());
+		}
+		return ResponseEntity.ok(list);
 	}
 }
