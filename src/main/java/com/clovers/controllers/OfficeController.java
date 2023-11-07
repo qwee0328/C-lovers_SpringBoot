@@ -33,7 +33,7 @@ public class OfficeController {
 	}
 	
 	// 직급 명 불러오기
-	@GetMapping("/position")
+	@GetMapping("/job")
 	public ResponseEntity<List<JobDTO>> selectPositionAll(){
 		List<JobDTO> list = oservice.selectPositionAll();
 		return ResponseEntity.ok(list);
@@ -64,7 +64,14 @@ public class OfficeController {
 	@PostMapping("/userDelete")
 	public ResponseEntity<Integer> deleteUser(@RequestBody List<String> userID){
 		int result = oservice.deleteUser(userID);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(result);
+	}
+	
+	// 사용자 직위 수정하기
+	@PostMapping("/updateUserJob")
+	public ResponseEntity<Integer> updateUserJob(@RequestBody List<MemberDTO> dtoList){
+		oservice.updateUserJob(dtoList);
+		return ResponseEntity.ok().build();
 	}
 	
 }

@@ -33,7 +33,7 @@
 	
 	<!-- // 사용자 등록하기 -->
 	<insert id="insertUser">
-		insert into employee values (#{id},#{name}, #{pw}, #{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id}, #{dept_task_id},"재직", #{profile_img}, "정상1");
+		insert into employee values (#{id},#{name}, #{pw}, #{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id}, #{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email});
 	</insert>
 	
 	<!-- // 사용자 삭제하기 -->
@@ -43,4 +43,9 @@
 	    	#{item}
 	    </foreach>
 	</delete>
+	
+	<!-- // 사용자 직위 수정하기 -->
+	<update id="updateUserJob">
+		update employee set job_id=#{job_id} where id =#{id};
+	</update>
 </mapper>

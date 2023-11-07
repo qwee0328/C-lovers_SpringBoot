@@ -56,6 +56,9 @@ public class OfficeService {
 
 		// 비밀번호는 이름으로 저장
 		dto.setPw(EncryptionUtils.getSHA512(dto.getName()));
+		
+		// 사내 이메일은 id랑 똑같이 저장
+		dto.setCompany_email(dto.getId());
 
 		return dao.insertUser(dto);
 	}
@@ -63,5 +66,12 @@ public class OfficeService {
 	// 사용자 삭제하기
 	public int deleteUser(List<String> userID) {
 		return dao.deleteUser(userID);
+	}
+	
+	// 사용자 직위 수정하기
+	public void updateUserJob(List<MemberDTO> dtoList) {
+		for(MemberDTO dto:dtoList) {
+			dao.updateUserJob(dto);
+		}
 	}
 }
