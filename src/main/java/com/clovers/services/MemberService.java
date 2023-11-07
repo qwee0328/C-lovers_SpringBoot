@@ -22,4 +22,12 @@ public class MemberService {
 		
 		return mdao.login(param);
 	}
+	
+	public int updatePW(String id, String pw) {
+		Map<String,String> param = new HashMap<>();
+		param.put("id", id);
+		param.put("pw", pw);
+		
+		return mdao.updatePW(param);
+	}
 }

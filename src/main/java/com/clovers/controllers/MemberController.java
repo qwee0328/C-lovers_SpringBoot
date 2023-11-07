@@ -2,10 +2,13 @@ package com.clovers.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.clovers.commons.EncryptionUtils;
+import com.clovers.services.EmailService;
 import com.clovers.services.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +25,10 @@ public class MemberController {
 	@Autowired
 	private MemberService mservice;
 	
+	@Autowired
+	private EmailService EmailService;
+
+	
 //	로그인 페이지 이동
 	@RequestMapping("goLogin")
 	public String goLogin() {
@@ -34,10 +41,9 @@ public class MemberController {
 	public boolean login(String id, String pw) {
 		
 //		암호화한거
-//		String pwEnc = EncryptionUtils.getSHA512(pw);
-//		boolean result = mservice.login(id, pwEnc);
+		String pwEnc = EncryptionUtils.getSHA512(pw);
+		boolean result = mservice.login(id, pwEnc);
 		
-		boolean result = mservice.login(id, pw);
 		
 		if(result) {
 			session.setAttribute("loginID", id);
@@ -47,6 +53,7 @@ public class MemberController {
 		return result;
 	}
 	
+//	로그아웃
 	@RequestMapping("logout")
 	public String logout(HttpServletRequest request) {
 		
@@ -55,11 +62,38 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+//	비밀번호 페이지 이동
 	@RequestMapping("goFindPW")
 	public String goFindPW() {
 		System.out.println("goFindPW ( )");
 		return "member/findPW";
 	}
 	
+//	이메일
+	@ResponseBody
+    @PostMapping("email")
+    public String MailSend(String email){
+		System.out.println(email);
+    	
+    	System.out.println("Cont- 이메일 전송 완료");
+
+        int number = EmailService.sendMail(email);
+
+        String num = "" + number;
+
+        return num;
+    }
+	
+//	비밀번호 변경
+	@RequestMapping("findPW")
+	public String updatePW(String id, String pw) {
+		
+//		암호화한거
+		String pwEnc = EncryptionUtils.getSHA512(pw);
+		mservice.updatePW(id, pwEnc);
+		
+		
+		return "redirect:/";
+	}
 
 }

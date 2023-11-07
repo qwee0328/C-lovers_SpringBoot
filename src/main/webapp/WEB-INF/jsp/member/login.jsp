@@ -83,7 +83,7 @@
 			
 		});
 	
-// 		cookie
+// 		아이디 기억 cookie
 		$("#id").val(Cookies.get('key'));
     	if($("#id").val() != ""){
     		$("#idSaveCheck").attr("checked",true);

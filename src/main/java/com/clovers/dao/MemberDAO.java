@@ -17,4 +17,8 @@ public class MemberDAO {
 		return db.selectOne("member.login",param);
 	}
 	
+	public int updatePW(Map<String, String> param) {
+		return db.update("member.updatePW",param);
+	}
+	
 }
