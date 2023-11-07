@@ -56,4 +56,10 @@ public class OfficeDAO {
 	public int updateUserDeptTask(MemberDTO dto) {
 		return db.update("Office.updateUserDeptTask",dto);
 	}
+	
+	// 사용자 이름, id 검색하기
+	public List<Map<String, String>> searchUser(String keyword){
+		keyword = "%"+keyword+"%";
+		return db.selectList("Office.searchUser", keyword);
+	}
 }

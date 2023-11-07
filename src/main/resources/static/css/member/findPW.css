@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+*{box-sizing: border-box;}
+/* div{border: 1px solid black;} */
+.container{
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto';
+}
+.findPwBox{
+    width: 480px;
+    background-color: white;
+    margin-top: 170px;
+}
+.findPwBox__inner{text-align: center;}
+
+/* 로고부분 */
+.findPwBox__logoBox{
+    height: 180px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+.logo__desc-pw{
+    font-size: 30px;
+    color: #75B47D;
+    font-weight:bold;
+    margin: 50px 0 10px 0;
+}
+.logo__desc-des{
+    font-size: 15px;
+    color: #6C6C72;
+}
+
+/* 사번, 이메일, 변경할 비번, 비밀번호 변경 크기 */
+.findPwBox__idBox,.findPwBox__emailBox,.findPwBox__authBox,.findPwBox__changePwBox,.findPwBox__changePwChkBox{
+    height: 50px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+/* 사번, 변경할 비밀번호, 비밀번호 변경*/
+.idBox,.changePwBox,.changePwChkBox,.changePwBtn{
+    width: 420px; height: 100%;
+    padding: 10px;
+}
+/* 이메일 , 인증코드 */
+.findPwBox__email-inner,.findPwBox_authBox-inner{
+    height: 100%; width: 420px; display: flex;
+}
+.emailBox{ width: 70%;  height: 100%;}
+.authBtnBox{width: 30%; text-align: right;}
+
+.in-emailBox,.auth_cod{width: 100%; height: 100%; padding: 10px;}
+
+.authBtn,.auth_chk{width: 90%; height: 100%; background-color: #DCEDD4; border: none; border-radius: 5px;}
+
+.auth_codBox{width: 80%;}
+.auth_chkBox{width: 20%; text-align: right;}
+
+/* 중간에 선 */
+.findPwBox__line{
+    width: 420px;
+    border-bottom: 1px solid black;
+    margin: 25px 30px;
+}
+/* 비밀번호 변경버튼 */
+.findPwBox__changePwBtnBox{
+    height: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin: 25px 0 60px 0;
+}
+.changePwBtn{background-color: #75B47D; color: white; border: none; border-radius: 5px;}
+
+@media(max-width: 786px){
+    .container{
+        max-width: 786px;
+    }
+}
+
+@media(min-width: 786px){
+    .container{
+        max-width: 1920px;
+    }
+    .findPw_body{
+        background-color: #7D7D7D20;
+    }
+}
+

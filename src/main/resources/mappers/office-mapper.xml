@@ -53,4 +53,9 @@
 	<update id="updateUserDeptTask">
 		update employee set dept_task_id=#{dept_task_id} where id=#{id};
 	</update>
+	
+	<!-- // 사용자 이름, id 검색하기 -->
+	<select id="searchUser" resultMap="userList">
+		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id where e.id like #{keyword} or e.name like #{keyword};
+	</select>
 </mapper>
