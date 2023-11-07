@@ -7,4 +7,8 @@
   	<select id="login" resultType="Boolean">
   		select count(*) from employee where id=#{id} and pw=#{pw}
   	</select>
+  	
+  	<update id="updatePW">
+  		update employee set pw=#{pw} where id=#{id}
+  	</update>
   </mapper>
