@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class OfficeController {
 	}
 	
 	// 직급 명 불러오기
-	@GetMapping("/position")
+	@GetMapping("/job")
 	public ResponseEntity<List<JobDTO>> selectPositionAll(){
 		List<JobDTO> list = oservice.selectPositionAll();
 		return ResponseEntity.ok(list);
@@ -64,7 +65,30 @@ public class OfficeController {
 	@PostMapping("/userDelete")
 	public ResponseEntity<Integer> deleteUser(@RequestBody List<String> userID){
 		int result = oservice.deleteUser(userID);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(result);
 	}
 	
+	// 사용자 직위 수정하기
+	@PostMapping("/updateUserJob")
+	public ResponseEntity<Integer> updateUserJob(@RequestBody List<MemberDTO> dtoList){
+		oservice.updateUserJob(dtoList);
+		return ResponseEntity.ok().build();
+	}
+	
+	// 사용자 소속 조직 수정하기
+	@PostMapping("/updateUserDeptTask")
+	public ResponseEntity<Integer> updateUserDeptTask(@RequestBody List<MemberDTO> dtoList){
+		oservice.updateUserDeptTask(dtoList);
+		return ResponseEntity.ok().build();
+	}
+	
+	// 사용자 이름, id 검색하기
+	@GetMapping("/searchUser")
+	public ResponseEntity<List<Map<String, String>>> searchUser(String keyword){
+		List<Map<String, String>> list = oservice.searchUser(keyword);
+		for(Map<String,String>d :list) {
+			System.out.println(d.toString());
+		}
+		return ResponseEntity.ok(list);
+	}
 }

@@ -53,9 +53,15 @@ public class OfficeService {
 		// 사번은 입사년도+부서번호+입사 순서로 구성
 		String id = year + dto.getDept_task_id() + joiningNumber;
 		dto.setId(id);
+		
+		String engKeyboardConversionName = EncryptionUtils.kR_EnKeyboardConversion(dto.getName());
+		System.out.println(engKeyboardConversionName);
 
 		// 비밀번호는 이름으로 저장
-		dto.setPw(EncryptionUtils.getSHA512(dto.getName()));
+		dto.setPw(EncryptionUtils.getSHA512(engKeyboardConversionName));
+		
+		// 사내 이메일은 id랑 똑같이 저장
+		dto.setCompany_email(dto.getId());
 
 		return dao.insertUser(dto);
 	}
@@ -63,5 +69,24 @@ public class OfficeService {
 	// 사용자 삭제하기
 	public int deleteUser(List<String> userID) {
 		return dao.deleteUser(userID);
+	}
+	
+	// 사용자 직위 수정하기
+	public void updateUserJob(List<MemberDTO> dtoList) {
+		for(MemberDTO dto:dtoList) {
+			dao.updateUserJob(dto);
+		}
+	}
+	
+	// 사용자 소속 조직 수정하기
+	public void updateUserDeptTask(List<MemberDTO> dtoList) {
+		for(MemberDTO dto:dtoList) {
+			dao.updateUserDeptTask(dto);
+		}
+	}
+	
+	// 사용자 이름, id 검색하기
+	public List<Map<String, String>> searchUser(String keyword){
+		return dao.searchUser(keyword);
 	}
 }

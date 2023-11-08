@@ -20,7 +20,9 @@
 	<!-- 채팅 테스트용 conflict 날 시 지워도 상관없음. -->
 	<button id="goChat">채팅 열기</button>
 	
-	<button><a href="/members/goLogin">로그인</a></button>
+<!-- 	<button><a href="/members/goLogin">로그인</a></button> -->
+	<button><a href="/members/logout">로그아웃</a></button>
+	
 	<script>
 		$("#goChat").on("click",function(){
 			let option ="height=700, width=400";

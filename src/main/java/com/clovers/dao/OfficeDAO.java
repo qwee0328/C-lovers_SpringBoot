@@ -46,4 +46,20 @@ public class OfficeDAO {
 	public int deleteUser(List<String> userID) {
 		return db.delete("Office.deleteUser", userID);
 	}
+	
+	// 사용자 직위 수정하기
+	public int updateUserJob(MemberDTO dto) {
+		return db.update("Office.updateUserJob", dto);
+	}
+	
+	// 사용자 소속 조직 수정하기
+	public int updateUserDeptTask(MemberDTO dto) {
+		return db.update("Office.updateUserDeptTask",dto);
+	}
+	
+	// 사용자 이름, id 검색하기
+	public List<Map<String, String>> searchUser(String keyword){
+		keyword = "%"+keyword+"%";
+		return db.selectList("Office.searchUser", keyword);
+	}
 }
