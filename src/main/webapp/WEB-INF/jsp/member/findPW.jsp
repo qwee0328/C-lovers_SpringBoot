@@ -46,10 +46,10 @@
 							</div>
 						</div>
 					</div>
-	
-					<!-- <div class="findPwBox__authChk">
-	                    <div>인증되었습니다</div>
-	                </div> -->
+					
+					 <div class="findPwBox__authChk">
+	                    
+	                </div>
 	
 					<div class="findPwBox__line"></div>
 	
@@ -83,7 +83,6 @@
 		$("#email").keyup(function(e){
 			console.log($("#email").val());
 			result = emailRegex.test($("#email").val());
-			console.log(result);
 			
 			if(!result){
 				$(".findPwBox__emailChk").html("이메일 형식이 올바르지 않습니다.").css({"font-size":"12px","color":"red"});
@@ -124,7 +123,6 @@
 			}
 		});
 		
-		let emailNum = 0;
 		let emailAuthFlag = false;
 		
 // 		이메일 인증 클릭
@@ -145,7 +143,6 @@
 				}
 			}).done(function(resp){
 				console.log(resp);
-				emailNum = resp;
 			})
 			
 		});
@@ -158,13 +155,24 @@
 				return;
 			}
 			
-			if($(".auth_cod").val() == emailNum){
-				emailAuthFlag = true;
-				alert("인증되었습니다.");
-				return;
-			}else{
-				alert("인증에 실패했습니다.")
-			}
+			$.ajax({
+				url:"/members/emailChk",
+				type:"POST",
+				data:{
+					emailCode: $(".auth_cod").val()
+				}
+			}).done(function(resp){
+				emailAuthFlag = resp;
+				
+				console.log("이메일 인증 클라이언트 : "+resp);
+				
+				if(resp == "true"){
+					$(".findPwBox__authChk").html("인증되었습니다.").css({"font-size":"12px","color":"green"});
+				}else{
+					$(".findPwBox__authChk").html("인증에 실패했습니다.").css({"font-size":"12px","color":"red"});
+				}
+			});
+			
 		});
 		
 		// 비밀번호 변경 버튼

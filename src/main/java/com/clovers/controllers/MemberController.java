@@ -28,6 +28,7 @@ public class MemberController {
 	@Autowired
 	private EmailService EmailService;
 
+	String num="";
 	
 //	로그인 페이지 이동
 	@RequestMapping("goLogin")
@@ -79,10 +80,24 @@ public class MemberController {
 
         int number = EmailService.sendMail(email);
 
-        String num = "" + number;
+        num = "" + number;
 
-        return num;
+        return "이메일 성공";
     }
+	
+//	코드 확인
+	@ResponseBody
+	@PostMapping("emailChk")
+	public String emailChk(String emailCode) {
+		
+		String emailSessionCode = session.getAttribute("emailCode")+"";
+		
+		if(emailCode.equals(emailSessionCode)) {
+			return "true";
+		}
+		return "false";
+		
+	}
 	
 //	비밀번호 변경
 	@RequestMapping("findPW")
