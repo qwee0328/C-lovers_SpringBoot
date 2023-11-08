@@ -35,8 +35,8 @@
 					</div>
 				</div>
 				<div class="send__inputLine">
-					<div class="inputLine_title">받는 사람</div>
-					<input type="text" name="receive_id" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<div class="inputLine_title">받는 사람</div> 
+					<input type="text" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>

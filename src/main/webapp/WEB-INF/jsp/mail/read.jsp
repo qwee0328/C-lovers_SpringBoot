@@ -27,11 +27,9 @@
 		<div class="container__read">
 			<form method="post" enctype="multipart/form-data">
 				<div class="read__btns">
-					<button type="submit" formaction="">답장</button>
-					<button type="submit" formaction="">전체답장</button>
-					<button type="submit" formaction="">전달</button>
-					<button type="submit" formaction="">삭제</button>
-					<button type="submit" formaction="">완전삭제</button>
+					<button type="submit" formaction="/mail/send/reply?id=${mail.id }">답장</button>
+					<button type="button" id="deleteMail" formaction="/mail/read/delete?id=${mail.id }">삭제</button>
+					<button type="button" id="perDeleteMail" formaction="/mail/read/perDelete?id=${mail.id }">완전삭제</button>
 				</div>
 				<input type="hidden" id="id" value="${mail.id }" />
 				<div class="read__title">
@@ -39,17 +37,16 @@
 				</div>
 				<div class="read__time">
 					${mail.send_date }
-					<%-- ${mail.time } --%>
 				</div>
 				<div class="read__idInfo">
-					<p>보낸 사람 : ${mail.send_id }
+					<p>보낸 사람 :<p><p class="idInfo__Value">${mail.send_id }</p>
 				</div>
 				<div class="read__idInfo">
-					<p>받는 사람 : ${mail.receive_id }
+					<p>받는 사람 :</p><p class="idInfo__Value">${mail.receive_id }</p>
 				</div>
 				<c:if test="${mail.reference_id != '' }">
 					<div class="read__idInfo">
-						<p>참조: ${mail.reference_id }</p>
+						<p>참조:</p><p class="idInfo__Value">${mail.reference_id }</p>
 					</div>
 				</c:if>
 				<hr>
@@ -84,6 +81,26 @@
 						}
 					})
 				})
+				
+				// 삭제 버튼 클릭 시
+				$("#deleteMail").on("click", function() {
+					let result = confirm("메일을 삭제하시겠습니까? 삭제한 메일은 휴지통으로 이동합니다.");
+					if(result) {
+						let formAction = $("#deleteMail").attr("formaction");
+						window.location.href = formAction;
+					}
+				})
+				
+				// 완전삭제 버튼 클릭 시
+				$("#deleteMail").on("click", function() {
+					let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
+					if(result) {
+						let formAction = $("#perDeleteMail").attr("formaction");
+						window.location.href = formAction;
+					}
+				})
+				
+				
 			</script>
 		</div>
 	</div>

@@ -78,6 +78,7 @@ input[type=checkbox] {
 
 .mailList__right {
 	display: flex;
+	align-items: center;
 	margin-left: auto;
 }
 

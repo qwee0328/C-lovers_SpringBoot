@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -107,14 +108,22 @@ public class MailController {
 		List<EmailFileDTO> fileList = new ArrayList<>();
 		
 		boolean result = mservice.selectFileByEmailId(email_id);
-		System.out.println(result);
-		
 		if(result) {
 			fileList = mservice.selectAllFileById(email_id);
 		} 
-		System.out.println(fileList);
 		
 		return fileList;
+	}
+	
+	// 답장
+	@RequestMapping("/send/reply")
+	public String replyMail(int id, Model model) {
+		System.out.println(id);
+		EmailDTO reply = mservice.selectAllById(id);
+		
+		model.addAttribute("reply", reply);
+		
+		return "/mail/send";
 	}
 	
 	// 삭제 (휴지통)
@@ -172,6 +181,20 @@ public class MailController {
 		mav.setViewName("/mail/read");
 		
 		return mav;
+	}
+	
+	// 삭제
+	@RequestMapping("/read/delete")
+	public String deleteAtRead(int id) {
+		mservice.deleteMail(id);
+		return "redirect:/mail";
+	}
+	
+	// 완전삭제
+	@RequestMapping("/read/perDelete")
+	public String perDeleteAtRead(int id) {
+		mservice.perDeleteMail(id);
+		return "redirect:/mail";
 	}
 	
 	

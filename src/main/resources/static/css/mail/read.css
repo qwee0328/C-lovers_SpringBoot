@@ -58,6 +58,10 @@ body {
 	display: flex;
 }
 
+.idInfo__Value {
+	margin-left: 5px;
+}
+
 
 hr {
 	margin: 20px 0px;

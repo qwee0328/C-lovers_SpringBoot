@@ -132,7 +132,7 @@
 				}).done(function(){
 					location.reload();
 				}).done(function(){
-					alert("선택한 메일이 휴지통으로 이동되었습니다.");
+					alert("선택한 메일이 휴지통으로 이동했습니다.");
 				});
 			} else {
 				alert("삭제할 메일을 선택해주세요.");
@@ -141,7 +141,7 @@
 		
 		// 완전 삭제 버튼 클릭 시
 		$("#perDeleteMail").on("click", function() {
-			let result = confirm("완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
+			let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
 			if(result) {
 				let selectedMails = [];
 				$(".mailList__checkbox:checked").each(function() {
