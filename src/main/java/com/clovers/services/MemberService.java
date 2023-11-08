@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clovers.dao.MemberDAO;
+import com.clovers.dto.MemberDTO;
 
 @Service
 public class MemberService {
@@ -29,5 +30,9 @@ public class MemberService {
 		param.put("pw", pw);
 		
 		return mdao.updatePW(param);
+	}
+	
+	public Map<String,String> selectUserInfo(String loginID){
+		return mdao.selectUserInfo(loginID);
 	}
 }
