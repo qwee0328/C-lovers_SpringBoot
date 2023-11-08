@@ -29,11 +29,11 @@
 					</div>
 					
 					<div class="loginBox__idBox">
-						<input class="idBox" name="id" id="id" type="text" placeholder="사번">
+						<input class="idBox" name="id" id="id" type="text" onkeyup="enterKey()" placeholder="사번">
 					</div>
 					
 					<div class="loginBox__pwBox">
-						<input class="pwBox" name="pw" id="pw" type="password" placeholder="비밀번호">
+						<input class="pwBox" name="pw" id="pw" type="password" onkeyup="enterKey()" placeholder="비밀번호">
 					</div>
 					
 					<div class="loginFail">
@@ -45,13 +45,45 @@
 					</div>
 					
 				<div class="loginBox__findPw">
-					<button class="findPwBtn">비밀번호 찾기</button>
+					<button type="button" class="findPwBtn">비밀번호 찾기</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
 	<script>
+	// 엔터키 눌렀을 때 login
+		function enterKey(){
+			if(window.event.keyCode == 13){
+				if($("#id").val() == ""){
+					alert("사번을 입력해주세요.");
+					return false;
+				}
+				if($("#pw").val()==""){
+					alert("비밀번호를 입력해주세요.");
+					return false;
+				}
+				$.ajax({
+					url:"/members/login",
+					type:"POST",
+					data:{
+						id:$("#id").val(),
+						pw:$("#pw").val()
+					}
+				}).done(function(resp){
+					console.log(resp);
+					if(resp == false){
+						$(".loginFail").html("로그인에 실패했습니다.");
+					}else{
+						location.href="/"
+					}
+				});
+			};
+		};
+		
+		
+		
+	// 버튼 클릭시 login
 		$("#loginBtn").on("click",function(){
 			
 //	 		login
