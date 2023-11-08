@@ -82,7 +82,6 @@
 		};
 		
 		
-		
 	// 버튼 클릭시 login
 		$("#loginBtn").on("click",function(){
 			

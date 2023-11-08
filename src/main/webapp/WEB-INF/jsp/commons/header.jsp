@@ -39,11 +39,63 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 민경 추가부분 -->
+	<div class="header__userinfoBox">
+		<div class="header__userinfo">
+			<div class="header__myinfo">
+
+				<div class="header__profileImageBox">
+					<img src="/assets/profile.png" alt="" class="header__profileImage">
+				</div>
+
+				<div class="header__profileInfoBox">
+					<div class="profileName">
+						이사원
+					</div>
+
+					<div class="profileEmail">
+						lee@clovers.com
+					</div>
+				</div>
+
+			</div>
+
+			<div class="header__myinfoBottom">
+
+				<div class="header__setting"><a href="#">설정</a></div>
+
+				<div class="header__logoutBtnBox">
+					<button><a href="/members/logout">로그아웃</a></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </body>
 
 <script>
 	$(".dropNavi__icon").on("click", function() {
 		
+	})
+	
+	// 민경 추가
+	// 프로필 이미지 누르면 창 뜨게 바깥 누르면 닫힘
+	$(document).click(function (e) {
+		if (e.target.className == "profileImg") {
+			$(".header__userinfoBox").toggle(
+				function () {
+					$(".header__userinfoBox").addClass("show");
+				},
+				function () {
+					$(".header__userinfoBox").addClass("hide");
+				}
+			)
+		}else if($(".header__userinfoBox").has(e.target).length>0){
+			return true;
+		}else{
+			$(".header__userinfoBox").css("display", "none");
+		}
 	})
 </script>
 </html>
