@@ -77,13 +77,6 @@ public class EncryptionUtils {
 				int middleConsonant = chars%(21*28)/28; // 중성
 				int finalConsonant = chars%(21*28)%28; // 종성
 				
-//				// 한글 분해
-//				result = result + arrInitialConsonant[initialConsonant] + arrMiddleConsonant[middleConsonant];
-//				// 자음 분리 - 종성이 존재할 경우
-//				if(finalConsonant!=0x0000) {
-//					result = result+arrFinalConsonant[finalConsonant];
-//				}
-				
 				// 알파벳으로 변경
 				resultEng = resultEng+arrInitialConsonantEng[initialConsonant]+arrMiddleConsonantEng[middleConsonant];
 				// 자음 분리 - 종성이 존재할 경우
@@ -91,9 +84,6 @@ public class EncryptionUtils {
 					resultEng=resultEng+arrFinalConsonantEng[finalConsonant];
 				}
 			}else { // 한글이 아니거나 자음만 있는 경우
-				// 자음 분리
-				//result = result+((char)(chars+0xAC00));
-				
 				// 알파벳으로 변경
 				if(chars>=34097 && chars<=34126) {
 					// 단자음인 경우
