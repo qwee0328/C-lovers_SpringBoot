@@ -1,13 +1,19 @@
 package com.clovers.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.commons.EncryptionUtils;
+import com.clovers.dto.MemberDTO;
 import com.clovers.services.EmailService;
 import com.clovers.services.MemberService;
 
@@ -15,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+//@RestController
 @RequestMapping("/members/")
 public class MemberController {
 	// 멤버 로그인, 비밀번호 확인
@@ -56,6 +63,7 @@ public class MemberController {
 	
 //	로그아웃
 	@RequestMapping("logout")
+	@GetMapping("logout")
 	public String logout(HttpServletRequest request) {
 		
 		session.invalidate();
@@ -109,6 +117,21 @@ public class MemberController {
 		
 		
 		return "redirect:/";
+	}
+	
+	@ResponseBody
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<Map<String,String>> getUserInfo(){
+		String loginID = (String) session.getAttribute("loginID");
+		System.out.println(loginID);
+		Map<String,String> userInfo = null;
+		if(loginID!=null) {
+			System.out.println("로그인 되어있음");
+			userInfo = mservice.selectUserInfo(loginID);
+		}else {
+			System.out.println("로그인 안되어있음");
+		}
+		return ResponseEntity.ok(userInfo);
 	}
 
 }
