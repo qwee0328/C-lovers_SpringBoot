@@ -63,6 +63,7 @@ public class MemberController {
 	
 //	로그아웃
 	@RequestMapping("logout")
+	@GetMapping("logout")
 	public String logout(HttpServletRequest request) {
 		
 		session.invalidate();
