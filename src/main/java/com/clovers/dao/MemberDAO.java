@@ -1,6 +1,7 @@
 package com.clovers.dao;
 
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -24,6 +25,11 @@ public class MemberDAO {
 
 	public List<String> isManager(String id) {
 		return db.selectList("member.isManager", id);
+	}
+	
+	public Map<String,String> selectUserInfo(String loginID){
+		System.out.println(db.selectOne("member.selectUserInfo", loginID).toString());
+		return db.selectOne("member.selectUserInfo", loginID);
 	}
 	
 }

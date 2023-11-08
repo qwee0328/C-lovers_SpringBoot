@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clovers.dao.MemberDAO;
+import com.clovers.dto.MemberDTO;
 
 @Service
 public class MemberService {
@@ -34,5 +35,9 @@ public class MemberService {
 
 	public List<String> isManager(String id) {
 		return mdao.isManager(id);
+	}
+	
+	public Map<String,String> selectUserInfo(String loginID){
+		return mdao.selectUserInfo(loginID);
 	}
 }

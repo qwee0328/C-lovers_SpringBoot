@@ -21,6 +21,7 @@ public class HomeController {
 		String title = "오피스 홈";
 		
 		session.setAttribute("title", title);
+		
 		return "home";
 	}
 	

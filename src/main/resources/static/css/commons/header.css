@@ -61,3 +61,81 @@
   height: 35px;
   border-radius: 50%;
 }
+
+
+/* 민경 css */
+.header__userinfoBox{
+	display: none;
+	border: 1px solid #7d7d7d40;
+	position: absolute;
+	right: 24px;
+  	top: 50px;
+	width: 360px;
+	border-radius: 5px;
+	box-shadow: 3px 3px #7D7D7D40;
+	background-color: white;
+}
+.header__userinfo{
+	padding: 20px;
+}
+.header__myinfo{
+	display: flex;
+}
+.header__profileImageBox,.header__profileImage{
+	width: 75px;
+}
+.profileName{
+	margin: 10px 0;
+	font-weight:600;
+	font-size: 17px;
+}
+.profileEmail{
+	font-size: 14px;
+}
+.header__profileInfoBox{
+	margin-left: 20px;
+}
+.header__myinfoBottom{
+	display: flex;
+	margin-top: 10px;
+	justify-content: space-between;
+}
+.header__setting{
+	font-size: 14px;
+	display: flex;
+    align-items: center;
+}
+.header__setting>a{
+	text-decoration: none;
+	color: #20412E;
+}
+.header__logoutBtnBox{
+	text-align: right;
+}
+.header__logoutBtnBox>button{
+	/*
+	width: 90px; height: 30px;
+	font-size: 14px;
+	background-color: #7D7D7D40;
+	border: none; border-radius: 5px;
+	*/
+	padding: 5px 20px;
+    background-color: #7d7d7d20;
+    border: 1px solid #7d7d7d40;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0;
+}
+.header__logoutBtnBox>button>a{
+	text-decoration: none;
+	color: black;
+}
+/* toggle */
+.show{
+	display: inline;
+}
+.hide{
+	display: none;
+}
+
+
