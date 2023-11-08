@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clovers.dto.DepartmentDTO;
@@ -21,7 +20,7 @@ import com.clovers.services.DeptTaskService;
 @RestController
 @RequestMapping("/org/")
 public class OrganizationController {
-	//부서, 직무 관련 컨트롤러
+	//상위부서, 부서 관련 컨트롤러
 	
 	@Autowired
 	private DepartmentService deptService;
@@ -35,15 +34,41 @@ public class OrganizationController {
 		return ResponseEntity.ok(deptService.selectOffice());
 	}
 	
+	@GetMapping("office/empCount")
+	public ResponseEntity<Integer> getOfficeEmpCount(){
+		return ResponseEntity.ok(deptService.selectEmpCount());
+	}
+	
 	@GetMapping("getDepartment")
-	public ResponseEntity<List<DepartmentDTO>> getDepartmentDTO(){
+	public ResponseEntity<List<DepartmentDTO>> getDepartmentDTOList(){
 		return ResponseEntity.ok(deptService.selectAllWithOutOfficeId());
 	}
 	
+	@GetMapping("getDepartment/{id}")
+	public ResponseEntity<DepartmentDTO> getDepartmentDTO(@PathVariable String id){
+		return ResponseEntity.ok(deptService.selectById(id));
+	}
+	
+	@GetMapping("getDepartment/{id}/empCount")
+	public ResponseEntity<Integer> getEmpCountByDepartment(@PathVariable String id){
+		return ResponseEntity.ok(deptService.selectEmpCountById(id));
+	}
+	
 	@GetMapping("getDeptTask/{dept_id}")
-	public ResponseEntity<List<DeptTaskDTO>> getDeptTaskDTOByDeptId(@PathVariable String dept_id){
+	public ResponseEntity<List<DeptTaskDTO>> getDeptTaskDTOListByDeptId(@PathVariable String dept_id){
 		return ResponseEntity.ok(dtaskService.selectByDeptId(dept_id));
 	}
+	
+	@GetMapping("getDeptTask/{id}")
+	public ResponseEntity<DeptTaskDTO> getDeptTaskDTO(@PathVariable String id){
+		return ResponseEntity.ok(dtaskService.selectById(id));
+	}
+	
+	@GetMapping("getDeptTask/{id}/empCount")
+	public ResponseEntity<Integer> getEmpCountByDeptTask(@PathVariable String id){
+		return ResponseEntity.ok(dtaskService.selectEmpCountById(id));
+	}
+	
 	
 	@PostMapping("postDepartment")
 	public ResponseEntity<Void> postDepartment(@RequestBody DepartmentDTO deptDTO){
@@ -65,7 +90,6 @@ public class OrganizationController {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-	}
-	
+	}	
 
 }
