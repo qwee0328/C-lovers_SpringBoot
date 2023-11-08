@@ -68,6 +68,12 @@ input[type=checkbox] {
 
 .mailList__title {
 	margin-left: 150px;
+	text-decoration: none;
+	color: #000000;
+}
+
+.mailList__title:hover {
+	color: #75B47D;
 }
 
 .mailList__right {

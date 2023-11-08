@@ -43,7 +43,7 @@ public class MailService {
 		return dao.inBoxList(recieve_id);
 	}
 	
-	public boolean selectFileByEmailId(String email_id) {
+	public boolean selectFileByEmailId(int email_id) {
 		return dao.selectFileByEmailId(email_id);
 	}
 	
@@ -65,6 +65,14 @@ public class MailService {
 	
 	public List<EmailDTO> sentBoxList(String send_id) {
 		return dao.sentBoxList(send_id);
+	}
+	
+	public EmailDTO selectAllById(int id) {
+		return dao.selectAllById(id);
+	}
+	
+	public List<EmailFileDTO> selectAllFileById(int email_id) {
+		return dao.selectAllFileById(email_id);
 	}
 	
 }

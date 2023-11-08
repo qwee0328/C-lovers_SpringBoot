@@ -29,7 +29,7 @@ public class MailDAO {
 		return db.selectList("Mail.inBoxList", recieve_id);
 	}
 	
-	public boolean selectFileByEmailId(String email_id) {
+	public boolean selectFileByEmailId(int email_id) {
 		Object result = db.selectOne("Mail.selectFileByEmailId", email_id);
 		boolean exist;
 		if(result != null) {
@@ -58,5 +58,13 @@ public class MailDAO {
 	
 	public List<EmailDTO> sentBoxList(String send_id) {
 		return db.selectList("Mail.sentBoxList", send_id);
+	}
+	
+	public EmailDTO selectAllById(int id) {
+		return db.selectOne("Mail.selectAllById", id);
+	}
+	
+	public List<EmailFileDTO> selectAllFileById(int email_id) {
+		return db.selectList("Mail.selectAllFileById", email_id);
 	}
 }

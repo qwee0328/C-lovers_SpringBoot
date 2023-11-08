@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.clovers.dto.EmailDTO;
+import com.clovers.dto.EmailFileDTO;
 import com.clovers.services.MailService;
 
 import jakarta.servlet.http.HttpSession;
@@ -89,9 +92,25 @@ public class MailController {
 	// 파일 유무
 	@ResponseBody
 	@RequestMapping("/haveFile")
-	public boolean haveFile(@RequestParam("email_id") String email_id) {
+	public boolean haveFile(@RequestParam("email_id") int email_id) {
+		return mservice.selectFileByEmailId(email_id);
+	}
+	
+	// 파일 리스트
+	@ResponseBody
+	@RequestMapping("/fileList")
+	public List<EmailFileDTO> fileList(@RequestParam("email_id") int email_id) {
+		List<EmailFileDTO> fileList = new ArrayList<>();
+		
 		boolean result = mservice.selectFileByEmailId(email_id);
-		return result;
+		System.out.println(result);
+		
+		if(result) {
+			fileList = mservice.selectAllFileById(email_id);
+		} 
+		System.out.println(fileList);
+		
+		return fileList;
 	}
 	
 	// 삭제 (휴지통)
@@ -134,6 +153,21 @@ public class MailController {
 	public List<EmailDTO> sentboxList() {
 		String send_id = (String) session.getAttribute("loginID");
 		return mservice.sentBoxList(send_id);
+	}
+	
+	
+	// ---------- read ----------
+	
+	// 메일 내용
+	@RequestMapping("/read")
+	public ModelAndView read(@RequestParam("id") String id) {
+		EmailDTO mail = mservice.selectAllById(Integer.parseInt(id));
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("mail", mail);
+		mav.setViewName("/mail/read");
+		
+		return mav;
 	}
 	
 	

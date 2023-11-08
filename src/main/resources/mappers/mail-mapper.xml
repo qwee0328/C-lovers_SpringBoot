@@ -40,4 +40,12 @@
 	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
 		select * from email where send_id = #{send_id} and trash = false order by id desc
 	</select>
+	
+	<select id="selectAllById" resultType="com.clovers.dto.EmailDTO">
+		select * from email where id = #{id}
+	</select>
+	
+	<select id="selectAllFileById" resultType="com.clovers.dto.EmailFileDTO">
+		select * from email_file where email_id = #{email_id};
+	</select>
 </mapper>
