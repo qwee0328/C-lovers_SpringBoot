@@ -1,5 +1,8 @@
 package com.clovers.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,6 +97,19 @@ public class MemberController {
 		
 		
 		return "redirect:/";
+	}
+	
+//	관리자인지 확인
+	@ResponseBody
+	@RequestMapping("isManager")
+	public List<String> isManager() {
+		String id = (String)session.getAttribute("loginID");
+		List<String> authority_category = new ArrayList<>();
+		
+		if(authority_category.size() > 0) {
+			authority_category = mservice.isManager(id);
+		}
+		return authority_category;
 	}
 
 }

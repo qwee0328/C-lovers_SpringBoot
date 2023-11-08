@@ -23,4 +23,6 @@ public class EmailDTO {
 	private boolean reservation;
 	private Timestamp reservation_date;
 	private boolean trash;
+	private String reference_id;
+	private Timestamp send_date;
 }

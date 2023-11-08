@@ -1,5 +1,6 @@
 package com.clovers.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,6 +20,10 @@ public class MemberDAO {
 	
 	public int updatePW(Map<String, String> param) {
 		return db.update("member.updatePW",param);
+	}
+
+	public List<String> isManager(String id) {
+		return db.selectList("member.isManager", id);
 	}
 	
 }

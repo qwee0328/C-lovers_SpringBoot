@@ -80,10 +80,11 @@
 						} 
 					})
 					
-					let timeDiv = $("<div>");
-					timeDiv.addClass("right__time");
+					let dateDiv = $("<div>");
+					dateDiv.addClass("right__date");
+					dateDiv.html(resp[i].send_date);
 					
-					rightDiv.append(fileIconDiv).append(timeDiv);
+					rightDiv.append(fileIconDiv).append(dateDiv);
 					mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
 					
 					$(".inBox__mailListBox").append(mailListDiv);

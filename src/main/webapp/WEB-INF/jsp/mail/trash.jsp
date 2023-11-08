@@ -60,7 +60,8 @@
 					nameDiv.html(resp[i].send_id);
 					
 					
-					let titleDiv = $("<div>");
+					let titleDiv = $("<a>");
+					titleDiv.attr("href", "/mail/read?id=" + resp[i].id);
 					titleDiv.addClass("mailList__title");
 					titleDiv.html(resp[i].title);
 					
@@ -79,10 +80,11 @@
 						} 
 					})
 					
-					let timeDiv = $("<div>");
-					timeDiv.addClass("right__time");
+					let dateDiv = $("<div>");
+					dateDiv.addClass("right__date");
+					dateDiv.html(resp[i].send_date);
 					
-					rightDiv.append(fileIconDiv).append(timeDiv);
+					rightDiv.append(fileIconDiv).append(dateDiv);
 					mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
 					
 					$(".inBox__mailListBox").append(mailListDiv);

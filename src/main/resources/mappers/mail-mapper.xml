@@ -6,7 +6,7 @@
 	<!-- 메일 매퍼 -->
 	
 	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
-		insert into email value(0, #{send_id}, 'test', #{title}, #{content}, default, default, null, default)
+		insert into email value(0, #{send_id}, #{receive_id}, #{title}, #{content}, default, default, null, default, #{reference_id}, #{send_date})
 	</insert>
 	
 	<insert id="submitFile">

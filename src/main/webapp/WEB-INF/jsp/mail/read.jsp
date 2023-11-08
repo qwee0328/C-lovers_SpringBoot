@@ -38,7 +38,7 @@
 					${mail.title}
 				</div>
 				<div class="read__time">
-					보낸 시간
+					${mail.send_date }
 					<%-- ${mail.time } --%>
 				</div>
 				<div class="read__idInfo">
@@ -47,9 +47,11 @@
 				<div class="read__idInfo">
 					<p>받는 사람 : ${mail.receive_id }
 				</div>
-				<div class="read__idInfo">
-					<p>참조: </p>
-				</div>
+				<c:if test="${mail.reference_id != '' }">
+					<div class="read__idInfo">
+						<p>참조: ${mail.reference_id }</p>
+					</div>
+				</c:if>
 				<hr>
 				<div class="read__file"></div>
 				<div class="read__content">

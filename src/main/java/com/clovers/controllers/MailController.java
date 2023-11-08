@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,9 @@ public class MailController {
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
 	public String submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
+		Timestamp send_date = new Timestamp(System.currentTimeMillis());
+		dto.setSend_date(send_date);
+		
 		int email_id = mservice.submitSend(dto, files);
 		
 		return "redirect:/mail";

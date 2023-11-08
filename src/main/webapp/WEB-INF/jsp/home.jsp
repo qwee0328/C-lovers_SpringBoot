@@ -92,6 +92,7 @@
 					</div>
 					<div class="naviItem__title">전자결재</div>
 				</div>
+				
 			</div>
 		</div>
 		
@@ -100,6 +101,45 @@
 				if($(this).siblings().html() == "메일") {
 					location.href = "/mail";
 				}
+			})
+			
+			$(document).ready(function() {
+				$.ajax({
+					url: "/members/isManager",
+				}).done(function(resp) {
+					if(resp.length > 0) {
+						for(let i = 0; i < resp.length; i++) {
+							if(resp[i] == "예약") {
+								
+							}
+							if(resp[i] == "인사") {
+								
+							}
+							if(resp[i] == "오피스 관리") {
+								let naviItemBox = $("<div>");
+								naviItemBox.addClass("naviItems__naviItem");
+								
+								let itemCurcleBox = $("<div>");
+								itemCurcleBox.addClass("naviItem__itemCurcle");
+								
+								let iconBox = $("<div>");
+								iconBox.addClass("itemCurcle__Icon");
+								
+								let icon = $("<i>");
+								icon.addClass("fa-solid fa-gear");
+								
+								let titleBox = $("<div>");
+								titleBox.addClass("naviItem__title");
+								titleBox.html("오피스 관리");
+								
+								iconBox.append(icon);
+								itemCurcleBox.append(iconBox);
+								naviItemBox.append(itemCurcleBox).append(titleBox);
+								$(".naviItems__naviItem").append(naviItemBox);
+							}
+						}
+					}
+				})
 			})
 		</script>
 

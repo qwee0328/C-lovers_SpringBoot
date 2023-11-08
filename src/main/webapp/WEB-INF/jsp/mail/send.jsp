@@ -40,7 +40,7 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
-					<input type="text" class="inputLine__input"/>
+					<input type="text" name="reference_id" class="inputLine__input"/>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">제목</div>
