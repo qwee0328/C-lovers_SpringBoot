@@ -28,7 +28,7 @@
 	
 	<!-- 사용자 리스트 불러오기 -->
 	<select id="selectUserList" resultMap="userList">
-		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id;
+		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id ORDER BY CAST(RIGHT(e.id, 3) AS UNSIGNED) desc;
 	</select>
 	
 	<!-- // 사용자 등록하기 -->
@@ -56,6 +56,6 @@
 	
 	<!-- // 사용자 이름, id 검색하기 -->
 	<select id="searchUser" resultMap="userList">
-		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id where e.id like #{keyword} or e.name like #{keyword};
+		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id where e.id like #{keyword} or e.name like #{keyword} ORDER BY CAST(RIGHT(e.id, 3) AS UNSIGNED) desc;
 	</select>
 </mapper>
