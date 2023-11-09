@@ -64,12 +64,12 @@ public class MailController {
 	
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
-	public String submitSend(EmailDTO dto, String sys_name, MultipartFile[] uploadFiles) throws Exception {
+	public String submitSend(EmailDTO dto, String sysName, MultipartFile[] uploadFiles) throws Exception {
 		dto.setSend_date(new Timestamp(System.currentTimeMillis()));
 		
 		// 임시 메일이라면
 		if(dto.isTemporary() == true) {
-			mservice.submitTempSend(dto, sys_name, uploadFiles);
+			mservice.submitTempSend(dto, sysName, uploadFiles);
 		} else {
 			dto.setTemporary(false);
 			mservice.submitSend(dto, uploadFiles);
