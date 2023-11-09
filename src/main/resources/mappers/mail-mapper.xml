@@ -5,7 +5,60 @@
 <mapper namespace="Mail">
 	<!-- 메일 매퍼 -->
 	
-	<insert id="submitSend">
-		insert into email value(0, #{send_id}, 'test', #{title}, #{content}, default, default, null, default)
+	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
+		insert into email value(0, #{send_id}, #{receive_id}, #{title}, #{content}, #{temporary}, default, null, default, #{reference_id}, #{send_date})
 	</insert>
+	
+	<update id="submitTempSend">
+		<choose>
+	        <when test="reference_id != ''">
+	            <!-- reference_id가 존재할 때 실행 -->
+	            update email set receive_id = #{receive_id}, reference_id = ${reference_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	        </when>
+	        <otherwise>
+	            <!-- reference_id가 존재하지 않을 때 실행 -->
+	            update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	        </otherwise>
+	    </choose>
+	</update>
+	
+	<insert id="submitFile">
+		insert into email_file value(0, #{email_id}, #{ori_name}, #{sys_name})
+	</insert>
+	
+	<select id="inBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from email where receive_id = #{receive_id} and temporary = false and trash = false order by id desc
+	</select>
+	
+	<select id="selectFileByEmailId" resultType="boolean">
+		select email_id from email_file group by email_id having email_id = ${email_id}
+	</select>
+	
+	<update id="deleteMail">
+		update email set trash = true where id = ${id}
+	</update>
+	
+	<delete id="perDeleteMail">
+		delete from email where id = ${id}
+	</delete>
+	
+	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
+		select * from email where send_id = #{id} and trash = true union select * from email where receive_id = #{id} and trash = true;
+	</select>
+	
+	<update id="restoreMail">
+		update email set trash = false where id = ${id}
+	</update>
+	
+	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from email where send_id = #{send_id} and temporary = #{temporary} and trash = false order by id desc
+	</select>
+	
+	<select id="selectAllById" resultType="com.clovers.dto.EmailDTO">
+		select * from email where id = #{id}
+	</select>
+	
+	<select id="selectAllFileById" resultType="com.clovers.dto.EmailFileDTO">
+		select * from email_file where email_id = #{email_id};
+	</select>
 </mapper>
