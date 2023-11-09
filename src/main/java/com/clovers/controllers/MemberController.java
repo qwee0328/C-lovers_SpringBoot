@@ -1,25 +1,41 @@
 package com.clovers.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.clovers.commons.EncryptionUtils;
+import com.clovers.dto.MemberDTO;
+import com.clovers.services.EmailService;
 import com.clovers.services.MemberService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+//@RestController
 @RequestMapping("/members/")
 public class MemberController {
 	// 멤버 로그인, 비밀번호 확인
 	
 	@Autowired
-	private HttpSession hsession;
+	private HttpSession session;
 	
 	@Autowired
 	private MemberService mservice;
+	
+	@Autowired
+	private EmailService EmailService;
+
+	String num="";
 	
 //	로그인 페이지 이동
 	@RequestMapping("goLogin")
@@ -32,13 +48,90 @@ public class MemberController {
 	@RequestMapping(value="login", method = RequestMethod.POST)
 	public boolean login(String id, String pw) {
 		
-		boolean result = mservice.login(id, pw);
+//		암호화한거
+		String pwEnc = EncryptionUtils.getSHA512(pw);
+		boolean result = mservice.login(id, pwEnc);
+		
 		
 		if(result) {
-			hsession.setAttribute("loginID", id);
+			session.setAttribute("loginID", id);
+			System.out.println("login( ) : "+ session.getAttribute("loginID"));
 		}
 		
 		return result;
+	}
+	
+//	로그아웃
+	@RequestMapping("logout")
+	@GetMapping("logout")
+	public String logout(HttpServletRequest request) {
+		
+		session.invalidate();
+		
+		return "redirect:/";
+	}
+	
+//	비밀번호 페이지 이동
+	@RequestMapping("goFindPW")
+	public String goFindPW() {
+		System.out.println("goFindPW ( )");
+		return "member/findPW";
+	}
+	
+//	이메일
+	@ResponseBody
+    @PostMapping("email")
+    public String MailSend(String email){
+		System.out.println(email);
+    	
+    	System.out.println("Cont- 이메일 전송 완료");
+
+        int number = EmailService.sendMail(email);
+
+        num = "" + number;
+
+        return "이메일 성공";
+    }
+	
+//	코드 확인
+	@ResponseBody
+	@PostMapping("emailChk")
+	public String emailChk(String emailCode) {
+		
+		String emailSessionCode = session.getAttribute("emailCode")+"";
+		
+		if(emailCode.equals(emailSessionCode)) {
+			return "true";
+		}
+		return "false";
+		
+	}
+	
+//	비밀번호 변경
+	@RequestMapping("findPW")
+	public String updatePW(String id, String pw) {
+		
+//		암호화한거
+		String pwEnc = EncryptionUtils.getSHA512(pw);
+		mservice.updatePW(id, pwEnc);
+		
+		
+		return "redirect:/";
+	}
+	
+	@ResponseBody
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<Map<String,String>> getUserInfo(){
+		String loginID = (String) session.getAttribute("loginID");
+		System.out.println(loginID);
+		Map<String,String> userInfo = null;
+		if(loginID!=null) {
+			System.out.println("로그인 되어있음");
+			userInfo = mservice.selectUserInfo(loginID);
+		}else {
+			System.out.println("로그인 안되어있음");
+		}
+		return ResponseEntity.ok(userInfo);
 	}
 
 }
