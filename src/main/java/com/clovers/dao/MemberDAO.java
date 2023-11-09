@@ -1,5 +1,7 @@
 package com.clovers.dao;
 
+import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,6 +21,11 @@ public class MemberDAO {
 	
 	public int updatePW(Map<String, String> param) {
 		return db.update("member.updatePW",param);
+	}
+	
+	public Map<String,String> selectUserInfo(String loginID){
+		System.out.println(db.selectOne("member.selectUserInfo", loginID).toString());
+		return db.selectOne("member.selectUserInfo", loginID);
 	}
 	
 }

@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/humanResources")
-public class HumanResourcesController {
-	
-	
-	
-	// 인사 컨트롤러
+
+public class AdminMappingController {
+	@RequestMapping("/admin/**")
+	public String adminRoute() {
+		return "forward:/index.html";
+	}
 }

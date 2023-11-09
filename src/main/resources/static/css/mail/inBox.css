@@ -30,15 +30,21 @@ input[type=checkbox] {
 	accent-color:#095544;
 }
 
-.allCheck__checkNum {
+.allCheck__checkCount {
 	margin-left: 10px;
 	font-size: 15px;
 	color: #095544;
 }
 
-.allCheck__delete {
+.allCheck__buttons {
 	margin-left: 15px;
+	border: none;
 	font-size: 16px;
+	background-color: #FFFFFF;
+}
+
+.allCheck__buttons:hover {
+	cursor: pointer;
 }
 
 .inBox__mailList {
@@ -62,10 +68,17 @@ input[type=checkbox] {
 
 .mailList__title {
 	margin-left: 150px;
+	text-decoration: none;
+	color: #000000;
+}
+
+.mailList__title:hover {
+	color: #75B47D;
 }
 
 .mailList__right {
 	display: flex;
+	align-items: center;
 	margin-left: auto;
 }
 
@@ -73,7 +86,7 @@ input[type=checkbox] {
 	color: #B5B5BB;
 }
 
-.right__time {
+.right__date {
 	margin-left: 20px;
 }
 
