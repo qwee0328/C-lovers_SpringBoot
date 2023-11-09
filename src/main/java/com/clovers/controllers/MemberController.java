@@ -121,19 +121,6 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-//	관리자인지 확인
-	@ResponseBody
-	@RequestMapping("isManager")
-	public List<String> isManager() {
-		String id = (String)session.getAttribute("loginID");
-		List<String> authority_category = new ArrayList<>();
-		
-		if(authority_category.size() > 0) {
-			authority_category = mservice.isManager(id);
-		}
-		return authority_category;
-	}
-	
 	@ResponseBody
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<Map<String,String>> getUserInfo(){

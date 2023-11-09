@@ -11,10 +11,6 @@
   	<update id="updatePW">
   		update employee set pw=#{pw} where id=#{id}
   	</update>
-  	
-  	<select id="isManager" resultType="List">
-  		select authority_category from admin where emp_id=#{id}
-	</select>
 
   	<!-- 로그인된 사용자 이름, 이메일 맵 -->
   	<resultMap type="java.util.HashMap" id="userList">

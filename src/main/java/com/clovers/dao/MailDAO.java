@@ -1,6 +1,7 @@
 package com.clovers.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class MailDAO {
 	public int submitSend(EmailDTO dto) {
 		db.insert("Mail.submitSend", dto);
 		return dto.getId();
+	}
+	
+	public int submitTempSend(EmailDTO dto) {
+		return db.update("Mail.submitTempSend", dto);
 	}
 	
 	public int submitFile(EmailFileDTO dto) {
@@ -56,8 +61,8 @@ public class MailDAO {
 		return db.update("Mail.restoreMail", id);
 	}
 	
-	public List<EmailDTO> sentBoxList(String send_id) {
-		return db.selectList("Mail.sentBoxList", send_id);
+	public List<EmailDTO> sentBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.sentBoxList", param);
 	}
 	
 	public EmailDTO selectAllById(int id) {

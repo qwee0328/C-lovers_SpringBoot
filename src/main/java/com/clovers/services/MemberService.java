@@ -32,10 +32,6 @@ public class MemberService {
 		
 		return mdao.updatePW(param);
 	}
-
-	public List<String> isManager(String id) {
-		return mdao.isManager(id);
-	}
 	
 	public Map<String,String> selectUserInfo(String loginID){
 		return mdao.selectUserInfo(loginID);

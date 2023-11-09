@@ -27,7 +27,14 @@
 		<div class="container__read">
 			<form method="post" enctype="multipart/form-data">
 				<div class="read__btns">
-					<button type="submit" formaction="/mail/send/reply?id=${mail.id }">답장</button>
+					<c:choose>
+						<c:when test="${mail.temporary }">
+							<button type="submit" formaction="/mail/send/rewrite?id=${mail.id }">작성하기</button>
+						</c:when>
+						<c:otherwise>
+							<button type="submit" formaction="/mail/send/reply?id=${mail.id }">답장</button>
+						</c:otherwise>
+					</c:choose>
 					<button type="button" id="deleteMail" formaction="/mail/read/delete?id=${mail.id }">삭제</button>
 					<button type="button" id="perDeleteMail" formaction="/mail/read/perDelete?id=${mail.id }">완전삭제</button>
 				</div>

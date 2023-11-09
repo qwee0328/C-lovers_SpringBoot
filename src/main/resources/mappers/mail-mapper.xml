@@ -6,15 +6,28 @@
 	<!-- 메일 매퍼 -->
 	
 	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
-		insert into email value(0, #{send_id}, #{receive_id}, #{title}, #{content}, default, default, null, default, #{reference_id}, #{send_date})
+		insert into email value(0, #{send_id}, #{receive_id}, #{title}, #{content}, #{temporary}, default, null, default, #{reference_id}, #{send_date})
 	</insert>
+	
+	<update id="submitTempSend">
+		<choose>
+	        <when test="reference_id != ''">
+	            <!-- reference_id가 존재할 때 실행 -->
+	            update email set receive_id = #{receive_id}, reference_id = ${reference_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	        </when>
+	        <otherwise>
+	            <!-- reference_id가 존재하지 않을 때 실행 -->
+	            update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	        </otherwise>
+	    </choose>
+	</update>
 	
 	<insert id="submitFile">
 		insert into email_file value(0, #{email_id}, #{ori_name}, #{sys_name})
 	</insert>
 	
 	<select id="inBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where receive_id = #{receive_id} and trash = false order by id desc
+		select * from email where receive_id = #{receive_id} and temporary = false and trash = false order by id desc
 	</select>
 	
 	<select id="selectFileByEmailId" resultType="boolean">
@@ -38,7 +51,7 @@
 	</update>
 	
 	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{send_id} and trash = false order by id desc
+		select * from email where send_id = #{send_id} and temporary = #{temporary} and trash = false order by id desc
 	</select>
 	
 	<select id="selectAllById" resultType="com.clovers.dto.EmailDTO">

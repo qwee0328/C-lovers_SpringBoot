@@ -64,25 +64,47 @@ public class MailController {
 	
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
-	public String submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
-		Timestamp send_date = new Timestamp(System.currentTimeMillis());
-		dto.setSend_date(send_date);
+	public String submitSend(EmailDTO dto, MultipartFile[] uploadFiles) throws Exception {
+		dto.setSend_date(new Timestamp(System.currentTimeMillis()));
 		
-		int email_id = mservice.submitSend(dto, files);
+		// 임시 메일이라면
+		if(dto.isTemporary() == true) {
+			mservice.submitTempSend(dto, uploadFiles);
+		} else {
+			dto.setTemporary(false);
+			mservice.submitSend(dto, uploadFiles);
+		}
+		
+		
 		
 		return "redirect:/mail";
 	}
 	
-	// 받은 메일함으로 이동
+	// 저장하기
+	@RequestMapping("/tempSend")
+	public String tempSend(EmailDTO dto, MultipartFile[] uploadFiles) throws Exception {
+		dto.setTemporary(true);
+		mservice.submitSend(dto, uploadFiles);
+		
+		return "redirect:/mail";
+	}
+	
+	// 받은 편지함으로 이동
 	@RequestMapping("/inBox")
 	public String inBox() {
 		return "/mail/inBox";
 	}
 	
-	// 보낸 메일함으로 이동
+	// 보낸 편지함으로 이동
 	@RequestMapping("/sentBox")
 	public String sentBox() {
 		return "/mail/sentBox";
+	}
+	
+	// 임시 편지함으로 이동
+	@RequestMapping("/tempBox")
+	public String tempBox() {
+		return "/mail/tempBox";
 	}
 	
 	// 휴지통으로 이동
@@ -118,10 +140,10 @@ public class MailController {
 	// 답장
 	@RequestMapping("/send/reply")
 	public String replyMail(int id, Model model) {
-		System.out.println(id);
 		EmailDTO reply = mservice.selectAllById(id);
 		
 		model.addAttribute("reply", reply);
+		model.addAttribute("isReply", true);
 		
 		return "/mail/send";
 	}
@@ -152,7 +174,7 @@ public class MailController {
 	// 받은 메일 리스트
 	@ResponseBody
 	@RequestMapping("/inBoxList")
-	public List<EmailDTO> inboxList() {
+	public List<EmailDTO> inBoxList() {
 		String recieve_id = (String) session.getAttribute("loginID");
 		return mservice.inBoxList(recieve_id);
 	}
@@ -160,27 +182,46 @@ public class MailController {
 	
 	// ---------- sentBox ----------
 	
-	// 받은 메일 리스트
+	// 보낸 메일 리스트
 	@ResponseBody
 	@RequestMapping("/sentBoxList")
-	public List<EmailDTO> sentboxList() {
+	public List<EmailDTO> sentBoxList() {
 		String send_id = (String) session.getAttribute("loginID");
-		return mservice.sentBoxList(send_id);
+		boolean temporary = false;
+		return mservice.sentBoxList(send_id, temporary);
 	}
 	
+	// ---------- tempBox ----------
+	
+	// 임시 메일 리스트
+	@ResponseBody
+	@RequestMapping("/tempBoxList")
+	public List<EmailDTO> tempBoxList() {
+		String send_id = (String) session.getAttribute("loginID");
+		boolean temporary = true;
+		return mservice.sentBoxList(send_id, temporary);
+	}
+	
+	// 임시 메일 작성하기
+	@RequestMapping("/send/rewrite")
+	public String rewriteMail(int id, Model model) {
+		EmailDTO reply = mservice.selectAllById(id);
+		
+		model.addAttribute("reply", reply);
+		
+		return "/mail/send";
+	}
 	
 	// ---------- read ----------
 	
 	// 메일 내용
 	@RequestMapping("/read")
-	public ModelAndView read(@RequestParam("id") String id) {
-		EmailDTO mail = mservice.selectAllById(Integer.parseInt(id));
+	public String read(@RequestParam("id") int id, Model model) {
+		EmailDTO mail = mservice.selectAllById(id);
 		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("mail", mail);
-		mav.setViewName("/mail/read");
+		model.addAttribute("mail", mail);
 		
-		return mav;
+		return "/mail/read";
 	}
 	
 	// 삭제
