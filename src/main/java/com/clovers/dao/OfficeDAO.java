@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.clovers.dto.DeptTaskDTO;
 import com.clovers.dto.JobDTO;
 import com.clovers.dto.MemberDTO;
+import com.clovers.dto.OfficeDTO;
 
 @Repository
 public class OfficeDAO {
@@ -36,6 +37,11 @@ public class OfficeDAO {
 	public List<Map<String, String>> selectUserList() {
 		return db.selectList("Office.selectUserList");
 	}
+	
+	// 오피스 정보 가져오기
+	public OfficeDTO selectOfficeInfo() {
+		return db.selectOne("Office.selectOfficeInfo");
+	}
 
 	// 사용자 등록하기
 	public int insertUser(MemberDTO dto) {
@@ -50,6 +56,11 @@ public class OfficeDAO {
 	// 사용자 직위 수정하기
 	public int updateUserJob(MemberDTO dto) {
 		return db.update("Office.updateUserJob", dto);
+	}
+	
+	// 오피스 이름 수정하기
+	public int updateOfficeName(OfficeDTO dto) {
+		return db.update("Office.updateOfficeName",dto);
 	}
 	
 	// 사용자 소속 조직 수정하기
