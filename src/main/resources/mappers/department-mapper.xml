@@ -11,8 +11,7 @@
 	</insert>
 
 	<!-- 상위 부서 정보 불러오기 -->
-	<select id="selectAllWithOutOfficeId"
-		resultType="com.clovers.dto.DepartmentDTO">
+	<select id="selectAllWithOutOfficeId" resultType="com.clovers.dto.DepartmentDTO">
 		select * from department where id != "D1001"
 	</select>
 

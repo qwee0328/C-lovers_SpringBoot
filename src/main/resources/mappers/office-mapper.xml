@@ -2,60 +2,84 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Office">	
+<mapper namespace="Office">
+
+	<!-- 오피스 정보 불러오기 -->
+	<select id="selectOfficeInfo"
+		resultType="com.clovers.dto.OfficeDTO">
+		select * from office;
+	</select>
 	<!-- // 부서 명 불러오기 -->
-	<select id="selectDeptTaskAll" resultType="com.clovers.dto.DeptTaskDTO">
+	<select id="selectDeptTaskAll"
+		resultType="com.clovers.dto.DeptTaskDTO">
 		select * from dept_task;
 	</select>
-	
+
 	<!-- // 직급 명 불러오기 -->
-	<select id="selectPositionAll" resultType="com.clovers.dto.JobDTO">
+	<select id="selectPositionAll"
+		resultType="com.clovers.dto.JobDTO">
 		select * from job;
 	</select>
-	
+
 	<!-- // 사용자 수 불러오기 -->
 	<select id="selectEmpCount" resultType="int">
-		select count(*) from employee;
+		select count(*) from
+		employee;
 	</select>
-	
+
 	<!-- 사용자 리스트 맵 -->
 	<resultMap type="HashMap" id="userList">
-		<id column="id" property="id"/>
-		<result column="name" property="name"/>
-		<result column="job_name" property="job_name"/>
-		<result column="task_name" property="task_name"/>
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="job_name" property="job_name" />
+		<result column="task_name" property="task_name" />
 	</resultMap>
-	
+
 	<!-- 사용자 리스트 불러오기 -->
 	<select id="selectUserList" resultMap="userList">
-		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id ORDER BY CAST(RIGHT(e.id, 3) AS UNSIGNED) desc;
+		select e.name, e.id,
+		j.job_name, d.task_name from employee e join job j on e.job_id=j.id
+		join dept_task d on e.dept_task_id=d.id ORDER BY CAST(RIGHT(e.id, 3)
+		AS UNSIGNED) desc;
 	</select>
-	
+
 	<!-- // 사용자 등록하기 -->
 	<insert id="insertUser">
-		insert into employee values (#{id},#{name}, #{pw}, #{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id}, #{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email});
+		insert into employee values (#{id},#{name}, #{pw},
+		#{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id},
+		#{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email});
 	</insert>
-	
+
 	<!-- // 사용자 삭제하기 -->
 	<delete id="deleteUser" parameterType="List">
 		delete from employee where id in
-		<foreach collection="list" item="item" separator="," open="(" close=")">
-	    	#{item}
-	    </foreach>
+		<foreach collection="list" item="item" separator="," open="("
+			close=")">
+			#{item}
+		</foreach>
 	</delete>
-	
+
+
+<!-- 	오피스 이름 수정하기 -->
+	<update id="updateOfficeName">
+		update office set office_name = #{office_name} where id =#{id};
+	</update>
 	<!-- // 사용자 직위 수정하기 -->
 	<update id="updateUserJob">
 		update employee set job_id=#{job_id} where id =#{id};
 	</update>
-	
+
 	<!-- // 사용자 소속 조직 수정 -->
 	<update id="updateUserDeptTask">
-		update employee set dept_task_id=#{dept_task_id} where id=#{id};
+		update employee set dept_task_id=#{dept_task_id}
+		where id=#{id};
 	</update>
-	
+
 	<!-- // 사용자 이름, id 검색하기 -->
 	<select id="searchUser" resultMap="userList">
-		select e.name, e.id, j.job_name, d.task_name from employee e join job j on e.job_id=j.id join dept_task d on e.dept_task_id=d.id where e.id like #{keyword} or e.name like #{keyword} ORDER BY CAST(RIGHT(e.id, 3) AS UNSIGNED) desc;
+		select e.name, e.id,
+		j.job_name, d.task_name from employee e join job j on e.job_id=j.id
+		join dept_task d on e.dept_task_id=d.id where e.id like #{keyword} or
+		e.name like #{keyword} ORDER BY CAST(RIGHT(e.id, 3) AS UNSIGNED) desc;
 	</select>
 </mapper>

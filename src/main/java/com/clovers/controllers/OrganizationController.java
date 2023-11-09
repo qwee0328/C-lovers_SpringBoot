@@ -54,12 +54,12 @@ public class OrganizationController {
 		return ResponseEntity.ok(deptService.selectEmpCountById(id));
 	}
 	
-	@GetMapping("getDeptTask/{dept_id}")
+	@GetMapping("getDeptTaskByDeptId/{dept_id}")
 	public ResponseEntity<List<DeptTaskDTO>> getDeptTaskDTOListByDeptId(@PathVariable String dept_id){
 		return ResponseEntity.ok(dtaskService.selectByDeptId(dept_id));
 	}
 	
-	@GetMapping("getDeptTask/{id}")
+	@GetMapping("getDeptTaskById/{id}")
 	public ResponseEntity<DeptTaskDTO> getDeptTaskDTO(@PathVariable String id){
 		return ResponseEntity.ok(dtaskService.selectById(id));
 	}
