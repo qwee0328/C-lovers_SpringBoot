@@ -1,11 +1,12 @@
 @charset "UTF-8";
 
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+
 * {
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;
 }
-
-div{border: 1px solid black;}
 
 .container{
     margin: auto;
@@ -23,6 +24,7 @@ div{border: 1px solid black;}
 /*  */
 .mypageBox{
     width: 80%;
+    border-radius: 10px;
 }
 
 .mypageBox__inner{
@@ -30,38 +32,38 @@ div{border: 1px solid black;}
 }
 
 /*  */
-.mypageBox__profileBox1{
+.mypageBox__profileBoxTop{
     height: 80px;
 }
-.profile1{
+.profileBoxTop{
     margin-top: 22px;
     font-size: 20px;
     font-weight: bold;
 }
 
 /*  */
-.profileBox2,.profileDesBox__idBox,.profileDesBox__nameBox{
+.profileBoxMid,.profileDesBox__idBox,.profileDesBox__nameBox{
     display: flex;
     text-align: center;
     justify-content: center;
 }
-.mypageBox__profileBox2{
+.mypageBox__profileBoxMid{
     width: 100%;
-    height: 100px;
 }
 
 .profileImageBox{
-    width: 15%;
-
+	display: flex;
+	justify-content: left;
+    text-align: center;
+    width: 10%;
 }
 .profileDesBox{
-    width: 85%;
+    width: 90%;
 }
 
 .profileImage{
     width: 100px;
     height: 100px;
-    margin-left: 26px;
 }
 
 .profileDesBox__idBox,.profileDesBox__nameBox{
@@ -72,13 +74,14 @@ div{border: 1px solid black;}
 }
 .idKr,.idNum,.nameKr,.numeNum{
     padding: 11px;
+    font-weight:500;
 }
 .idNumBox,.nameNumBox{
     width: 90%;
     text-align: left;
 }
 /*  */
-.mypageBox__profileBox3{
+.mypageBox__profileBoxBottom{
     margin-top: 50px;
 }
 .profileBtn{
@@ -103,11 +106,18 @@ div{border: 1px solid black;}
 .profileBtnSave{
     background-color: #75B47D;
     color: white;
+    margin-left: 5px;
 }
 
 @media(max-width: 786px){
     .container{
         max-width: 786px;
+    }
+    .profileImageBox{
+        display: none;
+    }
+    .profileDesBox{
+        width: 100%;
     }
 }
 
@@ -115,5 +125,29 @@ div{border: 1px solid black;}
     .container{
         max-width: 1920px;
     }
-    
+   
 }
+
+/* 수정버튼 누르고 나서 - 내 정보 관리 css */
+/* div{border: 1px solid black;} */
+
+.profileBoxClick{
+    display: none;
+}
+.profileBox__inner{
+    padding: 10px;
+    display: flex;
+    width: 100%;
+}
+.profileImageBtn{
+    margin-top: 17px;
+    border: none;
+    border-radius: 5px;
+    color: #6C6C72;
+    width: 124px; height: 30px;
+}
+.profileLeft{
+    width: 10%;
+}
+
+

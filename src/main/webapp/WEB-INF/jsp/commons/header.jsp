@@ -63,7 +63,7 @@
 
 			<div class="header__myinfoBottom">
 
-				<div class="header__setting"><a href="#">설정</a></div>
+				<div class="header__setting"><a href="/humanResources/mypage">설정</a></div>
 
 				<div class="header__logoutBtnBox">
 					<button><a href="/members/logout">로그아웃</a></button>

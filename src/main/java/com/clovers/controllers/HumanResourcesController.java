@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/humanResources")
 public class HumanResourcesController {
 	
-	
-	
 	// 인사 컨트롤러
+	
+	@RequestMapping("/mypage")
+	public String mypage() {
+		return "humanresources/myPage";
+	}
+	
 }
