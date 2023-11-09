@@ -65,13 +65,25 @@ public class MemberController {
 	
 //	로그아웃
 	@RequestMapping("logout")
-	@GetMapping("logout")
+//	@GetMapping("logout")
+//	@ResponseBody
 	public String logout(HttpServletRequest request) {
 		
 		session.invalidate();
-		
+//		return "";
 		return "redirect:/";
+		
 	}
+	
+//	@GetMapping("adminLogout")
+//	@ResponseBody
+//	public void adminLogout(HttpServletRequest request) {
+//		
+//		session.invalidate();
+////		return "";
+////		return "redirect:/";
+//		
+//	}
 	
 //	비밀번호 페이지 이동
 	@RequestMapping("goFindPW")
