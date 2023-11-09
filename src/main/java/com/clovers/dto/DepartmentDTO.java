@@ -19,7 +19,8 @@ public class DepartmentDTO {
 	private String id;
 	private String dept_name;
 	private String office_id;
-	private List<DeptTaskDTO> deptTasks;	// 실제 DB에 들어가지 않는 모델들
+	private int dept_officer;
+	private List<DeptTaskDTO> deptTask;	// 실제 DB에 들어가지 않는 모델들
 	
 	
 }

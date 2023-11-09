@@ -15,4 +15,5 @@ public class DeptTaskDTO {
 	private String id;
 	private String task_name;
 	private String dept_id;
+	private int dept_task_officer;
 }
