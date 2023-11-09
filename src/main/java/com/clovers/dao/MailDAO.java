@@ -72,4 +72,8 @@ public class MailDAO {
 	public List<EmailFileDTO> selectAllFileById(int email_id) {
 		return db.selectList("Mail.selectAllFileById", email_id);
 	}
+	
+	public int deleteFiles(String sys_name) {
+		return db.delete("Mail.deleteBySysname", sys_name);
+	}
 }

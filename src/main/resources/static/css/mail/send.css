@@ -56,6 +56,10 @@ body {
 	font-size: 16px;
 }
 
+#fileList {
+	height: auto !important;
+}
+
 .inputLine__input {
 	height: 100%;
 }
@@ -89,8 +93,18 @@ blockquote {
 
 .fileList__deleteFile {
 	display: flex;
+	margin-bottom: 5px;
+}
+
+.fileList__deleteFile div {
+	font-size: 14px;
 }
 
 .deleteFile__btn {
+	border: none;
+	border-radius: 4px;
 	margin-left: 10px;
+	font-size: 12px;
+	color: #FFFFFF;
+	background-color: #75B47D;
 }

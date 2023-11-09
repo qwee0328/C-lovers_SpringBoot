@@ -55,26 +55,34 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">파일 첨부</div>
-						<input type="file" name="uploadFiles" multiple/>
 					<div class="inputLine__fileList">
-						<%-- <c:forEach var="i" items="${fileList }">
-							<div class="fileList__deleteFile">
-								<div>${i.ori_name }</div>
-								<input type="button" sysName="${i.sys_name }" class="deleteFile__btn" value="X">
-							</div>
-						</c:forEach> --%>
+						<input type="file" name="uploadFiles" multiple/>
 					</div>
 				</div>
+				<div id="fileList" class="send__inputLine">
+					<div class="inputLine_title">파일 리스트</div>
+					<div class="inputLine__fileList">
+						<c:forEach var="i" items="${fileList }">
+							<div class="fileList__deleteFile">
+								<div>${i.ori_name }</div>
+								<button type="button" sysName="${i.sys_name }" class="deleteFile__btn"><i class="fa-solid fa-xmark"></i></button>
+							</div>
+						</c:forEach>
+					</div>
+				</div>
+				<input type="hidden" id="deleteFiles" name="sysName">
+				
 				<div class="send__contentBox">
 					<textarea id="summernote" name="content" class="contentBox__content"></textarea>
 					<c:choose>
 						<c:when test="${empty isReply }">
 							<script>
 								$("#summernote").summernote({
-									height: 500,  
-									disableResizeEditor: true,
-									code: `${reply.content}`});
-								
+								    height: 500,
+								    disableResizeEditor: true
+								});
+							
+								$("#summernote").summernote("code", `${reply.content}`);
 							</script>
 						</c:when>
 						<c:otherwise>
@@ -150,16 +158,14 @@
 			</form>
 			
 			<script>
-			/* 	let deleteFileList = "";
-				$(document).on("click", ".deleteFileBtn", function() {
+				let deleteFileList = "";
+				$(document).on("click", ".deleteFile__btn", function() {
 					deleteFileList = deleteFileList.concat($(this).attr("sysName")+":");
 					console.log(deleteFileList);
 					
-					$(this).siblings().remove();
-					$(this).remove();
-					
+					$(this).parent().remove();
 					$("#deleteFiles").val(deleteFileList);
-				}); */
+				});
 			
 				$(document).ready(function() {
 					$('#summernote').summernote({           // set editor height

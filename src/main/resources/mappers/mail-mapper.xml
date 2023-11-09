@@ -61,4 +61,8 @@
 	<select id="selectAllFileById" resultType="com.clovers.dto.EmailFileDTO">
 		select * from email_file where email_id = #{email_id};
 	</select>
+	
+	<delete id="deleteBySysname">
+		delete from email_file where sys_name = #{sys_name};
+	</delete>
 </mapper>
