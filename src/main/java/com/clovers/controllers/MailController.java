@@ -139,15 +139,15 @@ public class MailController {
 	@RequestMapping("/send/reply")
 	public String replyMail(int id, Model model) {
 		EmailDTO reply = mservice.selectAllById(id);
-		List<EmailFileDTO> fileList = new ArrayList<>();
+//		List<EmailFileDTO> fileList = new ArrayList<>();
 		
-		boolean haveFile = mservice.selectFileByEmailId(id);
-		if(haveFile) {
-			fileList = mservice.selectAllFileById(id);
-		}
+//		boolean haveFile = mservice.selectFileByEmailId(id);
+//		if(haveFile) {
+//			fileList = mservice.selectAllFileById(id);
+//		}
 		
 		model.addAttribute("reply", reply);
-		model.addAttribute("fileList", fileList);
+//		model.addAttribute("fileList", fileList);
 		model.addAttribute("isReply", true);
 		
 		return "/mail/send";
@@ -211,14 +211,15 @@ public class MailController {
 	@RequestMapping("/send/rewrite")
 	public String rewriteMail(int id, Model model) {
 		EmailDTO reply = mservice.selectAllById(id);
-		List<EmailFileDTO> fileList = new ArrayList<>();
-		
-		boolean haveFile = mservice.selectFileByEmailId(id);
-		if(haveFile) {
-			fileList = mservice.selectAllFileById(id);
-		}
+//		List<EmailFileDTO> fileList = new ArrayList<>();
+//		
+//		boolean haveFile = mservice.selectFileByEmailId(id);
+//		if(haveFile) {
+//			fileList = mservice.selectAllFileById(id);
+//		}
 		
 		model.addAttribute("reply", reply);
+		System.out.println("id값 : " + id);
 		
 		return "/mail/send";
 	}

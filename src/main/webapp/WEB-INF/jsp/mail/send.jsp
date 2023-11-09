@@ -70,7 +70,11 @@
 					<c:choose>
 						<c:when test="${empty isReply }">
 							<script>
-								$("#summernote").summernote("code", `${reply.content}`);
+								$("#summernote").summernote({
+									height: 500,  
+									disableResizeEditor: true,
+									code: `${reply.content}`});
+								
 							</script>
 						</c:when>
 						<c:otherwise>
@@ -137,7 +141,7 @@
 				</div>
 				<input type="hidden" name="send_id" value=${loginID } />
 				<c:choose>
-					<c:when test="${reply.id }">
+					<c:when test="${not empty reply.id }">
 						<input type="hidden" name="id" value=${reply.id } />
 						<input type="hidden" name="temporary" value=${reply.temporary } />
 					</c:when>
@@ -146,7 +150,7 @@
 			</form>
 			
 			<script>
-				let deleteFileList = "";
+			/* 	let deleteFileList = "";
 				$(document).on("click", ".deleteFileBtn", function() {
 					deleteFileList = deleteFileList.concat($(this).attr("sysName")+":");
 					console.log(deleteFileList);
@@ -155,12 +159,12 @@
 					$(this).remove();
 					
 					$("#deleteFiles").val(deleteFileList);
-				});
+				}); */
 			
 				$(document).ready(function() {
 					$('#summernote').summernote({           // set editor height
-						  minHeight: 500,             // set minimum height of editor
-						  maxHeight: 500,             // set maximum height of editor
+						height: 500,  
+						disableResizeEditor: true,          // set maximum height of editor
 						  focus: true 
 					});
 				});
