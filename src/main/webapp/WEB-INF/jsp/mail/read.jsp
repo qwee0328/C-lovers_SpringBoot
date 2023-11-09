@@ -99,7 +99,7 @@
 				})
 				
 				// 완전삭제 버튼 클릭 시
-				$("#deleteMail").on("click", function() {
+				$("#perDeleteMail").on("click", function() {
 					let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
 					if(result) {
 						let formAction = $("#perDeleteMail").attr("formaction");

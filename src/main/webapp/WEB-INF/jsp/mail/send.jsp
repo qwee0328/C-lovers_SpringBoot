@@ -56,7 +56,14 @@
 				<div class="send__inputLine">
 					<div class="inputLine_title">파일 첨부</div>
 						<input type="file" name="uploadFiles" multiple/>
-					<div class="inputLine__fileList"></div>
+					<div class="inputLine__fileList">
+						<%-- <c:forEach var="i" items="${fileList }">
+							<div class="fileList__deleteFile">
+								<div>${i.ori_name }</div>
+								<input type="button" sysName="${i.sys_name }" class="deleteFile__btn" value="X">
+							</div>
+						</c:forEach> --%>
+					</div>
 				</div>
 				<div class="send__contentBox">
 					<textarea id="summernote" name="content" class="contentBox__content"></textarea>
@@ -139,6 +146,17 @@
 			</form>
 			
 			<script>
+				let deleteFileList = "";
+				$(document).on("click", ".deleteFileBtn", function() {
+					deleteFileList = deleteFileList.concat($(this).attr("sysName")+":");
+					console.log(deleteFileList);
+					
+					$(this).siblings().remove();
+					$(this).remove();
+					
+					$("#deleteFiles").val(deleteFileList);
+				});
+			
 				$(document).ready(function() {
 					$('#summernote').summernote({           // set editor height
 						  minHeight: 500,             // set minimum height of editor

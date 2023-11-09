@@ -42,7 +42,7 @@ public class MailService {
 	}
 	
 	@Transactional
-	public int submitTempSend(EmailDTO dto, MultipartFile[] files) throws Exception {
+	public int submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files) throws Exception {
 		dao.submitTempSend(dto);
 		int email_id = dto.getId();
 		
@@ -58,6 +58,16 @@ public class MailService {
 			dao.submitFile(new EmailFileDTO(0, email_id, oriName, sysName));
 			}
 		}
+		
+		String[] deleteFiles = deleteSysName.split(":");
+		for(int i = 0; i < deleteFiles.length; i++) {
+			String deleteRealPath = upload;
+			File targetFile = new File(upload + "/" + deleteFiles[i]);
+			targetFile.delete();
+			
+//			dao.deleteFiles(deleteFiles[i]);
+		}
+		
 		return email_id;
 	}
 	
