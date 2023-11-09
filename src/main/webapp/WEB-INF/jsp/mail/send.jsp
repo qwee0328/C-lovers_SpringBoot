@@ -59,17 +59,21 @@
 						<input type="file" name="uploadFiles" multiple/>
 					</div>
 				</div>
-				<div id="fileList" class="send__inputLine">
-					<div class="inputLine_title">파일 리스트</div>
-					<div class="inputLine__fileList">
-						<c:forEach var="i" items="${fileList }">
-							<div class="fileList__deleteFile">
-								<div>${i.ori_name }</div>
-								<button type="button" sysName="${i.sys_name }" class="deleteFile__btn"><i class="fa-solid fa-xmark"></i></button>
+				<c:choose>
+					<c:when test="${not empty fileList }">
+						<div id="fileList" class="send__inputLine">
+							<div class="inputLine_title">파일 리스트</div>
+							<div class="inputLine__fileList">
+								<c:forEach var="i" items="${fileList }">
+									<div class="fileList__deleteFile">
+										<div>${i.ori_name }</div>
+										<button type="button" sysName="${i.sys_name }" class="deleteFile__btn"><i class="fa-solid fa-xmark"></i></button>
+									</div>
+								</c:forEach>
 							</div>
-						</c:forEach>
-					</div>
-				</div>
+						</div>	
+					</c:when>
+				</c:choose>
 				<input type="hidden" id="deleteFiles" name="sysName">
 				
 				<div class="send__contentBox">
