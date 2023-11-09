@@ -44,7 +44,14 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">제목</div>
-					<input type="text" name="title" value="${reply.title }" class="inputLine__input"/>
+					<c:choose>
+					    <c:when test="${not empty reply.title and reply.temporary == false}">
+					        <input type="text" name="title" value="[RE:]${reply.title}" class="inputLine__input"/>
+					    </c:when>
+					    <c:otherwise>
+					        <input type="text" name="title" value="${reply.title}" class="inputLine__input"/>
+					    </c:otherwise>
+					</c:choose>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">파일 첨부</div>
@@ -121,9 +128,14 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
-				<input type="hidden" name="id" value=${reply.id } />
 				<input type="hidden" name="send_id" value=${loginID } />
-				<input type="hidden" name="temporary" value=${reply.temporary } />
+				<c:choose>
+					<c:when test="${reply.id }">
+						<input type="hidden" name="id" value=${reply.id } />
+						<input type="hidden" name="temporary" value=${reply.temporary } />
+					</c:when>
+				</c:choose>
+				
 			</form>
 			
 			<script>
