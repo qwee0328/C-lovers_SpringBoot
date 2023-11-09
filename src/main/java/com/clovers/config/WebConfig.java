@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/members/**");
 	}
 	
-//	public void addCorsMapping(CorsRegistry registry) {
-//		registry.addMapping("/admin/**").allowedOrigins("http://localhost:3000").allowedMethods("OPTIONS", "GET", "POST", "PUT", "DELETE");
-//	}
+	public void addCorsMapping(CorsRegistry registry) {
+		registry.addMapping("/**").allowedOrigins("*");
+	}
 }
