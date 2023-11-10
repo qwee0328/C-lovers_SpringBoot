@@ -15,9 +15,6 @@ public class ScheduleController {
 	@Autowired
 	private HttpSession session;
 	
-//	@Value("${google.calendar.api.key}")
-//	private String googleCalendarApiKey;
-	
 	// 메인 화면 (받은 메일함)
 	@RequestMapping("")
 	public String main() {
@@ -41,9 +38,4 @@ public class ScheduleController {
 		return "/schedule/scheduleMain";
 	}
 	
-//	@ResponseBody
-//	@RequestMapping("api/getProperty")
-//	public String getProperty(){
-//		return googleCalendarApiKey;
-//	}
 }

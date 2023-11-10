@@ -1,11 +1,16 @@
 // full calendar 관련 main function
 let eventCnt = 0; // 나중에 삭제하고 auto_increment 값 불러오ㅏ 넣어주기
 let groupCnt = 0; // 마찬가지 반복이벤트 아이디
+
+/*window.onresize = function(){
+	let w = $(".fc-scroller-harness").innerWidth();
+	console.log(w);
+	$(".fc-timegrid-body").css("width",w);
+}*/
 document.addEventListener('DOMContentLoaded', function() {
 	function modalInitail(datas) {
 		$(".modalName").text("일정 추가");
 		$(".insertSchedule__title").val("");
-		$(".insertSchedule__startDate").val(datas.dateStr); // 시작 날짜
 		$(".insertSchedule__startTime").val("09:00");
 		$(".insertSchedule__endDate").val("");
 		$(".insertSchedule__endTime").val("18:00");
@@ -28,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	let calendarEl = document.getElementById('calendar');
 	const calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: 'dayGridMonth',
-		height: 'auto',
+		height: true,
 		googleCalendarApiKey: "AIzaSyAStWVnOxLheNeBURhUh6-xC-jitc60FcE", // 구글 캘린더 api key
 		eventSources: [{ // 구글 캘린더를 이용해 한국 공휴일 불러오기
 			googleCalendarId: "ko.south_korea.official#holiday@group.v.calendar.google.com",
@@ -43,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		views: { // 타이틀 형식
 			dayGridMonth: { // 달
 				titleFormat: "YYYY.MM",
-				dayMaxEventRows: 3 // 캘린더 한 칸에 최대 보여지는 이벤트 개수(+more n -> 누르면 자세히 보기 나옴)
+				dayMaxEventRows: 2 // 캘린더 한 칸에 최대 보여지는 이벤트 개수(+more n -> 누르면 자세히 보기 나옴)
 			},
 			timeGridWeek: { // 주
 				titleFormat: function(date) {
@@ -75,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		dateClick: function(e) { // 날짜 클릭 시 일정 등록 모달 띄우기
 			modalInitail(e);
+			$(".insertSchedule__startDate").val(e.dateStr.slice(0,10)); // 시작 날짜
 			if (e.view.type == "dayGridMonth") {
 				let selectDate = new Date(e.date);
 				selectDate.setHours(selectDate.getHours() + 9, selectDate.getMinutes());
@@ -97,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					selectDate.setHours(selectDate.getHours(), selectDate.getMinutes() + 30);
 					$(".insertSchedule__endDate").val(selectDate.toISOString().slice(0, 10)); // 끝 날짜
 					$(".insertSchedule__endTime").val(selectDate.toISOString().slice(11, 16));
-					$(".range__endDate").val($(".insertSchedule__endDate").val());
+					$(".range__endDate").val(selectDate.toISOString().slice(0, 10));
 				}
 			}
 
