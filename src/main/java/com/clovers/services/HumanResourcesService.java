@@ -39,4 +39,9 @@ public class HumanResourcesService {
 		
 		return hrdao.update(param);
 	}
+	
+	// 사용자 근무 규칙 정보 불러오기
+	public Map<String, String> selectEmployeeWorkRule(String id) {
+		return hrdao.selectEmployeeWorkRule(id);
+	}
 }

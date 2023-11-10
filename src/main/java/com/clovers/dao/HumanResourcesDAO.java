@@ -30,4 +30,8 @@ public class HumanResourcesDAO {
 	public int update(Map<String,String> param) {
 		return db.update("HumanResources.update",param);
 	}
+	// 사용자 근무 규칙 정보 불러오기
+	public Map<String, String> selectEmployeeWorkRule(String id) {
+		return db.selectMap("HumanResources.selectEmployeeWorkRule", id);
+	}
 }

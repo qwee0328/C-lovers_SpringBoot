@@ -23,12 +23,17 @@
 	background-color: #75B47D;
 }
 
+.naviBtn > *{
+	color: #FFFFFF;
+}
+
 .naviBtn:hover {
 	cursor: pointer;
 }
 
 .naviBtn__icon {
-	display: flex;
+	display: flex !important;
+	margin-right: 5px;
 	justify-content: center;
 	align-items: center;
 	width: 26px;
@@ -54,6 +59,9 @@
 
 .naviConp__icon {
   margin-right: 10px;
-  display: flex;
-  align-items: center;
+}
+
+.naviConp__title+.naviConp__icon {
+	margin-left: 10px;
+	margin-right: 0px;
 }

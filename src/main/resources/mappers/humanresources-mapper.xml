@@ -20,4 +20,18 @@
 	<update id="update">
 		update employee set profile_img=#{profile_img},company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
 	</update>
+
+	<!-- 사용자 근무 규칙 맵 -->
+	<resultMap type="HashMap" id="userWorkRule">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="attend_time" property="attend_time" />
+		<result column="leave_time" property="leave_time" />
+	</resultMap>
+	
+	<!-- // 사용자 근무 규칙 정보 불러오기 -->
+	<select id="selectEmployeeWorkRule" resultMap="userWorkRule">
+		select * from employee_work_rule where id = #{id};
+	</select>
+
 </mapper>
