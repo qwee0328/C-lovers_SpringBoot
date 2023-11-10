@@ -4,4 +4,17 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HumanResources">
 	<!-- 인사 매퍼 -->
+	
+	<!-- 사용자 근무 규칙 맵 -->
+	<resultMap type="HashMap" id="userWorkRule">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="attend_time" property="attend_time" />
+		<result column="leave_time" property="leave_time" />
+	</resultMap>
+	
+	<!-- // 사용자 근무 규칙 정보 불러오기 -->
+	<select id="selectEmployeeWorkRule" resultMap="userWorkRule">
+		select * from employee_work_rule where id = #{id};
+	</select>
 </mapper>

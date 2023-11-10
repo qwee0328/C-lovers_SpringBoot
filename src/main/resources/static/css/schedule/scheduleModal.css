@@ -1,0 +1,334 @@
+@charset "UTF-8";
+.scheduleInsertModal, .scheduleViewModal{padding:25px 30px; width: 500px; display: none;}
+.calendarModal__title{color:#75B47D; margin-bottom: 20px; font-size: 18px; font-weight: 500;}
+.calendarModal__buttons>button{
+    width: 80px;
+    height: 30px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #7d7d7d20;
+    color:#6C6C72;
+    margin-top: 30px;
+    cursor: pointer;
+}
+.calendarModal__buttons>.calendarModal__save, .calendarModal__buttons>.calendarModal__update, .calendarModal__buttons>.calendarModal__updateSave{
+    background-color: #75B47D;
+    color:#FFFFFF;
+}
+
+.calendarModal__buttons>.calendarModal__updateSave{
+    display: none;
+}
+
+.calendarModal__bodyLine{
+    margin-bottom: 10px;
+}
+.calendarModal__bodyTitle{
+    width: 25%;
+    color:#6C6C72;
+}
+.calendarModal__bodyContent{
+    width: 75%;
+    color:#6C6C72;
+}
+
+
+.calendarModal__bodyContent>*{
+    width: 100%;
+    border:1px solid #7D7D7D20;
+    color:#6C6C72;
+    border-radius: 4px;
+    padding-left: 5px;
+    font-size: 12px;
+}
+
+.insertSchedule__range{
+    padding-left: 0px;
+    border:0;
+}
+
+.insertSchedule__range input{
+    border:1px solid #7D7D7D20;
+}
+
+.insertSchedule__range label{
+    color:#6C6C72;
+}
+
+.ml-15{
+    margin-left: 15px;
+}
+.range__count{
+    width: 25px;
+    margin-right: 5px;
+    border-radius: 4px;
+    padding-left: 5px;
+    color:#6C6C72;
+}
+
+.range__endDate{
+    width:100px;
+    margin-left: 5px;
+    border-radius: 4px;
+    padding-left: 5px;
+    color:#6C6C72;
+}
+
+
+
+input[type="radio"][name="period"]{
+    margin-right: 5px;
+}
+
+.insertSchedule__repeatChk{
+    padding-left: 0;
+    margin-top: 10px;
+    border:0;
+}
+input[type="checkbox"][name="week"]{
+    margin-right: 2px;
+}
+.insertSchedule__repeatChk>label{
+    margin-right: 10px;
+    color:#6C6C72;
+}
+
+
+.insertSchedule__frequency{
+    border:0;
+    padding-left: 0;
+}
+
+.insertSchedule__frequency select{
+    border:1px solid #7D7D7D20;
+    border-radius: 4px;
+    width: 31%;
+}
+
+.insertSchedule__frequency>*{
+    margin-right: 5px;
+    color:#6C6C72;
+}
+
+.frequency__txt{
+    margin-left: 15px;
+}
+
+
+
+.calendarModal__dateInfo>*{
+    margin-right: 5px;
+}
+
+.calendarModal__dateInfo>label{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    border:0;
+}
+
+
+.calendarModal__dateInfo>label>*{
+    color:#6C6C72;
+}
+
+input[type="checkbox"]{
+    margin-top: 2px;
+    margin-right: 2px;
+    accent-color:#095544;
+    zoom:1.2;
+}
+.insertSchedule__content{
+    border:1px solid #7D7D7D20;
+    padding:5px;
+    height: 200px;
+    color:#6C6C72;
+    border-radius: 4px;
+    overflow-y: auto;
+}
+.insertSchedule__content::-webkit-scrollbar {
+    width: 20px;
+    
+}
+.insertSchedule__content::-webkit-scrollbar-thumb{
+    background-color: #7d7d7d20;
+    border-radius: 10px; 
+
+    border: 7px solid #FFFFFF /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.insertSchedule__content::-webkit-scrollbar-track{
+    background-color: #FFFFFF/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+
+.checkbox__content{
+    margin-left: 3px;
+}
+.buttons__margin{
+    width: 10px;
+}
+
+
+
+/* calendarInsertModal */
+.calendarInsertModal{width: 900px; padding:25px 30px; display: none;}
+
+.calendarModal__bodyContentShare>.calendarModal__bodyTitle{
+    font-size: 13px;
+}
+
+.calendarModal__bodyTitle *{
+    color:#6C6C72;
+}
+
+
+input[type="radio"]{
+    accent-color:#095544;
+    zoom:1.1;
+    height: 100%;
+    margin-top: 3px;
+    margin-right: 2px;
+    border: 1px solid #6C6C72;
+}
+
+.calendarModal__bodyContentShare label{
+    margin-right: 7px;
+}
+
+.calendarModal__bodyContentShare{
+    margin-top: 10px;
+}
+
+.w-15{
+    width: 15%;
+}
+
+.w-60{
+    width: 40%;
+}
+
+.bodyContentShare__searchBtn{
+    margin-left: 10px;
+    border:0;
+    color:#75B47D;
+    font-size: 15px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
+
+.calendarModal__bodyBottom{
+    margin-top: 20px;
+}
+
+.selectIcon__margin{
+    height: 10px;
+}            
+
+.calendarModal__deptList{
+    width: 200px;
+    color:#20412E;
+    font-weight: 800;
+    font-size: 16px;
+    padding:10px;
+    margin-right: 10px;
+    border:1px solid #7d7d7d20;
+    min-height: 400px;
+}
+
+.calendarModal__dept{
+    padding-left: 20px; 
+}
+
+.dept__deptName{
+    font-size: 14px;
+    color:#20412E;
+}
+
+.team__teamName{
+    font-size: 14px;
+    color:#20412E;
+    font-weight: 500;
+}
+
+
+.calendarModal__empAllList{
+    width: 250px;
+    
+    margin-right: 10px;
+    color:#6C6C72;
+    border:1px solid #7d7d7d20;
+    min-height: 400px;
+}
+
+.empList__emp{
+    color:#6C6C72;
+    font-size: 14px;
+}
+
+.empAllList__empList{
+    height: 90%;
+    padding:10px;
+}
+
+.empAllList__bottomBtn{
+    height: 10%;
+    background-color: #7D7D7D10;
+    display: flex;
+    align-items: center;
+}
+.empAllList__bottomBtn>button{
+    background-color: transparent;
+    border:0;
+    color:#75B47D;
+    margin:10px;
+    cursor: pointer;
+}
+
+
+
+.calendarModal__empSelectList{
+    width: 250px;
+    min-height: 400px;
+}
+
+.empSelectList__empList{
+    padding:10px;  
+    border:1px solid #7d7d7d20;
+    height: 95%;
+}
+
+.empSelectList__emp{
+    color:#6C6C72;
+    font-size: 14px;
+}
+.calendarModal__selectIcon{
+    width: 75px;
+    margin-right: 5px;
+}
+
+.empSelectList__title{
+    color: #323B3D;
+    font-size:14px;
+    margin-bottom: 5px;
+    height: 5%;
+}
+.empSelectList__cnt{
+    color:#75B47D;
+}
+
+
+.weekDayOption:disabled{
+    background-color: #7d7d7d20;
+    color:#7d7d7d80;
+}
+
+.swal2-confirm{
+    background-color:#75B47D !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:focus{
+    box-shadow: 0 0 0 3px #20412E15 !important;
+
+}

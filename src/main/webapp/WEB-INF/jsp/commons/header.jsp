@@ -75,6 +75,11 @@
 </body>
 
 <script>
+	// 로고 클릭시 홈으로 이동
+	$(document).on("click", ".headerLeft__logo", function() {
+		location.href = "/";
+	})
+	
 	$(".dropNavi__icon").on("click", function() {
 		
 	})

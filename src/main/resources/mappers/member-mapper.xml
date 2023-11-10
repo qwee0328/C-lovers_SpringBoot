@@ -22,6 +22,5 @@
   	<!-- 로그인된 사용자 이름, 이메일 불러오기 -->
   	<select id="selectUserInfo" resultMap="userList">
   		select id, name, company_email from employee where id=#{loginID};
->>>>>>> leader/master
   	</select>
   </mapper>

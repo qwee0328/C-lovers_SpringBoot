@@ -1,11 +1,15 @@
 package com.clovers.services;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.clovers.commons.EncryptionUtils;
 import com.clovers.dao.OfficeDAO;
@@ -34,7 +38,7 @@ public class OfficeService {
 	public int selectEmpCount() {
 		return dao.selectEmpCount();
 	}
-	
+
 	// 오피스 정보 불러오기
 	public OfficeDTO selectOfficeInfo() {
 		return dao.selectOfficeInfo();
@@ -43,6 +47,11 @@ public class OfficeService {
 	// 사용자 리스트 불러오기
 	public List<Map<String, String>> selectUserList() {
 		return dao.selectUserList();
+	}
+
+	// 사내 전화번호 사용중인번호인지 체크
+	public int usingCompanyPhoneCheck(String companyPhone) {
+		return dao.usingCompanyPhoneCheck(companyPhone);
 	}
 
 	// 사용자 등록하기
@@ -65,6 +74,9 @@ public class OfficeService {
 
 		// 비밀번호는 이름으로 저장
 		dto.setPw(EncryptionUtils.getSHA512(engKeyboardConversionName));
+
+		// 입사일을 timestamp값으로 변경
+		System.out.println(dto.getHire_date());
 
 		// 사내 이메일은 id랑 똑같이 저장
 		dto.setCompany_email(dto.getId());
