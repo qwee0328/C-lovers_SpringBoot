@@ -71,11 +71,11 @@
 	                                <div class="profileImageBox">
 	                                	<div>
 		                                    <div>
-		                                    	<img src="/uploads/${list.profile_img }" name="profile_img" alt="프로필 사진" class="profileImage">
+		                                    	<img src="/uploads/${list.profile_img }" id="profile_img" name="profile_img" alt="프로필 사진" class="profileImage">
 		                                    </div>
                                             <div style="padding-top: 17px;">
                                                 <label for="input-image" class="profileImageBtn">프로필 수정</label>
-		                                        <input type="file" id="input-image" name="profile_img" value="프로필 수정">
+		                                        <input type="file" id="input-image" name="profile_img" value="프로필 수정" onchange="setThumbnail(event);">
                                             </div>
 	                                	</div>
 	                                </div>
@@ -228,6 +228,19 @@
         $(".profileBoxMid").css("display","flex");
         $(".profileBoxClick").css("display","none");
     })
+    
+//    미리보기
+	function setThumbnail(event){
+		var reader = new FileReader();
+
+		reader.onload = function(event){
+			$("#profile_img").attr("src",event.target.result);
+			console.log(event.target.result);
+		}
+
+		reader.readAsDataURL(event.target.files[0]);
+	}
+    
 	</script>
 
 </html>
