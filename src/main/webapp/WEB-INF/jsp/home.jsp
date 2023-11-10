@@ -98,6 +98,9 @@
 				if($(this).siblings().html() == "메일") {
 					location.href = "/mail";
 				}
+				if($(this).siblings().html() == "인사") {
+					location.href = "/humanResources";
+				}
 			})
 			
 		</script>
