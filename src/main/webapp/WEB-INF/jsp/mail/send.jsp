@@ -230,6 +230,21 @@
 			        });
 			    });
 				
+				// input type=date에서 현재 날짜 이전은 선택 불가능
+				 $(document).ready(function() {
+		            // 현재 날짜 가져오기
+		            var currentDate = new Date().toISOString().split("T")[0];
+		            // input 요소의 min 속성 설정
+		            $("#send_date").attr("min", currentDate);
+		        });
+				
+				// 선택한 날짜가 현재 날짜보다 이후인지
+				function isDateAfterNow(dateString) {
+					let now = new Date();
+					let inputDate = new Date(dateString);
+					return inputDate > now;
+				}
+				
 				// 예약 드롭다운 확인 버튼 눌렀을 때
 				$(".reserve__btn").on("click", function(e) {
 					e.preventDefault(); // a 태그 페이지 이동하지 않도록
@@ -239,12 +254,20 @@
 					let sendMinute = $("#send_minute").val();
 					
 					let reserveDate = sendDate + " " + sendHour + ":" + sendMinute + ":00";
-					$("#reserve__dateBox").css("display", "block");
-					$("#reserve__date").html(reserveDate);
-					$("#reserve__hidden__date").val(reserveDate);
 					
-					$(".sendReserve__dropDown").toggleClass("hide show");
-					$(".sendReserve__dropDown .dropDown__box").toggle();
+					let result = isDateAfterNow(reserveDate);
+					if(result) {
+						$("#reserve__dateBox").css("display", "block");
+						$("#reserve__date").html(reserveDate);
+						$("#reserve__hidden__date").val(reserveDate);
+						
+						$(".sendReserve__dropDown").toggleClass("hide show");
+						$(".sendReserve__dropDown .dropDown__box").toggle();
+					} else {
+						alert("현재보다 이전의 시간은 선택할 수 없습니다.");
+					}
+					
+					
 				})
 			
 				// 파일 리스트 삭제 버튼 눌렀을 때
