@@ -42,9 +42,18 @@
 				<div class="read__title">
 					${mail.title}
 				</div>
-				<div class="read__time">
-					${mail.send_date }
-				</div>
+				<c:choose>
+					<c:when test="${not empty mail.reservation_date }">
+						<div class="read__time">
+							예약시간 ${mail.reservation_date }
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="read__time">
+							${mail.send_date }
+						</div>
+					</c:otherwise>
+				</c:choose>
 				<div class="read__idInfo">
 					<p>보낸 사람 :<p><p class="idInfo__Value">${mail.send_id }</p>
 				</div>

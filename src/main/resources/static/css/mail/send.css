@@ -21,11 +21,13 @@ body {
 }
 
 .send__btns {
-	width: 300px;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
 	margin-bottom: 13px;
+}
+
+.send__btns > * {
+	margin-right: 50px;
 }
 
 .send__btns button {
@@ -33,6 +35,11 @@ body {
 	background-color: #FFFFFF;
 	color: #095544;
 	font-size: 18px;
+}
+
+.submit__sendBox {
+	display: flex;
+	align-items: center;
 }
 
 .btns__sendReserve:hover {
@@ -44,6 +51,32 @@ body {
 	height: 25px;
 	font-size: 20px;
 	color: #095544;
+}
+
+.dropbox__title {
+	font-weight: 600;
+	margin-bottom: 10px;
+}
+
+.dropDown__box {
+	border: 1px solid #7d7d7d40;
+	border-radius: 4px;
+	display: none;
+	position: absolute;
+	padding: 16px 20px;
+	background-color: #FFFFFF;
+}
+
+.reserve__btn {
+	text-decoration: none;
+	color: #75B47D;
+}
+
+#reserve__dateBox {
+	display: none;
+	margin-left: 10px;
+	font-size: 13px;
+	color: #B5B5BB;
 }
 
 .send__inputLine {

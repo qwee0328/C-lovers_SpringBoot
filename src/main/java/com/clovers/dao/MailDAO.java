@@ -1,5 +1,6 @@
 package com.clovers.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -75,5 +76,17 @@ public class MailDAO {
 	
 	public int deleteFiles(String sys_name) {
 		return db.delete("Mail.deleteBySysname", sys_name);
+	}
+	
+	public List<EmailDTO> outBoxList(String send_id) {
+		return db.selectList("Mail.outBoxList", send_id);
+	}
+	
+	public List<EmailDTO> selectAllReservationDate() {
+		return db.selectList("Mail.selectAllReservationDate");
+	}
+	
+	public int submitReservationMail(Map<String, Object> param) {
+		return db.update("Mail.submitReservationMail", param);
 	}
 }
