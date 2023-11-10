@@ -1,54 +1,30 @@
 package com.clovers.controllers;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.clovers.services.ChatGroupService;
+import com.clovers.dto.ChatMessageDTO;
+import com.clovers.services.MemberService;
 
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Controller
 public class ChatController {
-
+	
+	private final SimpMessageSendingOperations messagingTemplate;
+	
 	@Autowired
-	private ChatGroupService cgService;
+	private MemberService mService;
 	
-	
-	@RequestMapping("/chat/goMain")
-	public String goMain() {
-		return "chat/main";
+	//Publisher 구현
+	@MessageMapping("/chat/message")
+	public void message(ChatMessageDTO message) {
+		if(ChatMessageDTO.ChatMessageStates.JOIN.equals(message.getState())) {
+			message.setContent(mService.selectNameById(message.getEmp_id()) +" 님이 입장하셨습니다.");
+		}
+		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getChat_room_id(), message);
 	}
-	
-	@RequestMapping("/chat/chatList")
-	public String goChatList() {
-		return "chat/chatList";
-	}
-	
-	
-	@RequestMapping("/chat/fileList")
-	public String goFileList() {
-		return "chat/fileList";
-	}
-	
-	@RequestMapping("/chat/goChatRoom")
-	public String goChatRoom() {
-		return "chat/chatRoom";
-	}
-	
-	@ResponseBody
-	@RequestMapping("/chat/chatListLoad")
-	public List<Map<String, Object>> selectByEmpId() {
-		return cgService.selectByEmpId();
-	}
-	
-	@ResponseBody
-	@RequestMapping("/chat/chatMsgLoad")
-	public Map<String,Object> selectByChatId(){
-		return cgService.selectByChatId();
-	}
-	
 }

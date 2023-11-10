@@ -35,4 +35,8 @@ public class MemberService {
 	public Map<String,String> selectUserInfo(String loginID){
 		return mdao.selectUserInfo(loginID);
 	}
+	
+	public String selectNameById(String id) {
+		return mdao.selectNameById(id);
+	}
 }

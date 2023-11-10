@@ -18,7 +18,7 @@
 	<select id="selectByChatId" resultType="com.clovers.dto.ChatMessageDTO">
 		select * from chat_message where chat_id = #{chat_id};
 	</select>
-	<select id="selectAboutChatRoom" resultType="com.clovers.dto.ChatDTO">
+	<select id="selectAboutChatRoom" resultType="com.clovers.dto.ChatRoomDTO">
 		select * from chat where chat_id = #{chat_id};
 	</select>
 </mapper>
