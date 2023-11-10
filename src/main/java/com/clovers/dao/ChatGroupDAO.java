@@ -12,6 +12,7 @@ import com.clovers.dto.ChatGroupDTO;
 
 @Repository
 public class ChatGroupDAO {
+	//채팅그룹 관리 DAO
 	
 	@Autowired
 	private SqlSession db;
@@ -44,9 +45,12 @@ public class ChatGroupDAO {
 		return db.delete("ChatGroup.closeChatGroup", chat_id);
 	}
 	
+	// 사용자에게 채팅방과 그에 관련된 그룹을 보여줌.
 	public List<Map<String, Object>> selectByEmpId(String emp_id) {
-		return db.selectList("Chat.selectByEmpId",emp_id);
+		return db.selectList("ChatGroup.selectByEmpId",emp_id);
 	}
+	
+	
 
 
 }

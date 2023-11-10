@@ -14,17 +14,17 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class ChatController {
 	
-	private final SimpMessageSendingOperations messagingTemplate;
-	
-	@Autowired
-	private MemberService mService;
-	
-	//Publisher 구현
-	@MessageMapping("/chat/message")
-	public void message(ChatMessageDTO message) {
-		if(ChatMessageDTO.ChatMessageStates.JOIN.equals(message.getState())) {
-			message.setContent(mService.selectNameById(message.getEmp_id()) +" 님이 입장하셨습니다.");
-		}
-		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getChat_room_id(), message);
-	}
+//	private final SimpMessageSendingOperations messagingTemplate;
+//	
+//	@Autowired
+//	private MemberService mService;
+//	
+//	//Publisher 구현
+//	@MessageMapping("/chat/message")
+//	public void message(ChatMessageDTO message) {
+//		if(ChatMessageDTO.ChatMessageStates.JOIN.equals(message.getState())) {
+//			message.setContent(mService.selectNameById(message.getEmp_id()) +" 님이 입장하셨습니다.");
+//		}
+//		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getChat_room_id(), message);
+//	}
 }

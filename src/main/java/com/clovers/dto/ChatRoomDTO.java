@@ -24,15 +24,13 @@ public class ChatRoomDTO {
 	};
 	
 	private String id;				// 채팅방 아이디
-	private String chat_room_name;
 	private ChatRoomStates state;	// 채팅방 상태
 	private Set<WebSocketSession> sessions = new HashSet<>();
 	
 	
-	public static ChatRoomDTO create(String chat_room_name, ChatRoomStates state) {
+	public static ChatRoomDTO create( ChatRoomStates state) {
         ChatRoomDTO room = new ChatRoomDTO();
         room.id = UUID.randomUUID().toString();
-        room.chat_room_name = chat_room_name;
         room.state = state;
         return room;
     }

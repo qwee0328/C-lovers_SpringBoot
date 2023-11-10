@@ -24,7 +24,7 @@
   		select id, name, company_email from employee where id=#{loginID};
   	</select>
   	
-  	<select id="selectUserInfo" resultMap="String">
+  	<select id="selectNameById" resultType="String">
   		select name from employee where id=#{id};
   	</select>
   	

@@ -1,5 +1,7 @@
 package com.clovers.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,14 +10,26 @@ import com.clovers.dto.ChatMessageDTO;
 
 @Repository
 public class ChatMessageDAO {
+	// 채팅 메시지 관련 DAO
 	
 	@Autowired
 	private SqlSession db;
 	
 	
-	// 채팅 그룹에 채팅을 남기기
+	// 채팅방에 채팅 남기기
 	public int insert(ChatMessageDTO cdto) {
 		return db.insert("ChatMessage.insert", cdto);
-	}	
+	}
+	
+	
+	// 채팅방의 아이디를 기준으로 채팅 메시지를 가져옴.
+	public List<ChatMessageDTO> selectMessagesByChatRoomId(String chat_room_id){
+		return db.selectList("ChatMessage.selectMessagesByChatRoomId", chat_room_id);
+	};
+	
+	// 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에  함수. 채팅방 아이디를 기준으로 가장 최신의 메시지의 아이디 값을 가져온다.
+	public int selectLatestChatMsgIdByChatRoomId(String chat_room_id) {
+		return db.selectOne("ChatMessage.selectLatestChatMsgIdByChatRoomIdForUpdate", chat_room_id);
+	}
 
 }
