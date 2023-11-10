@@ -110,30 +110,40 @@ public class MailController {
 	// 받은 편지함으로 이동
 	@RequestMapping("/inBox")
 	public String inBox() {
+		String currentMenu = "받은 편지함";
+		session.setAttribute("currentMenu", currentMenu);
 		return "/mail/inBox";
 	}
 	
 	// 보낸 편지함으로 이동
 	@RequestMapping("/sentBox")
 	public String sentBox() {
+		String currentMenu = "보낸 편지함";
+		session.setAttribute("currentMenu", currentMenu);
 		return "/mail/sentBox";
 	}
 	
 	// 임시 편지함으로 이동
 	@RequestMapping("/tempBox")
 	public String tempBox() {
+		String currentMenu = "임시 편지함";
+		session.setAttribute("currentMenu", currentMenu);
 		return "/mail/tempBox";
 	}
 	
 	// 보낼 편지함으로 이동
 	@RequestMapping("/outBox")
 	public String outBox() {
+		String currentMenu = "보낼 편지함";
+		session.setAttribute("currentMenu", currentMenu);
 		return "/mail/outBox";
 	}
 	
 	// 휴지통으로 이동
 	@RequestMapping("/trash")
 	public String trash() {
+		String currentMenu = "휴지통";
+		session.setAttribute("currentMenu", currentMenu);
 		return "mail/trash";
 	}
 	
