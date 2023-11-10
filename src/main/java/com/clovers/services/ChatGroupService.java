@@ -25,9 +25,7 @@ public class ChatGroupService {
 	
 	
 	public List<Map<String, Object>> selectByEmpId() {
-		List<Map<String, Object>> result = dao.selectByEmpId((String)session.getAttribute("loginID"));		
-		
-		return result;
+		return dao.selectByEmpId((String)session.getAttribute("loginID"));		
 	}
 	
 	public Map<String,Object> selectByChatId(){
