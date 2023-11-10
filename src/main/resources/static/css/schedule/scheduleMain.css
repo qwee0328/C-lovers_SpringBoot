@@ -31,9 +31,17 @@
 .d-flex{
     display: flex;
 }
+.d-none{
+    display: none;
+}
 
 .align-center{
     display:flex;
     align-items: center;
     justify-content: center;
+}
+
+.h-center{
+    display:flex;
+    align-items: center;
 }

@@ -33,6 +33,6 @@ public class ScheduleController {
 		session.setAttribute("naviMenuLength", naviMenuLength);
 		session.setAttribute("currentMenu", currentMenu);
 		
-		return "/schedule/calendar_main";
+		return "/schedule/scheduleMain";
 	}
 }
