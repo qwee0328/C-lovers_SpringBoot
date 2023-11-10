@@ -23,8 +23,6 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="/js/schedule/schedule.js"></script>
-<script type="text/javascript"
-	src="http://www.google.com/jsapi?key=AIzaSyC0HDcPeTEdFVF1yhS3A14hYQTKPhKghnE"></script>
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />

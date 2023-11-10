@@ -1,8 +1,10 @@
 package com.clovers.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -12,6 +14,9 @@ public class ScheduleController {
 	// 일정 컨트롤러
 	@Autowired
 	private HttpSession session;
+	
+	@Value("${google.calendar.api.key}")
+	private String googleCalendarApiKey;
 	
 	// 메인 화면 (받은 메일함)
 	@RequestMapping("")
@@ -35,4 +40,10 @@ public class ScheduleController {
 		
 		return "/schedule/scheduleMain";
 	}
+	
+//	@ResponseBody
+//	@RequestMapping("api/getProperty")
+//	public String getProperty(){
+//		return googleCalendarApiKey;
+//	}
 }

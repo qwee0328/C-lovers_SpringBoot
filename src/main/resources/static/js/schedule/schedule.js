@@ -24,11 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		$("input[type='checkbox'][name='week']").prop("checked", false);
 
 	}
+	
 	let calendarEl = document.getElementById('calendar');
 	const calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: 'dayGridMonth',
 		height: 'auto',
-		googleCalendarApiKey: "AIzaSyC0HDcPeTEdFVF1yhS3A14hYQTKPhKghnE", // 구글 캘린더 api key
+		googleCalendarApiKey: "AIzaSyAStWVnOxLheNeBURhUh6-xC-jitc60FcE", // 구글 캘린더 api key
 		eventSources: [{ // 구글 캘린더를 이용해 한국 공휴일 불러오기
 			googleCalendarId: "ko.south_korea.official#holiday@group.v.calendar.google.com",
 			className: "koHolidays",
@@ -174,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 	///////////////////////////////////////////////////////////////
-	function generateRecurringEvent() {
+	function generateEvent() {
 		let startDate = new Date($(".insertSchedule__startDate").val());
 		startDate.setHours((parseInt($(".insertSchedule__startTime").val().slice(0, 2)) + 9), $(".insertSchedule__startTime").val().slice(3, 5)); // +9 하는 이유는 한국 시간으로 변경하기 위함.
 		let startDateStr = startDate.toISOString().slice(0, 16);
@@ -218,14 +219,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			// 그럼 기준 시간을 12시로 잡고 해보자, 12시면 자정이라 하루가 빠짐 -> 1 더해주기        
 			let during = Math.ceil((new Date($(".insertSchedule__endDate").val()).getTime() - new Date($(".insertSchedule__startDate").val()).getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
-
-
-			/// 넣어야할 데이터 5:29 정리 생각
 			eventData.frequency__when = $(".frequency__when option:selected").val();
 			eventData.repeatChk = $("input[type='checkbox'][name='week']:checked").val();
 			eventData[`${endKey}`] = $(":radio[name='period']:checked").next().children().val();
-			///
-
 
 
 			if (during == 1) { // 1일짜리 이벤트 일 때
@@ -321,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
 			return false;
 		}
-		let events = generateRecurringEvent();
+		let events = generateEvent();
 		calendar.addEventSource(events);
 
 		$.modal.close(); // 등록 후 모달 닫기
