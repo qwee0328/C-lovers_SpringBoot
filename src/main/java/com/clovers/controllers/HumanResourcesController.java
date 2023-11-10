@@ -1,6 +1,8 @@
 package com.clovers.controllers;
 
+import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,17 +71,28 @@ public class HumanResourcesController {
 	}
 	
 	
-//	사내전화,휴대전화,개인이메일 정보 업데이트
+//	프로필 이미지,사내전화,휴대전화,개인이메일 정보 업데이트
 	@RequestMapping("/update")
-	public String update(MultipartFile profile_img,String company_phone,String phone,String email) {
+	public String update(MultipartFile profile_img,String company_phone,String phone,String email) throws Exception {
 		
 		String id = (String)session.getAttribute("loginID");
 		
-		
 		System.out.println(profile_img);
 		
+		String path = "C:/C-lovers";
 		
-		//hrService.update(id,profile_img,company_phone,phone,email);
+		File uploadPath = new File(path);
+		
+		if(!uploadPath.exists()) {
+			uploadPath.mkdir();
+		}
+		
+		String oriName = profile_img.getOriginalFilename();
+		String sysName = UUID.randomUUID()+"_"+oriName;
+		
+		profile_img.transferTo(new File(uploadPath+"/"+sysName));
+		
+		hrservice.update(id,sysName,company_phone,phone,email);
 		
 		return "redirect:/humanResources/mypage";
 	}

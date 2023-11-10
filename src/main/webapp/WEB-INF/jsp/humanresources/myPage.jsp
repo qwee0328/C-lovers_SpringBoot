@@ -29,7 +29,7 @@
                 <div class="mypageBox__profileBoxMid">
                     <div class="profileBoxMid">
                         <div class="profileImageBox align_center">
-                            <img src="/assets/profile.png" alt="프로필 사진" class="profileImage">
+                            <img src="/uploads/${list.profile_img }" alt="프로필 사진" class="profileImage">
                         </div>
                         <div class="profileDesBox">
                             <div class="profileDesBox__idBox">
@@ -71,7 +71,7 @@
 	                                <div class="profileImageBox">
 	                                	<div>
 		                                    <div>
-		                                    	<img src="/assets/profile.png" name="profile_img" alt="프로필 사진" class="profileImage">
+		                                    	<img src="/uploads/${list.profile_img }" name="profile_img" alt="프로필 사진" class="profileImage">
 		                                    </div>
                                             <div style="padding-top: 17px;">
                                                 <label for="input-image" class="profileImageBtn">프로필 수정</label>
