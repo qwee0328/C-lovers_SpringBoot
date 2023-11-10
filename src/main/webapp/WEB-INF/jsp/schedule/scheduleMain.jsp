@@ -74,7 +74,7 @@
 		<%@ include file="../schedule/scheduleViewModal.jsp"%>
 
 		<!-- 캘린더 추가 모달창 -->
-		<%@ include file="../schedule/scheduleViewModal.jsp"%>
+		<%@ include file="../schedule/calendarInsertModal.jsp"%>
 	</div>
 
 
