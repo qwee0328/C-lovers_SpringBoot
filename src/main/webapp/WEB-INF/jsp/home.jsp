@@ -103,6 +103,11 @@
 				}
 			})
 			
+			$(document).on("click", ".naviItem__itemCurcle", function() {
+				if($(this).siblings().html() == "일정") {
+					location.href = "/schedule";
+				}
+			})
 		</script>
 
 		<!-- MainContents  -->
