@@ -89,6 +89,7 @@
 					</div>
 					<div class="naviItem__title">전자결재</div>
 				</div>
+				
 			</div>
 		</div>
 		
@@ -98,6 +99,7 @@
 					location.href = "/mail";
 				}
 			})
+			
 		</script>
 
 		<!-- MainContents  -->

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>받은 메일함</title>
+<title>보낸 메일함</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
@@ -20,7 +20,7 @@
 		<div class="container__inBox">
 			<div class="inBox__allCheck">
 				<input type="checkbox" class="allCheck__checkbox" />
-				<div class="allCheck__checkCount"></div>
+				<div class="allCheck__checkNum"></div>
 				<button type="submit" id="deleteMail" class="allCheck__buttons">삭제</button>
 				<button type="submit" id="perDeleteMail" class="allCheck__buttons">완전삭제</button>
 			</div>
@@ -37,10 +37,10 @@
 	
 	<script>
 		let mailCount;
-		
+	
 		window.onload = function() {
 			$.ajax({
-				url: "/mail/inBoxList",
+				url: "/mail/tempBoxList",
 				type: 'POST'
 			}).done(function(resp){
 				mailCount = resp.length;
@@ -108,6 +108,7 @@
 		// 체크박스 개별 클릭 시
 		$(document).on("change", ".mailList__checkbox", function() {
 			let check = $(this).is(":checked");
+			console.log("체크박스 클릭: " + check);
 			if(check) {
 				$(this).prop("checked", true);
 				$(this).parent().css("background-color", "#DCEDD4");
@@ -156,7 +157,7 @@
 					}).done(function(){
 						location.reload();
 					}).done(function(){
-						alert("선택한 메일이 완전삭제되었습니다.");
+						alert("선택한 메일이 완전삭제 되었습니다.");
 					});
 				} else {
 					alert("완전삭제할 메일을 선택해주세요.");
