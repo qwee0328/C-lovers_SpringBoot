@@ -23,8 +23,10 @@
 
 	<!-- // 사용자 수 불러오기 -->
 	<select id="selectEmpCount" resultType="int">
-		select count(*) from
-		employee;
+		select substring(id, char_length(id)-2) as last_three_digits
+		from employee
+		order by cast(substring(id, -3) as unsigned) desc
+		limit 1;
 	</select>
 
 	<!-- 사용자 리스트 맵 -->
@@ -37,17 +39,22 @@
 
 	<!-- 사용자 리스트 불러오기 -->
 	<select id="selectUserList" resultMap="userList">
-		select e.name, e.id,
-		j.job_name, d.task_name from employee e join job j on e.job_id=j.id
-		join dept_task d on e.dept_task_id=d.id ORDER BY CAST(RIGHT(e.id, 3)
-		AS UNSIGNED) desc;
+		select name, id, job_name, task_name 
+		from mypageData 
+		order by cast(right(id,3)as unsigned) desc;
 	</select>
+	
+	<!-- // 사내 전화번호 사용중인지 체크 -->
+	<select id="usingCompanyPhoneCheck" resultType="Integer">
+		select count(*) from employee where company_phone=#{companyPhone};
+	</select>
+
 
 	<!-- // 사용자 등록하기 -->
 	<insert id="insertUser">
 		insert into employee values (#{id},#{name}, #{pw},
 		#{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id},
-		#{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email});
+		#{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email}, #{company_phone});
 	</insert>
 
 	<!-- // 사용자 삭제하기 -->
@@ -77,9 +84,9 @@
 
 	<!-- // 사용자 이름, id 검색하기 -->
 	<select id="searchUser" resultMap="userList">
-		select e.name, e.id,
-		j.job_name, d.task_name from employee e join job j on e.job_id=j.id
-		join dept_task d on e.dept_task_id=d.id where e.id like #{keyword} or
-		e.name like #{keyword} ORDER BY CAST(RIGHT(e.id, 3) AS UNSIGNED) desc;
+		select name, id, job_name, task_name 
+		from mypageData 
+		where e.id like #{keyword} or e.name like #{keyword} 
+		order by cast(right(id,3)as unsigned) desc;
 	</select>
 </mapper>

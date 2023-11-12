@@ -98,9 +98,10 @@
 				if($(this).siblings().html() == "메일") {
 					location.href = "/mail";
 				}
-			})
-			
-			$(document).on("click", ".naviItem__itemCurcle", function() {
+				if($(this).siblings().html() == "인사") {
+					location.href = "/humanResources";
+				}
+				
 				if($(this).siblings().html() == "일정") {
 					location.href = "/schedule";
 				}
