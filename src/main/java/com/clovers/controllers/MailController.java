@@ -71,8 +71,10 @@ public class MailController {
 	@RequestMapping("/submitSend")
 	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
 		
+		System.out.println("reserve_date : " + reserve_date);
+		
 		// 예약 메일이라면
-		if(reserve_date != "") {
+		if(!reserve_date.isEmpty()) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date date = dateFormat.parse(reserve_date);
 			Timestamp reservation_date = new Timestamp(date.getTime());

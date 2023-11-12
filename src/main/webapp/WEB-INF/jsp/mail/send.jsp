@@ -25,7 +25,7 @@
 		<%@ include file="../commons/naviBar.jsp" %>
 		
 		<div class="container__send">
-			<form method="post" enctype="multipart/form-data">
+			<form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 				<div class="send__btns">
 					<div class="submit__sendBox">
 						<button type="submit" formaction="/mail/submitSend">보내기</button>
@@ -93,7 +93,7 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">받는 사람</div> 
-					<input type="text" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<input type="text" id="send_id" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
@@ -103,10 +103,10 @@
 					<div class="inputLine_title">제목</div>
 					<c:choose>
 					    <c:when test="${not empty reply.title and reply.temporary == false}">
-					        <input type="text" name="title" value="[RE:]${reply.title}" class="inputLine__input"/>
+					        <input type="text" id="title" name="title" value="[RE:]${reply.title}" class="inputLine__input"/>
 					    </c:when>
 					    <c:otherwise>
-					        <input type="text" name="title" value="${reply.title}" class="inputLine__input"/>
+					        <input type="text" id="title" name="title" value="${reply.title}" class="inputLine__input"/>
 					    </c:otherwise>
 					</c:choose>
 				</div>
@@ -256,7 +256,7 @@
 					let reserveDate = sendDate + " " + sendHour + ":" + sendMinute + ":00";
 					
 					let result = isDateAfterNow(reserveDate);
-					if(result) {
+					if(result) {			
 						$("#reserve__dateBox").css("display", "block");
 						$("#reserve__date").html(reserveDate);
 						$("#reserve__hidden__date").val(reserveDate);
@@ -288,10 +288,20 @@
 					});
 				});
 				
-				// 발송 예약 아이콘 눌렀을 때
-				$(".sendReserve__icon").on("click", function() {
+				// 필수 입력값들이 존재하는지
+				function validateForm() {
+					// 받는 사람을 입력하지 않았을 경우
+					if($("#send_id").val() == "") {
+						alert("받는 사람은 필수 입력 항목입니다.");
+						return false;
+					}
 					
-				})
+					// 제목을 입력하지 않았을 경우
+					if($("#title").val() == "") {
+						alert("제목은 필수 입력 항목입니다.");
+						return false;
+					}
+				}
 			</script>
 		</div>
 	</div>
