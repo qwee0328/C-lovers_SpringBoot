@@ -55,6 +55,14 @@ public class MailDAO {
 		return db.selectOne("Mail.outBoxTotalCount", send_id);
 	}
 	
+	public List<EmailDTO> trashList(Map<String, Object> param) {
+		return db.selectList("Mail.trashList", param);
+	}
+	
+	public int trashTotalCount(String id) {
+		return db.selectOne("Mail.trashTotalCount", id);
+	}
+	
 	public boolean selectFileByEmailId(int email_id) {
 		Object result = db.selectOne("Mail.selectFileByEmailId", email_id);
 		boolean exist;
@@ -72,10 +80,6 @@ public class MailDAO {
 	
 	public int perDeleteMail(int id) {
 		return db.delete("Mail.perDeleteMail", id);
-	}
-	
-	public List<EmailDTO> trashList(String id) {
-		return db.selectList("Mail.trashList", id);
 	}
 	
 	public int restoreMail(int id) {

@@ -59,6 +59,14 @@
 		select count(*) from email where send_id = #{send_id} and reservation = true
 	</select>
 	
+	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select e.*, row_number() over(order by id desc) rn from (select * from email where (send_id = #{id} or receive_id = #{id}) and trash = true) e) ranked where rn between #{start} and #{end}
+	</select>
+	
+	<select id="trashTotalCount" resultType="int">
+		select count(*) from email where (send_id = #{id} or receive_id = #{id}) and trash = true
+	</select>
+	
 	<select id="selectFileByEmailId" resultType="boolean">
 		select email_id from email_file group by email_id having email_id = ${email_id}
 	</select>
@@ -70,10 +78,6 @@
 	<delete id="perDeleteMail">
 		delete from email where id = ${id}
 	</delete>
-	
-	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{id} and trash = true union select * from email where receive_id = #{id} and trash = true;
-	</select>
 	
 	<update id="restoreMail">
 		update email set trash = false where id = ${id}

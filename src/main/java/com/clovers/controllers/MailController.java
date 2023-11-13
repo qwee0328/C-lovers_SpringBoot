@@ -362,9 +362,20 @@ public class MailController {
 	// 휴지통 리스트
 	@ResponseBody
 	@RequestMapping("/trashList")
-	public List<EmailDTO> trashList() {
+	public Map<String, Object> trashList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String id = (String) session.getAttribute("loginID");
-		return mservice.trashList(id);
+		List<EmailDTO> mail = mservice.trashList(id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.trashTotalCount(id));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
+		
 	}
 	
 	// 복원 (휴지통 -> 받은 메일함)

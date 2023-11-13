@@ -110,6 +110,18 @@ public class MailService {
 		return dao.outBoxTotalCount(send_id);
 	}
 	
+	public List<EmailDTO> trashList(String id, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.trashList(param);
+	}
+	
+	public int trashTotalCount(String id) {
+		return dao.trashTotalCount(id);
+	}
+	
 	public boolean selectFileByEmailId(int email_id) {
 		return dao.selectFileByEmailId(email_id);
 	}
@@ -120,10 +132,6 @@ public class MailService {
 	
 	public int perDeleteMail(int id) {
 		return dao.perDeleteMail(id);
-	}
-	
-	public List<EmailDTO> trashList(String id) {
-		return dao.trashList(id);
 	}
 	
 	public int restoreMail(int id) {
