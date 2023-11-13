@@ -60,6 +60,7 @@ public class OfficeController {
 		int count = oservice.usingCompanyPhoneCheck(companyPhone);
 		System.out.println("사용중인 번호 개수 :"+count);
 		boolean result = count>0;
+		System.out.println(result);
 		return ResponseEntity.ok(result);
 	}
 	

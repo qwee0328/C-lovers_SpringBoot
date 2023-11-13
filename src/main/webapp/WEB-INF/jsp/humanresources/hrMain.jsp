@@ -98,17 +98,16 @@
                         <div class="conf_detail">
                             <div class="calendar">
                                 <div class="month">
-                                    10월
                                     <div class="day">
-                                        <div class="day__num">30</div>
-                                        <div class="day__week">월요일</div>
+                                        <div class="day__num"></div>
+                                        <div class="day__week"></div>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="workingTime">
-                                <div class="">9시출근</div>
-                                <div class="">09:00 ~ 18:00 (소정 8시간)</div>
+                                <div id="work_rule_name"></div>
+                                <div id="work_rule_time"></div>
                             </div>
                             <div class="workingPlan">
                                 <div class="detail__colortitle"><a href="">내근무계획</a></div>
@@ -124,22 +123,21 @@
                         </div>
                         <div class="conf_detail">
                             <div class="nowTime">
-                                20 : 07 : 43
-                                <button class="grayBtn">근무 종료</button>
+                                <div class="statusBox"></div>
                             </div>
                             <div class="commuteBtns">
-                                <div class="commuteBtns__title">
+                                <div class="commuteBtns__title" id="attendBtn">
                                     출근하기
-                                    <div class="commuteBtns__time">00:00:00</div>
+                                    <div class="commuteBtns__time" id="attendTime">00:00:00</div>
                                 </div>
-                                <div class="commuteBtns__title">
+                                <div class="commuteBtns__title" id="leaveBtn">
                                     퇴근하기
-                                    <div class="commuteBtns__time">00:00:00</div>
+                                    <div class="commuteBtns__time" id="leaveTime">00:00:00</div>
                                 </div>
                             </div>
                             <div class="workingStatusBtns">
-                                <div><button class="whiteBtn">업무</button><button class="whiteBtn">외출</button></div>
-                                <div><button class="whiteBtn">회의</button><button class="whiteBtn">외근</button></div>
+                                <div><button class="whiteBtn" id="working">업무</button><button class="whiteBtn" id="goingOut">외출</button></div>
+                                <div><button class="whiteBtn" id="conference">회의</button><button class="whiteBtn" id="outside">외근</button></div>
                             </div>
                         </div>
                     </div>

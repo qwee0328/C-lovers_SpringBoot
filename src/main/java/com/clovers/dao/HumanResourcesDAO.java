@@ -13,7 +13,33 @@ public class HumanResourcesDAO {
 	private SqlSession db;
 
 	// 사용자 근무 규칙 정보 불러오기
-	public Map<String, String> selectEmployeeWorkRule(String id) {
-		return db.selectMap("HumanResources.selectEmployeeWorkRule", id);
+	public Map<String, Object> selectEmployeeWorkRule(String id) {
+	    return db.selectOne("HumanResources.selectEmployeeWorkRule", id);
+	}
+	
+	// 출근전인지 확인
+	public Map<String, Object> selectAttendStatus(String id) {
+		return db.selectOne("HumanResources.selectAttendStatus",id);
+	}
+	
+	// 출근 기록 남기기
+	public int insertAttendingWork(Map<String, Object> user) {
+		System.out.println(user.toString()+"test");
+		return db.insert("HumanResources.insertAttendingWork", user);
+	}
+	
+	// 퇴근 기록 남기기
+	public int updateLeavingWork(String id) {
+		return db.update("HumanResources.updateLeavingWork", id);
+	}
+	
+	// 업무 상태 기록 남기기
+	public int insertWorkCondition(Map<String, Object> data) {
+		return db.insert("HumanResources.insertWorkCondition", data);
+	}
+	
+	// 업무 상태 종료시간 업데이트
+	public int updateWorkCondtionEndTime(int attend_status_id) {
+		return db.update("HumanResources.updateWorkCondtionEndTime", attend_status_id);
 	}
 }
