@@ -82,6 +82,18 @@ public class MailService {
 		return dao.inBoxTotalCount(receive_id);
 	}
 	
+	public List<EmailDTO> outBoxList(String send_id, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("send_id", send_id);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.outBoxList(param);
+	}
+	
+	public int outBoxTotalCount(String send_id) {
+		return dao.outBoxTotalCount(send_id);
+	}
+	
 	public boolean selectFileByEmailId(int email_id) {
 		return dao.selectFileByEmailId(email_id);
 	}
@@ -115,10 +127,6 @@ public class MailService {
 	
 	public List<EmailFileDTO> selectAllFileById(int email_id) {
 		return dao.selectAllFileById(email_id);
-	}
-	
-	public List<EmailDTO> outBoxList(String send_id) {
-		return dao.outBoxList(send_id);
 	}
 	
 	public List<EmailDTO> selectAllReservationDate() {

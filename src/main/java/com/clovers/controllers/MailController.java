@@ -273,9 +273,19 @@ public class MailController {
 	// 보낼 메일 리스트
 	@ResponseBody
 	@RequestMapping("/outBoxList")
-	public List<EmailDTO> outBoxList() {
+	public Map<String, Object> outBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String send_id = (String) session.getAttribute("loginID");
-		return mservice.outBoxList(send_id);
+		List<EmailDTO> mail = mservice.outBoxList(send_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.outBoxTotalCount(send_id));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
 	}
 	
 	// 예약시간에 전송

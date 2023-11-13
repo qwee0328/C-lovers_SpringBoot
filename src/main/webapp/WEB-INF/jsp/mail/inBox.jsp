@@ -27,21 +27,13 @@
 			<hr>
 			<div class="inBox__bottom">
 				<div class="bottom__mailNum"></div>
-				<div class="bottom__pageNavi">
-					<!-- <div class="pageNavi__circle">1</div> -->
-				</div>
+				<div class="bottom__pageNavi"></div>
 			</div>
 		</div>
-	<%-- 	<input type="hidden" id="recordTotalCount" value="${recordTotalCount }">
-		<input type="hidden" id="recordCountPerPage" value="${recordCountPerPage }">
-		<input type="hidden" id="naviCountPerPage" value="${naviCountPerPage }">
-		<input type="hidden" id="lastPageNum" value="${lastPageNum }"> --%>
 	</div>
 	
 <script>
-
     $(document).ready(function() {
-    	
     	$.ajax({
             url: "/mail/inBoxList?cpage=",
             type: 'POST'
@@ -57,6 +49,7 @@
         $(".inBox__mailListBox").empty();
         
         $(".bottom__mailNum").html("편지 수 : " + mailCount);
+        console.log("mailCount: " + mailCount);
 
         for (let i = 0; i < mail.length; i++) {
             let mailListDiv = $("<div>");
@@ -265,8 +258,7 @@
             url: pageUrl,
             type: 'POST'
         }).done(function (resp) {
-        	console.log(resp);
-            mailList(resp.mail);
+            mailList(resp.mail, resp.recordTotalCount);
             pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
         })
     })

@@ -109,6 +109,10 @@ hr {
 	align-items: center;
 }
 
+.bottom__pageNavi > div {
+	margin: 0px 3px;
+}
+
 .pageNavi__circle {
 	width: 25px;
 	height: 25px;

@@ -43,6 +43,14 @@
 		select count(*) from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false
 	</select>
 	
+	<select id="outBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = true) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="outBoxTotalCount" resultType="int">
+		select count(*) from email where send_id = #{send_id} and reservation = true
+	</select>
+	
 	<select id="selectFileByEmailId" resultType="boolean">
 		select email_id from email_file group by email_id having email_id = ${email_id}
 	</select>
@@ -78,11 +86,7 @@
 	<delete id="deleteBySysname">
 		delete from email_file where sys_name = #{sys_name};
 	</delete>
-	
-	<select id="outBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{send_id} and reservation = true
-	</select>
-	
+
 	<select id="selectAllReservationDate" resultType="com.clovers.dto.EmailDTO">
 		select * from email where reservation = true
 	</select>

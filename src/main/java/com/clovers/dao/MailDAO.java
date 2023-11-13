@@ -39,6 +39,14 @@ public class MailDAO {
 		return db.selectOne("Mail.inBoxTotalCount", receive_id);
 	}
 	
+	public List<EmailDTO> outBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.outBoxList", param);
+	}
+	
+	public int outBoxTotalCount(String send_id) {
+		return db.selectOne("Mail.outBoxTotalCount", send_id);
+	}
+	
 	public boolean selectFileByEmailId(int email_id) {
 		Object result = db.selectOne("Mail.selectFileByEmailId", email_id);
 		boolean exist;
@@ -80,10 +88,6 @@ public class MailDAO {
 	
 	public int deleteFiles(String sys_name) {
 		return db.delete("Mail.deleteBySysname", sys_name);
-	}
-	
-	public List<EmailDTO> outBoxList(String send_id) {
-		return db.selectList("Mail.outBoxList", send_id);
 	}
 	
 	public List<EmailDTO> selectAllReservationDate() {
