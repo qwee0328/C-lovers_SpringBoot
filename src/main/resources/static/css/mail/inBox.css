@@ -14,7 +14,7 @@ body {
 }
 
 .container__inBox {
-	width: 1190px;
+	flex: 1;
 }
 
 .container__inBox div {

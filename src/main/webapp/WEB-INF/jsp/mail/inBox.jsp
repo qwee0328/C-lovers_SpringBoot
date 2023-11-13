@@ -38,7 +38,6 @@
             url: "/mail/inBoxList?cpage=",
             type: 'POST'
         }).done(function (resp) {
-        	console.log(resp.mail);
             mailList(resp.mail, resp.recordTotalCount);
             pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
         })
@@ -47,9 +46,7 @@
     // 메일 리스트 출력 함수
     function mailList(mail, mailCount) {
         $(".inBox__mailListBox").empty();
-        
         $(".bottom__mailNum").html("편지 수 : " + mailCount);
-        console.log("mailCount: " + mailCount);
 
         for (let i = 0; i < mail.length; i++) {
             let mailListDiv = $("<div>");
@@ -211,6 +208,11 @@
 				divTag.append(iTag);
 				pagination.append(divTag);
 			}
+			
+			console.log("startNavi: " + startNavi);
+			console.log("needPrev: " + needPrev);
+			console.log("endNavi:" + endNavi);
+			console.log("pageTotalCount: " + pageTotalCount);
 
 			if (needPrev) {
 				let divTag = $("<div>");
