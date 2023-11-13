@@ -70,8 +70,16 @@ public class MailService {
 		}
 	}
 	
-	public List<EmailDTO> inBoxList(String recieve_id) {
-		return dao.inBoxList(recieve_id);
+	public List<EmailDTO> inBoxList(String receive_id, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("receive_id", receive_id);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.inBoxList(param);
+	}
+	
+	public int inBoxTotalCount(String receive_id) {
+		return dao.inBoxTotalCount(receive_id);
 	}
 	
 	public boolean selectFileByEmailId(int email_id) {

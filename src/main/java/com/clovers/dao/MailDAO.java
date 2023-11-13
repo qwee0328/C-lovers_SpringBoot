@@ -31,8 +31,12 @@ public class MailDAO {
 		return db.insert("Mail.submitFile", dto);
 	}
 	
-	public List<EmailDTO> inBoxList(String recieve_id) {
-		return db.selectList("Mail.inBoxList", recieve_id);
+	public List<EmailDTO> inBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.inBoxList", param);
+	}
+	
+	public int inBoxTotalCount(String receive_id) {
+		return db.selectOne("Mail.inBoxTotalCount", receive_id);
 	}
 	
 	public boolean selectFileByEmailId(int email_id) {

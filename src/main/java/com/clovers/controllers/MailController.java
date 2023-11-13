@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.clovers.constants.Constants;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
 import com.clovers.services.MailService;
@@ -70,8 +73,6 @@ public class MailController {
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
 	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
-		
-		System.out.println("reserve_date : " + reserve_date);
 		
 		// 예약 메일이라면
 		if(!reserve_date.isEmpty()) {
@@ -210,9 +211,19 @@ public class MailController {
 	// 받은 메일 리스트
 	@ResponseBody
 	@RequestMapping("/inBoxList")
-	public List<EmailDTO> inBoxList() {
-		String recieve_id = (String) session.getAttribute("loginID");
-		return mservice.inBoxList(recieve_id);
+	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
+		String receive_id = (String) session.getAttribute("loginID");
+		List<EmailDTO> mail = mservice.inBoxList(receive_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
 	}
 	
 	

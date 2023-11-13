@@ -36,7 +36,11 @@
 	</insert>
 	
 	<select id="inBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false order by id desc
+		select * from (select row_number() over(order by id desc) rn, email.* from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="inBoxTotalCount" resultType="int">
+		select count(*) from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false
 	</select>
 	
 	<select id="selectFileByEmailId" resultType="boolean">

@@ -93,7 +93,8 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">받는 사람</div> 
-					<input type="text" id="send_id" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<input type="text" id="receive_id" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<div id="autoComplete"></div>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
@@ -269,6 +270,24 @@
 					
 					
 				})
+				
+				// 받는 사람 입력할 때 자동완성
+				/* $("#receive_id").on("keyup", function() {
+					let inputId = $(this).val();
+					
+					$.ajax({
+						url: "/mail/AutoComplete",
+						data: { receive_id : inputId }
+					}).done(function(resp) {
+						$("#autoComplete").empty();
+						if(resp.length > 0) {
+							for(let i = 0; i < resp.length; i++) {
+								item = $("<div>");
+								item.append(`resp[i].name resp[i].email `);
+							}
+						}
+					})
+				}) */
 			
 				// 파일 리스트 삭제 버튼 눌렀을 때
 				let deleteFileList = "";
@@ -291,7 +310,7 @@
 				// 필수 입력값들이 존재하는지
 				function validateForm() {
 					// 받는 사람을 입력하지 않았을 경우
-					if($("#send_id").val() == "") {
+					if($("#receive_id").val() == "") {
 						alert("받는 사람은 필수 입력 항목입니다.");
 						return false;
 					}
