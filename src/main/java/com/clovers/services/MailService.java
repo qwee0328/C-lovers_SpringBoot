@@ -82,6 +82,22 @@ public class MailService {
 		return dao.inBoxTotalCount(receive_id);
 	}
 	
+	public List<EmailDTO> sentBoxList(String send_id, boolean temporary, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("send_id", send_id);
+		param.put("temporary", temporary);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.sentBoxList(param);
+	}
+	
+	public int sentBoxTotalCount(String send_id, boolean temporary) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("send_id", send_id);
+		param.put("temporary", temporary);
+		return dao.sentBoxTotalCount(param);
+	}
+	
 	public List<EmailDTO> outBoxList(String send_id, int start, int end) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("send_id", send_id);
@@ -112,13 +128,6 @@ public class MailService {
 	
 	public int restoreMail(int id) {
 		return dao.restoreMail(id);
-	}
-	
-	public List<EmailDTO> sentBoxList(String send_id, boolean temporary) {
-		Map<String, Object> param = new HashMap<>();
-		param.put("send_id", send_id);
-		param.put("temporary", temporary);
-		return dao.sentBoxList(param);
 	}
 	
 	public EmailDTO selectAllById(int id) {

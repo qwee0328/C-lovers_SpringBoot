@@ -43,6 +43,14 @@
 		select count(*) from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false
 	</select>
 	
+	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="sentBoxTotalCount" resultType="int">
+		select count(*) from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false
+	</select>
+	
 	<select id="outBoxList" resultType="com.clovers.dto.EmailDTO">
 		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = true) temp where rn between #{start} and #{end}
 	</select>
@@ -70,10 +78,6 @@
 	<update id="restoreMail">
 		update email set trash = false where id = ${id}
 	</update>
-	
-	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false order by id desc
-	</select>
 	
 	<select id="selectAllById" resultType="com.clovers.dto.EmailDTO">
 		select * from email where id = #{id}

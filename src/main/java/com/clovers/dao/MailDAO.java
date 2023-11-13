@@ -39,6 +39,14 @@ public class MailDAO {
 		return db.selectOne("Mail.inBoxTotalCount", receive_id);
 	}
 	
+	public List<EmailDTO> sentBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.sentBoxList", param);
+	}
+	
+	public int sentBoxTotalCount(Map<String, Object> param) {
+		return db.selectOne("Mail.sentBoxTotalCount", param);
+	}
+	
 	public List<EmailDTO> outBoxList(Map<String, Object> param) {
 		return db.selectList("Mail.outBoxList", param);
 	}
@@ -72,10 +80,6 @@ public class MailDAO {
 	
 	public int restoreMail(int id) {
 		return db.update("Mail.restoreMail", id);
-	}
-	
-	public List<EmailDTO> sentBoxList(Map<String, Object> param) {
-		return db.selectList("Mail.sentBoxList", param);
 	}
 	
 	public EmailDTO selectAllById(int id) {
