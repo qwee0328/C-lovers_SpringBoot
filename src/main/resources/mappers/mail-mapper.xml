@@ -36,7 +36,35 @@
 	</insert>
 	
 	<select id="inBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false order by id desc
+		select * from (select row_number() over(order by id desc) rn, email.* from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="inBoxTotalCount" resultType="int">
+		select count(*) from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false
+	</select>
+	
+	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="sentBoxTotalCount" resultType="int">
+		select count(*) from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false
+	</select>
+	
+	<select id="outBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = true) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="outBoxTotalCount" resultType="int">
+		select count(*) from email where send_id = #{send_id} and reservation = true
+	</select>
+	
+	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select e.*, row_number() over(order by id desc) rn from (select * from email where (send_id = #{id} or receive_id = #{id}) and trash = true) e) ranked where rn between #{start} and #{end}
+	</select>
+	
+	<select id="trashTotalCount" resultType="int">
+		select count(*) from email where (send_id = #{id} or receive_id = #{id}) and trash = true
 	</select>
 	
 	<select id="selectFileByEmailId" resultType="boolean">
@@ -51,17 +79,9 @@
 		delete from email where id = ${id}
 	</delete>
 	
-	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{id} and trash = true union select * from email where receive_id = #{id} and trash = true;
-	</select>
-	
 	<update id="restoreMail">
 		update email set trash = false where id = ${id}
 	</update>
-	
-	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false order by id desc
-	</select>
 	
 	<select id="selectAllById" resultType="com.clovers.dto.EmailDTO">
 		select * from email where id = #{id}
@@ -74,11 +94,7 @@
 	<delete id="deleteBySysname">
 		delete from email_file where sys_name = #{sys_name};
 	</delete>
-	
-	<select id="outBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from email where send_id = #{send_id} and reservation = true
-	</select>
-	
+
 	<select id="selectAllReservationDate" resultType="com.clovers.dto.EmailDTO">
 		select * from email where reservation = true
 	</select>

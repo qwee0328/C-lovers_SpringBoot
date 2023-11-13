@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.clovers.constants.Constants;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
 import com.clovers.services.MailService;
@@ -72,7 +75,7 @@ public class MailController {
 	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
 		
 		// 예약 메일이라면
-		if(reserve_date != "") {
+		if(!reserve_date.isEmpty()) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date date = dateFormat.parse(reserve_date);
 			Timestamp reservation_date = new Timestamp(date.getTime());
@@ -208,9 +211,19 @@ public class MailController {
 	// 받은 메일 리스트
 	@ResponseBody
 	@RequestMapping("/inBoxList")
-	public List<EmailDTO> inBoxList() {
-		String recieve_id = (String) session.getAttribute("loginID");
-		return mservice.inBoxList(recieve_id);
+	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
+		String receive_id = (String) session.getAttribute("loginID");
+		List<EmailDTO> mail = mservice.inBoxList(receive_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
 	}
 	
 	
@@ -219,10 +232,20 @@ public class MailController {
 	// 보낸 메일 리스트
 	@ResponseBody
 	@RequestMapping("/sentBoxList")
-	public List<EmailDTO> sentBoxList() {
+	public Map<String, Object> sentBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String send_id = (String) session.getAttribute("loginID");
 		boolean temporary = false;
-		return mservice.sentBoxList(send_id, temporary);
+		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.sentBoxTotalCount(send_id, temporary));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+
+		return param;
 	}
 	
 	
@@ -231,10 +254,20 @@ public class MailController {
 	// 임시 메일 리스트
 	@ResponseBody
 	@RequestMapping("/tempBoxList")
-	public List<EmailDTO> tempBoxList() {
+	public Map<String, Object> tempBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String send_id = (String) session.getAttribute("loginID");
 		boolean temporary = true;
-		return mservice.sentBoxList(send_id, temporary);
+		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.sentBoxTotalCount(send_id, temporary));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+
+		return param;
 	}
 	
 	// 임시 메일 작성하기
@@ -260,9 +293,19 @@ public class MailController {
 	// 보낼 메일 리스트
 	@ResponseBody
 	@RequestMapping("/outBoxList")
-	public List<EmailDTO> outBoxList() {
+	public Map<String, Object> outBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String send_id = (String) session.getAttribute("loginID");
-		return mservice.outBoxList(send_id);
+		List<EmailDTO> mail = mservice.outBoxList(send_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.outBoxTotalCount(send_id));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
 	}
 	
 	// 예약시간에 전송
@@ -319,9 +362,20 @@ public class MailController {
 	// 휴지통 리스트
 	@ResponseBody
 	@RequestMapping("/trashList")
-	public List<EmailDTO> trashList() {
+	public Map<String, Object> trashList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String id = (String) session.getAttribute("loginID");
-		return mservice.trashList(id);
+		List<EmailDTO> mail = mservice.trashList(id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.trashTotalCount(id));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
+		
 	}
 	
 	// 복원 (휴지통 -> 받은 메일함)
