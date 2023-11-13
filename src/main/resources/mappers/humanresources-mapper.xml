@@ -40,7 +40,7 @@
 	</update>
 	
 	<!-- 업무 상태 기록 남기기 -->
-	<insert id="insertWorkCondition">
+	<insert id="insertWorkCondition" useGeneratedKeys="true" keyProperty="id">
 		insert into work_conditioin (attend_status_id, work_condition_status_id, emp_id, start_time, work_date) values (#{attend_status_id},#{status}, #{id}, convert_tz(now(),'+00:00', '+09:00'), curdate());
 	</insert>
 	
@@ -48,4 +48,18 @@
 	<update id="updateWorkCondtionEndTime">
 		update work_conditioin set end_time = convert_tz(now(),'+00:00', '+09:00') where attend_status_id = #{attend_status_id};
 	</update>
+	
+	<!-- 입력한 업무 상태 확인 -->
+	<select id="selectWorkCondition" resultType="com.clovers.dto.WorkConditionDTO">
+		select *
+		from work_conditioin
+		where id=#{id};
+	</select>
+	
+	<!-- 업무 상태 리스트 불러오기 -->
+	<select id="selectWorkConditionsList" resultType="com.clovers.dto.WorkConditionDTO">
+		select *
+		from work_conditioin
+		where date(work_date) = curdate() and emp_id=#{id};
+	</select>
 </mapper>

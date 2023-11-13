@@ -1,10 +1,13 @@
 package com.clovers.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.clovers.dto.WorkConditionDTO;
 
 @Repository
 public class HumanResourcesDAO {
@@ -35,11 +38,22 @@ public class HumanResourcesDAO {
 	
 	// 업무 상태 기록 남기기
 	public int insertWorkCondition(Map<String, Object> data) {
-		return db.insert("HumanResources.insertWorkCondition", data);
+		db.insert("HumanResources.insertWorkCondition", data);
+		return Integer.parseInt(data.get("id").toString());
 	}
 	
 	// 업무 상태 종료시간 업데이트
 	public int updateWorkCondtionEndTime(int attend_status_id) {
 		return db.update("HumanResources.updateWorkCondtionEndTime", attend_status_id);
 	}
+	
+	// 입력한 업무 상태 확인
+	public WorkConditionDTO selectWorkCondition(int id){
+		return db.selectOne("HumanResources.selectWorkCondition", id);
+	}
+	
+	// 업무 상태 리스트 불러오기
+		public List<WorkConditionDTO> selectWorkConditionsList(String id){
+			return db.selectList("HumanResources.selectWorkConditionsList", id);
+		}
 }

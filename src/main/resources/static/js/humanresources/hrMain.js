@@ -1,4 +1,4 @@
-let status ="";
+let status = "";
 
 window.onload = function() {
 	setClock();
@@ -33,159 +33,216 @@ window.onload = function() {
 		console.log(attend)
 
 		$("#work_rule_name").html(resp.name);
-		$("#work_rule_time").html(resp.attend_time + " ~ " + resp.leave_time + "(소정 " + (workTime-breakTime) + "시간)");
-		
+		$("#work_rule_time").html(resp.attend_time + " ~ " + resp.leave_time + "(소정 " + (workTime - breakTime) + "시간)");
+
 		// 근무 체크 확인
 		$.ajax({
 			url: "/humanResources/selectAttendStatus",
 			dataType: "json"
 		}).done(function(resp) {
-			if(Object.keys(resp).length>0){
+			if (Object.keys(resp).length > 0) {
 				// 출근 했을 경우
-				
+
 				let attendTimestamp = resp.attend_time;
 				let time = new Date(attendTimestamp);
 				let hour = time.getHours();
 				let minutes = time.getMinutes();
 				let sec = time.getSeconds();
+				if (minutes == 0) {
+					minutes = minutes.toString().padStart(2, '0');
+				}
 				$("#attendTime").html(hour + " : " + minutes + " : " + sec);
-				
-				if(resp.leave_time==null){
+
+				if (resp.leave_time == null) {
 					// 근무 중인경우
 					console.log("근무중")
 					window.status = "근무중"
 					$(".statusBox").html(window.status);
-					
-					$("#leaveBtn").css({"color": "#75b47d", "pointer-events":"auto"});
-					$("#attendBtn").css({"color": "#b5b5bb", "pointer-events":"none"});
+
+					$("#leaveBtn").css({ "color": "#75b47d", "pointer-events": "auto" });
+					$("#attendBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
 					$(".workingStatusBtns div button").prop("disabled", false);
-					if(resp.work_status_id == "지각"){
+					if (resp.work_status_id == "지각") {
 						createCommute_Attend(resp.attend_time, "지각");
-					}else{
+					} else {
 						createCommute_Attend(resp.attend_time, "출근");
 					}
-					
-					
-					
+
+					$.ajax({
+						url: "/humanResources/selectWorkConditionsList",
+						dataType: "json"
+					}).done(function(respList){
+						console.log(respList);
+						console.log(respList.length);
+						for(let i =0; i<respList.length;i++){
+							createWorkCondition(respList[i]);
+						}
+					})
+
 					// 퇴근하기
-					$("#leaveBtn").on("click", function(){
+					$("#leaveBtn").on("click", function() {
 						$.ajax({
 							url: "/humanResources/updateLeavingWork",
 							dataType: "json"
-						}).done(function(){
-							location.href="/humanResources";
+						}).done(function() {
+							location.href = "/humanResources";
 						})
 					})
-				}else{
+				} else {
 					// 퇴근한 경우
 					console.log("퇴근함")
 					window.status = "근무 종료"
 					$(".statusBox").html(window.status);
-					
+
 					let leaveTimestamp = resp.leave_time;
 					let time = new Date(leaveTimestamp);
 					let hour = time.getHours();
 					let minutes = time.getMinutes();
 					let sec = time.getSeconds();
+
+					if (minutes == 0) {
+						minutes = minutes.toString().padStart(2, '0');
+					}
 					$("#leaveTime").html(hour + " : " + minutes + " : " + sec);
-					
-					$("#leaveBtn").css({"color": "#b5b5bb", "pointer-events":"none"});
-					$("#attendBtn").css({"color": "#b5b5bb", "pointer-events":"none"});
+
+					$("#leaveBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
+					$("#attendBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
 					$(".workingStatusBtns div button").prop("disabled", true);
-					
-					if(resp.work_status_id == "지각"){
+
+					if (resp.work_status_id == "지각") {
 						createCommute_Attend(resp.attend_time, "지각");
-					}else{
+					} else {
 						createCommute_Attend(resp.attend_time, "출근");
 					}
-					createCommute_Attend(resp.leave_time, "퇴근");
 					
+					$.ajax({
+						url: "/humanResources/selectWorkConditionsList",
+						dataType: "json"
+					}).done(function(respList){
+						console.log(respList);
+						console.log(respList.length);
+						for(let i =0; i<respList.length;i++){
+							createWorkCondition(respList[i]);
+						}
+						createCommute_Attend(resp.leave_time, "퇴근");
+					})
+					
+					
+
 				}
-				
-				
-			}else{
+
+
+			} else {
 				console.log("출근 전")
 				// 출근을 아직 안한 경우
-				$("#leaveBtn").css({"color": "#b5b5bb", "pointer-events":"none"});
-				$("#attendBtn").css({"color": "#75b47d", "pointer-events":"auto"});
+				$("#leaveBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
+				$("#attendBtn").css({ "color": "#75b47d", "pointer-events": "auto" });
 				$(".workingStatusBtns div button").prop("disabled", true);
 				window.status = "출근전";
 				$(".statusBox").html(window.status);
-				
-				$("#attendBtn").on("click",function(){
+
+				$("#attendBtn").on("click", function() {
 					console.log("출근함")
 					$.ajax({
 						url: "/humanResources/insertAttendingWork",
 						dataType: "json"
-					}).done(function(){
-						location.href="/humanResources";
+					}).done(function() {
+						location.href = "/humanResources";
 					})
 				})
 			}
 		})
 		if (attend < today) {
-		    console.log('attend 시간은 이미 지났습니다.');
+			console.log('attend 시간은 이미 지났습니다.');
 		} else {
-		    console.log('attend 시간은 아직 지나지 않았습니다.');
+			console.log('attend 시간은 아직 지나지 않았습니다.');
 		}
 	});
-	
+
 	if (!$("#working").prop("disabled")) {
-	    $("#working").on("click", function() {
-	        console.log("업무중 클릭")
-	        $.ajax({
+		$("#working").on("click", function() {
+			console.log("업무중 클릭")
+			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=업무",
 				dataType: "json"
-			}).done(function(){
+			}).done(function(resp) {
+				console.log(resp)
 				$("#working").prop("disabled", true);
 				$("#goingOut").prop("disabled", false);
 				$("#conference").prop("disabled", false);
 				$("#outside").prop("disabled", false);
+
+				createWorkCondition(resp);
 			})
-	    });
+		});
 	}
 	if (!$("#goingOut").prop("disabled")) {
-	    $("#goingOut").on("click", function() {
-	        console.log("외출중 클릭")
-	         $.ajax({
+		$("#goingOut").on("click", function() {
+			console.log("외출중 클릭")
+			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=외출",
 				dataType: "json"
-			}).done(function(){
+			}).done(function(resp) {
 				$("#working").prop("disabled", false);
 				$("#goingOut").prop("disabled", true);
 				$("#conference").prop("disabled", false);
 				$("#outside").prop("disabled", false);
+
+				createWorkCondition(resp);
 			})
-	    });
+		});
 	}
 	if (!$("#conference").prop("disabled")) {
-	    $("#conference").on("click", function() {
-	        console.log("회의중 클릭")
-	         $.ajax({
+		$("#conference").on("click", function() {
+			console.log("회의중 클릭")
+			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=회의",
 				dataType: "json"
-			}).done(function(){
+			}).done(function(resp) {
 				$("#working").prop("disabled", false);
 				$("#goingOut").prop("disabled", false);
 				$("#conference").prop("disabled", true);
 				$("#outside").prop("disabled", false);
+
+				createWorkCondition(resp);
 			})
-	    });
+		});
 	}
 	if (!$("#outside").prop("disabled")) {
-	    $("#outside").on("click", function() {
-	        console.log("외근중 클릭")
-	         $.ajax({
+		$("#outside").on("click", function() {
+			console.log("외근중 클릭")
+			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=외근",
 				dataType: "json"
-			}).done(function(){
+			}).done(function(resp) {
 				$("#working").prop("disabled", false);
 				$("#goingOut").prop("disabled", false);
 				$("#conference").prop("disabled", false);
 				$("#outside").prop("disabled", true);
+
+				createWorkCondition(resp);
 			})
-	    });
+		});
 	}
+}
+
+function createWorkCondition(resp) {
+	let startTimestamp = resp.start_time;
+	let time = new Date(startTimestamp);
+	let hour = time.getHours();
+	let minutes = time.getMinutes();
+	if (minutes == 0) {
+		minutes = minutes.toString().padStart(2, '0');
+	}
+
+	let commuteTable__row = $("<div>").attr("class", "commuteTable__row");
+	let commute__left = $("<div>").attr("class", "commute__left");
+	let commute__circle = $("<div>").attr("class", "commute__circle");
+	let commute__time = $("<div>").attr("class", "commute__time").html(hour + " : " + minutes);
+
+	commute__left.append(commute__circle).append(commute__time).append($("<div>").html(resp.work_condition_status_id));
+	commuteTable__row.append(commute__left);
+	$(".commuteTable").append(commuteTable__row);
 }
 
 function setClock() {
@@ -205,8 +262,8 @@ function setClock() {
 	dayDiv.append(dateDiv).append(weekDiv);
 	$(".month").append(dayDiv);
 	$(".nowTime").html(hour + " : " + min + " : " + sec);
-	
-	let statusDiv = $("<div>").attr("class","statusBox").html(window.status);
+
+	let statusDiv = $("<div>").attr("class", "statusBox").html(window.status);
 	console.log(window.status)
 	$(".nowTime").append(statusDiv);
 }
@@ -219,24 +276,27 @@ function modifyNumber(time) {
 	}
 }
 
-function createCommute_Attend(attend_time, title){
+function createCommute_Attend(attend_time, title) {
 	let attendTimestamp = attend_time;
 	let time = new Date(attendTimestamp);
 	let hour = time.getHours();
 	let minutes = time.getMinutes();
-	
+	if (minutes == 0) {
+		minutes = minutes.toString().padStart(2, '0');
+	}
+
 	let commuteTable__row = $("<div>").attr("class", "commuteTable__row");
 	let commute__left = $("<div>").attr("class", "commute__left");
 	let commute__circle = $("<div>").attr("class", "commute__circle");
 	let commute__time = $("<div>").attr("class", "commute__time").html(hour + " : " + minutes);
 	let commute__right = $("<div>").attr("class", "commute__right");
-	
-	if(title=="지각"){
+
+	if (title == "지각") {
 		commute__left.append(commute__circle).append(commute__time).append($("<div>").html("출근"))
-	}else{
+	} else {
 		commute__left.append(commute__circle).append(commute__time).append($("<div>").html(title))
-	}			
-	
+	}
+
 	commute__right.append($("<div>").html(title));
 	commuteTable__row.append(commute__left).append(commute__right);
 	$(".commuteTable").append(commuteTable__row);

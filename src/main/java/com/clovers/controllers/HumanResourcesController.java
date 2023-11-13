@@ -1,6 +1,7 @@
 package com.clovers.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.clovers.dto.WorkConditionDTO;
 import com.clovers.services.HumanResourcesService;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,8 +28,9 @@ public class HumanResourcesController {
 	@RequestMapping("")
 	public String main() {
 		String title="인사";
+		String currentMenu = "휴가/근무";
 		session.setAttribute("title", title);
-		
+		session.setAttribute("currentMenu", currentMenu);
 		return "humanresources/hrMain";
 	}
 	
@@ -74,9 +77,16 @@ public class HumanResourcesController {
 	// 업무 상태 기록 남기기
 	@ResponseBody
 	@RequestMapping("/insertWorkCondition")
-	public int insertWorkCondition(@RequestParam("status") String status) {
+	public WorkConditionDTO insertWorkCondition(@RequestParam("status") String status) {
 		String id = (String)session.getAttribute("loginID");
 		return hrservice.insertWorkCondition(id, status);
 	}
 	
+	// 업무 상태 리스트 불러오기
+	@ResponseBody
+	@RequestMapping("/selectWorkConditionsList")
+	public List<WorkConditionDTO> selectWorkConditionsList(){
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectWorkConditionsList(id);
+	}
 }

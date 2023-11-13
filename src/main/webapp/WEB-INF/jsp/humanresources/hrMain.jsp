@@ -147,42 +147,7 @@
                             근무현황
                         </div>
                         <div class="conf_detail">
-                            <div class="commuteTable">
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>출근</div>
-                                    </div>
-                                    <div class="commute__right">
-                                        <div>출근</div>
-                                    </div>
-                                </div>
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>업무</div>
-                                    </div>
-                                </div>
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>외출</div>
-                                    </div>
-                                </div>
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>퇴근</div>
-                                    </div>
-                                    <div class="commute__right">
-                                        <div>퇴근</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="commuteTable"></div>
                             <div class="shiftEditBtn">
                                 <button class="whiteBtn">근무체크 수정</button>
                             </div>

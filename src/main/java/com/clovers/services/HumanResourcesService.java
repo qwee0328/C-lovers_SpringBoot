@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.dao.HumanResourcesDAO;
+import com.clovers.dto.WorkConditionDTO;
 
 @Service
 public class HumanResourcesService {
@@ -65,7 +67,7 @@ public class HumanResourcesService {
 	
 	// 업무상태 기록 남기기
 	@Transactional
-	public int insertWorkCondition(String id, String status) {
+	public WorkConditionDTO insertWorkCondition(String id, String status) {
 		int attend_status_id = (int) dao.selectAttendStatus(id).get("id");
 		
 		Map<String, Object> data = new HashMap<>();
@@ -75,6 +77,16 @@ public class HumanResourcesService {
 	    
 	    // 이전에 사용하던 업무상태 종료하기
 	    dao.updateWorkCondtionEndTime(attend_status_id);
-	    return dao.insertWorkCondition(data);
+	    // 업무상태 삽입 후 id 받아오기
+	    int workConditionId = dao.insertWorkCondition(data);
+	    System.out.println(workConditionId);
+	    
+	    // 삽입한 업무 상태 확인
+	    return dao.selectWorkCondition(workConditionId);
+	}
+	
+	// 업무 상태 리스트 불러오기
+	public List<WorkConditionDTO> selectWorkConditionsList(String id){
+		return dao.selectWorkConditionsList(id);
 	}
 }
