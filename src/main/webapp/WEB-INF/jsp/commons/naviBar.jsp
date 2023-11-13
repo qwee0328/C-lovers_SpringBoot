@@ -14,7 +14,6 @@
 </head>
 <body>
 	<div class="naviBar">
-		
 		<c:if test="${naviBtn != '' }">
 			<div class="naviBtn">
 				<i class="fa-solid fa-plus naviBtn__icon"></i>
@@ -31,7 +30,6 @@
 				<input type="hidden" class="naviLocation" value="${naviMenuLocation[i] }"/>
 			</div>
 		</c:forEach>
-		<input type="hidden" id="currentMenu" value="${currentMenu }" />
 	</div>
 </body>
 
@@ -43,6 +41,14 @@
 	$(document).on("click", ".naviConp", function() {
 		let location = $(this).children(".naviLocation").val();
 		window.location.href = "/mail/" + location;
+	})
+	
+	$(document).ready(function() {
+		 $(".naviConp__title").each(function() {
+	        if ($(this).text() == `${currentMenu}`) {
+	            $(this).parent().css("background-color", "#DCEDD4");
+	        }
+	    });
 	})
 </script>
 </html>

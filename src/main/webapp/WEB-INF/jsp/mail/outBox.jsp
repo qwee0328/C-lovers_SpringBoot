@@ -20,22 +20,22 @@
 		<div class="container__inBox">
 			<div class="inBox__allCheck">
 				<input type="checkbox" class="allCheck__checkbox" />
-				<button type="submit" id="restoreMail" class="allCheck__buttons">메일함으로 이동</button>
+				<button type="submit" id="deleteMail" class="allCheck__buttons">삭제</button>
 				<button type="submit" id="perDeleteMail" class="allCheck__buttons">완전삭제</button>
 			</div>
 			<div class="inBox__mailListBox"></div>
 			<hr>
 			<div class="inBox__bottom">
-				<div class="bottom__mailNum">편지 수 : </div>
+				<div class="bottom__mailNum"></div>
 				<div class="bottom__pageNavi"></div>
 			</div>
 		</div>
 	</div>
 	
 	<script>
-		$(document).ready(function() {
+	    $(document).ready(function() {
 	    	$.ajax({
-	            url: "/mail/trashList?cpage=",
+	            url: "/mail/outBoxList?cpage=",
 	            type: 'POST'
 	        }).done(function (resp) {
 	        	console.log(resp.mail);
@@ -43,8 +43,8 @@
 	            pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
 	        })
 	    })
-		
-	    // 메일 리스트 출력 함수
+	
+		// 메일 리스트 출력 함수
 	    function mailList(mail, mailCount) {
 	        $(".inBox__mailListBox").empty();
 	        
@@ -111,7 +111,6 @@
 		// 체크박스 개별 클릭 시
 		$(document).on("change", ".mailList__checkbox", function() {
 			let check = $(this).is(":checked");
-			console.log("체크박스 클릭: " + check);
 			if(check) {
 				$(this).prop("checked", true);
 				$(this).parent().css("background-color", "#DCEDD4");
@@ -121,8 +120,8 @@
 			}
 		})
 		
-		// 메일함으로 이동 버튼 클릭 시
-		$("#restoreMail").on("click", function() {
+		// 삭제 버튼 클릭 시
+		$("#deleteMail").on("click", function() {
 			let selectedMails = [];
 			$(".mailList__checkbox:checked").each(function() {
 				selectedMails.push($(this).val());
@@ -131,21 +130,21 @@
 			if(selectedMails.length > 0) {
 				$.ajax({
 					type: "POST",
-					url: "/mail/restoreMail",
+					url: "/mail/deleteMail",
 					data: { selectedMails : selectedMails }
 				}).done(function(){
 					location.reload();
 				}).done(function(){
-					alert("선택한 메일이 메일함으로 이동되었습니다.");
+					alert("선택한 메일이 휴지통으로 이동했습니다.");
 				});
 			} else {
-				alert("이동할 메일을 선택해주세요.");
+				alert("삭제할 메일을 선택해주세요.");
 			}
 		})
 		
 		// 완전 삭제 버튼 클릭 시
 		$("#perDeleteMail").on("click", function() {
-			let result = confirm("완전삭제 하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
+			let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
 			if(result) {
 				let selectedMails = [];
 				$(".mailList__checkbox:checked").each(function() {
@@ -160,7 +159,7 @@
 					}).done(function(){
 						location.reload();
 					}).done(function(){
-						alert("선택한 메일이 완전삭제 되었습니다.");
+						alert("선택한 메일이 완전삭제되었습니다.");
 					});
 				} else {
 					alert("완전삭제할 메일을 선택해주세요.");
@@ -206,7 +205,7 @@
 				let pagination = $(".bottom__pageNavi");
 				if (startNavi != 1) {
 					let divTag = $("<div>");
-					divTag.attr("href", "/mail/trashList?cpage=1");
+					divTag.attr("href", "/mail/outBoxList?cpage=1");
 					let iTag = $("<i>");
 					iTag.addClass("fa-solid fa-angles-left");
 					divTag.append(iTag);
@@ -215,7 +214,7 @@
 
 				if (needPrev) {
 					let divTag = $("<div>");
-					divTag.attr("href", "/mail/trashList?cpage=" + (startNavi - 1));
+					divTag.attr("href", "/mail/outBoxList?cpage=" + (startNavi - 1));
 					let iTag = $("<i>");
 					iTag.addClass("fa-solid fa-chevron-left");
 					divTag.append(iTag);
@@ -225,7 +224,7 @@
 				for (let i = startNavi; i <= endNavi; i++) {
 					let divTag = $("<div>");
 					divTag.text(i);
-					divTag.attr("href", "/mail/trashList?cpage=" + i);
+					divTag.attr("href", "/mail/inBoxList?cpage=" + i);
 					if (i == currentPage) {
 						divTag.addClass("pageNavi__circle");
 					}
@@ -234,7 +233,7 @@
 
 				if (needNext) {
 					let divTag = $("<div>");
-					divTag.attr("href", "/mail/trashList?cpage=" + (endNavi + 1));
+					divTag.attr("href", "/mail/outBoxList?cpage=" + (endNavi + 1));
 					let iTag = $("<i>");
 					iTag.addClass("fa-solid fa-chevron-right");
 					divTag.append(iTag);
@@ -243,7 +242,7 @@
 
 				if (endNavi != pageTotalCount) {
 					let divTag = $("<div>");
-					divTag.attr("href", "/mail/inBoxList?cpage="+pageTotalCount);
+					divTag.attr("href", "/mail/outBoxList?cpage="+pageTotalCount);
 					let iTag = $("<i>");
 					iTag.addClass("fa-solid fa-angles-right");
 					divTag.append(iTag);
@@ -263,6 +262,8 @@
 	            pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
 	        })
 	    })
+		
+		
 	</script>
 </body>
 </html>

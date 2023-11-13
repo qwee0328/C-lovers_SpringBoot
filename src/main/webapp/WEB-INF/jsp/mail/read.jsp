@@ -29,22 +29,31 @@
 				<div class="read__btns">
 					<c:choose>
 						<c:when test="${mail.temporary }">
-							<button type="submit" formaction="/mail/send/rewrite?id=${mail.id }">작성하기</button>
+							<button type="submit" formaction="/mail/send/rewrite">작성하기</button>
 						</c:when>
 						<c:otherwise>
-							<button type="submit" formaction="/mail/send/reply?id=${mail.id }">답장</button>
+							<button type="submit" formaction="/mail/send/reply">답장</button>
 						</c:otherwise>
 					</c:choose>
-					<button type="button" id="deleteMail" formaction="/mail/read/delete?id=${mail.id }">삭제</button>
-					<button type="button" id="perDeleteMail" formaction="/mail/read/perDelete?id=${mail.id }">완전삭제</button>
+					<button type="button" id="deleteMail">삭제</button>
+					<button type="button" id="perDeleteMail">완전삭제</button>
 				</div>
-				<input type="hidden" id="id" value="${mail.id }" />
+				<input type="hidden" name="id" id="id" value="${mail.id }" />
 				<div class="read__title">
 					${mail.title}
 				</div>
-				<div class="read__time">
-					${mail.send_date }
-				</div>
+				<c:choose>
+					<c:when test="${not empty mail.reservation_date }">
+						<div class="read__time">
+							예약시간 ${mail.reservation_date }
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="read__time">
+							${mail.send_date }
+						</div>
+					</c:otherwise>
+				</c:choose>
 				<div class="read__idInfo">
 					<p>보낸 사람 :<p><p class="idInfo__Value">${mail.send_id }</p>
 				</div>
@@ -93,17 +102,15 @@
 				$("#deleteMail").on("click", function() {
 					let result = confirm("메일을 삭제하시겠습니까? 삭제한 메일은 휴지통으로 이동합니다.");
 					if(result) {
-						let formAction = $("#deleteMail").attr("formaction");
-						window.location.href = formAction;
+						window.location.href = "/mail/read/delete?id=${mail.id }";
 					}
 				})
 				
 				// 완전삭제 버튼 클릭 시
-				$("#deleteMail").on("click", function() {
+				$("#perDeleteMail").on("click", function() {
 					let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
 					if(result) {
-						let formAction = $("#perDeleteMail").attr("formaction");
-						window.location.href = formAction;
+						window.location.href = "/mail/read/perDelete?id=${mail.id }";
 					}
 				})
 				

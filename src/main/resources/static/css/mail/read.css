@@ -17,7 +17,7 @@ body {
 
 .container__read {
 	margin: 30px;
-	width: 1190px;
+	flex: 1;
 }
 
 .read__btns {

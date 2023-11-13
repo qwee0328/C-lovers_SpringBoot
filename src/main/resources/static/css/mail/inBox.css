@@ -14,7 +14,7 @@ body {
 }
 
 .container__inBox {
-	width: 1190px;
+	flex: 1;
 }
 
 .container__inBox div {
@@ -67,7 +67,7 @@ input[type=checkbox] {
 }
 
 .mailList__title {
-	margin-left: 150px;
+	margin-left: 50px;
 	text-decoration: none;
 	color: #000000;
 }
@@ -107,6 +107,10 @@ hr {
 	display: flex;
 	margin: auto;
 	align-items: center;
+}
+
+.bottom__pageNavi > div {
+	margin: 0px 3px;
 }
 
 .pageNavi__circle {

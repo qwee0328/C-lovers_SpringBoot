@@ -1,5 +1,6 @@
 package com.clovers.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,36 @@ public class MailDAO {
 		return db.insert("Mail.submitFile", dto);
 	}
 	
-	public List<EmailDTO> inBoxList(String recieve_id) {
-		return db.selectList("Mail.inBoxList", recieve_id);
+	public List<EmailDTO> inBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.inBoxList", param);
+	}
+	
+	public int inBoxTotalCount(String receive_id) {
+		return db.selectOne("Mail.inBoxTotalCount", receive_id);
+	}
+	
+	public List<EmailDTO> sentBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.sentBoxList", param);
+	}
+	
+	public int sentBoxTotalCount(Map<String, Object> param) {
+		return db.selectOne("Mail.sentBoxTotalCount", param);
+	}
+	
+	public List<EmailDTO> outBoxList(Map<String, Object> param) {
+		return db.selectList("Mail.outBoxList", param);
+	}
+	
+	public int outBoxTotalCount(String send_id) {
+		return db.selectOne("Mail.outBoxTotalCount", send_id);
+	}
+	
+	public List<EmailDTO> trashList(Map<String, Object> param) {
+		return db.selectList("Mail.trashList", param);
+	}
+	
+	public int trashTotalCount(String id) {
+		return db.selectOne("Mail.trashTotalCount", id);
 	}
 	
 	public boolean selectFileByEmailId(int email_id) {
@@ -53,16 +82,8 @@ public class MailDAO {
 		return db.delete("Mail.perDeleteMail", id);
 	}
 	
-	public List<EmailDTO> trashList(String id) {
-		return db.selectList("Mail.trashList", id);
-	}
-	
 	public int restoreMail(int id) {
 		return db.update("Mail.restoreMail", id);
-	}
-	
-	public List<EmailDTO> sentBoxList(Map<String, Object> param) {
-		return db.selectList("Mail.sentBoxList", param);
 	}
 	
 	public EmailDTO selectAllById(int id) {
@@ -71,5 +92,17 @@ public class MailDAO {
 	
 	public List<EmailFileDTO> selectAllFileById(int email_id) {
 		return db.selectList("Mail.selectAllFileById", email_id);
+	}
+	
+	public int deleteFiles(String sys_name) {
+		return db.delete("Mail.deleteBySysname", sys_name);
+	}
+	
+	public List<EmailDTO> selectAllReservationDate() {
+		return db.selectList("Mail.selectAllReservationDate");
+	}
+	
+	public int submitReservationMail(Map<String, Object> param) {
+		return db.update("Mail.submitReservationMail", param);
 	}
 }

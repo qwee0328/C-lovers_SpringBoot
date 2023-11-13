@@ -26,4 +26,12 @@ $(document).ready(function() {
 			$(this).children(".naviConp__icon").html(`<i class="fa-solid fa-chevron-up"></i>`);
 		}
 	})
+	
+	// 메뉴바 설정
+	$(".naviConp__title").each(function(){
+		console.log($("#hrCurrentMenu").val())
+		if($(this).text() == $("#hrCurrentMenu").val()){
+			$(this).parent().css("background-color", "#DCEDD4");
+		}
+	})
 });
