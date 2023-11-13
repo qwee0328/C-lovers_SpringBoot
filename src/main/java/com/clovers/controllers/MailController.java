@@ -254,10 +254,20 @@ public class MailController {
 	// 임시 메일 리스트
 	@ResponseBody
 	@RequestMapping("/tempBoxList")
-	public List<EmailDTO> tempBoxList() {
+	public Map<String, Object> tempBoxList(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		
 		String send_id = (String) session.getAttribute("loginID");
 		boolean temporary = true;
-		return mservice.sentBoxList(send_id, temporary);
+		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		Map<String, Object> param = new HashMap<>();
+		param.put("mail", mail);
+		param.put("recordTotalCount", mservice.sentBoxTotalCount(send_id, temporary));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+
+		return param;
 	}
 	
 	// 임시 메일 작성하기
