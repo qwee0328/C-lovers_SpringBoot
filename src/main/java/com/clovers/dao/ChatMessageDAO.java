@@ -32,7 +32,7 @@ public class ChatMessageDAO {
 	}
 	
 	// 사용자의 아이디를 기준으로 사용자가 현재 채팅방에 들어와 있는지 확인
-//	public 
+	//	public 
 	
 	// 채팅방의 메시지를 삭제하기(업데이트하여서 가리기)
 	public int deleteExecModifyChatMessageById(int id) {

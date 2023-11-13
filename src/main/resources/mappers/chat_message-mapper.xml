@@ -17,8 +17,6 @@
 		#{chat_room_id}
 	</select>
 
-
-
 	<!-- 최신 메시지의 아이디 불러내기 -->
 	<select id="selectLatestChatMsgIdByChatRoomIdForUpdate"
 		resultType="String">

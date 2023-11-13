@@ -48,8 +48,8 @@
 
         <div class="chatHeader">
             <div class="header d-flex">
-                <div class="header__chatNameCover d-flex"><div class="header__chatName">채팅방 이름dddddddddddddddddddddddddddd</div>
-                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;10</div>
+                <div class="header__chatNameCover d-flex"><div class="header__chatName">${personalChatRoomInfo.name}</div>
+                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;${personalChatRoomInfo.emp_cnt}</div>
                 </div>
                 <div class="header__menuIcon d-flex">
                     <div class="menuIcon__searchBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -76,6 +76,7 @@
             		$(".chatContainer__chatArea").append($("<div>").attr("class","chatArea__DayLine align-center").text("날짜"));
             	-->
                 <div class="chatArea__DayLine align-center">2023년 10월 30일 월요일</div>
+                
             </div>
 
 
