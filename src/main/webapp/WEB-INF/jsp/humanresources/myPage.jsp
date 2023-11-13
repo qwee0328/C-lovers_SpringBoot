@@ -122,8 +122,14 @@
 	                                    <span>사내전화</span>
 	                                </div>
 	                                <div class="profileRight">
-	                                    <div><input type="text" name="company_phone" value=${list.company_phone }></div>
+	                                    <div><input type="text" name="company_phone" id="company" value=${list.company_phone }></div>
 	                                </div>
+	                                <!-- 사내전화 regex -->
+									<div class="profileRexBox">
+										<div class="company__regex">
+
+										</div>
+									</div>
 	                            </div>
 	
 	                            <div class="profileBox__inner">
@@ -131,8 +137,14 @@
 	                                    <span>휴대전화</span>
 	                                </div>
 	                                <div class="profileRight">
-	                                    <div><input type="text" name="phone" value=${list.phone }></div>
+	                                    <div><input type="text" name="phone" id="phone" value=${list.phone }></div>
 	                                </div>
+	                                <!-- 휴대전화 regex -->
+									<div class="profileRexBox">
+										<div class="phone__regex">
+
+										</div>
+									</div>
 	                            </div>
 	
 	                            <div class="profileBox__inner">
@@ -140,8 +152,14 @@
 	                                    <span>개인이메일</span>
 	                                </div>
 	                                <div class="profileRight">
-	                                    <div><input type="text" name="email" value=${list.email }></div>
+	                                    <div><input type="text" name="email" id="email" value=${list.email }></div>
 	                                </div>
+	                                <!-- 이메일 regex -->
+									<div class="profileRexBox">
+										<div class="email__regex">
+
+										</div>
+									</div>
 	                            </div>
 	
 	                            <div class="profileBox__inner">
@@ -180,7 +198,7 @@
 	                <div class="mypageBox__profileBoxBottom">
 	                    <button type="button" class="profileBtn">내 정보 관리</button>
 	                    <button type="button" class="profileBtnCancle">취소</button>
-	                    <button type="submit" class="profileBtnSave">저장</button>
+	                    <button type="button" class="profileBtnSave">저장</button>
 	                </div>
                 </form>
             </div>
@@ -240,6 +258,52 @@
 
 		reader.readAsDataURL(event.target.files[0]);
 	}
+    
+    let regexResult=true;
+	//     Regex검사
+	// 		이메일 regex
+	let emailRegex = /^[a-zA-Z0-9\_]+@[a-z]+\.[a-z]{2,3}$/;
+	$("#email").keyup(function (e) {
+		result = emailRegex.test($("#email").val());
+
+		if (!result) {
+			$(".email__regex").html("이메일 형식이 올바르지 않습니다.").css({ "font-size": "12px", "color": "red" });
+			regexResult = false;
+		}
+		if (result) {
+			$(".email__regex").html("");
+			regexResult=true;
+		}
+	});
+
+	// 		휴대전화 regex
+	let phoneRegex = /^(010)-?\d{3,4}-?\d{4}$/;
+	$("#phone").keyup(function (e) {
+		result = phoneRegex.test($("#phone").val());
+
+		if (!result) {
+			$(".phone__regex").html("전화번호 형식이 올바르지 않습니다.").css({ "font-size": "12px", "color": "red" });
+			regexResult = false;
+		}
+		if (result) {
+			$(".phone__regex").html("");
+			regexResult=true;
+		}
+	});
+
+	//		사내전화 regex -> 사내전화가 어떤 형식인지 몰라서 못함
+
+
+	// 
+	$(".profileBtnSave").click(function(){
+		if (!regexResult) {
+			alert("형식에 맞추어 다시 입력해주세요.");
+			return;
+		}
+		
+		$(".profileBtnSave").attr("type","submit");
+		
+	})
     
 	</script>
 
