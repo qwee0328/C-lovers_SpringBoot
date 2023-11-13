@@ -39,7 +39,7 @@
 		
 		window.onload = function() {
 			$.ajax({
-				url: "/mail/inBoxList",
+				url: "/mail/outBoxList",
 				type: 'POST'
 			}).done(function(resp){
 				mailCount = resp.length;
@@ -81,7 +81,7 @@
 					
 					let dateDiv = $("<div>");
 					dateDiv.addClass("right__date");
-					dateDiv.html(resp[i].send_date);
+					dateDiv.html("예약시간 " + resp[i].reservation_date);
 					
 					rightDiv.append(fileIconDiv).append(dateDiv);
 					mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);

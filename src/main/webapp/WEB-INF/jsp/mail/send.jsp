@@ -27,11 +27,68 @@
 		<div class="container__send">
 			<form method="post" enctype="multipart/form-data">
 				<div class="send__btns">
-					<button type="submit" formaction="/mail/submitSend">보내기</button>				
+					<div class="submit__sendBox">
+						<button type="submit" formaction="/mail/submitSend">보내기</button>
+						<div id="reserve__dateBox">
+							<span>( 예약시간 </span>
+							<span id="reserve__date"></span>
+							<input type="hidden" id="reserve__hidden__date" name="reserve_date" />
+							<span> )</span>
+						</div>	
+					</div>			
 					<button type="submit" formaction="/mail/tempSend">저장하기</button>
 					<div class="btns__sendReserve">
-						<button type="submit" formaction="/mail/reserveSend">발송 예약</button>
+						<button disabled>발송 예약</button>
 						<i class="fa-solid fa-angle-down sendReserve__icon"></i>
+						<div class="sendReserve__dropDown hide">
+							<div class="dropDown__box">
+								<div class="dropbox__title">발송 예약</div>
+								<div class="dropbox__reserve">
+									<input type="date" id="send_date">
+									<select id="send_hour">
+										<option value="00">0 시</option>
+										<option value="01">1 시</option>
+										<option value="02">2 시</option>
+										<option value="03">3 시</option>
+										<option value="04">4 시</option>
+										<option value="05">5 시</option>
+										<option value="06">6 시</option>
+										<option value="07">7 시</option>
+										<option value="08">8 시</option>
+										<option value="09">9 시</option>
+										<option value="10">10 시</option>
+										<option value="11">11 시</option>
+										<option value="12">12 시</option>
+										<option value="13">13 시</option>
+										<option value="14">14 시</option>
+										<option value="15">15 시</option>
+										<option value="16">16 시</option>
+										<option value="17">17 시</option>
+										<option value="18">18 시</option>
+										<option value="19">19 시</option>
+										<option value="20">20 시</option>
+										<option value="21">21 시</option>
+										<option value="22">22 시</option>
+										<option value="23">23 시</option>
+									</select>
+									<select id="send_minute">
+										<option value="00">0 분</option>
+										<option value="05">5 분</option>
+										<option value="10">10 분</option>
+										<option value="15">15 분</option>
+										<option value="20">20 분</option>
+										<option value="25">25 분</option>
+										<option value="30">30 분</option>
+										<option value="35">35 분</option>
+										<option value="40">40 분</option>
+										<option value="45">45 분</option>
+										<option value="50">50 분</option>
+										<option value="55">55 분</option>
+									</select>
+								</div>
+								<a href="#" class="reserve__btn">확인</a>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="send__inputLine">
@@ -55,14 +112,37 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">파일 첨부</div>
+					<div class="inputLine__fileList">
 						<input type="file" name="uploadFiles" multiple/>
-					<div class="inputLine__fileList"></div>
+					</div>
 				</div>
+				<c:choose>
+					<c:when test="${not empty fileList }">
+						<div id="fileList" class="send__inputLine">
+							<div class="inputLine_title">파일 리스트</div>
+							<div class="inputLine__fileList">
+								<c:forEach var="i" items="${fileList }">
+									<div class="fileList__deleteFile">
+										<div>${i.ori_name }</div>
+										<button type="button" sysName="${i.sys_name }" class="deleteFile__btn"><i class="fa-solid fa-xmark"></i></button>
+									</div>
+								</c:forEach>
+							</div>
+						</div>	
+					</c:when>
+				</c:choose>
+				<input type="hidden" id="deleteFiles" name="sysName">
+				
 				<div class="send__contentBox">
 					<textarea id="summernote" name="content" class="contentBox__content"></textarea>
 					<c:choose>
 						<c:when test="${empty isReply }">
 							<script>
+								$("#summernote").summernote({
+								    height: 500,
+								    disableResizeEditor: true
+								});
+							
 								$("#summernote").summernote("code", `${reply.content}`);
 							</script>
 						</c:when>
@@ -130,7 +210,7 @@
 				</div>
 				<input type="hidden" name="send_id" value=${loginID } />
 				<c:choose>
-					<c:when test="${reply.id }">
+					<c:when test="${not empty reply.id }">
 						<input type="hidden" name="id" value=${reply.id } />
 						<input type="hidden" name="temporary" value=${reply.temporary } />
 					</c:when>
@@ -139,13 +219,56 @@
 			</form>
 			
 			<script>
+				// 예약 발송 드롭다운 버튼 눌렀을 때
+				$(document).ready(function () {
+			        $(".sendReserve__icon").on("click", function () {
+			            // sendReserve__dropDown 클래스에 hide가 있으면 show로, show가 있으면 hide로 토글
+			            $(".sendReserve__dropDown").toggleClass("hide show");
+			
+			            // sendReserve__dropDown의 하위 요소인 dropDown__box의 디스플레이 속성을 토글
+			            $(".sendReserve__dropDown .dropDown__box").toggle();
+			        });
+			    });
+				
+				// 예약 드롭다운 확인 버튼 눌렀을 때
+				$(".reserve__btn").on("click", function(e) {
+					e.preventDefault(); // a 태그 페이지 이동하지 않도록
+					
+					let sendDate = $("#send_date").val();
+					let sendHour = $("#send_hour").val();
+					let sendMinute = $("#send_minute").val();
+					
+					let reserveDate = sendDate + " " + sendHour + ":" + sendMinute + ":00";
+					$("#reserve__dateBox").css("display", "block");
+					$("#reserve__date").html(reserveDate);
+					$("#reserve__hidden__date").val(reserveDate);
+					
+					$(".sendReserve__dropDown").toggleClass("hide show");
+					$(".sendReserve__dropDown .dropDown__box").toggle();
+				})
+			
+				// 파일 리스트 삭제 버튼 눌렀을 때
+				let deleteFileList = "";
+				$(document).on("click", ".deleteFile__btn", function() {
+					deleteFileList = deleteFileList.concat($(this).attr("sysName")+":");
+					console.log(deleteFileList);
+					
+					$(this).parent().remove();
+					$("#deleteFiles").val(deleteFileList);
+				});
+			
 				$(document).ready(function() {
 					$('#summernote').summernote({           // set editor height
-						  minHeight: 500,             // set minimum height of editor
-						  maxHeight: 500,             // set maximum height of editor
+						height: 500,  
+						disableResizeEditor: true,          // set maximum height of editor
 						  focus: true 
 					});
 				});
+				
+				// 발송 예약 아이콘 눌렀을 때
+				$(".sendReserve__icon").on("click", function() {
+					
+				})
 			</script>
 		</div>
 	</div>

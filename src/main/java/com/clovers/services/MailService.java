@@ -1,6 +1,7 @@
 package com.clovers.services;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class MailService {
 	}
 	
 	@Transactional
-	public int submitTempSend(EmailDTO dto, MultipartFile[] files) throws Exception {
+	public void submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files) throws Exception {
 		dao.submitTempSend(dto);
 		int email_id = dto.getId();
 		
@@ -58,7 +59,15 @@ public class MailService {
 			dao.submitFile(new EmailFileDTO(0, email_id, oriName, sysName));
 			}
 		}
-		return email_id;
+		
+		String[] deleteFiles = deleteSysName.split(":");
+		for(int i = 0; i < deleteFiles.length; i++) {
+			String deleteRealPath = upload;
+			File targetFile = new File(upload + "/" + deleteFiles[i]);
+			targetFile.delete();
+			
+			dao.deleteFiles(deleteFiles[i]);
+		}
 	}
 	
 	public List<EmailDTO> inBoxList(String recieve_id) {
@@ -99,4 +108,20 @@ public class MailService {
 	public List<EmailFileDTO> selectAllFileById(int email_id) {
 		return dao.selectAllFileById(email_id);
 	}
+	
+	public List<EmailDTO> outBoxList(String send_id) {
+		return dao.outBoxList(send_id);
+	}
+	
+	public List<EmailDTO> selectAllReservationDate() {
+		return dao.selectAllReservationDate();
+	}
+	
+	public int submitReservationMail(int id, Timestamp send_date) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("send_date", send_date);
+		return dao.submitReservationMail(param);
+	}
+		
 }

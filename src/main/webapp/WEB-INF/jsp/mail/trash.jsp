@@ -20,7 +20,6 @@
 		<div class="container__inBox">
 			<div class="inBox__allCheck">
 				<input type="checkbox" class="allCheck__checkbox" />
-				<div class="allCheck__checkNum"></div>
 				<button type="submit" id="restoreMail" class="allCheck__buttons">메일함으로 이동</button>
 				<button type="submit" id="perDeleteMail" class="allCheck__buttons">완전삭제</button>
 			</div>
