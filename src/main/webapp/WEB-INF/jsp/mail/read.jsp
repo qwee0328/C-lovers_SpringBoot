@@ -58,7 +58,7 @@
 					<p>보낸 사람 :<p><p class="idInfo__Value">${mail.send_id }</p>
 				</div>
 				<div class="read__idInfo">
-					<p>받는 사람 :</p><p class="idInfo__Value">${mail.receive_id }</p>
+					<p>받는 사람 :</p><p id="receive_id" class="idInfo__Value">${mail.receive_id }</p>
 				</div>
 				<c:if test="${mail.reference_id != '' }">
 					<div class="read__idInfo">
@@ -71,7 +71,8 @@
 					${mail.content }
 				</div>
 			</form>
-			
+			<input type="hidden" id="loginID" value="${loginID }" />
+					
 			<script>
 				$(document).ready(function() {
 					$.ajax({
@@ -96,6 +97,18 @@
 							
 						}
 					})
+					
+					console.log("receive_id :" + $("#receive_id").html());
+					console.log("loginID :" + $("#loginID").val());
+					console.log($("#receive_id").html() == $("#loginID").val());
+					
+					// 받는 사람과 로그인한 사람이 같다면 (== 수신인이 읽었다면)
+					if($("#receive_id").html() == $("#loginID").val()) {
+						$.ajax({
+							url: "/mail/confirmation",
+							data: { id : $("#id").val() }
+						})
+					}
 				})
 				
 				// 삭제 버튼 클릭 시

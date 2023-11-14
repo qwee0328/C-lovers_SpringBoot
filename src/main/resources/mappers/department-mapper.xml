@@ -11,15 +11,10 @@
 	</insert>
 
 	<!-- 상위 부서 정보 불러오기 -->
-	<select id="selectAllWithOutOfficeId" resultType="com.clovers.dto.DepartmentDTO">
-		select * from department where id != "D1001"
+	<select id="selectAll" resultType="com.clovers.dto.DepartmentDTO">
+		select * from department
 	</select>
 
-	<!-- 오피스 정보 불러오기 -->
-	<select id="selectOffice"
-		resultType="com.clovers.dto.DepartmentDTO">
-		select * from department where id = "D1001"
-	</select>
 
 	<!-- 상위 부서 별 종사하는 인원 수 불러오기 -->
 	<select id="selectEmpCountById" resultType="int">

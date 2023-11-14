@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>휴가/근무</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 <link rel="stylesheet" href="/css/commons/basicSetting.css">
@@ -98,17 +98,16 @@
                         <div class="conf_detail">
                             <div class="calendar">
                                 <div class="month">
-                                    10월
                                     <div class="day">
-                                        <div class="day__num">30</div>
-                                        <div class="day__week">월요일</div>
+                                        <div class="day__num"></div>
+                                        <div class="day__week"></div>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="workingTime">
-                                <div class="">9시출근</div>
-                                <div class="">09:00 ~ 18:00 (소정 8시간)</div>
+                                <div id="work_rule_name"></div>
+                                <div id="work_rule_time"></div>
                             </div>
                             <div class="workingPlan">
                                 <div class="detail__colortitle"><a href="">내근무계획</a></div>
@@ -124,22 +123,21 @@
                         </div>
                         <div class="conf_detail">
                             <div class="nowTime">
-                                20 : 07 : 43
-                                <button class="grayBtn">근무 종료</button>
+                                <div class="statusBox"></div>
                             </div>
                             <div class="commuteBtns">
-                                <div class="commuteBtns__title">
+                                <div class="commuteBtns__title" id="attendBtn">
                                     출근하기
-                                    <div class="commuteBtns__time">00:00:00</div>
+                                    <div class="commuteBtns__time" id="attendTime">00:00:00</div>
                                 </div>
-                                <div class="commuteBtns__title">
+                                <div class="commuteBtns__title" id="leaveBtn">
                                     퇴근하기
-                                    <div class="commuteBtns__time">00:00:00</div>
+                                    <div class="commuteBtns__time" id="leaveTime">00:00:00</div>
                                 </div>
                             </div>
                             <div class="workingStatusBtns">
-                                <div><button class="whiteBtn">업무</button><button class="whiteBtn">외출</button></div>
-                                <div><button class="whiteBtn">회의</button><button class="whiteBtn">외근</button></div>
+                                <div><button class="whiteBtn" id="working">업무</button><button class="whiteBtn" id="goingOut">외출</button></div>
+                                <div><button class="whiteBtn" id="conference">회의</button><button class="whiteBtn" id="outside">외근</button></div>
                             </div>
                         </div>
                     </div>
@@ -149,42 +147,7 @@
                             근무현황
                         </div>
                         <div class="conf_detail">
-                            <div class="commuteTable">
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>출근</div>
-                                    </div>
-                                    <div class="commute__right">
-                                        <div>출근</div>
-                                    </div>
-                                </div>
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>업무</div>
-                                    </div>
-                                </div>
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>외출</div>
-                                    </div>
-                                </div>
-                                <div class="commuteTable__row">
-                                    <div class="commute__left">
-                                        <div class="commute__circle"></div>
-                                        <div class="commute__time">14:47</div>
-                                        <div>퇴근</div>
-                                    </div>
-                                    <div class="commute__right">
-                                        <div>퇴근</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="commuteTable"></div>
                             <div class="shiftEditBtn">
                                 <button class="whiteBtn">근무체크 수정</button>
                             </div>

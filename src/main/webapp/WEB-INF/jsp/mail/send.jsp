@@ -25,7 +25,7 @@
 		<%@ include file="../commons/naviBar.jsp" %>
 		
 		<div class="container__send">
-			<form method="post" enctype="multipart/form-data">
+			<form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 				<div class="send__btns">
 					<div class="submit__sendBox">
 						<button type="submit" formaction="/mail/submitSend">보내기</button>
@@ -93,7 +93,8 @@
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">받는 사람</div> 
-					<input type="text" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<input type="text" id="receive_id" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
+					<div id="autoComplete"></div>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
@@ -103,10 +104,10 @@
 					<div class="inputLine_title">제목</div>
 					<c:choose>
 					    <c:when test="${not empty reply.title and reply.temporary == false}">
-					        <input type="text" name="title" value="[RE:]${reply.title}" class="inputLine__input"/>
+					        <input type="text" id="title" name="title" value="[RE:]${reply.title}" class="inputLine__input"/>
 					    </c:when>
 					    <c:otherwise>
-					        <input type="text" name="title" value="${reply.title}" class="inputLine__input"/>
+					        <input type="text" id="title" name="title" value="${reply.title}" class="inputLine__input"/>
 					    </c:otherwise>
 					</c:choose>
 				</div>
@@ -230,6 +231,21 @@
 			        });
 			    });
 				
+				// input type=date에서 현재 날짜 이전은 선택 불가능
+				 $(document).ready(function() {
+		            // 현재 날짜 가져오기
+		            var currentDate = new Date().toISOString().split("T")[0];
+		            // input 요소의 min 속성 설정
+		            $("#send_date").attr("min", currentDate);
+		        });
+				
+				// 선택한 날짜가 현재 날짜보다 이후인지
+				function isDateAfterNow(dateString) {
+					let now = new Date();
+					let inputDate = new Date(dateString);
+					return inputDate > now;
+				}
+				
 				// 예약 드롭다운 확인 버튼 눌렀을 때
 				$(".reserve__btn").on("click", function(e) {
 					e.preventDefault(); // a 태그 페이지 이동하지 않도록
@@ -239,12 +255,39 @@
 					let sendMinute = $("#send_minute").val();
 					
 					let reserveDate = sendDate + " " + sendHour + ":" + sendMinute + ":00";
-					$("#reserve__dateBox").css("display", "block");
-					$("#reserve__date").html(reserveDate);
-					$("#reserve__hidden__date").val(reserveDate);
 					
-					$(".sendReserve__dropDown").toggleClass("hide show");
-					$(".sendReserve__dropDown .dropDown__box").toggle();
+					let result = isDateAfterNow(reserveDate);
+					if(result) {			
+						$("#reserve__dateBox").css("display", "block");
+						$("#reserve__date").html(reserveDate);
+						$("#reserve__hidden__date").val(reserveDate);
+						
+						$(".sendReserve__dropDown").toggleClass("hide show");
+						$(".sendReserve__dropDown .dropDown__box").toggle();
+					} else {
+						alert("현재보다 이전의 시간은 선택할 수 없습니다.");
+					}
+					
+					
+				})
+				
+				// 받는 사람 입력할 때 자동완성
+				$("#receive_id").on("keyup", function() {
+					let inputId = $(this).val();
+					
+					$.ajax({
+						url: "/mail/autoComplete",
+						data: { keyword : inputId }
+					}).done(function(resp) {
+						$("#autoComplete").empty();
+						if(resp.length > 0) {
+							for(let i = 0; i < resp.length; i++) {
+								emailList = $("<div>");
+								emailList.append(`resp[i].name resp[i].email`);
+								$("#autoComplete").append(item);
+							}
+						}
+					})
 				})
 			
 				// 파일 리스트 삭제 버튼 눌렀을 때
@@ -265,10 +308,20 @@
 					});
 				});
 				
-				// 발송 예약 아이콘 눌렀을 때
-				$(".sendReserve__icon").on("click", function() {
+				// 필수 입력값들이 존재하는지
+				function validateForm() {
+					// 받는 사람을 입력하지 않았을 경우
+					if($("#receive_id").val() == "") {
+						alert("받는 사람은 필수 입력 항목입니다.");
+						return false;
+					}
 					
-				})
+					// 제목을 입력하지 않았을 경우
+					if($("#title").val() == "") {
+						alert("제목은 필수 입력 항목입니다.");
+						return false;
+					}
+				}
 			</script>
 		</div>
 	</div>

@@ -1,0 +1,180 @@
+@charset "UTF-8";
+.container {
+  display: flex;
+}
+.vacationApp {
+  width: calc(100% - 250px);
+  height: calc(100vh - 60px);
+  padding: 0 24px 20px 24px;
+  overflow: auto;
+}
+.vacationApp::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.vacationApp::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d60;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.vacationApp::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+.draftingBtn {
+  padding: 20px 0;
+  position: fixed;
+  background-color: white;
+  width: 100%;
+}
+.basicSetting {
+  min-width: 950px;
+  margin-top: 110px;
+}
+
+.approvalLine,
+.vacationStatus,
+.vacationReason {
+  min-width: 950px;
+  margin-top: 50px;
+}
+.noneBackgroundBtn {
+  background-color: transparent;
+  border: none;
+  color: #75b47d;
+  font-size: 18px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.table__row {
+  display: flex;
+}
+.table__header {
+  background-color: #f3f7f1;
+  width: 150px;
+  height: 50px;
+  border: 1px solid #7d7d7d40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.table__td {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #7d7d7d40;
+  height: 50px;
+}
+.basicSetting__table .table__td {
+  width: calc((100% - 300px) / 2);
+}
+
+.approvalLine > .title > button {
+  margin-left: 30px;
+}
+.approvalLine__table .table__td {
+  width: calc(100% - 110px);
+}
+
+.vacationInfo__main span {
+  color: #75b47d;
+  margin: 0 10px;
+}
+.vacationInfo__sub {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.sub__label {
+  display: flex;
+  align-items: center;
+}
+.usedVacation {
+  background-color: #b5b5bb;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #7d7d7d40;
+  margin-right: 5px;
+}
+.selectedVacation {
+  background-color: #75b47d;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #7d7d7d40;
+  margin-left: 30px;
+  margin-right: 5px;
+}
+.vacationScahdule {
+  display: flex;
+  margin-top: 30px;
+}
+
+.flatpickr-input[readonly] {
+  display: none;
+}
+.flatpickr-day.selected {
+  background-color: #75b47d;
+  border: #75b47d;
+  color: white;
+}
+.flatpickr-day.selected:hover {
+  background-color: #dcedd4;
+  border: #dcedd4;
+  color: black;
+}
+.flatpickr-day.flatpickr-disabled {
+  color: #b5b5bb;
+  cursor: initial !important;
+}
+.flatpickr-day.flatpickr-disabled:hover {
+  color: #b5b5bb;
+}
+
+.appStatus {
+  margin-left: 50px;
+}
+.appStatus__line {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 10px;
+}
+.vacationDate {
+  margin-right: 30px;
+}
+.selectorType {
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
+  padding: 5px 10px;
+  border: 1px solid #7d7d7d40;
+  border-radius: 4px;
+}
+.selector__option {
+  display: none;
+  position: absolute;
+  top: 37px;
+  left: 138px;
+  border: 1px solid #7d7d7d40;
+  border-radius: 4px;
+  width: 150px;
+  background-color: white;
+  z-index: 999;
+}
+.option__item {
+  padding: 10px;
+}
+.option__item:hover {
+  background-color: #dcedd4;
+}
+.vacationReason textarea {
+  resize: none;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #7d7d7d40;
+  border-radius: 4px;
+}
