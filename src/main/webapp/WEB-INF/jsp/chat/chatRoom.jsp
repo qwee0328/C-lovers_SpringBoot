@@ -18,6 +18,8 @@
 <link rel="stylesheet" href="/css/chat/chat_chatRoom.css">
 <script src="/js/chat/chat_invite.js"></script>
 <script src="/js/chat/chatMessageLoad.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 </head>
 
 <body>

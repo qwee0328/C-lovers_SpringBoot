@@ -19,6 +19,7 @@ public class ChatMessageDTO {
 	public enum ChatMessageStates{
 		JOIN,		// 사용자가 채팅방에 입장했을 때
 		LEAVE,		// 사용자가 채팅방에서 일시적으로 나갔을 때
+		FILE,		// 사용자가 파일메시지를 채팅방에 남겼을 때
 		CHAT,		// 사용자가 채팅 메시지를 보냈을 때
 		REJOIN,		// 사용자가 채팅방에 다시 들어 왔을 때 
 		EXIT		// 사용자가 채팅방에서 완전히 퇴장했을 때 (채팅그룹과의 연관관계가 해제됨)
