@@ -86,8 +86,13 @@ input[type=checkbox] {
 	color: #B5B5BB;
 }
 
-.right__date, .right__confirm {
+.right__date, .right__confirm, .right__cancallation {
 	margin-left: 20px;
+}
+
+.right__cancallation {
+	color: #095544;
+	cursor: pointer;
 }
 
 hr {
