@@ -100,6 +100,12 @@
   border-radius: 4px;
   cursor: pointer;
 }
+.whiteBtn:disabled {
+    background-color: #7d7d7d20;
+    border: none;
+    color: #6C6C72;
+    cursor: auto;
+}
 
 .officeHour > .conf_detail {
   display: grid;
@@ -111,7 +117,7 @@
 }
 
 .toDayWorkInfo .conf_detail {
-  min-height: 356px;
+  height: 356px;
 }
 
 .toDayWorkInfo .conf_detail {
@@ -119,6 +125,32 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 25px;
+}
+
+.workStatus > .conf_detail{
+	padding: 0;
+}
+.workStatus .commuteTable{
+	margin: 25px 0;
+    padding: 0 25px;
+	overflow: auto;
+}
+
+.workStatus .commuteTable::-webkit-scrollbar {
+  width: 7px;
+  margin: 25px 0;
+}
+.workStatus .commuteTable::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d60;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.workStatus .commuteTable::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.workStatus .shiftEditBtn{
+	padding: 0 25px 25px 25px
 }
 
 .calendar {
@@ -173,22 +205,25 @@
 .workingPlan > .detail__colortitle {
   margin-bottom: 20px;
 }
+.workingPlan >.detail_conf>button:last-child{
+	margin-left: 10px;
+}
 
 .nowTime {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.grayBtn {
+.statusBox {
   padding: 5px 10px;
-  background-color: #7d7d7d20;
+  background-color: #F3F7F1;
+  color: #75B47D;
+  font-size: 15px;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
 }
-.nowTime > .grayBtn {
+.nowTime > .statusBox {
   margin-left: 30px;
 }
 .commuteBtns {
@@ -196,7 +231,10 @@
   grid-template-columns: repeat(2, 1fr);
   text-align: center;
 }
-.commuteBtns > div:first-child {
+.commuteBtns > .commuteBtns__title{
+	cursor: pointer;
+}
+.commuteBtns > .commuteBtns__title:first-child {
   border-right: 1px solid #7d7d7d40;
 }
 .commuteBtns__time {
@@ -214,6 +252,8 @@
 .workingStatusBtns div > button:first-child {
   margin-right: 20px;
 }
+
+
 
 .commuteTable__row {
   display: flex;

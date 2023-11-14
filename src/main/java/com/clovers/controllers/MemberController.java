@@ -133,6 +133,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	// 관리자 로그인 정보 불러오기
 	@ResponseBody
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<Map<String,String>> getUserInfo(){

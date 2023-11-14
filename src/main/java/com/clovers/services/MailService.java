@@ -70,8 +70,56 @@ public class MailService {
 		}
 	}
 	
-	public List<EmailDTO> inBoxList(String recieve_id) {
-		return dao.inBoxList(recieve_id);
+	public List<EmailDTO> inBoxList(String receive_id, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("receive_id", receive_id);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.inBoxList(param);
+	}
+	
+	public int inBoxTotalCount(String receive_id) {
+		return dao.inBoxTotalCount(receive_id);
+	}
+	
+	public List<EmailDTO> sentBoxList(String send_id, boolean temporary, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("send_id", send_id);
+		param.put("temporary", temporary);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.sentBoxList(param);
+	}
+	
+	public int sentBoxTotalCount(String send_id, boolean temporary) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("send_id", send_id);
+		param.put("temporary", temporary);
+		return dao.sentBoxTotalCount(param);
+	}
+	
+	public List<EmailDTO> outBoxList(String send_id, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("send_id", send_id);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.outBoxList(param);
+	}
+	
+	public int outBoxTotalCount(String send_id) {
+		return dao.outBoxTotalCount(send_id);
+	}
+	
+	public List<EmailDTO> trashList(String id, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.trashList(param);
+	}
+	
+	public int trashTotalCount(String id) {
+		return dao.trashTotalCount(id);
 	}
 	
 	public boolean selectFileByEmailId(int email_id) {
@@ -86,19 +134,8 @@ public class MailService {
 		return dao.perDeleteMail(id);
 	}
 	
-	public List<EmailDTO> trashList(String id) {
-		return dao.trashList(id);
-	}
-	
 	public int restoreMail(int id) {
 		return dao.restoreMail(id);
-	}
-	
-	public List<EmailDTO> sentBoxList(String send_id, boolean temporary) {
-		Map<String, Object> param = new HashMap<>();
-		param.put("send_id", send_id);
-		param.put("temporary", temporary);
-		return dao.sentBoxList(param);
 	}
 	
 	public EmailDTO selectAllById(int id) {
@@ -107,10 +144,6 @@ public class MailService {
 	
 	public List<EmailFileDTO> selectAllFileById(int email_id) {
 		return dao.selectAllFileById(email_id);
-	}
-	
-	public List<EmailDTO> outBoxList(String send_id) {
-		return dao.outBoxList(send_id);
 	}
 	
 	public List<EmailDTO> selectAllReservationDate() {

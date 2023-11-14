@@ -16,8 +16,10 @@ body {
 }
 
 .container__send {
-	margin: 30px;
-	width: 1190px;
+	padding: 30px;
+	flex: 1;
+	overflow-y: auto;
+	height: calc(100vh - 60px);
 }
 
 .send__btns {
