@@ -3,12 +3,12 @@ $(document).ready(function() {
         url: "/mail/inBoxList?cpage=",
         type: 'POST'
     }).done(function (resp) {
-        mailList(resp.mail, resp.recordTotalCount);
+        mailList(resp.mail, resp.send_date, resp.recordTotalCount);
         pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
     })
     
     // 메일 리스트 출력 함수
-	function mailList(mail, mailCount) {
+	function mailList(mail, send_date, mailCount) {
 	    $(".inBox__mailListBox").empty();
 	    $(".bottom__mailNum").html("편지 수 : " + mailCount);
 	
@@ -47,7 +47,7 @@ $(document).ready(function() {
 	
 	        let dateDiv = $("<div>");
 	        dateDiv.addClass("right__date");
-	        dateDiv.html(mail[i].send_date);
+	        dateDiv.html(send_date[i]);
 	
 	        rightDiv.append(fileIconDiv).append(dateDiv);
 	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);

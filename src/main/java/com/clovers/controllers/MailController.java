@@ -2,7 +2,9 @@ package com.clovers.controllers;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -205,6 +207,26 @@ public class MailController {
 		return "redirect:/mail";
 	}
 	
+	// 발송 시간 출력
+	private String formatTimestamp(Timestamp time) {
+		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime sendTime = time.toLocalDateTime();
+		
+		// 시간 차이 계산
+		Duration duration = Duration.between(sendTime, currentTime);
+		long minutes = duration.toMinutes();
+		long hours = duration.toHours();
+		
+		if(minutes < 60) {
+			return minutes + "분 전";
+		} else if(hours < 24) {
+			return hours + "시간 전";
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return sendTime.format(formatter);
+		}
+	}
+	
 	
 	// ---------- inBox ----------
 	
@@ -216,8 +238,14 @@ public class MailController {
 		
 		String receive_id = (String) session.getAttribute("loginID");
 		List<EmailDTO> mail = mservice.inBoxList(receive_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		String[] send_date = new String[mail.size()];
+		for(int i = 0; i < mail.size(); i++) {
+			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+		}
+		
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
+		param.put("send_date", send_date);
 		param.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
 		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
 		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
@@ -238,8 +266,14 @@ public class MailController {
 		String send_id = (String) session.getAttribute("loginID");
 		boolean temporary = false;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		String[] send_date = new String[mail.size()];
+		for(int i = 0; i < mail.size(); i++) {
+			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+		}
+		
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
+		param.put("send_date", send_date);
 		param.put("recordTotalCount", mservice.sentBoxTotalCount(send_id, temporary));
 		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
 		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
@@ -374,8 +408,14 @@ public class MailController {
 		
 		String id = (String) session.getAttribute("loginID");
 		List<EmailDTO> mail = mservice.trashList(id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		String[] send_date = new String[mail.size()];
+		for(int i = 0; i < mail.size(); i++) {
+			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+		}
+		
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
+		param.put("send_date", send_date);
 		param.put("recordTotalCount", mservice.trashTotalCount(id));
 		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
 		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
