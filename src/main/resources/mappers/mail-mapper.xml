@@ -102,4 +102,8 @@
 	<update id="submitReservationMail">
 		update email set reservation = false, send_date = #{send_date} where id = #{id}
 	</update>
+	
+	<update id="confirmation">
+		update email set confirmation = true where id = ${id}
+	</update>
 </mapper>

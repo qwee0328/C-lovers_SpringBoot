@@ -272,7 +272,7 @@
 				})
 				
 				// 받는 사람 입력할 때 자동완성
-				/* $("#receive_id").on("keyup", function() {
+				$("#receive_id").on("keyup", function() {
 					let inputId = $(this).val();
 					
 					$.ajax({
@@ -283,11 +283,11 @@
 						if(resp.length > 0) {
 							for(let i = 0; i < resp.length; i++) {
 								item = $("<div>");
-								item.append(`resp[i].name resp[i].email `);
+								item.append(`resp[i].name resp[i].email`);
 							}
 						}
 					})
-				}) */
+				})
 			
 				// 파일 리스트 삭제 버튼 눌렀을 때
 				let deleteFileList = "";

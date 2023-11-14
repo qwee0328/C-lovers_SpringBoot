@@ -156,5 +156,9 @@ public class MailService {
 		param.put("send_date", send_date);
 		return dao.submitReservationMail(param);
 	}
+	
+	public int confirmation(int id) {
+		return dao.confirmation(id);
+	}
 		
 }
