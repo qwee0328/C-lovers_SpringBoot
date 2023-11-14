@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -55,6 +56,7 @@ public class OfficeService {
 	}
 
 	// 사용자 등록하기
+	@Transactional
 	public int insertUser(MemberDTO dto) {
 		// 입사 년도 구하기
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
