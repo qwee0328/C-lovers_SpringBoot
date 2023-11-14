@@ -1,5 +1,7 @@
 package com.clovers.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,13 +65,25 @@ public class MemberController {
 	
 //	로그아웃
 	@RequestMapping("logout")
-	@GetMapping("logout")
+//	@GetMapping("logout")
+//	@ResponseBody
 	public String logout(HttpServletRequest request) {
 		
 		session.invalidate();
-		
+//		return "";
 		return "redirect:/";
+		
 	}
+	
+//	@GetMapping("adminLogout")
+//	@ResponseBody
+//	public void adminLogout(HttpServletRequest request) {
+//		
+//		session.invalidate();
+////		return "";
+////		return "redirect:/";
+//		
+//	}
 	
 //	비밀번호 페이지 이동
 	@RequestMapping("goFindPW")
@@ -110,7 +124,7 @@ public class MemberController {
 //	비밀번호 변경
 	@RequestMapping("findPW")
 	public String updatePW(String id, String pw) {
-		
+		// 여기는 로그인을 안한 상태(session이 없음)로 비밀번호를 바꾸는 것
 //		암호화한거
 		String pwEnc = EncryptionUtils.getSHA512(pw);
 		mservice.updatePW(id, pwEnc);
@@ -119,6 +133,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	// 관리자 로그인 정보 불러오기
 	@ResponseBody
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<Map<String,String>> getUserInfo(){
@@ -133,5 +148,17 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(userInfo);
 	}
-
+	
+//	changePW.jsp-> 비밀번호 변경 시
+	@RequestMapping("/changePW")
+	public String changePW(String pw) {
+		// 여기는 로그인을 한 상태(session이 남아있음)로 비밀번호를 바꾸는 것
+		String id = (String)session.getAttribute("loginID");
+		String pwEnc = EncryptionUtils.getSHA512(pw);
+		
+		System.out.println(id+" : "+pw);
+		
+		mservice.updatePW(id,pwEnc);
+		return "redirect:/humanResources/mypage";
+	}
 }

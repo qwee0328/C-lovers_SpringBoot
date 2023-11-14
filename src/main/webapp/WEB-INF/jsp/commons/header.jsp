@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Header</title>
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <link rel="stylesheet" href="/css/commons/header.css">
@@ -63,7 +63,7 @@
 
 			<div class="header__myinfoBottom">
 
-				<div class="header__setting"><a href="#">설정</a></div>
+				<div class="header__setting"><a href="/humanResources/mypage">설정</a></div>
 
 				<div class="header__logoutBtnBox">
 					<button><a href="/members/logout">로그아웃</a></button>
@@ -75,6 +75,11 @@
 </body>
 
 <script>
+	// 로고 클릭시 홈으로 이동
+	$(document).on("click", ".headerLeft__logo", function() {
+		location.href = "/";
+	})
+	
 	$(".dropNavi__icon").on("click", function() {
 		
 	})

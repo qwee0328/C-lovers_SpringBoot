@@ -5,7 +5,101 @@
 <mapper namespace="Mail">
 	<!-- 메일 매퍼 -->
 	
-	<insert id="submitSend">
-		insert into email value(0, #{send_id}, 'test', #{title}, #{content}, default, default, null, default)
+	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
+	    <choose>
+	        <!-- reservation이 존재할 때 실행 -->
+	        <when test="reservation != null">
+	            insert into email value(0, #{send_id}, #{receive_id}, #{title}, #{content}, #{temporary}, #{reservation}, #{reservation_date}, default, #{reference_id}, #{send_date})
+	        </when>
+	        <!-- reservation이 존재하지 않을 때 실행 -->
+	        <otherwise>
+	            insert into email value(0, #{send_id}, #{receive_id}, #{title}, #{content}, #{temporary}, default, null, default, #{reference_id}, #{send_date})
+	        </otherwise>
+	    </choose>
 	</insert>
+	
+	<update id="submitTempSend">
+		<choose>
+	        <when test="reference_id != ''">
+	            <!-- reference_id가 존재할 때 실행 -->
+	            update email set receive_id = #{receive_id}, reference_id = ${reference_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	        </when>
+	        <otherwise>
+	            <!-- reference_id가 존재하지 않을 때 실행 -->
+	            update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	        </otherwise>
+	    </choose>
+	</update>
+	
+	<insert id="submitFile">
+		insert into email_file value(0, #{email_id}, #{ori_name}, #{sys_name})
+	</insert>
+	
+	<select id="inBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="inBoxTotalCount" resultType="int">
+		select count(*) from email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false
+	</select>
+	
+	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="sentBoxTotalCount" resultType="int">
+		select count(*) from email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false
+	</select>
+	
+	<select id="outBoxList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select row_number() over(order by id desc) rn, email.* from email where send_id = #{send_id} and reservation = true) temp where rn between #{start} and #{end}
+	</select>
+	
+	<select id="outBoxTotalCount" resultType="int">
+		select count(*) from email where send_id = #{send_id} and reservation = true
+	</select>
+	
+	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
+		select * from (select e.*, row_number() over(order by id desc) rn from (select * from email where (send_id = #{id} or receive_id = #{id}) and trash = true) e) ranked where rn between #{start} and #{end}
+	</select>
+	
+	<select id="trashTotalCount" resultType="int">
+		select count(*) from email where (send_id = #{id} or receive_id = #{id}) and trash = true
+	</select>
+	
+	<select id="selectFileByEmailId" resultType="boolean">
+		select email_id from email_file group by email_id having email_id = ${email_id}
+	</select>
+	
+	<update id="deleteMail">
+		update email set trash = true where id = ${id}
+	</update>
+	
+	<delete id="perDeleteMail">
+		delete from email where id = ${id}
+	</delete>
+	
+	<update id="restoreMail">
+		update email set trash = false where id = ${id}
+	</update>
+	
+	<select id="selectAllById" resultType="com.clovers.dto.EmailDTO">
+		select * from email where id = #{id}
+	</select>
+	
+	<select id="selectAllFileById" resultType="com.clovers.dto.EmailFileDTO">
+		select * from email_file where email_id = #{email_id};
+	</select>
+	
+	<delete id="deleteBySysname">
+		delete from email_file where sys_name = #{sys_name};
+	</delete>
+
+	<select id="selectAllReservationDate" resultType="com.clovers.dto.EmailDTO">
+		select * from email where reservation = true
+	</select>
+	
+	<update id="submitReservationMail">
+		update email set reservation = false, send_date = #{send_date} where id = #{id}
+	</update>
 </mapper>

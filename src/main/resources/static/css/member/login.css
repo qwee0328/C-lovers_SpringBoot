@@ -68,6 +68,7 @@
 	        width: 100%;
 	        font-size: 14px;
 	        margin-top: 200px;
+	    	border-radius: 4px;
 	    }
 	    .loginBox__saveBox{
 	        display: flex;
@@ -94,6 +95,7 @@
 	        margin: auto;
 	        font-size: 14px;
 	        margin-top: 200px;
+	        border-radius: 4px;
 	    }
 	    .loginBox__saveBox{
 	        margin-left: 30px;

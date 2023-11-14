@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clovers.dto.DeptTaskDTO;
@@ -54,9 +54,20 @@ public class OfficeController {
 		return ResponseEntity.ok(list);
 	}
 	
+	// 사내 전화번호 사용중인번호인지 체크
+	@GetMapping("/usingCompanyPhoneCheck")
+	public ResponseEntity<Boolean> usingCompanyPhoneCheck(@RequestParam("company_phone") String companyPhone){
+		int count = oservice.usingCompanyPhoneCheck(companyPhone);
+		System.out.println("사용중인 번호 개수 :"+count);
+		boolean result = count>0;
+		System.out.println(result);
+		return ResponseEntity.ok(result);
+	}
+	
 	// 사용자 등록하기
 	@PostMapping("/userInsert")
 	public ResponseEntity<Integer> insertUser(@RequestBody MemberDTO dto){
+		System.out.println(dto.getHire_date());
 		int result = oservice.insertUser(dto);
 		return ResponseEntity.ok(result);
 	}

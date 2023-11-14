@@ -89,6 +89,7 @@
 					</div>
 					<div class="naviItem__title">전자결재</div>
 				</div>
+				
 			</div>
 		</div>
 		
@@ -96,6 +97,13 @@
 			$(document).on("click", ".naviItem__itemCurcle", function() {
 				if($(this).siblings().html() == "메일") {
 					location.href = "/mail";
+				}
+				if($(this).siblings().html() == "인사") {
+					location.href = "/humanResources";
+				}
+				
+				if($(this).siblings().html() == "일정") {
+					location.href = "/schedule";
 				}
 			})
 		</script>

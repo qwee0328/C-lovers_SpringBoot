@@ -1,0 +1,81 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+body {
+	margin: 0px !important;
+}
+
+.container {
+	display: flex;
+	margin: 0px !important;
+	padding: 0px !important;
+}
+
+.container__read {
+	margin: 30px;
+	flex: 1;
+}
+
+.read__btns {
+	width: 250px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 13px;
+}
+
+.read__btns button {
+	border: none;
+	background-color: #FFFFFF;
+	color: #095544;
+	font-size: 18px;
+}
+
+.read__btns button:hover {
+	cursor: pointer;
+}
+
+.read__title {
+	margin-top: 20px;
+	font-size: 22px;
+}
+
+.read__content {
+	width: 100%;
+}
+
+.read__time {
+	margin: 20px 0px;
+	font-size: 14px;
+	color: #B5B5BB;
+}
+
+.read__idInfo {
+	display: flex;
+}
+
+.idInfo__Value {
+	margin-left: 5px;
+}
+
+
+hr {
+	margin: 20px 0px;
+	color: #7d7d7d40;
+}
+
+read__file div {
+	font-size: 14px;
+}
+
+.file__count {
+	margin-bottom: 5px;
+}
+
+.file__name {
+	margin-bottom: 3px;
+}

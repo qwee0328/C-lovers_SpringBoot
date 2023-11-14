@@ -17,7 +17,8 @@
 <link rel="stylesheet" href="/css/chat/chat_profile.css">
 <link rel="stylesheet" href="/css/chat/chat_chatRoom.css">
 <script src="/js/chat/chat_invite.js"></script>
-<script src="/js/chat/chatMessageLoad.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
 </head>
 
 <body>
@@ -48,8 +49,8 @@
 
         <div class="chatHeader">
             <div class="header d-flex">
-                <div class="header__chatNameCover d-flex"><div class="header__chatName">채팅방 이름dddddddddddddddddddddddddddd</div>
-                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;10</div>
+                <div class="header__chatNameCover d-flex"><div class="header__chatName">${personalChatRoomInfo.name}</div>
+                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;${personalChatRoomInfo.emp_cnt}</div>
                 </div>
                 <div class="header__menuIcon d-flex">
                     <div class="menuIcon__searchBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -76,6 +77,7 @@
             		$(".chatContainer__chatArea").append($("<div>").attr("class","chatArea__DayLine align-center").text("날짜"));
             	-->
                 <div class="chatArea__DayLine align-center">2023년 10월 30일 월요일</div>
+                
             </div>
 
 
@@ -268,6 +270,96 @@
     </div>
 
     <script>
+    	let roomId = "${chatRoomId}";
+    	let loginId = "${loginID}";
+    	
+    	let sock = new SockJS("/ws/chat");
+    	let ws = Stomp.over(sock);
+    	
+    	function connect() {
+    	    ws.connect({}, function(frame) {
+    	        ws.subscribe("/sub/chat/room/" + roomId, function(message) {  // 여기에 닫는 괄호 추가
+    	            let recv = JSON.parse(message.body);
+    	            recvMessage(recv);
+    	        });
+    	        console.log("/sub/chat/room/"+roomId);
+
+    	        // 이벤트 리스너를 통해 다시한번 확인해볼것. 방법이 있을거다.
+//     	        $.ajax({
+//     	            url: '/chat/isExistThisRoom',
+//     	            method: 'GET',  // 여기에 쉼표 추가
+//     	            data: { chat_room_id: roomId },  // 객체 형태로 수정
+//     	            success: function(resp) {
+//     	                if (!resp) {
+//     	                    ws.send("/pub/chat/message", {}, JSON.stringify({
+//     	                        state: "JOIN",
+//     	                        chat_room_id: roomId,
+//     	                        emp_id: loginId
+//     	                    }));
+//     	                } else {
+//     	                    ws.send("/pub/chat/message", {}, JSON.stringify({
+//     	                        state: "REJOIN",
+//     	                        chat_room_id: roomId,
+//     	                        emp_id: loginId
+//     	                    }));
+//     	                }
+//     	            },
+//     	            error: function(error) {
+//     	                // 에러처리 코드
+//     	            }
+//     	        });
+    	    });
+    	}
+
+    	
+    	function sendMessage() {
+    	    var message = $(".inputArea__msg").text();
+    	    if (message.trim() === '') {
+    	        alert('메시지를 입력하세요');
+    	        return;
+    	    }
+    	    ws.send('/pub/chat/message', {}, JSON.stringify({  // 여기에 중괄호 추가
+    	        state: 'CHAT',
+    	        chat_room_id: roomId,
+    	        emp_id: loginId,
+    	        content: message
+    	    }));  // 여기에 있는 괄호 하나 제거
+    	    $(".inputArea__msg").text('');
+    	}
+
+    	// 여기 스타일 한번 더 수정해야됨...
+    	function recvMessage(recv) {
+    		console.log(recv);
+    	    var messageItem;
+    	    if (recv.emp_id === loginId) { // 본인이 보낸 메시지
+    	        messageItem = '<div class="chatArea__myChat d-flex">' +
+    	                      '<div class="myChat__chatContents d-flex">' +
+    	                      '<div class="myChat__chatMsg d-flex">' + recv.content + '</div>' +
+    	                      '</div></div>';
+    	    } else { // 타인이 보낸 메시지
+    	        messageItem = '<div class="chatArea__otherPersonChat d-flex">' +
+    	                      '<div class="otherPersonChat__profileImg"></div>' +
+    	                      '<div class="otherPersonChat__chatInfo">' +
+    	                      '<div class="otherPersonChat__userName">' + recv.emp_id + '</div>' +
+    	                      '<div class="otherPersonChat__chatContents d-flex">' +
+    	                      '<div class="otherPersonChat__chatMsg d-flex">' + recv.content + '</div>' +
+    	                      '</div></div></div>';
+    	    }
+    	    $('.chatContainer__chatArea').append(messageItem);
+    	    $('.chatContainer__chatArea').scrollTop($('.chatContainer__chatArea')[0].scrollHeight);
+    	}
+
+
+    	
+    	
+    	function handleKeyPress(event){
+    		if (event.keyCode === 13 && !event.shiftKey) {
+				event.preventDefault();
+				sendMessage();
+			}
+    	}
+    	
+    	
         window.onresize = function () {
             let h = window.innerHeight - 165;
             $(".chatContainer__chatArea").css("height", h - 0.1);
@@ -327,6 +419,105 @@
             });
 
             $(".close__btn").on("click",$.modal.close);
+        });
+        
+        $(document).ready(function() {
+        	$.ajax({
+        		url: "/chat/chatMsgLoad",
+        		data:{
+        			emp_id : loginId,
+        			chat_room_id : roomId
+        		}
+        	}).done(function(resp) {
+        		console.log(resp);
+        		//
+        		
+        		
+        		for (let i = 0; i < resp.chat.length; i++) {
+        			if (resp.chat[i].emp_id == resp.group.emp_id) {
+        				let chatArea__myChat = $("<div>").attr("class","chatArea__myChat d-flex");
+        				let myChat__chatContents = $("<div>").attr("class","myChat__chatContents d-flex");
+        				let myChat__chatMsgLeft = $("<div>").attr("class","myChat__chatMsgLeft d-flex");
+        				let chatMsgLeft__align = $("<div>").attr("class","chatMsgLeft__align");
+        				let myChat__readCnt = $("<div>").attr("class","myChat__readCnt").text("2"); //채팅 안 읽은 사람 수
+        				let myChat__sendTime = $("<div>").attr("class","myChat__sendTime").text("오후 8:48"); //채팅 보낸 시각
+        				
+        				
+        				let myChat__chatMsg = $("<div>").attr("class","myChat__chatMsg d-flex")				
+        				
+        				// if문 추후에 파일여부에 대한 속성 추가하든 해서 수정 필요
+        				if(resp.chat[i].state=="FILE") {// 파일이면
+        					let myChat__fileMsg = $("<div>").attr("class","myChat__fileMsg");
+        					let fileMsg__fileName = $("<div>").attr("class","fileMsg__fileName").text("파일명.확장자명"); //파일명.확장자명
+        					let fileMsg__volume = $("<div>").attr("class","fileMsg__volume").text("파일 용량: 33.5kb"); //파일 용량
+        					let fileMsg__expirationDate = $("<div>").attr("class","fileMsg__expirationDate").text("유효기간: ~ 2023.11.13"); //파일 유효기간
+        					let chatMsg__download = $("<div>").attr("class","chatMsg__download align-center").html("<i class='fa-solid fa-download'></i>"); //파일 다운도르 아이콘	
+        					myChat__chatMsg.append(myChat__fileMsg.append(fileMsg__fileName).append(fileMsg__volume).append(fileMsg__expirationDate)).append(chatMsg__download);
+        				}else{ // 파일아니면
+        					myChat__chatMsg.text(resp.chat[i].content); // 채팅 내용	
+        				}
+        				
+        						
+        				
+        				// 채팅 좌측 읽지 않은 사람 수 및 보낸 시각
+        				myChat__chatMsgLeft.append(chatMsgLeft__align.append(myChat__readCnt).append(myChat__sendTime));
+        				
+        				// 최종 본인 메시지 형태
+        				chatArea__myChat.append(myChat__chatContents.append(myChat__chatMsgLeft).append(myChat__chatMsg));
+        				
+        				$(".chatContainer__chatArea").append(chatArea__myChat);
+        			} else {
+        				let chatArea__otherPersonChat = $("<div>").attr("class", "chatArea__otherPersonChat d-flex");
+        				let otherPersonChat__profileImg = $("<div>").attr("class", "otherPersonChat__profileImg");
+        				let otherPersonChat__chatInfo = $("<div>").attr("class", "otherPersonChat__chatInfo");
+        				let otherPersonChat__userName = $("<div>").attr("class", "otherPersonChat__userName").text(resp.chat[i].emp_id); //사원이름, employee table과 join해 가져와야함.
+        				let otherPersonChat__chatContents = $("<div>").attr("class", "otherPersonChat__chatContents d-flex");
+        				
+        				
+        				
+        				let otherPersonChat__chatMsg = $("<div>").attr("class", "otherPersonChat__chatMsg d-flex");
+
+        				// if문 추후에 파일여부에 대한 속성 추가하든 해서 수정 필요
+        				if(resp.chat[i].content=="file") {// 파일이면
+        					let myChat__fileMsg = $("<div>").attr("class","otherPersonChat__fileMsg");
+        					let fileMsg__fileName = $("<div>").attr("class","fileMsg__fileName").text("파일명.확장자명"); //파일명.확장자명
+        					let fileMsg__volume = $("<div>").attr("class","fileMsg__volume").text("파일 용량: 33.5kb"); //파일 용량
+        					let fileMsg__expirationDate = $("<div>").attr("class","fileMsg__expirationDate").text("유효기간: ~ 2023.11.13"); //파일 유효기간
+        					let chatMsg__download = $("<div>").attr("class","chatMsg__download align-center").html("<i class='fa-solid fa-download'></i>"); //파일 다운도르 아이콘	
+        					otherPersonChat__chatMsg.append(myChat__fileMsg.append(fileMsg__fileName).append(fileMsg__volume).append(fileMsg__expirationDate)).append(chatMsg__download);
+        				}else{ // 파일아니면
+        					otherPersonChat__chatMsg.text(resp.chat[i].content); // 채팅 내용	
+        				}
+        				
+        				
+        				
+        				
+        				
+        				let otherPersonChat__chatMsgRight = $("<div>").attr("class", "otherPersonChat__chatMsgRight d-flex");
+        				let chatMsgRight__align = $("<div>").attr("class", "chatMsgRight__align");
+        				let otherPersonChat__readCnt = $("<div>").attr("class", "otherPersonChat__readCnt").text("1"); //채팅 안 읽은 사람 수
+        				let otherPersonChat__sendTime = $("<div>").attr("class", "otherPersonChat__sendTime").text("오후 7:46"); // 채팅 보낸 시각
+
+        				// 채팅 우측 읽지 않은 사람 수 및 보낸 시각
+        				otherPersonChat__chatMsgRight.append(chatMsgRight__align.append(otherPersonChat__readCnt).append(otherPersonChat__sendTime));
+
+        				// 채팅 메시지 및 읽지 않은 사람 수, 보낸 시각
+        				otherPersonChat__chatContents.append(otherPersonChat__chatMsg).append(otherPersonChat__chatMsgRight); arguments
+
+        				// 보낸 사람 정보 + 메시지 정보
+        				otherPersonChat__chatInfo.append(otherPersonChat__userName).append(otherPersonChat__chatContents);
+
+        				// 최종 상대방 메시지 형태
+        				chatArea__otherPersonChat.append(otherPersonChat__profileImg).append(otherPersonChat__chatInfo);
+
+        				$(".chatContainer__chatArea").append(chatArea__otherPersonChat);
+        			}
+        		}
+        	});
+        	
+        	connect();
+        	
+        	$(".inputArea__msg").on("keypress", handleKeyPress);
         });
 
 </script>

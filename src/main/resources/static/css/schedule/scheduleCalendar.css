@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+.calenderBody{
+	max-width: 1200px;
+	margin: auto;
+}
+.fc .fc-daygrid-day-top{
+    flex-direction:column;
+  }
+  .fc .fc-today-button {
+    margin-top: 3px;
+  }
+
+  .koHolidays * {
+    color: red !important;
+    font-weight: 500;
+    cursor: default;
+  }
+
+  .fc-toolbar-chunk {
+    display: flex;
+  }
+
+  .fc .fc-button-primary:disabled {
+    background-color: #75B47D;
+    border: 0;
+  }
+
+  .fc .fc-button-primary:disabled:hover {
+    background-color: #75B47D;
+    opacity: 0.65;
+    border: 0;
+  }
+
+  .fc .fc-button-primary {
+    background-color: #75B47D;
+    border: 0;
+  }
+
+  .fc .fc-button-primary:hover {
+    background-color: #20412E;
+    opacity: 1.0;
+    border: 0;
+  }
+
+  .fc .fc-button-primary:not(:disabled).fc-button-active,
+  .fc .fc-button-primary:not(:disabled):active {
+    background-color: #20412E;
+    border: 0;
+  }
+
+  .fc .fc-button-primary:focus {
+    box-shadow: none !important;
+  }
+
+  .modal {
+    max-width: 900px;
+  }
+
+  .fc .fc-next-button,
+  .fc .fc-prev-button {
+    background-color: transparent;
+    border: 0;
+    color: #6C6C72;
+  }
+
+  .fc .fc-next-button:hover,
+  .fc .fc-prev-button:hover {
+    background-color: transparent;
+    color: #6C6C7250;
+  }
+
+  .fc .fc-next-button:active,
+  .fc .fc-prev-button:active {
+    background-color: transparent !important;
+  }
+
+  .fc .fc-daygrid-day.fc-day-today{
+    background-color: #75B47D50;
+  }   
+
+  .fc .fc-highlight{
+    background-color: #E8F3E390;
+  }
+
+  .fc-day-today .fc-timegrid-now-indicator-container{
+    background-color: #F3F7F1;
+  }
+
+  .fc-col-header .fc-col-header-cell{
+    background-color: #7d7d7d20;;
+  }
+
+  .fc-day-sat .fc-col-header-cell-cushion, .fc-day-sat .fc-daygrid-day-number{
+    color:#3E78E7 !important;
+  }
+  .fc-day-sun .fc-col-header-cell-cushion, .fc-day-sun .fc-daygrid-day-number{
+    color:#FF3C3C !important;
+  }
+
+  tr[role="presentation"]{  /* 모달창 위로 태그 내용들이 올라오는 것 방지 */
+    position:sticky;
+  }
+  .fc-icon{
+    color:#6C6C72;
+  }
+  
+  .fc-toolbar-title{
+    font-size: 25px !important;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    color:#323B3D;
+  }
