@@ -4,4 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Accounting">
 	<!-- 회계지원 매퍼 -->
+	<select id="selectAll" resultType="com.clovers.dto.AccountingDTO">
+		select * from emp_account
+	</select>
 </mapper>
