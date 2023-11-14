@@ -165,5 +165,9 @@ public class MailService {
 	public List<MemberDTO> autoComplete(String keyword) {
 		return dao.autoComplete(keyword);
 	}
+	
+	public String getEmailByLoginID(String loginID) {
+		return dao.getEmailByLoginID(loginID);
+	}
 		
 }

@@ -15,8 +15,9 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-<!-- read.css -->
+<!-- css, js -->
 <link rel="stylesheet" href="/css/mail/read.css">
+<script src="/js/mail/read.js"></script>
 </head>
 <body>
 	<%@ include file="../commons/header.jsp" %>
@@ -55,10 +56,10 @@
 					</c:otherwise>
 				</c:choose>
 				<div class="read__idInfo">
-					<p>보낸 사람 :<p><p class="idInfo__Value">${mail.send_id }</p>
+					<p>보낸 사람 :<p><p class="idInfo__Value">${mail.sender_name }</p><p>[${mail.sender_task_name }]</p>
 				</div>
 				<div class="read__idInfo">
-					<p>받는 사람 :</p><p id="receive_id" class="idInfo__Value">${mail.receive_id }</p>
+					<p>받는 사람 :</p><p id="receiver_name" class="idInfo__Value">${mail.receiver_name }</p><p>[${mail.receiver_task_name }]</p>
 				</div>
 				<c:if test="${mail.reference_id != '' }">
 					<div class="read__idInfo">
@@ -71,64 +72,7 @@
 					${mail.content }
 				</div>
 			</form>
-			<input type="hidden" id="loginID" value="${loginID }" />
-					
-			<script>
-				$(document).ready(function() {
-					$.ajax({
-						url: "/mail/fileList",
-						data: { email_id : $("#id").val() } 
-					}).done(function(resp) {						
-						if(resp.length > 0) {
-							let fileCount = $("<div>");
-							fileCount.addClass("file__count");
-							fileCount.html("첨부파일 : " + resp.length + "개");
-							$(".read__file").append(fileCount);
-							
-							for(let i = 0; i < resp.length; i++) {
-								let fileInfoBox = $("<div>");
-								fileInfoBox.addClass("file__name");
-								fileInfoBox.html(resp[i].ori_name);	
-								
-								$(".read__file").append(fileInfoBox);
-							}
-							
-							$(".read__file").append($("<hr>"));
-							
-						}
-					})
-					
-					console.log("receive_id :" + $("#receive_id").html());
-					console.log("loginID :" + $("#loginID").val());
-					console.log($("#receive_id").html() == $("#loginID").val());
-					
-					// 받는 사람과 로그인한 사람이 같다면 (== 수신인이 읽었다면)
-					if($("#receive_id").html() == $("#loginID").val()) {
-						$.ajax({
-							url: "/mail/confirmation",
-							data: { id : $("#id").val() }
-						})
-					}
-				})
-				
-				// 삭제 버튼 클릭 시
-				$("#deleteMail").on("click", function() {
-					let result = confirm("메일을 삭제하시겠습니까? 삭제한 메일은 휴지통으로 이동합니다.");
-					if(result) {
-						window.location.href = "/mail/read/delete?id=${mail.id }";
-					}
-				})
-				
-				// 완전삭제 버튼 클릭 시
-				$("#perDeleteMail").on("click", function() {
-					let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
-					if(result) {
-						window.location.href = "/mail/read/perDelete?id=${mail.id }";
-					}
-				})
-				
-				
-			</script>
+			<input type="hidden" id="receive_id" value="${mail.receive_id }" />
 		</div>
 	</div>
 </body>

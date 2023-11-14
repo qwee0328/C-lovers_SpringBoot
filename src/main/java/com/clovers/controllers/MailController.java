@@ -81,7 +81,7 @@ public class MailController {
 			dto.setReceive_id(receiveIds[i]);
 			
 			// 예약 메일이라면
-			if(!reserve_date.isEmpty()) {
+			if(!reserve_date.isEmpty() && dto.isTemporary() == false) {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date date = dateFormat.parse(reserve_date);
 				Timestamp reservation_date = new Timestamp(date.getTime());
@@ -251,7 +251,7 @@ public class MailController {
 	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String receive_id = (String) session.getAttribute("loginID");
+		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.inBoxList(receive_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
 		for(int i = 0; i < mail.size(); i++) {
@@ -278,7 +278,7 @@ public class MailController {
 	public Map<String, Object> sentBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String send_id = (String) session.getAttribute("loginID");
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		boolean temporary = false;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
@@ -306,7 +306,7 @@ public class MailController {
 	public Map<String, Object> tempBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String send_id = (String) session.getAttribute("loginID");
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		boolean temporary = true;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		Map<String, Object> param = new HashMap<>();
@@ -345,7 +345,7 @@ public class MailController {
 	public Map<String, Object> outBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String send_id = (String) session.getAttribute("loginID");
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.outBoxList(send_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
@@ -407,8 +407,13 @@ public class MailController {
 	
 	// 읽음 처리
 	@RequestMapping("/confirmation")
-	public String confirmation(int id) {
-		mservice.confirmation(id);
+	public String confirmation(int id, String receive_id) {
+		String getReceiveId = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+
+		// 로그인한 사용자의 이메일과 받는 사람의 이메일이 같다면
+		if(getReceiveId.equals(receive_id)) {
+			mservice.confirmation(id);
+		}
 		return "redirect:/mail/read?id="+id;
 	}
 	
@@ -421,7 +426,7 @@ public class MailController {
 	public Map<String, Object> trashList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String id = (String) session.getAttribute("loginID");
+		String id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.trashList(id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
 		for(int i = 0; i < mail.size(); i++) {

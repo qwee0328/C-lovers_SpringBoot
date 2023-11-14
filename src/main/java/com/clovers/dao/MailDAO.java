@@ -113,4 +113,8 @@ public class MailDAO {
 	public List<MemberDTO> autoComplete(String keyword) {
 		return db.selectList("Mail.autoComplete", keyword);
 	}
+
+	public String getEmailByLoginID(String loginID) {
+		return db.selectOne("Mail.getEmailByLoginID", loginID);
+	}
 }

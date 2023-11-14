@@ -23,7 +23,7 @@ $(document).ready(function() {
 	
 	        let nameDiv = $("<div>");
 	        nameDiv.addClass("mailList__name");
-	        nameDiv.html(mail[i].send_id);
+	        nameDiv.html(mail[i].sender_name);
 	
 	        let titleDiv = $("<a>");
 	        titleDiv.attr("href", "/mail/read?id=" + mail[i].id);
@@ -222,8 +222,8 @@ $(document).ready(function() {
 	        url: pageUrl,
 	        type: 'POST'
 	    }).done(function (resp) {
-	        mailList(resp.mail, resp.recordTotalCount);
-	        pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
+	        mailList(resp.mail, resp.send_date, resp.recordTotalCount);
+        	pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
 	    })
 	})
 })
