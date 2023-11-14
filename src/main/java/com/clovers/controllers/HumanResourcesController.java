@@ -21,20 +21,26 @@ import com.clovers.services.HumanResourcesService;
 
 import jakarta.servlet.http.HttpSession;
 
-
-
 @Controller
 @RequestMapping("/humanResources")
 public class HumanResourcesController {
 	
-//인사 컨트롤러
+	//인사 컨트롤러
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired 
 	private HumanResourcesService hrservice;
 	
-	// 인사 컨트롤러
+	@RequestMapping("")
+	public String main() {
+		String title="인사";
+		String currentMenu = "휴가/근무";
+		session.setAttribute("title", title);
+		session.setAttribute("currentMenu", currentMenu);
+		return "humanresources/hrMain";
+	}
+	
 	
 	// view로 mypage에 필요한 정보 가져오기
 	@RequestMapping("/mypage")
@@ -64,8 +70,6 @@ public class HumanResourcesController {
 			return "변경추천";
 		}
 		return "변경완료";
-		
-		
 	}
 	
 //	비밀번호 변경하는 페이지로 이동
@@ -101,14 +105,7 @@ public class HumanResourcesController {
 		return "redirect:/humanResources/mypage";
 	}
 	
-	@RequestMapping("")
-	public String main() {
-		String title="인사";
-		String currentMenu = "휴가/근무";
-		session.setAttribute("title", title);
-		session.setAttribute("currentMenu", currentMenu);
-		return "humanresources/hrMain";
-	}
+	
 	
 	// 사용자 근무 규칙 정보 불러오기
 	@ResponseBody

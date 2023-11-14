@@ -51,15 +51,15 @@ public class HumanResourcesService {
 	}
 	
 	// 사용자 근무 규칙 정보 불러오기
-	public Map<String, String> selectEmployeeWorkRule(String id) {
-		return dao.selectEmployeeWorkRule(id);
-
-	
-
-	// 사용자 근무 규칙 정보 불러오기
 	public Map<String, Object> selectEmployeeWorkRule(String id) {
 		return dao.selectEmployeeWorkRule(id);
 	}
+	
+
+	// 사용자 근무 규칙 정보 불러오기
+//	public Map<String, Object> selectEmployeeWorkRule(String id) {
+//		return dao.selectEmployeeWorkRule(id);
+//	}
 
 	// 출근전인지 확인
 	public Map<String, Object> selectAttendStatus(String id) {
