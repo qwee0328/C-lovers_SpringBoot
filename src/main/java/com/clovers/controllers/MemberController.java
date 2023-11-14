@@ -124,7 +124,7 @@ public class MemberController {
 //	비밀번호 변경
 	@RequestMapping("findPW")
 	public String updatePW(String id, String pw) {
-		
+		// 여기는 로그인을 안한 상태(session이 없음)로 비밀번호를 바꾸는 것
 //		암호화한거
 		String pwEnc = EncryptionUtils.getSHA512(pw);
 		mservice.updatePW(id, pwEnc);
@@ -148,5 +148,17 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(userInfo);
 	}
-
+	
+//	changePW.jsp-> 비밀번호 변경 시
+	@RequestMapping("/changePW")
+	public String changePW(String pw) {
+		// 여기는 로그인을 한 상태(session이 남아있음)로 비밀번호를 바꾸는 것
+		String id = (String)session.getAttribute("loginID");
+		String pwEnc = EncryptionUtils.getSHA512(pw);
+		
+		System.out.println(id+" : "+pw);
+		
+		mservice.updatePW(id,pwEnc);
+		return "redirect:/humanResources/mypage";
+	}
 }

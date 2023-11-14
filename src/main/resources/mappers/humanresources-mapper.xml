@@ -5,6 +5,23 @@
 <mapper namespace="HumanResources">
 	<!-- 인사 매퍼 -->
 
+	
+<!-- 	<select id="selectByIdGetName" resultType="String"> -->
+<!-- 		select name from employee where id = #{id} -->
+<!-- 	</select> -->
+	
+	<select id="selectById" resultType="com.clovers.dto.MemberDTO">
+		select * from mypageData where id = #{id};
+	</select>
+	
+	<select id="getPw" resultType="String">
+		select pw from employee where id = #{id};
+	</select>
+	
+	<update id="update">
+		update employee set profile_img=#{profile_img},company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+	</update>
+
 	<!-- 사용자 근무 규칙 맵 -->
 	<!-- 
 	<resultMap type="HashMap" id="userWorkRuleMap">
@@ -62,4 +79,5 @@
 		from work_conditioin
 		where date(work_date) = curdate() and emp_id=#{id};
 	</select>
+
 </mapper>
