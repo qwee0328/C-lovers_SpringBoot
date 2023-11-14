@@ -20,6 +20,7 @@ public class MemberService {
 		param.put("id",id);
 		param.put("pw", pw);
 		
+		System.out.println("test"+id);
 		return mdao.login(param);
 	}
 	

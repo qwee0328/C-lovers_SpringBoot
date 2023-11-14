@@ -16,6 +16,7 @@ public class MemberDAO {
 	private SqlSession db;
 	
 	public boolean login(Map<String,String> param) {
+		System.out.println(param.get("id"));
 		return db.selectOne("member.login",param);
 	}
 	
