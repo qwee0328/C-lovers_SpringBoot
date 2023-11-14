@@ -22,7 +22,6 @@ public class DepartmentService {
         return ddao.insert(dto);
     }
 
-
     // 조회: 아이디를 기준으로 부서 정보를 검색
     public DepartmentDTO selectById(String id) {
         return ddao.selectById(id);
@@ -38,14 +37,10 @@ public class DepartmentService {
         return ddao.selectByDeptName(dept_name);
     }
 
-    // 조회: 회사(Office)의 부서 정보를 조회
-    public DepartmentDTO selectOffice() {
-        return ddao.selectOffice();
-    }
 
     // 조회: 회사를 제외한 모든 부서의 정보를 리스트로 조회
-    public List<DepartmentDTO> selectAllWithOutOfficeId() {
-        return ddao.selectAllWithOutOfficeId();
+    public List<DepartmentDTO> selectAll() {
+        return ddao.selectAll();
     }
 
     // 조회: 특정 부서의 직원 수를 조회
@@ -67,10 +62,6 @@ public class DepartmentService {
         return ddao.update(param);
     }
 
-    // 수정: 회사의 이름을 업데이트
-    public int updateCompanyName(String newName) {
-        return ddao.updateOfficeName(newName);
-    }
 
     // 삭제: 아이디를 기준으로 부서 정보를 삭제
     public int deleteById(String id) {

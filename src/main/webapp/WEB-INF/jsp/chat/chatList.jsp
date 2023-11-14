@@ -49,15 +49,17 @@
         <div class="chat-search__cancel fontEN align-center"><i class="fa-solid fa-xmark"></i></div>
     </div>
 
-    <div class="chat-chatList"></div>
+    <div class="chat-chatList">
+    	
+    </div>
 
     <script>
 		// 채팅목록 누르면 채팅방으로 이동 -> 임의로 작성한 코드임. 추후에 코드 수정 필요
-		$(document).on("click",".chat-chatList__chatRoom",function(){
-			let option ="height=585, width=400";
-	        let openUrl = "/chat/goChatRoom";
-	        window.open(openUrl,"chatRoom",option);
-		})
+// 		$(document).on("click",".chat-chatList__chatRoom",function(){
+// 			let option ="height=585, width=400";
+// 	        let openUrl = "/chat/goChatRoom";
+// 	        window.open(openUrl,"chatRoom",option);
+// 		})
 
         // search input focus 시 우측에 검색 취소 버튼 생성
         $(".chat-search__txt").on("focus", function () {
@@ -142,6 +144,7 @@
             $(".chat-search__txt").css("width",w-72);
         }
     </script>
+    <script src="./js/chat/chatListLoad.js"></script>
 </body>
 
 </html>
