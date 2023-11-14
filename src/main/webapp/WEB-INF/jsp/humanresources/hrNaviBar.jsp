@@ -14,7 +14,7 @@
 <body>
 	<div class="naviBar">
 	   <div class="naviBar__applyBtns">
-	       <button><i class="fa-solid fa-plus"></i>휴가신청</button>
+	       <button id="vacationAppBtn"><i class="fa-solid fa-plus"></i>휴가신청</button>
 	       <div class="naviConp">
 	           <div class="naviConp__icon"><i class="fa-solid fa-plus"></i></div>
 	           <div class="naviConp__title">시차출퇴근제 신청</div>

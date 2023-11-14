@@ -2,25 +2,30 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-  <mapper namespace="member">
-  	<select id="login" resultType="Boolean">
-  		select count(*) from employee where id=#{id} and pw=#{pw}
-  	</select>
-  	
-  	<update id="updatePW">
-  		update employee set pw=#{pw} where id=#{id}
-  	</update>
 
-  	<!-- 로그인된 사용자 이름, 이메일 맵 -->
-  	<resultMap type="java.util.HashMap" id="userList">
-  		<id column="id" property="id"/>
-		<result column="name" property="name"/>
-  		<result column="company_email" property="company_email"/>
-  	</resultMap>
-  	
-  	<!-- 로그인된 사용자 이름, 이메일 불러오기 -->
-  	<select id="selectUserInfo" resultMap="userList">
-  		select id, name, company_email from employee where id=#{loginID};
-  	</select>
-  </mapper>
+<mapper namespace="member">
+	<select id="login" resultType="Boolean">
+		select count(*) from employee where id = #{id} and pw = #{pw}
+	</select>
+
+	<update id="updatePW">
+		update employee set pw = #{pw} where id = #{id}
+	</update>
+
+	<!-- 로그인된 사용자 이름, 이메일 맵 -->
+	<resultMap type="java.util.HashMap" id="userList">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="company_email" property="company_email" />
+	</resultMap>
+
+	<!-- 로그인된 사용자 이름, 이메일 불러오기 -->
+	<select id="selectUserInfo" resultMap="userList">
+		select id, name, company_email from employee where id = #{loginID};
+	</select>
+
+	<select id="selectNameById" resultType="String">
+		select name from employee where id = #{id};
+	</select>
+
+</mapper>
