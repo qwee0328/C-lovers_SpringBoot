@@ -106,4 +106,8 @@
 	<update id="confirmation">
 		update email set confirmation = true where id = ${id}
 	</update>
+	
+	<select id="autoComplete">
+		
+	</select>
 </mapper>
