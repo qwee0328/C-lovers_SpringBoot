@@ -13,6 +13,7 @@
     width: 480px;
     background-color: white;
     margin-top: 170px;
+    border-radius: 4px;
 }
 .findPwBox__inner{text-align: center;}
 

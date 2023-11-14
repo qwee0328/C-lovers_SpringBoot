@@ -28,6 +28,20 @@ public class WebConfig implements WebMvcConfigurer{
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(loginValidator)
 				.addPathPatterns("/")
+				.addPathPatterns("/mail/**")
+				.addPathPatterns("/schedule/**")
+				.addPathPatterns("/humanResources/**")
+				.addPathPatterns("/accounting/**")
+				.addPathPatterns("/addressbook/**")
+				.addPathPatterns("/admin/**")
+				.addPathPatterns("/board/**")
+				.addPathPatterns("/chat/**")
+				.addPathPatterns("/electronicSignature/**")
+				.addPathPatterns("/employee/**")
+				.addPathPatterns("/members/**")
+				.addPathPatterns("/office/**")
+				.addPathPatterns("/org/")
+				.addPathPatterns("/reservation/**")
 				.excludePathPatterns("/members/**");
 	}
 	
