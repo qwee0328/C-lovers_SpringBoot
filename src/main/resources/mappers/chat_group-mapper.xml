@@ -42,15 +42,26 @@
 	</insert>
 
 	<select id="selectByEmpId" resultMap="chatRoomListInfo">
-		select * from
-		chat_room_list_info where emp_id=#{emp_id} order by write_date desc;
+		SELECT cri.*
+		FROM chat_room_list_info cri
+		JOIN (
+		SELECT chat_room_id, MAX(write_date) AS latest_date
+		FROM chat_room_list_info
+		GROUP BY chat_room_id
+		) AS latest_messages ON cri.chat_room_id = latest_messages.chat_room_id
+		AND cri.write_date = latest_messages.latest_date
+		WHERE cri.emp_id=#{emp_id}
+		ORDER BY cri.write_date DESC;
 	</select>
+
+
 
 	<select id="selectByEmpIdNChatRoomID"
 		resultMap="chatRoomListInfo">
 		select * from chat_room_list_info
-		where emp_id=#{emp_id} AND chat_room_id=#{chat_room_id}
-		order by write_date desc;
+		where emp_id=#{emp_id} AND
+		chat_room_id=#{chat_room_id}
+		order by write_date desc LIMIT 1;
 	</select>
 
 

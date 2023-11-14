@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.services.ChatGroupService;
+import com.clovers.services.ChatMessageService;
 import com.clovers.services.ChatRoomService;
 import com.clovers.services.MemberService;
 
@@ -28,6 +29,9 @@ public class ChatController {
 	
 	@Autowired
 	private ChatRoomService crService;
+	
+	@Autowired
+	private ChatMessageService cmService;
 	
 	@Autowired
 	private MemberService mService;
@@ -114,8 +118,9 @@ public class ChatController {
 	
 	@ResponseBody
 	@RequestMapping("/chatMsgLoad")
-	public Map<String,Object> selectByChatId(){
-		return cgService.selectByChatId();
+	public Map<String,Object> selectByChatId(@RequestParam("emp_id") String emp_id,
+			@RequestParam("chat_room_id") String chat_room_id){
+		return cmService.selectByChatRoomId(emp_id, chat_room_id);
 	}
 	
 }
