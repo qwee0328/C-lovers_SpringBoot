@@ -112,6 +112,13 @@ public class MailController {
 		return "redirect:/mail";
 	}
 	
+	// 받는 사람 자동완성
+//	@ResponseBody
+//	@RequestMapping("/autoComplete")
+//	public EmailDTO autoComplete(String keyword) {
+//		return mservice.autoComplete(keyword);
+//	}
+	
 	// 받은 편지함으로 이동
 	@RequestMapping("/inBox")
 	public String inBox() {

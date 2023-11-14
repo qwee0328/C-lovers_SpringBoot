@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.dao.MailDAO;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
+import com.clovers.dto.EmployeeDTO;
 
 @Service
 public class MailService {
@@ -159,6 +160,10 @@ public class MailService {
 	
 	public int confirmation(int id) {
 		return dao.confirmation(id);
+	}
+	
+	public List<EmployeeDTO> autoComplete(String keyword) {
+		return dao.autoComplete(keyword);
 	}
 		
 }
