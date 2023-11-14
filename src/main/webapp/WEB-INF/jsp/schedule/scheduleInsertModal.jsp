@@ -22,8 +22,8 @@
 				<div class="calendarModal__bodyTitle">캘린더</div>
 				<div class="calendarModal__bodyContent">
 					<select class="calendarModal__calNameList">
-						<option value="teamp">팀 프로젝트</option>
-						<option value="myp">나의 프로젝트</option>
+						<option value="0">팀 프로젝트</option>
+						<option value="1">나의 프로젝트</option>
 					</select>
 				</div>
 			</div>

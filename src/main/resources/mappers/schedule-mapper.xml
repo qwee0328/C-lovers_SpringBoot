@@ -3,5 +3,41 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Schedule">
-	<!-- 일정 매퍼 -->
+
+	<resultMap type="HashMap" id="scheduleInfo">
+		<result property="id" column="id"/>
+		<result property="emp_id" column="emp_id"/>
+		<result property="calendar_id" column="calendar_id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="start_date" column="start_date"/>
+		<result property="end_date" column="end_date"/>
+		<result property="all_day" column="all_day"/>
+		<result property="reg_date" column="reg_date"/>
+		<result property="recurring_id" column="recurring_id"/>
+		<result property="during" column="during"/>
+		<result property="frequency__whenOption" column="frequency__whenOption"/>
+		<result property="endKey" column="endKey"/>
+		<result property="endValue" column="endValue"/>
+		<result property="intervalCnt" column="intervalCnt"/>
+		<result property="startTime" column="startTime"/>
+		<result property="endTime" column="endTime"/>
+		<result property="selectWeeks" column="selectWeeks"/>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into schedule values(null, #{emp_id}, #{calendar_id}, #{title}, #{content}, #{start_date}, #{end_date}, #{all_day}, #{reg_date}, #{recurring_id});
+	</insert>
+	<delete id="delete">
+		delete from schedule where id=#{id};
+	</delete>
+	
+	<insert id="insertRuccuring" useGeneratedKeys="true" keyProperty="id">
+		insert into schedule_recurring values(null, #{during}, #{frequency__whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{startTime}, #{endTime}, #{selectWeeks});
+	</insert>
+	
+	<select id="selectAll" resultMap="scheduleInfo">
+		select * from scheduleAll;
+	</select>
+	
 </mapper>
