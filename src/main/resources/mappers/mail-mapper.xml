@@ -107,7 +107,7 @@
 		update email set confirmation = true where id = ${id}
 	</update>
 	
-	<select id="autoComplete">
-		
+	<select id="autoComplete" resultType="com.clovers.dto.MemberDTO">
+		select * from employee where name like #{keyword} or company_email like #{keyword}
 	</select>
 </mapper>

@@ -92,9 +92,11 @@
 					</div>
 				</div>
 				<div class="send__inputLine">
-					<div class="inputLine_title">받는 사람</div> 
-					<input type="text" id="receive_id" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) Ehsms ;(세미콜론)으로 구분하여 입력하세요."/>
-					<div id="autoComplete"></div>
+					<div class="inputLine_title">받는 사람</div>
+					<div class="inputLine__auto">
+						<input type="text" id="receive_id" name="receive_id" value="${reply.send_id }" class="inputLine__input" placeholder="메일 주소 사이에 ,(콤마) 또는 ;(세미콜론)으로 구분하여 입력하세요." autocomplete="off"/>
+						<div id="autoComplete"></div>
+					</div>
 				</div>
 				<div class="send__inputLine">
 					<div class="inputLine_title">참조</div>
@@ -275,19 +277,45 @@
 				$("#receive_id").on("keyup", function() {
 					let inputId = $(this).val();
 					
-					$.ajax({
-						url: "/mail/autoComplete",
-						data: { keyword : inputId }
-					}).done(function(resp) {
-						$("#autoComplete").empty();
-						if(resp.length > 0) {
-							for(let i = 0; i < resp.length; i++) {
-								emailList = $("<div>");
-								emailList.append(`resp[i].name resp[i].email`);
-								$("#autoComplete").append(item);
+					if(inputId != "") {
+						$.ajax({
+							dataType: "json",
+							url: "/mail/autoComplete",
+							data: { keyword : inputId }
+						}).done(function(resp) {
+							console.log(resp);
+							$("#autoComplete").empty();
+							if(resp.length > 0) {
+								for(let i = 0; i < resp.length; i++) {
+									emailList = $("<div>");
+									emailList.addClass("emailList__autoComplete")
+									emailList.attr("data-email", resp[i].company_email);
+									
+									autoName = $("<div>");
+									autoName.addClass("autoComplete__name");
+									autoName.html(resp[i].name);
+									
+									autoEmail = $("<div>");
+									autoEmail.addClass("autoComplete__email");
+									autoEmail.html(resp[i].company_email);
+									
+									emailList.append(autoName).append(autoEmail);
+									$("#autoComplete").append(emailList);
+								}
 							}
-						}
-					})
+						})
+					} else {
+						$(".emailList__autoComplete").remove();
+					}
+				})
+				
+				// 자동완성 클릭했을 때
+				$(document).on("click", ".emailList__autoComplete", function() {
+					$("#receive_id").val("");
+					$(".emailList__autoComplete").remove();
+					
+					let email = $(this).attr("data-email");
+					$("#receive_id").val(email);
 				})
 			
 				// 파일 리스트 삭제 버튼 눌렀을 때

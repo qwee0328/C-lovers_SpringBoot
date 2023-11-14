@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.constants.Constants;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.EmployeeDTO;
+import com.clovers.dto.MemberDTO;
 import com.clovers.services.MailService;
 
 import jakarta.servlet.http.HttpSession;
@@ -76,29 +76,31 @@ public class MailController {
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
 	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
-		
-		// 예약 메일이라면
-		if(!reserve_date.isEmpty()) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date date = dateFormat.parse(reserve_date);
-			Timestamp reservation_date = new Timestamp(date.getTime());
+		String[] receiveIds = dto.getReceive_id().split("\\s*[,;]\\s*"); // 정규식 \s*는 0개 이상의 공백을 말함
+		for(int i = 0; i < receiveIds.length; i++) {
+			dto.setReceive_id(receiveIds[i]);
 			
-			dto.setReservation(true);
-			dto.setReservation_date(reservation_date);
-			mservice.submitSend(dto, uploadFiles);
+			// 예약 메일이라면
+			if(!reserve_date.isEmpty()) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date = dateFormat.parse(reserve_date);
+				Timestamp reservation_date = new Timestamp(date.getTime());
+				
+				dto.setReservation(true);
+				dto.setReservation_date(reservation_date);
+				mservice.submitSend(dto, uploadFiles);
+			}
 			
-			return "redirect:/mail";
-		}
-		
-		dto.setReservation(false);
-		dto.setSend_date(new Timestamp(System.currentTimeMillis()));
-		
-		// 임시 메일이라면
-		if(dto.isTemporary() == true) {
-			mservice.submitTempSend(dto, sysName, uploadFiles);
-		} else {
-			dto.setTemporary(false);
-			mservice.submitSend(dto, uploadFiles);
+			dto.setReservation(false);
+			dto.setSend_date(new Timestamp(System.currentTimeMillis()));
+			
+			// 임시 메일이라면
+			if(dto.isTemporary() == true) {
+				mservice.submitTempSend(dto, sysName, uploadFiles);
+			} else {
+				dto.setTemporary(false);
+				mservice.submitSend(dto, uploadFiles);
+			}
 		}
 
 		return "redirect:/mail";
@@ -116,8 +118,13 @@ public class MailController {
 	// 받는 사람 자동완성
 	@ResponseBody
 	@RequestMapping("/autoComplete")
-	public List<EmployeeDTO> autoComplete(String keyword) {
-		return mservice.autoComplete(keyword);
+	public List<MemberDTO> autoComplete(@RequestParam String keyword) {
+		String search = "%" + keyword + "%";
+		List<MemberDTO> result = mservice.autoComplete(search);
+		for(int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).getName() + " : " + result.get(i).getCompany_email());
+		}
+		return mservice.autoComplete(search);
 	}
 	
 	// 받은 편지함으로 이동
