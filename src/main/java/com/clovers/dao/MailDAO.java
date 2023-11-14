@@ -105,4 +105,8 @@ public class MailDAO {
 	public int submitReservationMail(Map<String, Object> param) {
 		return db.update("Mail.submitReservationMail", param);
 	}
+	
+	public int confirmation(int id) {
+		return db.update("Mail.confirmation", id);
+	}
 }

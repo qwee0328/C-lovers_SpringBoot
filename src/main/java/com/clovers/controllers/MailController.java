@@ -356,6 +356,13 @@ public class MailController {
 		return "redirect:/mail";
 	}
 	
+	// 읽음 처리
+	@RequestMapping("/confirmation")
+	public String confirmation(int id) {
+		mservice.confirmation(id);
+		return "redirect:/mail/read?id="+id;
+	}
+	
 	
 	// ---------- trash ----------
 	

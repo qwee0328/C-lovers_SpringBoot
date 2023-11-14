@@ -87,8 +87,18 @@
 	            let dateDiv = $("<div>");
 	            dateDiv.addClass("right__date");
 	            dateDiv.html(mail[i].send_date);
+	            
+	            let confirmDiv = $("<div>");
+	            confirmDiv.addClass("right__confirm");
+	            
+            	console.log(mail[i].title + " : " + mail[i].confirmation);
+           		if(mail[i].confirmation) {
+	            	confirmDiv.html("읽음");
+	            } else {
+	            	confirmDiv.html("읽지 않음");
+	            }
 	
-	            rightDiv.append(fileIconDiv).append(dateDiv);
+	            rightDiv.append(fileIconDiv).append(dateDiv).append(confirmDiv);
 	            mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
 	
 	            $(".inBox__mailListBox").append(mailListDiv);
