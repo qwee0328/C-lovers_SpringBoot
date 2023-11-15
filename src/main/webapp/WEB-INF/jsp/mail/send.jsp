@@ -15,8 +15,9 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-<!-- send.css -->
+<!-- css, js -->
 <link rel="stylesheet" href="/css/mail/send.css">
+<script src="/js/mail/send.js"></script>
 </head>
 <body>
 	<%@ include file="../commons/header.jsp" %>
@@ -46,44 +47,16 @@
 								<div class="dropbox__reserve">
 									<input type="date" id="send_date">
 									<select id="send_hour">
-										<option value="00">0 시</option>
-										<option value="01">1 시</option>
-										<option value="02">2 시</option>
-										<option value="03">3 시</option>
-										<option value="04">4 시</option>
-										<option value="05">5 시</option>
-										<option value="06">6 시</option>
-										<option value="07">7 시</option>
-										<option value="08">8 시</option>
-										<option value="09">9 시</option>
-										<option value="10">10 시</option>
-										<option value="11">11 시</option>
-										<option value="12">12 시</option>
-										<option value="13">13 시</option>
-										<option value="14">14 시</option>
-										<option value="15">15 시</option>
-										<option value="16">16 시</option>
-										<option value="17">17 시</option>
-										<option value="18">18 시</option>
-										<option value="19">19 시</option>
-										<option value="20">20 시</option>
-										<option value="21">21 시</option>
-										<option value="22">22 시</option>
-										<option value="23">23 시</option>
+									    <c:forEach begin="0" end="23" var="hour">
+									        <c:set var="formattedHour" value="${hour < 10 ? '0' + hour : hour}"/>
+									        <option value="${formattedHour}">${hour} 시</option>
+									    </c:forEach>
 									</select>
 									<select id="send_minute">
-										<option value="00">0 분</option>
-										<option value="05">5 분</option>
-										<option value="10">10 분</option>
-										<option value="15">15 분</option>
-										<option value="20">20 분</option>
-										<option value="25">25 분</option>
-										<option value="30">30 분</option>
-										<option value="35">35 분</option>
-										<option value="40">40 분</option>
-										<option value="45">45 분</option>
-										<option value="50">50 분</option>
-										<option value="55">55 분</option>
+									    <c:forEach begin="0" end="55" step="5" var="minute">
+									        <c:set var="formattedMinute" value="${minute < 10 ? '0' + minute : minute}"/>
+									        <option value="${formattedMinute}">${minute} 분</option>
+									    </c:forEach>
 									</select>
 								</div>
 								<a href="#" class="reserve__btn">확인</a>
@@ -143,7 +116,12 @@
 							<script>
 								$("#summernote").summernote({
 								    height: 500,
-								    disableResizeEditor: true
+								    disableResizeEditor: true,
+								    callbacks: {
+										onImageUpload: function(files) {
+											uploadImage(files);
+										}
+									}
 								});
 							
 								$("#summernote").summernote("code", `${reply.content}`);
@@ -218,139 +196,7 @@
 						<input type="hidden" name="temporary" value=${reply.temporary } />
 					</c:when>
 				</c:choose>
-				
 			</form>
-			
-			<script>
-				// 예약 발송 드롭다운 버튼 눌렀을 때
-				$(document).ready(function () {
-			        $(".sendReserve__icon").on("click", function () {
-			            // sendReserve__dropDown 클래스에 hide가 있으면 show로, show가 있으면 hide로 토글
-			            $(".sendReserve__dropDown").toggleClass("hide show");
-			
-			            // sendReserve__dropDown의 하위 요소인 dropDown__box의 디스플레이 속성을 토글
-			            $(".sendReserve__dropDown .dropDown__box").toggle();
-			        });
-			    });
-				
-				// input type=date에서 현재 날짜 이전은 선택 불가능
-				 $(document).ready(function() {
-		            // 현재 날짜 가져오기
-		            var currentDate = new Date().toISOString().split("T")[0];
-		            // input 요소의 min 속성 설정
-		            $("#send_date").attr("min", currentDate);
-		        });
-				
-				// 선택한 날짜가 현재 날짜보다 이후인지
-				function isDateAfterNow(dateString) {
-					let now = new Date();
-					let inputDate = new Date(dateString);
-					return inputDate > now;
-				}
-				
-				// 예약 드롭다운 확인 버튼 눌렀을 때
-				$(".reserve__btn").on("click", function(e) {
-					e.preventDefault(); // a 태그 페이지 이동하지 않도록
-					
-					let sendDate = $("#send_date").val();
-					let sendHour = $("#send_hour").val();
-					let sendMinute = $("#send_minute").val();
-					
-					let reserveDate = sendDate + " " + sendHour + ":" + sendMinute + ":00";
-					
-					let result = isDateAfterNow(reserveDate);
-					if(result) {			
-						$("#reserve__dateBox").css("display", "block");
-						$("#reserve__date").html(reserveDate);
-						$("#reserve__hidden__date").val(reserveDate);
-						
-						$(".sendReserve__dropDown").toggleClass("hide show");
-						$(".sendReserve__dropDown .dropDown__box").toggle();
-					} else {
-						alert("현재보다 이전의 시간은 선택할 수 없습니다.");
-					}
-					
-					
-				})
-				
-				// 받는 사람 입력할 때 자동완성
-				$("#receive_id").on("keyup", function() {
-					let inputId = $(this).val();
-					
-					if(inputId != "") {
-						$.ajax({
-							dataType: "json",
-							url: "/mail/autoComplete",
-							data: { keyword : inputId }
-						}).done(function(resp) {
-							console.log(resp);
-							$("#autoComplete").empty();
-							if(resp.length > 0) {
-								for(let i = 0; i < resp.length; i++) {
-									emailList = $("<div>");
-									emailList.addClass("emailList__autoComplete")
-									emailList.attr("data-email", resp[i].company_email);
-									
-									autoName = $("<div>");
-									autoName.addClass("autoComplete__name");
-									autoName.html(resp[i].name);
-									
-									autoEmail = $("<div>");
-									autoEmail.addClass("autoComplete__email");
-									autoEmail.html(resp[i].company_email);
-									
-									emailList.append(autoName).append(autoEmail);
-									$("#autoComplete").append(emailList);
-								}
-							}
-						})
-					} else {
-						$(".emailList__autoComplete").remove();
-					}
-				})
-				
-				// 자동완성 클릭했을 때
-				$(document).on("click", ".emailList__autoComplete", function() {
-					$("#receive_id").val("");
-					$(".emailList__autoComplete").remove();
-					
-					let email = $(this).attr("data-email");
-					$("#receive_id").val(email);
-				})
-			
-				// 파일 리스트 삭제 버튼 눌렀을 때
-				let deleteFileList = "";
-				$(document).on("click", ".deleteFile__btn", function() {
-					deleteFileList = deleteFileList.concat($(this).attr("sysName")+":");
-					console.log(deleteFileList);
-					
-					$(this).parent().remove();
-					$("#deleteFiles").val(deleteFileList);
-				});
-			
-				$(document).ready(function() {
-					$('#summernote').summernote({           // set editor height
-						height: 500,  
-						disableResizeEditor: true,          // set maximum height of editor
-						  focus: true 
-					});
-				});
-				
-				// 필수 입력값들이 존재하는지
-				function validateForm() {
-					// 받는 사람을 입력하지 않았을 경우
-					if($("#receive_id").val() == "") {
-						alert("받는 사람은 필수 입력 항목입니다.");
-						return false;
-					}
-					
-					// 제목을 입력하지 않았을 경우
-					if($("#title").val() == "") {
-						alert("제목은 필수 입력 항목입니다.");
-						return false;
-					}
-				}
-			</script>
 		</div>
 	</div>
 </body>

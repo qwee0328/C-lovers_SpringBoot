@@ -2,6 +2,7 @@ package com.clovers.services;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,7 +132,19 @@ public class MailService {
 		return dao.deleteMail(id);
 	}
 	
+	@Transactional
 	public int perDeleteMail(int id) {
+		String upload = "/Users/uploads";
+		List<EmailFileDTO> fileList = dao.selectAllFileById(id);
+		
+        for(EmailFileDTO file : fileList) {
+        	System.out.println(file.getSys_name());
+           File filepath = new File(upload + "/" + file.getSys_name());
+           filepath.delete();
+           
+           dao.deleteFiles(file.getSys_name());
+        }
+
 		return dao.perDeleteMail(id);
 	}
 	
@@ -169,5 +182,23 @@ public class MailService {
 	public String getEmailByLoginID(String loginID) {
 		return dao.getEmailByLoginID(loginID);
 	}
+	
+	public List<String> saveImage(MultipartFile[] image) throws Exception {
+		String upload = "/Users/mailUploads";
+		File uploadPath = new File(upload);
+		if(!uploadPath.exists()) {uploadPath.mkdir();}
 		
+		List<String> fileList = new ArrayList<>();
+		
+		if(image != null) {
+			for(MultipartFile file : image) {
+				String oriName = file.getOriginalFilename();
+				String sysName = UUID.randomUUID() + "_" + oriName; // UUID.randomUUID() : String 값 반환 (해시코드와 비슷)
+				file.transferTo(new File(uploadPath+"/"+sysName));
+				fileList.add("/mailUploads/" + sysName);
+				System.out.println("image: " + fileList);
+			}
+		}
+		return fileList;
+	}
 }

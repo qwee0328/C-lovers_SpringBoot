@@ -31,19 +31,21 @@ $(document).ready(function() {
 			}
 	})
 	
+	let id = $("#id").val();
 	// 삭제 버튼 클릭 시
 	$("#deleteMail").on("click", function() {
 		let result = confirm("메일을 삭제하시겠습니까? 삭제한 메일은 휴지통으로 이동합니다.");
 		if(result) {
-			window.location.href = "/mail/read/delete?id=${mail.id }";
+			window.location.href = "/mail/read/delete?id=" + id;
 		}
 	})
 	
 	// 완전삭제 버튼 클릭 시
 	$("#perDeleteMail").on("click", function() {
+		console.log('${mail.id}');
 		let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
 		if(result) {
-			window.location.href = "/mail/read/perDelete?id=${mail.id }";
+			window.location.href = "/mail/read/perDelete?id=" + id;
 		}
-})
+	})
 })

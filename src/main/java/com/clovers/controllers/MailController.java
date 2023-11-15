@@ -73,60 +73,6 @@ public class MailController {
 		return "mail/send";
 	}
 	
-	// 보내기 (메일 발송)
-	@RequestMapping("/submitSend")
-	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
-		String[] receiveIds = dto.getReceive_id().split("\\s*[,;]\\s*"); // 정규식 \s*는 0개 이상의 공백을 말함
-		for(int i = 0; i < receiveIds.length; i++) {
-			dto.setReceive_id(receiveIds[i]);
-			
-			// 예약 메일이라면
-			if(!reserve_date.isEmpty() && dto.isTemporary() == false) {
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date date = dateFormat.parse(reserve_date);
-				Timestamp reservation_date = new Timestamp(date.getTime());
-				
-				dto.setReservation(true);
-				dto.setReservation_date(reservation_date);
-				mservice.submitSend(dto, uploadFiles);
-			}
-			
-			dto.setReservation(false);
-			dto.setSend_date(new Timestamp(System.currentTimeMillis()));
-			
-			// 임시 메일이라면
-			if(dto.isTemporary() == true) {
-				mservice.submitTempSend(dto, sysName, uploadFiles);
-			} else {
-				dto.setTemporary(false);
-				mservice.submitSend(dto, uploadFiles);
-			}
-		}
-
-		return "redirect:/mail";
-	}
-	
-	// 저장하기
-	@RequestMapping("/tempSend")
-	public String tempSend(EmailDTO dto, MultipartFile[] uploadFiles) throws Exception {
-		dto.setTemporary(true);
-		mservice.submitSend(dto, uploadFiles);
-		
-		return "redirect:/mail";
-	}
-	
-	// 받는 사람 자동완성
-	@ResponseBody
-	@RequestMapping("/autoComplete")
-	public List<MemberDTO> autoComplete(@RequestParam String keyword) {
-		String search = "%" + keyword + "%";
-		List<MemberDTO> result = mservice.autoComplete(search);
-		for(int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i).getName() + " : " + result.get(i).getCompany_email());
-		}
-		return mservice.autoComplete(search);
-	}
-	
 	// 받은 편지함으로 이동
 	@RequestMapping("/inBox")
 	public String inBox() {
@@ -207,6 +153,7 @@ public class MailController {
 	public String deleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
 		for(int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
+			
 			mservice.deleteMail(id);
 		}
 		return "redirect:/mail";
@@ -385,22 +332,20 @@ public class MailController {
 	@RequestMapping("/read")
 	public String read(@RequestParam("id") int id, Model model) {
 		EmailDTO mail = mservice.selectAllById(id);
-		
 		model.addAttribute("mail", mail);
-		
 		return "/mail/read";
 	}
 	
 	// 삭제
 	@RequestMapping("/read/delete")
-	public String deleteAtRead(int id) {
+	public String deleteAtRead(@RequestParam int id) {
 		mservice.deleteMail(id);
 		return "redirect:/mail";
 	}
 	
 	// 완전삭제
 	@RequestMapping("/read/perDelete")
-	public String perDeleteAtRead(int id) {
+	public String perDeleteAtRead(@RequestParam int id) {
 		mservice.perDeleteMail(id);
 		return "redirect:/mail";
 	}
@@ -415,6 +360,71 @@ public class MailController {
 			mservice.confirmation(id);
 		}
 		return "redirect:/mail/read?id="+id;
+	}
+	
+	
+	// ---------- send ----------
+	
+	// 보내기 (메일 발송)
+	@RequestMapping("/submitSend")
+	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
+		String[] receiveIds = dto.getReceive_id().split("\\s*[,;]\\s*"); // 정규식 \s*는 0개 이상의 공백을 말함
+		for(int i = 0; i < receiveIds.length; i++) {
+			dto.setReceive_id(receiveIds[i]);
+			
+			// 예약 메일이라면
+			if(!reserve_date.isEmpty() && dto.isTemporary() == false) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date = dateFormat.parse(reserve_date);
+				Timestamp reservation_date = new Timestamp(date.getTime());
+				
+				dto.setReservation(true);
+				dto.setReservation_date(reservation_date);
+				mservice.submitSend(dto, uploadFiles);
+			}
+			
+			dto.setReservation(false);
+			dto.setSend_date(new Timestamp(System.currentTimeMillis()));
+			
+			// 임시 메일이라면
+			if(dto.isTemporary() == true) {
+				mservice.submitTempSend(dto, sysName, uploadFiles);
+			} else {
+				dto.setTemporary(false);
+				mservice.submitSend(dto, uploadFiles);
+			}
+		}
+
+		return "redirect:/mail";
+	}
+	
+	// 저장하기
+	@RequestMapping("/tempSend")
+	public String tempSend(EmailDTO dto, MultipartFile[] uploadFiles) throws Exception {
+		dto.setTemporary(true);
+		mservice.submitSend(dto, uploadFiles);
+		
+		return "redirect:/mail";
+	}
+	
+	// 받는 사람 자동완성
+	@ResponseBody
+	@RequestMapping("/autoComplete")
+	public List<MemberDTO> autoComplete(@RequestParam String keyword) {
+		String search = "%" + keyword + "%";
+		List<MemberDTO> result = mservice.autoComplete(search);
+		for(int i = 0; i < result.size(); i++) {
+//			System.out.println(result.get(i).getName() + " : " + result.get(i).getCompany_email());
+		}
+		return mservice.autoComplete(search);
+	}
+	
+	// summernote 이미지 경로 설정
+	@ResponseBody
+	@RequestMapping("/uploadImage")
+	public List<String> uploadImage(@RequestParam("files") MultipartFile[] files) throws Exception {
+		List<String> fileList = mservice.saveImage(files);
+		return fileList;
 	}
 	
 	
