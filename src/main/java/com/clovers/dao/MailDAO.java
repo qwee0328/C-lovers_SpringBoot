@@ -110,7 +110,7 @@ public class MailDAO {
 		return db.update("Mail.confirmation", id);
 	}
 	
-	public List<MemberDTO> autoComplete(String keyword) {
+	public List<Map<String, String>> autoComplete(String keyword) {
 		return db.selectList("Mail.autoComplete", keyword);
 	}
 

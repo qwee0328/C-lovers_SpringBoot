@@ -29,7 +29,7 @@ public class MailService {
 	public int submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
 		int email_id = dao.submitSend(dto);
 		
-		String upload = "/Users/uploads";
+		String upload = "/Users/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();} // 만약 업로드 폴더가 존재하지 않는다면 생성
 		
@@ -49,7 +49,7 @@ public class MailService {
 		dao.submitTempSend(dto);
 		int email_id = dto.getId();
 		
-		String upload = "/Users/uploads";
+		String upload = "/Users/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();} // 만약 업로드 폴더가 존재하지 않는다면 생성
 		
@@ -134,7 +134,7 @@ public class MailService {
 	
 	@Transactional
 	public int perDeleteMail(int id) {
-		String upload = "/Users/uploads";
+		String upload = "/Users/mailUploads";
 		List<EmailFileDTO> fileList = dao.selectAllFileById(id);
 		
         for(EmailFileDTO file : fileList) {
@@ -175,7 +175,7 @@ public class MailService {
 		return dao.confirmation(id);
 	}
 	
-	public List<MemberDTO> autoComplete(String keyword) {
+	public List<Map<String, String>> autoComplete(String keyword) {
 		return dao.autoComplete(keyword);
 	}
 	
@@ -196,7 +196,6 @@ public class MailService {
 				String sysName = UUID.randomUUID() + "_" + oriName; // UUID.randomUUID() : String 값 반환 (해시코드와 비슷)
 				file.transferTo(new File(uploadPath+"/"+sysName));
 				fileList.add("/mailUploads/" + sysName);
-				System.out.println("image: " + fileList);
 			}
 		}
 		return fileList;

@@ -10,8 +10,9 @@ $(document).ready(function() {
 			$(".read__file").append(fileCount);
 			
 			for(let i = 0; i < resp.length; i++) {
-				let fileInfoBox = $("<div>");
+				let fileInfoBox = $("<a>");
 				fileInfoBox.addClass("file__name");
+				fileInfoBox.attr("href", "/mail/downloadFile?sysname=" + resp[i].sys_name + "&oriname=" + resp[i].ori_name);
 				fileInfoBox.html(resp[i].ori_name);	
 				
 				$(".read__file").append(fileInfoBox);

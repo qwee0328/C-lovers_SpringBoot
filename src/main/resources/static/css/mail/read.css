@@ -78,4 +78,12 @@ read__file div {
 
 .file__name {
 	margin-bottom: 3px;
+	text-decoration: none;
+	color: #000000;
+}
+
+.file__name:hover {
+	cursor: pointer;
+	text-decoration: none;
+	color: #75B47D;
 }

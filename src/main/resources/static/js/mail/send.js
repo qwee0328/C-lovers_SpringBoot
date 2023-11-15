@@ -101,6 +101,9 @@ $(document).ready(function () {
 		callbacks: {
 			onImageUpload: function(files) {
 				uploadImage(files);
+			},
+			onMediaDelete: function($target, editor, $editable) {        
+            	deleteImage($target.attr("src"));
 			}
 		}
 	});
@@ -128,7 +131,7 @@ function validateForm() {
 	}
 }
 
-// summernote에 첨부한 이미지에 realpath 경로 부여하기
+// 이미지에 realpath 경로 부여하고 summernote에 출력
 function uploadImage(files) {
 	let formData = new FormData();
 	
@@ -146,12 +149,24 @@ function uploadImage(files) {
 			for (let i = 0; i < data.length; i++) {
 				let img = $("<img>");
 				img.attr("src", data[i]);
-				console.log(img[0]);
 				$("#summernote").summernote("insertNode", img[0]);
 			}
+		}
+	})
+}
+
+// 이미지 삭제
+function deleteImage(imageSrc) {
+	
+	$.ajax({
+		url: "/mail/deleteImage",
+		type: "POST",
+		data: { src : imageSrc },
+		success: function(data) {
+			console.log("삭제 성공");
 		},
 		error: function(error) {
-			console.error('Error uploading image:', error);
+			console.log("삭제 실패");
 		}
 	})
 }

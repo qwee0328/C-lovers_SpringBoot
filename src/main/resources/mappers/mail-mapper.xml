@@ -5,6 +5,11 @@
 <mapper namespace="Mail">
 	<!-- 메일 매퍼 -->
 	
+	<resultMap type="HashMap" id="emailInfo">
+      <result property="name" column="name"/>
+      <result property="company_email" column="company_email"/>
+   </resultMap>
+	
 	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
 	    <choose>
 	        <!-- reservation이 존재할 때 실행 -->
@@ -107,8 +112,8 @@
 		update email set confirmation = true where id = ${id}
 	</update>
 	
-	<select id="autoComplete" resultType="com.clovers.dto.MemberDTO">
-		select * from employee where name like #{keyword} or company_email like #{keyword}
+	<select id="autoComplete" resultMap="emailInfo">
+		select name, company_email from employee where name like #{keyword} or company_email like #{keyword}
 	</select>
 	
 	<select id="getEmailByLoginID" resultType="String">

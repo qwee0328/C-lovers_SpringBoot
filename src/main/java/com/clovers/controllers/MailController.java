@@ -1,5 +1,11 @@
 package com.clovers.controllers;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -27,6 +33,8 @@ import com.clovers.dto.EmailFileDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.services.MailService;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -121,20 +129,6 @@ public class MailController {
 	@RequestMapping("/haveFile")
 	public boolean haveFile(@RequestParam("email_id") int email_id) {
 		return mservice.selectFileByEmailId(email_id);
-	}
-	
-	// 파일 리스트
-	@ResponseBody
-	@RequestMapping("/fileList")
-	public List<EmailFileDTO> fileList(@RequestParam("email_id") int email_id) {
-		List<EmailFileDTO> fileList = new ArrayList<>();
-		
-		boolean result = mservice.selectFileByEmailId(email_id);
-		if(result) {
-			fileList = mservice.selectAllFileById(email_id);
-		} 
-		
-		return fileList;
 	}
 	
 	// 답장
@@ -362,6 +356,37 @@ public class MailController {
 		return "redirect:/mail/read?id="+id;
 	}
 	
+	// 파일 리스트
+	@ResponseBody
+	@RequestMapping("/fileList")
+	public List<EmailFileDTO> fileList(@RequestParam("email_id") int email_id) {
+		List<EmailFileDTO> fileList = new ArrayList<>();
+		
+		boolean result = mservice.selectFileByEmailId(email_id);
+		if(result) {
+			fileList = mservice.selectAllFileById(email_id);
+		} 
+		return fileList;
+	}
+	
+	// 파일 다운로드
+	@RequestMapping("/downloadFile")
+	public void downloadFile(@RequestParam String sysname, @RequestParam String oriname, HttpServletResponse response) throws Exception {
+		String realPath = "/Users/mailUploads";
+		File targetFile = new File(realPath + "/" + sysname);
+		
+		oriname = new String(oriname.getBytes("utf8"), "ISO-8859-1");
+		response.setHeader("content-disposition", "attachement;filename="+oriname);
+		byte[] fileContents = new byte[(int) targetFile.length()];
+		
+		try(DataInputStream dis = new DataInputStream(new FileInputStream(targetFile))){
+			ServletOutputStream sos = response.getOutputStream();
+			dis.readFully(fileContents);
+			sos.write(fileContents);
+			sos.flush();
+		}
+	}
+	
 	
 	// ---------- send ----------
 	
@@ -410,12 +435,13 @@ public class MailController {
 	// 받는 사람 자동완성
 	@ResponseBody
 	@RequestMapping("/autoComplete")
-	public List<MemberDTO> autoComplete(@RequestParam String keyword) {
+	public List<Map<String, String>> autoComplete(@RequestParam String keyword) {
 		String search = "%" + keyword + "%";
-		List<MemberDTO> result = mservice.autoComplete(search);
+		List<Map<String, String>> result = mservice.autoComplete(search);
 		for(int i = 0; i < result.size(); i++) {
-//			System.out.println(result.get(i).getName() + " : " + result.get(i).getCompany_email());
+			System.out.println(result.get(i));
 		}
+		System.out.println("-----------------------------------------");
 		return mservice.autoComplete(search);
 	}
 	
@@ -425,6 +451,13 @@ public class MailController {
 	public List<String> uploadImage(@RequestParam("files") MultipartFile[] files) throws Exception {
 		List<String> fileList = mservice.saveImage(files);
 		return fileList;
+	}
+	
+	// summernote 이미지 경로에서 삭제
+	@RequestMapping("/deleteImage")
+	public void  deleteImage(@RequestParam("src") String src) throws Exception {
+		Path path = FileSystems.getDefault().getPath("/Users/" + src); // String을 Path 객체로 변환
+		Files.deleteIfExists(path);
 	}
 	
 	

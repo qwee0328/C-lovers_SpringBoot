@@ -118,8 +118,27 @@
 								    height: 500,
 								    disableResizeEditor: true,
 								    callbacks: {
+								    	// 이미지 업로드
 										onImageUpload: function(files) {
 											uploadImage(files);
+										},
+										// 이미지 삭제 (삭제 버튼)
+										onMediaDelete: function($target, editor, $editable) {        
+											deleteImage($target.attr("src"));
+										},
+										// 이미지 삭제 (백스페이스)
+										onKeyup: function(e) {
+											if(e.key === "Backspace") {
+												setTimeout(function() {
+													let focusNode = $(document.getSelection().focusNode);
+													
+													if (focusNode.is('img')) {
+										                // 백스페이스를 누른 위치가 이미지인 경우
+										                // p 태그에 감싸져서 img 태그가 인식 안 됨...
+										                deleteImage(focusNode.attr('src'));
+										            }
+												})
+											}
 										}
 									}
 								});
