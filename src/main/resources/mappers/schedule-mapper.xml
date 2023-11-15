@@ -42,7 +42,7 @@
 		delete from schedule where id=#{id};
 	</delete>
 	
-	<insert id="insertRuccuring" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insertReccuring" useGeneratedKeys="true" keyProperty="id">
 		insert into schedule_recurring values(null, #{during}, #{frequency_whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{startTime}, #{endTime}, #{selectWeeks});
 	</insert>
 	
@@ -54,6 +54,10 @@
 		select * from scheduleAll where id=#{id};
 	</select>
 	
+	<select id="selectRecurringIdById" resultMap="scheduleInfo">
+		select recurring_id from schedule where id=#{id};
+	</select>
+	
 	<select id="calendarByEmpId" resultMap="calendarInfo">
 		select * from calendarAll where emp_id=#{emp_id};
 	</select>
@@ -61,4 +65,13 @@
 	<update id="scheduleUpdate">
 		update schedule set calendar_id = #{calendar_id}, title=#{title}, content=#{content}, start_date=#{start_date}, end_date=#{end_date}, all_day=#{all_day} where id = #{id};
 	</update>
+	
+		
+	<update id="recurringScheduleUpdate">
+		update schedule_recurring set during = #{during}, frequency_whenOption=#{frequency_whenOption}, endKey=#{endKey}, endValue=#{endValue}, intervalCnt=#{intervalCnt}, startTime=#{startTime}, endTime=#{endTime}, selectWeeks=#{selectWeeks}  where id = #{id};
+	</update>
+	
+	<delete id="deleteReccuring">
+		delete from schedule_recurring where id=#{id};
+	</delete>
 </mapper>

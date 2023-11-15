@@ -21,8 +21,7 @@
 			<div class="calendarModal__bodyLine d-flex">
 				<div class="calendarModal__bodyTitle">캘린더</div>
 				<div class="calendarModal__bodyContent">
-					<select class="calendarModal__calNameList">
-					</select>
+					<select class="calendarModal__calNameList" name="calendarNameList"></select>
 				</div>
 			</div>
 			<div class="calendarModal__bodyLine d-flex">

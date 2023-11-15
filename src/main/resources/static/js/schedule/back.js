@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 
 				$.ajax({
-					url:"/schedule/insertRuccuring",
+					url:"/schedule/insertReccuring",
 					data: {
 					    during : during,
 					    frequency_whenOption : eventData.frequency__when,

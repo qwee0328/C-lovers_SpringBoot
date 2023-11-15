@@ -22,20 +22,28 @@ public class ScheduleService {
 		return dto;
 	}
 	
-	public int insertRuccuring(ScheduleRecurringDTO	dto) {
-		return dao.insertRuccuring(dto);
+	public int insertReccuring(ScheduleRecurringDTO	dto) {
+		return dao.insertReccuring(dto);
 	}
 	
 	public int delete(int id) {
 		return dao.delete(id);
 	}
 	
+	public int deleteReccuring(int id) {
+		return dao.deleteReccuring(id);
+	}
+	
 	public List<HashMap<String,Object>> selectAll(){
 		return dao.selectAll();
 	}
 	
-	public HashMap<String,Object> selectById(String id){
+	public HashMap<String,Object> selectById(int id){
 		return dao.selectById(id);
+	}
+	
+	public int selectRecurringIdById(int id) {
+		return dao.selectRecurringIdById(id);
 	}
 	
 	public List<HashMap<String, Object>> calendarByEmpId(String emp_id){
@@ -44,5 +52,9 @@ public class ScheduleService {
 	
 	public int scheduleUpdate(ScheduleDTO dto) {
 		return dao.scheduleUpdate(dto);
+	}
+	
+	public int recurringScheduleUpdate(ScheduleRecurringDTO dto) {
+		return dao.recurringScheduleUpdate(dto);
 	}
 }

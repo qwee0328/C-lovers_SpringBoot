@@ -57,10 +57,10 @@ public class ScheduleController {
 		return dto;
 	}
 	@ResponseBody
-	@RequestMapping(value = "/insertRuccuring", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertReccuring", method = RequestMethod.POST)
 	public ScheduleDTO insertRuccuring(ScheduleRecurringDTO	srdto, ScheduleDTO sdto) {
 		sdto.setEmp_id((String) session.getAttribute("loginID"));
-		sdto.setRecurring_id(sService.insertRuccuring(srdto));
+		sdto.setRecurring_id(sService.insertReccuring(srdto));
 		return sService.insert(sdto);
 	}
 	
@@ -70,10 +70,18 @@ public class ScheduleController {
 //		return sService.insertRuccuring(srdto);
 //	}
 	
+	// 병행제어 필요
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public int delete(int id) {
-		return sService.delete(id);
+		
+		int rid = sService.selectRecurringIdById(id);
+		if(rid!=0) {
+			sService.deleteReccuring(rid);
+			return sService.delete(id);
+		}else {
+			return sService.delete(id);
+		}
 	}
 	
 	@ResponseBody
@@ -84,7 +92,7 @@ public class ScheduleController {
 	
 	@ResponseBody
 	@RequestMapping(value="/selectById")
-	public HashMap<String,Object> selectById(String id){
+	public HashMap<String,Object> selectById(int id){
 		return sService.selectById(id);
 	}
 	
@@ -97,8 +105,29 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/scheduleUpdate",  method = RequestMethod.POST)
 	public void scheduleUpdate(ScheduleDTO dto){
+		if(dto.getRecurring_id()!=0)
+			sService.deleteReccuring(dto.getRecurring_id());
 		sService.scheduleUpdate(dto);
 	}
 
+	
 
+	 @ResponseBody
+	 
+	 @RequestMapping(value="/recurringScheduleUpdate", method =
+	 RequestMethod.POST) public void recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ 
+		 System.out.println(srdto);
+		 System.out.println(sdto);
+		 
+		 if(sdto.getRecurring_id()==0) { // 반복 이벤트가 없었다가 생긴 경우
+			 sdto.setRecurring_id(sService.insertReccuring(srdto));
+			 sService.scheduleUpdate(sdto);
+		 }else { // 기존 반복 이벤트를 수정한 경우
+			 srdto.setId(sdto.getRecurring_id());
+			 sService.recurringScheduleUpdate(srdto);
+			 sService.scheduleUpdate(sdto);
+		 }
+		
+	 }
+	 
 }

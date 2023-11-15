@@ -22,8 +22,8 @@ public class ScheduleDAO {
 		return dto;
 	}
 	
-	public int insertRuccuring(ScheduleRecurringDTO	dto) {
-		db.insert("Schedule.insertRuccuring",dto);
+	public int insertReccuring(ScheduleRecurringDTO	dto) {
+		db.insert("Schedule.insertReccuring",dto);
 		return dto.getId();
 	}
 	
@@ -31,13 +31,21 @@ public class ScheduleDAO {
 		return db.delete("Schedule.delete",id);
 	}
 	
+	public int deleteReccuring(int id) {
+		return db.delete("Schedule.deleteReccuring",id);
+	}
+	
 	
 	public List<HashMap<String,Object>> selectAll(){
 		return db.selectList("Schedule.selectAll");
 	}
 	
-	public HashMap<String,Object> selectById(String id){
+	public HashMap<String,Object> selectById(int id){
 		return db.selectOne("Schedule.selectById",id);
+	}
+	
+	public int selectRecurringIdById(int id) {
+		return db.selectOne("Schedule.selectRecurringIdById",id);
 	}
 	
 	public List<HashMap<String, Object>> calendarByEmpId(String emp_id){
@@ -46,5 +54,9 @@ public class ScheduleDAO {
 	
 	public int scheduleUpdate(ScheduleDTO dto) {
 		return db.update("Schedule.scheduleUpdate", dto);
+	}
+	
+	public int recurringScheduleUpdate(ScheduleRecurringDTO dto) {
+		return db.update("Schedule.recurringScheduleUpdate",dto);
 	}
 }
