@@ -35,6 +35,10 @@ public class ChatMessageService {
 		return cmdao.selectMessagesByChatRoomId(chat_room_id);
 	}
 	
+	public List<Map<String,Object>> selectMessageListByChatRoomId(String chat_room_id){
+		return cmdao.selectMessageListByChatRoomId(chat_room_id);
+	}
+	
 	public int selectLatestChatMsgIdByChatRoomId(String chat_room_id) {
 		return cmdao.selectLatestChatMsgIdByChatRoomId(chat_room_id);
 	}
@@ -54,10 +58,8 @@ public class ChatMessageService {
 		Map<String,Object> list = new HashMap<>();
 		list.put("group", group);
 		
-		List<ChatMessageDTO> msg = cmdao.selectMessagesByChatRoomId(chat_room_id);
+		List<Map<String,Object>> msg = cmdao.selectMessageListByChatRoomId(chat_room_id);
 		list.put("chat", msg);
-		String emp_name = mdao.selectNameById(emp_id);
-		list.put("emp_name", emp_name);
 		
 		return list;
 	}

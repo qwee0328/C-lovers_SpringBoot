@@ -76,12 +76,8 @@
             	<!-- 날짜는 아래와 같이 작성 
             		$(".chatContainer__chatArea").append($("<div>").attr("class","chatArea__DayLine align-center").text("날짜"));
             	-->
-                <div class="chatArea__DayLine align-center">2023년 10월 30일 월요일</div>
                 
             </div>
-
-
-
 
             <div class="chatContainer__inputArea">
                 <div class="inputArea__msg" contenteditable="true"></div>
@@ -340,7 +336,7 @@
     	        messageItem = '<div class="chatArea__otherPersonChat d-flex">' +
     	                      '<div class="otherPersonChat__profileImg"></div>' +
     	                      '<div class="otherPersonChat__chatInfo">' +
-    	                      '<div class="otherPersonChat__userName">' + recv.emp_id + '</div>' +
+    	                      '<div class="otherPersonChat__userName">' + recv.emp_name + '</div>' +
     	                      '<div class="otherPersonChat__chatContents d-flex">' +
     	                      '<div class="otherPersonChat__chatMsg d-flex">' + recv.content + '</div>' +
     	                      '</div></div></div>';
@@ -421,6 +417,16 @@
             $(".close__btn").on("click",$.modal.close);
         });
         
+        function scrollToBottom() {
+            var chatArea = $(".chatContainer__chatArea")[0];
+
+            // chatArea가 존재하는 경우에만 실행
+            if (chatArea) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }
+
+        
         $(document).ready(function() {
         	$.ajax({
         		url: "/chat/chatMsgLoad",
@@ -432,15 +438,30 @@
         		console.log(resp);
         		//
         		
+        		let lastDate = null;
+        		
         		
         		for (let i = 0; i < resp.chat.length; i++) {
+        			let formattedTime = formatChatTime(resp.chat[i].write_date);
+        			let currentDate = new Date(resp.chat[i].write_date).toDateString();
+        			
+        			// 날짜가 변경되었거나 첫 메시지인 경우
+                    if (lastDate !== currentDate) {
+                        let formattedDate = formatDate(resp.chat[i].write_date);
+                        $(".chatContainer__chatArea").append(
+                            $("<div>").addClass("chatArea__DayLine align-center").text(formattedDate)
+                        );
+                        lastDate = currentDate;
+                    }
         			if (resp.chat[i].emp_id == resp.group.emp_id) {
+        				
+        				
         				let chatArea__myChat = $("<div>").attr("class","chatArea__myChat d-flex");
         				let myChat__chatContents = $("<div>").attr("class","myChat__chatContents d-flex");
         				let myChat__chatMsgLeft = $("<div>").attr("class","myChat__chatMsgLeft d-flex");
         				let chatMsgLeft__align = $("<div>").attr("class","chatMsgLeft__align");
         				let myChat__readCnt = $("<div>").attr("class","myChat__readCnt").text("2"); //채팅 안 읽은 사람 수
-        				let myChat__sendTime = $("<div>").attr("class","myChat__sendTime").text("오후 8:48"); //채팅 보낸 시각
+        				let myChat__sendTime = $("<div>").attr("class","myChat__sendTime").text(formattedTime); //채팅 보낸 시각
         				
         				
         				let myChat__chatMsg = $("<div>").attr("class","myChat__chatMsg d-flex")				
@@ -470,7 +491,7 @@
         				let chatArea__otherPersonChat = $("<div>").attr("class", "chatArea__otherPersonChat d-flex");
         				let otherPersonChat__profileImg = $("<div>").attr("class", "otherPersonChat__profileImg");
         				let otherPersonChat__chatInfo = $("<div>").attr("class", "otherPersonChat__chatInfo");
-        				let otherPersonChat__userName = $("<div>").attr("class", "otherPersonChat__userName").text(resp.chat[i].emp_id); //사원이름, employee table과 join해 가져와야함.
+        				let otherPersonChat__userName = $("<div>").attr("class", "otherPersonChat__userName").text(resp.chat[i].emp_name); //사원이름, employee table과 join해 가져와야함.
         				let otherPersonChat__chatContents = $("<div>").attr("class", "otherPersonChat__chatContents d-flex");
         				
         				
@@ -489,14 +510,10 @@
         					otherPersonChat__chatMsg.text(resp.chat[i].content); // 채팅 내용	
         				}
         				
-        				
-        				
-        				
-        				
         				let otherPersonChat__chatMsgRight = $("<div>").attr("class", "otherPersonChat__chatMsgRight d-flex");
         				let chatMsgRight__align = $("<div>").attr("class", "chatMsgRight__align");
         				let otherPersonChat__readCnt = $("<div>").attr("class", "otherPersonChat__readCnt").text("1"); //채팅 안 읽은 사람 수
-        				let otherPersonChat__sendTime = $("<div>").attr("class", "otherPersonChat__sendTime").text("오후 7:46"); // 채팅 보낸 시각
+        				let otherPersonChat__sendTime = $("<div>").attr("class", "otherPersonChat__sendTime").text(formattedTime); // 채팅 보낸 시각
 
         				// 채팅 우측 읽지 않은 사람 수 및 보낸 시각
         				otherPersonChat__chatMsgRight.append(chatMsgRight__align.append(otherPersonChat__readCnt).append(otherPersonChat__sendTime));
@@ -513,11 +530,31 @@
         				$(".chatContainer__chatArea").append(chatArea__otherPersonChat);
         			}
         		}
+        		scrollToBottom();
         	});
         	
-        	connect();
+        	function formatChatTime(timestamp) {
+        	    let date = new Date(timestamp);
+
+        	    return date.toLocaleTimeString('ko-KR', {
+        	        hour: '2-digit',
+        	        minute: '2-digit',
+        	        hour12: true
+        	    });
+        	}
+        	
+        	function formatDate(timestamp) {
+        	    let date = new Date(timestamp);
+        	    let options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        	    return date.toLocaleDateString('ko-KR', options);
+        	}
+
         	
         	$(".inputArea__msg").on("keypress", handleKeyPress);
+        	
+        	
+        	
+        	connect();
         });
 
 </script>

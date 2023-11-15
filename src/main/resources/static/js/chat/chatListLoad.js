@@ -2,7 +2,6 @@ $(document).ready(function() {
 	$.ajax({
 		url: "/chat/chatListLoad"
 	}).done(function(resp) {
-		console.log(resp);
 
 		for (let i = 0; i < resp.length; i++) {
 			//만약 인원이 2명이면 (개인채팅)
@@ -17,7 +16,7 @@ $(document).ready(function() {
 			let chatRoom__chatName = $("<div>").attr("class", "chatRoom__chatName d-flex").html(resp[i].name); // 채팅방 이름
 
 			let chatRoom__lastChat = $("<div>").attr("class", "chatRoom__lastChat").html(resp[i].content); // 채팅방 마지막 채팅 내역
-			let chatRoom__lastChatDate = $("<div>").attr("class", "chatRoom__lastChatDate").html(resp[i].write_date); // 마지막으로 보낸 메시지 시각 -> 나중에 이걸 기준으로 data 받아와서 최신내역이 상단에 표시되도록
+			let chatRoom__lastChatDate = $("<div>").attr("class", "chatRoom__lastChatDate").html(formatTimestamp(resp[i].write_date)) // 마지막으로 보낸 메시지 시각 -> 나중에 이걸 기준으로 data 받아와서 최신내역이 상단에 표시되도록
 
 			let chatRoom__img;
 			if (resp[i].emp_cnt <= 2) {
@@ -40,7 +39,7 @@ $(document).ready(function() {
 			$(document).on("click", ".chat-chatList__chatRoom", function() {
 				let chatRoomId = $(this).data("chat-room-id"); // data 속성에서 chat_room_id 가져오기
 				let option = "height=585, width=400";
-				let openUrl = "/chat/goChatRoom?id=" + chatRoomId;
+				let openUrl = "/chat/goChatRoom/" + chatRoomId;
 				window.open(openUrl, "chatRoom", option);
 			});
 
@@ -84,3 +83,32 @@ $(document).ready(function() {
 
 	});
 });
+
+function formatTimestamp(timestamp) {
+    const messageDate = new Date(timestamp);
+    const now = new Date();
+
+    const isToday = now.toDateString() === messageDate.toDateString();
+    const isYesterday = new Date(now.setDate(now.getDate() - 1)).toDateString() === messageDate.toDateString();
+    const isThisYear = now.getFullYear() === messageDate.getFullYear();
+
+    const timeString = messageDate.toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    }).toUpperCase();
+
+    if (isToday) {
+        // 오늘 보낸 메시지
+        return timeString;
+    } else if (isYesterday) {
+        // 어제 보낸 메시지
+        return `어제 ${timeString}`;
+    } else if (isThisYear) {
+        // 올해 이전에 보낸 메시지
+        return `${messageDate.getMonth() + 1}.${messageDate.getDate()} ${timeString}`;
+    } else {
+        // 작년 이전에 보낸 메시지
+        return `${messageDate.getFullYear().toString().slice(2)}.${messageDate.getMonth() + 1}.${messageDate.getDate()} ${timeString}`;
+    }
+}

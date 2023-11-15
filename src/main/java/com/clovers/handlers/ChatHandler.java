@@ -27,12 +27,12 @@ public class ChatHandler {
 
 	@MessageMapping("/chat/message")
 	public void message(ChatMessageDTO chatMessage) {
-		if (ChatMessageDTO.ChatMessageStates.JOIN.equals(chatMessage.getState())) {
-			chatMessage.setContent(mService.selectNameById(chatMessage.getEmp_id()) + " 님이 채팅방에 입장하셨습니다.");
-		}
-		if (ChatMessageDTO.ChatMessageStates.EXIT.equals(chatMessage.getState())) {
-			chatMessage.setContent(mService.selectNameById(chatMessage.getEmp_id()) + " 님이 채팅방을 나갔습니다.");
-		}
+//		if (ChatMessageDTO.ChatMessageStates.JOIN.equals(chatMessage.getState())) {
+//			chatMessage.setContent(mService.selectNameById(chatMessage.getEmp_id()) + " 님이 채팅방에 입장하셨습니다.");
+//		}
+//		if (ChatMessageDTO.ChatMessageStates.EXIT.equals(chatMessage.getState())) {
+//			chatMessage.setContent(mService.selectNameById(chatMessage.getEmp_id()) + " 님이 채팅방을 나갔습니다.");
+//		}
 		chatMessage.setWrite_date(new Timestamp(System.currentTimeMillis()));
 		cmService.recordChat(chatMessage);
 		messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getChat_room_id(), chatMessage);

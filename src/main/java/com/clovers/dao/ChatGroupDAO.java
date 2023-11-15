@@ -70,6 +70,7 @@ public class ChatGroupDAO {
 		return db.selectOne("ChatGroup.getExist1v1ChatRoom",param);
 	}
 	
+	// 사용자가 속한 채팅그룹 리스트를 반환.
 	public List<ChatGroupDTO> selectChatGroupListByEmpId(String emp_id) {
 		return db.selectList("ChatGroup.selectChatGroupListByEmpId",emp_id);
 	}
