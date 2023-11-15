@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.clovers.dto.ScheduleDTO;
 import com.clovers.dto.ScheduleRecurringDTO;
 
-@Repository
+@Repository 
 public class ScheduleDAO {
 	// 일정 DAO
 	
@@ -34,5 +34,17 @@ public class ScheduleDAO {
 	
 	public List<HashMap<String,Object>> selectAll(){
 		return db.selectList("Schedule.selectAll");
+	}
+	
+	public HashMap<String,Object> selectById(String id){
+		return db.selectOne("Schedule.selectById",id);
+	}
+	
+	public List<HashMap<String, Object>> calendarByEmpId(String emp_id){
+		return db.selectList("Schedule.calendarByEmpId",emp_id);
+	}
+	
+	public int scheduleUpdate(ScheduleDTO dto) {
+		return db.update("Schedule.scheduleUpdate", dto);
 	}
 }

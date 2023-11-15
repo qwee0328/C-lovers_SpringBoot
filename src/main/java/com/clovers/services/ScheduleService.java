@@ -33,4 +33,16 @@ public class ScheduleService {
 	public List<HashMap<String,Object>> selectAll(){
 		return dao.selectAll();
 	}
+	
+	public HashMap<String,Object> selectById(String id){
+		return dao.selectById(id);
+	}
+	
+	public List<HashMap<String, Object>> calendarByEmpId(String emp_id){
+		return dao.calendarByEmpId(emp_id);
+	}
+	
+	public int scheduleUpdate(ScheduleDTO dto) {
+		return dao.scheduleUpdate(dto);
+	}
 }

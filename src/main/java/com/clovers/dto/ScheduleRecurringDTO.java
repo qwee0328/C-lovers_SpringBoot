@@ -1,6 +1,5 @@
 package com.clovers.dto;
 
-import java.sql.Time;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import lombok.ToString;
 public class ScheduleRecurringDTO {
 	private int id;
 	private int during;
-	private String frequency__whenOption;
+	private String frequency_whenOption;
 	private String endKey;
 	private String endValue;
 	private int intervalCnt;

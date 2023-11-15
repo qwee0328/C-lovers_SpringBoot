@@ -82,5 +82,23 @@ public class ScheduleController {
 		return sService.selectAll();
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/selectById")
+	public HashMap<String,Object> selectById(String id){
+		return sService.selectById(id);
+	}
 	
+	@ResponseBody
+	@RequestMapping(value="/calendarByEmpId")
+	public List<HashMap<String, Object>> calendarByEmpId(){
+		return sService.calendarByEmpId((String)session.getAttribute("loginID"));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/scheduleUpdate",  method = RequestMethod.POST)
+	public void scheduleUpdate(ScheduleDTO dto){
+		sService.scheduleUpdate(dto);
+	}
+
+
 }

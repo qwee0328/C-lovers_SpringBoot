@@ -6,8 +6,6 @@ $(document).ready(function(){
 	
 })
 
-let eventsLoaded = false;
-
 document.addEventListener('DOMContentLoaded', function() {
 	function modalInitail(type,datas) {
 		$(".modalName").text("일정 추가");
@@ -56,68 +54,63 @@ document.addEventListener('DOMContentLoaded', function() {
 			color: "white"
 		}
 		,{events:function(info, successCallback){
-			if(!eventsLoaded){
-				let eventDatas = [];
-				$.ajax({
-					url:"/schedule/selectAll",
-					async:false
-				}).done(function(resp){
+			let eventDatas = [];
+			$.ajax({
+				url:"/schedule/selectAll",
+				async:false
+			}).done(function(resp){
+				for(let i=0; i<resp.length; i++){
 					
-					for(let i=0; i<resp.length; i++){
-						
-						let eventData = {
-							id: resp[i].id,
-							title: resp[i].title,
-							allDay: resp[i].all_day,
-							color: resp[i].color,
-							content: resp[i].content,
-							calNameVal: resp[i].calendar_id,
-							registor: resp[i].emp_id,
-							reg_date: resp[i].reg_date,
-							repeat: false
-						}
-						
-						
-						if(resp[i].recurring_id == 0){
-							eventData.start = resp[i].start_date; // 일정 시작 일자
-							eventData.end = resp[i].end_date; // 일정 종료 일자
-							
-						}
-						else{
-							eventData.repeat =true;
-							let endKey = resp[i].endKey;
-							let frequency_whenOption = resp[i].frequency_whenOption == "weekDay" ? "weekly" : resp[i].frequency_whenOption;
-							let chkWeekDayList = resp[i].selectWeeks.split(",");
-							if(chkWeekDayList.length>=1)
-								chkWeekDayList = chkWeekDayList.map((e)=>{ return parseInt(e); });
-								// resp[i].frequency_whenOption == "weekDay" ? [0, 1, 2, 3, 4] :
-							let endValue = resp[i].endValue;
-							if (endKey == "count" &&  frequency_whenOption == "weekly") endValue *= chkWeekDayList.length; 
-							let rrule = {
-								freq:  frequency_whenOption,
-								[endKey]: endValue,
-								interval: resp[i].intervalCnt,
-								dtstart: resp[i].start_date
-							}
-							if(frequency_whenOption == "weekly"){
-								rrule.byweekday = chkWeekDayList;
-							}
-							eventData.rrule =rrule;
-							eventData.startDateTime =resp[i].start_date; 
-							eventData.endDateTime = resp[i].end_date.slice(11,16);
-							eventData.groupId = resp[i].recurring_id;
-							eventData.frequency__when = resp[i].frequency_whenOption;
-							eventData[`${endKey}`] =resp[i].endValue;
-						}
-						eventDatas.push(eventData);
+					let eventData = {
+						id: resp[i].id,
+						title: resp[i].title,
+						allDay: resp[i].all_day,
+						color: resp[i].color,
+						content: resp[i].content,
+						calNameVal: resp[i].calendar_id,
+						registor: resp[i].emp_id,
+						reg_date: resp[i].reg_date,
+						repeat: false
 					}
-					successCallback(eventDatas);
-					eventsLoaded = true;
-				});
 					
-			}
-		
-		}}],
+					
+					if(resp[i].recurring_id == 0){
+						eventData.start = resp[i].start_date; // 일정 시작 일자
+						eventData.end = resp[i].end_date; // 일정 종료 일자
+						
+					}
+					else{
+						eventData.repeat =true;
+						let endKey = resp[i].endKey;
+						let frequency_whenOption = resp[i].frequency_whenOption == "weekDay" ? "weekly" : resp[i].frequency_whenOption;
+						let chkWeekDayList = resp[i].selectWeeks.split(",");
+						if(chkWeekDayList.length>=1)
+							chkWeekDayList = chkWeekDayList.map((e)=>{ return parseInt(e); });
+							// resp[i].frequency_whenOption == "weekDay" ? [0, 1, 2, 3, 4] :
+						let endValue = resp[i].endValue;
+						if (endKey == "count" &&  frequency_whenOption == "weekly") endValue *= chkWeekDayList.length; 
+						let rrule = {
+							freq:  frequency_whenOption,
+							[endKey]: endValue,
+							interval: resp[i].intervalCnt,
+							dtstart: resp[i].start_date
+						}
+						if(frequency_whenOption == "weekly"){
+							rrule.byweekday = chkWeekDayList;
+						}
+						eventData.rrule =rrule;
+						eventData.startDateTime =resp[i].start_date; 
+						eventData.endDateTime = resp[i].end_date.slice(11,16);
+						eventData.groupId = resp[i].recurring_id;
+						eventData.frequency__when = resp[i].frequency_whenOption;
+						eventData[`${endKey}`] =resp[i].endValue;
+					}
+					eventDatas.push(eventData);
+				}
+				successCallback(eventDatas);
+			});
+		}}
+		],
 		
 		
 		headerToolbar: { // 캘린더 header
@@ -286,68 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		dayCellContent: function(e) { // 달력에서 일 이라는 글자 제거
 			return e.dayNumberText.replace("일", "");
-		},
-		datesSet: function (info) {
-	  
-	        $.ajax({
-				url:"/schedule/selectAll",
-				async:false
-			}).done(function(resp){
-				console.log("페이지 전환 시 다시 업데이트");
-				calendar.removeAllEvents();
-				let eventDatas = [];
-	           for(let i=0; i<resp.length; i++){
-					
-					let eventData = {
-						id: resp[i].id,
-						title: resp[i].title,
-						allDay: resp[i].all_day,
-						color: resp[i].color,
-						content: resp[i].content,
-						calNameVal: resp[i].calendar_id,
-						registor: resp[i].emp_id,
-						reg_date: resp[i].reg_date,
-						repeat: false
-					}
-					
-					
-					if(resp[i].recurring_id == 0){
-						eventData.start = resp[i].start_date; // 일정 시작 일자
-						eventData.end = resp[i].end_date; // 일정 종료 일자
-						
-					}
-					else{
-						eventData.repeat =true;
-						let endKey = resp[i].endKey;
-						let frequency_whenOption = resp[i].frequency_whenOption == "weekDay" ? "weekly" : resp[i].frequency_whenOption;
-						let chkWeekDayList = resp[i].selectWeeks.split(",");
-						if(chkWeekDayList.length>=1)
-							chkWeekDayList = chkWeekDayList.map((e)=>{ return parseInt(e); });
-							// resp[i].frequency_whenOption == "weekDay" ? [0, 1, 2, 3, 4] :
-						let endValue = resp[i].endValue;
-						if (endKey == "count" &&  frequency_whenOption == "weekly") endValue *= chkWeekDayList.length; 
-						let rrule = {
-							freq:  frequency_whenOption,
-							[endKey]: endValue,
-							interval: resp[i].intervalCnt,
-							dtstart: resp[i].start_date
-						}
-						if(frequency_whenOption == "weekly"){
-							rrule.byweekday = chkWeekDayList;
-						}
-						eventData.rrule =rrule;
-						eventData.startDateTime =resp[i].start_date; 
-						eventData.endDateTime = resp[i].end_date.slice(11,16);
-						eventData.groupId = resp[i].recurring_id;
-						eventData.frequency__when = resp[i].frequency_whenOption;
-						eventData[`${endKey}`] =resp[i].endValue;
-					}
-					eventDatas.push(eventData);
-				}
-				calendar.addEventSource(eventDatas);
-	            calendar.render();
-			});
-	    }
+		}
 	});
 
 
@@ -560,7 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	$(".calendarModal__update").on("click", function() { // 일정 수정 모달 띄우기 (기존 내용 불러오기)
 		$.modal.close();
 		
-		console.log(calendar.getEventById($("#eventId").val()));
+		//console.log(calendar.getEventById($("#eventId").val()));
 		
 		$.ajax({
 			url:"/schedule/selectById",
@@ -628,33 +560,25 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	$(".calendarModal__updateSave").on("click", function() { // 일정 수정 내용 저장
-	
-	
-		
-	
-		if($(".insertSchedule__repeat").is(":checked")){
-			let during = Math.ceil((new Date($(".insertSchedule__endDate").val()).getTime() - new Date($(".insertSchedule__startDate").val()).getTime()) / (1000 * 60 * 60 * 24));
-		
-			if (during > 0) { // 반복 이벤트 X 
-				Swal.fire({
-					icon: "error",
-					text: "반복이벤트는 2일 이상 설정할 수 없습니다."
-				});
-				return false;
-			}else{
-				
-			}
-			
-		}
-	
-	
-	
-	
-	
-	
-	
-	
 		// 날짜 데이터에 시간 데이터 추가
+		
+		$.ajax({
+			url:"/schedule/update",
+			data:{
+				calendar_id : parseInt(eventData.calNameVal),
+				title : eventData.title,
+				content : eventData.content,
+				start_date : eventData.start,
+				end_date : eventData.end,
+				reg_date : eventData.reg_date,
+				all_day : eventData.allDay
+			},
+			type:post
+		}).done(function(resp){
+			
+		});
+	
+		
 		let startDate = new Date($(".insertSchedule__startDate").val());
 		startDate.setHours((parseInt($(".insertSchedule__startTime").val().slice(0, 2)) + 9), $(".insertSchedule__startTime").val().slice(3, 5)); // +9 하는 이유는 한국 시간으로 변경하기 위함.
 		startDate = startDate.toISOString().slice(0, 16);
@@ -662,39 +586,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		let endDate = new Date($(".insertSchedule__endDate").val());
 		endDate.setHours((parseInt($(".insertSchedule__endTime").val().slice(0, 2)) + 9), $(".insertSchedule__endTime").val().slice(3, 5));
 		endDate = endDate.toISOString().slice(0, 16);
-		
-		if($(".insertSchedule__allDay").is(":checked")){
-			startDate = startDate.slice(0, 11)+"00:00";
-			endDate = new Date($(".insertSchedule__endDate").val());
-			endDate.setDate(endDate.getDate()+1); // 하루종일이니 다음 날 12시로 설정
-			endDate = endDate.toISOString().slice(0, 11)+"00:00";
-		}
-		
-		
-		
-		
-		let sche = calendar.getEventById($("#eventId").val());
+
+
+		let sche = calendar.getEventById($("#eventId").val()); // 번호 불러올 방법에 대해서 잘 생각해보기... 
 		sche.setProp('title', $(".insertSchedule__title").val());
 		sche.setDates(startDate, endDate, $(".insertSchedule__allDay").is(":checked"));
 		sche.setExtendedProp('content', $(".insertSchedule__content").html());
 		sche.setExtendedProp('calNameVal', $(".calendarModal__calNameList option:selected").val());
-		
-		$.ajax({
-			url:"/schedule/scheduleUpdate",
-			type:"post",
-			data:{
-				id : $("#eventId").val(),
-				calendar_id : parseInt( $(".calendarModal__calNameList option:selected").val()),
-				title : $(".insertSchedule__title").val(),
-				content : $(".insertSchedule__content").html(),
-				start_date : startDate,
-				end_date : endDate,
-				all_day : $(".insertSchedule__allDay").is(":checked")
-			}
-		}).done(function(){
-			console.log("업데이트 성공!");
-		});
-	
+		/*sche.setExtendedProp('calName', $(".calendarModal__calNameList option:selected").html());*/
 
 		$.modal.close();
 	});

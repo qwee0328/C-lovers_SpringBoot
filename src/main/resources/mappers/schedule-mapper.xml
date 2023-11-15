@@ -16,13 +16,23 @@
 		<result property="reg_date" column="reg_date"/>
 		<result property="recurring_id" column="recurring_id"/>
 		<result property="during" column="during"/>
-		<result property="frequency__whenOption" column="frequency__whenOption"/>
+		<result property="frequency_whenOption" column="frequency_whenOption"/>
 		<result property="endKey" column="endKey"/>
 		<result property="endValue" column="endValue"/>
 		<result property="intervalCnt" column="intervalCnt"/>
 		<result property="startTime" column="startTime"/>
 		<result property="endTime" column="endTime"/>
 		<result property="selectWeeks" column="selectWeeks"/>
+		<result property="name" column="name"/>
+		<result property="calendar_name" column="calendar_name"/>
+		<result property="color" column="color"/>
+	</resultMap>
+	
+	<resultMap type="HashMap" id="calendarInfo">
+		<result property="id" column="id"/>
+		<result property="emp_id" column="emp_id"/>
+		<result property="color" column="color"/>
+		<result property="name" column="name"/>
 	</resultMap>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -33,11 +43,22 @@
 	</delete>
 	
 	<insert id="insertRuccuring" useGeneratedKeys="true" keyProperty="id">
-		insert into schedule_recurring values(null, #{during}, #{frequency__whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{startTime}, #{endTime}, #{selectWeeks});
+		insert into schedule_recurring values(null, #{during}, #{frequency_whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{startTime}, #{endTime}, #{selectWeeks});
 	</insert>
 	
 	<select id="selectAll" resultMap="scheduleInfo">
 		select * from scheduleAll;
 	</select>
 	
+	<select id="selectById" resultMap="scheduleInfo">
+		select * from scheduleAll where id=#{id};
+	</select>
+	
+	<select id="calendarByEmpId" resultMap="calendarInfo">
+		select * from calendarAll where emp_id=#{emp_id};
+	</select>
+	
+	<update id="scheduleUpdate">
+		update schedule set calendar_id = #{calendar_id}, title=#{title}, content=#{content}, start_date=#{start_date}, end_date=#{end_date}, all_day=#{all_day} where id = #{id};
+	</update>
 </mapper>

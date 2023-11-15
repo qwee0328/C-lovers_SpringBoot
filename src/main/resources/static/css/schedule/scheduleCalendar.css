@@ -1,4 +1,7 @@
 @charset "UTF-8";
+.naviBar{
+	height:auto !important;
+}
 
 .calenderBody {
 	max-width: 1200px;
