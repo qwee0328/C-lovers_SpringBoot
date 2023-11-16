@@ -89,7 +89,22 @@
 					</div>
 					<div class="naviItem__title">전자결재</div>
 				</div>
-				
+				<div id="officeController" class="naviItems__naviItem">
+					<div class="naviItem__itemCurcle">
+						<div class="itemCurcle__Icon">
+							<i class="fa-solid fa-gear"></i>
+						</div>
+					</div>
+					<div class="naviItem__title">오피스 관리</div>
+				</div>
+				<div id="accountingController" class="naviItems__naviItem">
+					<div class="naviItem__itemCurcle">
+						<div class="itemCurcle__Icon">
+							<i class="fa-solid fa-hand-holding-dollar"></i>
+						</div>
+					</div>
+					<div class="naviItem__title">회계지원</div>
+				</div>
 			</div>
 		</div>
 		
@@ -107,13 +122,21 @@
 				}
 			})
 			
+			// 관리자 권한 가져오기
 			$(document).ready(function() {
 				$.ajax({
 					url: "/members/isAdmin"
 				}).done(function(resp) {
-					console.log(resp);
-					if(resp == "인사") {
+					for(let i = 0; i < resp.length; i++) {			
+						// 회계 권한
+						if(resp[i] == "회계" || resp[i] == "총괄") {
+							$("#accountingController").css("display", "block");
+						}
 						
+						// 총괄 권한
+						if(resp[i] == "총괄") {
+							$("#officeController").css("display", "block");
+						}
 					}
 				})
 			})

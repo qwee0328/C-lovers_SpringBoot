@@ -1,6 +1,7 @@
 package com.clovers.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class MemberService {
 		return mdao.selectNameById(id);
 	}
 	
-	public String getAuthorityCategory(String id) {
+	public List<String> getAuthorityCategory(String id) {
 		return mdao.getAuthorityCategory(id);
 	}
 	
