@@ -9,10 +9,7 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
 
-import com.clovers.dto.ChatDTO.ChatRoomStates;
-import com.clovers.dto.ChatMessageDTO.ChatMessageStates;
-
-@MappedTypes({ChatRoomStates.class, ChatMessageStates.class})
+@MappedTypes({})
 public class EnumIntegerHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
     private Class<E> type;
     private E[] enums;
