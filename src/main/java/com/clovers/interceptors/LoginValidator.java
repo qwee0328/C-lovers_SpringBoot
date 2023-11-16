@@ -22,7 +22,6 @@ public class LoginValidator implements HandlerInterceptor{
 		session = request.getSession();
 		String loginID = (String)session.getAttribute("loginID");
 	
-		System.out.println("loginValidator : "+loginID);
 		if(loginID != null) {
 			return true;
 		}else {

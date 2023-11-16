@@ -25,4 +25,5 @@ public class EmailDTO {
 	private boolean trash;
 	private String reference_id;
 	private Timestamp send_date;
+	private boolean confirmation;
 }

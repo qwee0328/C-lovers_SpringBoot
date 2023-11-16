@@ -1,14 +1,12 @@
 package com.clovers.services;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clovers.dao.MemberDAO;
-import com.clovers.dto.MemberDTO;
 
 @Service
 public class MemberService {
@@ -22,6 +20,7 @@ public class MemberService {
 		param.put("id",id);
 		param.put("pw", pw);
 		
+		System.out.println("test"+id);
 		return mdao.login(param);
 	}
 	
@@ -36,4 +35,9 @@ public class MemberService {
 	public Map<String,String> selectUserInfo(String loginID){
 		return mdao.selectUserInfo(loginID);
 	}
+	
+	public String selectNameById(String id) {
+		return mdao.selectNameById(id);
+	}
+	
 }

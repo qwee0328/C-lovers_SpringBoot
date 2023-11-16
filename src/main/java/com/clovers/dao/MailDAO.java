@@ -1,6 +1,5 @@
 package com.clovers.dao;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
+import com.clovers.dto.EmployeeDTO;
 
 @Repository
 public class MailDAO {
@@ -104,5 +104,13 @@ public class MailDAO {
 	
 	public int submitReservationMail(Map<String, Object> param) {
 		return db.update("Mail.submitReservationMail", param);
+	}
+	
+	public int confirmation(int id) {
+		return db.update("Mail.confirmation", id);
+	}
+	
+	public List<EmployeeDTO> autoComplete(String keyword) {
+		return db.selectList("Mail.autoComplete", keyword);
 	}
 }

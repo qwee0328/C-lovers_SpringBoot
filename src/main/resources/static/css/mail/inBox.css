@@ -86,8 +86,13 @@ input[type=checkbox] {
 	color: #B5B5BB;
 }
 
-.right__date {
+.right__date, .right__confirm, .right__cancallation {
 	margin-left: 20px;
+}
+
+.right__cancallation {
+	color: #095544;
+	cursor: pointer;
 }
 
 hr {
@@ -111,6 +116,10 @@ hr {
 
 .bottom__pageNavi > div {
 	margin: 0px 3px;
+}
+
+.bottom__pageNavi > div:hover {
+	cursor: pointer;
 }
 
 .pageNavi__circle {
