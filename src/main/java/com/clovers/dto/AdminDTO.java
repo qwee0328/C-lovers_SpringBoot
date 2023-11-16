@@ -16,10 +16,7 @@ import lombok.ToString;
 public class AdminDTO {
 	
 	public enum AuthorityCategories{
-		TOTAL_MANAGER,				// 전체 관리자
-		HUMAN_RESOURCE_MANAGER,		// 인사 관리자
-		ELECTRIC_APPROVAL_MANAGER,	// 전자결재 관리자
-		RESERVATION_MANAGER			// 예약 관리자
+		TOTAL_MANAGER,HUMAN_RESOURCE_MANAGER,ELECTRIC_APPROVAL_MANAGER,RESERVATION_MANAGER
 	}
 	
 	private String emp_id;
