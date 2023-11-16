@@ -406,6 +406,8 @@ public class MailController {
 				dto.setReservation(true);
 				dto.setReservation_date(reservation_date);
 				mservice.submitSend(dto, uploadFiles);
+				
+				return "redirect:/mail";
 			}
 			
 			dto.setReservation(false);
@@ -413,7 +415,8 @@ public class MailController {
 			
 			// 임시 메일이라면
 			if(dto.isTemporary() == true) {
-				mservice.submitTempSend(dto, sysName, uploadFiles);
+				boolean send = true;
+				mservice.submitTempSend(dto, sysName, uploadFiles, send);
 			} else {
 				dto.setTemporary(false);
 				mservice.submitSend(dto, uploadFiles);
@@ -435,9 +438,17 @@ public class MailController {
 	
 	// 저장하기
 	@RequestMapping("/tempSend")
-	public String tempSend(EmailDTO dto, MultipartFile[] uploadFiles) throws Exception {
-		dto.setTemporary(true);
-		mservice.submitSend(dto, uploadFiles);
+	public String tempSend(EmailDTO dto, String sysName, MultipartFile[] uploadFiles) throws Exception {
+		
+		// 기존 메일 업데이트
+		if(dto.getId() != 0) {
+			boolean send = false;
+			mservice.submitTempSend(dto, sysName, uploadFiles, false);
+		// 새 메일 작성
+		} else {
+			dto.setTemporary(true);
+			mservice.submitSend(dto, uploadFiles);
+		}
 		
 		return "redirect:/mail";
 	}

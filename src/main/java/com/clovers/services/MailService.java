@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.dao.MailDAO;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.MemberDTO;
 
 @Service
 public class MailService {
@@ -45,9 +44,17 @@ public class MailService {
 	}
 	
 	@Transactional
-	public void submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files) throws Exception {
-		dao.submitTempSend(dto);
+	public void submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files, boolean send) throws Exception {
 		int email_id = dto.getId();
+		
+		// 임시 보관함 -> 보내기
+		if(send == true) {
+			dao.submitTempSend(dto);
+		// 임시 보관함 -> 저장
+		} else {
+			dao.updateMail(dto);
+		}
+		
 		
 		String upload = "/Users/mailUploads";
 		File uploadPath = new File(upload);

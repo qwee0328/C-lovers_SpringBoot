@@ -117,4 +117,8 @@ public class MailDAO {
 	public String getEmailByLoginID(String loginID) {
 		return db.selectOne("Mail.getEmailByLoginID", loginID);
 	}
+	
+	public int updateMail(EmailDTO dto) {
+		return db.update("Mail.updateMail", dto);
+	}
 }

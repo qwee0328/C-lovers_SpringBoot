@@ -141,7 +141,7 @@ $(document).ready(function() {
 	$(document).on("click", ".right__cancallation", function() {
 		let result = confirm("발송을 취소하시겠습니까? 취소한 메일은 휴지통으로 이동합니다.");
 		let selectedMails = [];
-		let id = $(this).parent().siblings(".mailList__checkbox").val();
+		let id = $(this).siblings(".mailList__checkbox").val();
 		
 		if(result) {
 			selectedMails.push(id);

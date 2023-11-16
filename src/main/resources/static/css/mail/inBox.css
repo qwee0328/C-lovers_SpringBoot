@@ -47,86 +47,49 @@ input[type=checkbox] {
 	cursor: pointer;
 }
 
-.inBox__mailList {
+.inBox__mailList,
+.sentBox__mailList,
+.tempBox__mailList,
+.outBox__mailList,
+.trash__mailList {
 	display: grid;
-    grid-template-columns: 13px 1fr 6fr 10px 170px;
 	padding: 0px 30px;
 	height: 34px;
 	align-items: center;
 }
 
-.inBox__mailList div {
-	font-size: 16px;
-}
-
-.inBox__mailList:hover {
-	background-color: #DCEDD4;
+.inBox__mailList {
+	grid-template-columns: 13px 1fr 6fr 10px 170px;
 }
 
 .sentBox__mailList {
-	display: grid;
     grid-template-columns: 13px 1fr 6fr 10px 170px 90px;
-    gap: 10px;
-	padding: 0px 30px;
-	height: 34px;
-	align-items: center;
-}
-
-.sentBox__mailList div {
-	font-size: 16px;
-}
-
-.sentBox__mailList:hover {
-	background-color: #DCEDD4;
 }
 
 .tempBox__mailList {
-	display: grid;
     grid-template-columns: 13px 1fr 6fr 10px;
-    gap: 10px;
-	padding: 0px 30px;
-	height: 34px;
-	align-items: center;
-}
-
-.tempBox__mailList div {
-	font-size: 16px;
-}
-
-.tempBox__mailList:hover {
-	background-color: #DCEDD4;
 }
 
 .outBox__mailList {
-	display: grid;
     grid-template-columns: 13px 1fr 6fr 10px 220px;
-    gap: 10px;
-	padding: 0px 30px;
-	height: 34px;
-	align-items: center;
-}
-
-.outBox__mailList div {
-	font-size: 16px;
-}
-
-.outBox__mailList:hover {
-	background-color: #DCEDD4;
 }
 
 .trash__mailList {
-	display: grid;
     grid-template-columns: 13px 1fr 6fr 10px 170px;
-    gap: 10px;
-	padding: 0px 30px;
-	height: 34px;
-	align-items: center;
 }
 
+.inBox__mailList,
+.sentBox__mailList,
+.tempBox__mailList,
+.outBox__mailList,
 .trash__mailList div {
 	font-size: 16px;
 }
 
+.inBox__mailList:hover,
+.sentBox__mailList:hover,
+.tempBox__mailList:hover,
+.outBox__mailList:hover,
 .trash__mailList:hover {
 	background-color: #DCEDD4;
 }

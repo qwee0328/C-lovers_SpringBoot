@@ -28,11 +28,11 @@
 		<choose>
 	        <when test="reference_id != ''">
 	            <!-- reference_id가 존재할 때 실행 -->
-	            update email set receive_id = #{receive_id}, reference_id = ${reference_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	            update email set receive_id = #{receive_id}, reference_id = ${reference_id}, title = #{title}, content = #{content}, temporary = false where id = #{id}
 	        </when>
 	        <otherwise>
 	            <!-- reference_id가 존재하지 않을 때 실행 -->
-	            update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, send_date = #{send_date}, temporary = false where id = #{id}
+	            update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, temporary = false where id = #{id}
 	        </otherwise>
 	    </choose>
 	</update>
@@ -42,7 +42,7 @@
 	</insert>
 	
 	<select id="inBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from (select row_number() over(order by id desc) rn, info_email.* from info_email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false) temp where rn between #{start} and #{end}
+		select * from (select row_number() over(order by send_date desc) rn, info_email.* from info_email where receive_id = #{receive_id} and reservation = false and temporary = false and trash = false) temp where rn between #{start} and #{end}
 	</select>
 	
 	<select id="inBoxTotalCount" resultType="int">
@@ -50,7 +50,7 @@
 	</select>
 	
 	<select id="sentBoxList" resultType="com.clovers.dto.EmailDTO">
-		select * from (select row_number() over(order by id desc) rn, info_email.* from info_email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false) temp where rn between #{start} and #{end}
+		select * from (select row_number() over(order by coalesce(send_date, id) desc) rn, info_email.* from info_email where send_id = #{send_id} and reservation = false and temporary = #{temporary} and trash = false) temp where rn between #{start} and #{end}
 	</select>
 	
 	<select id="sentBoxTotalCount" resultType="int">
@@ -102,7 +102,7 @@
 	</delete>
 
 	<select id="selectAllReservationDate" resultType="com.clovers.dto.EmailDTO">
-		select * from email where reservation = true
+		select * from email where reservation = true and temporary = false
 	</select>
 	
 	<update id="submitReservationMail">
@@ -120,4 +120,8 @@
 	<select id="getEmailByLoginID" resultType="String">
 		select * from employee where id = #{loginID}
 	</select>
+	
+	<update id="updateMail">
+		update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, reference_id = #{reference_id} where id = ${id}
+	</update>
 </mapper>
