@@ -97,7 +97,6 @@
 			</div></a>
 	</div>
 
-
 	<div class="chat-search d-flex">
 		<div class="chat-search__icon align-center">
 			<i class="fa-solid fa-magnifying-glass"></i>
@@ -116,11 +115,11 @@
 	</div>
 	<script>
 		// 채팅목록 누르면 채팅방으로 이동 -> 임의로 작성한 코드임. 추후에 코드 수정 필요
-		$(document).on("click",".chat-chatList__chatRoom",function(){
-			let option ="height=585, width=400";
-	        let openUrl = "/chat/goChatRoom";
-	        window.open(openUrl,"chatRoom",option);
-		})
+// 		$(document).on("click",".chat-chatList__chatRoom",function(){
+// 			let option ="height=585, width=400";
+// 	        let openUrl = "/chat/goChatRoom";
+// 	        window.open(openUrl,"chatRoom",option);
+// 		})
 
         // search input focus 시 우측에 검색 취소 버튼 생성
         $(".chat-search__txt").on("focus", function () {
@@ -325,7 +324,9 @@
                 var dataToSend = {
                     // 데이터 예시: 선택된 직원들의 ID를 서버로 전송
                     selectedEmployees: Object.keys(selectedEmployees)
-                };   
+                };
+                
+               
 
                 // AJAX 요청
                 $.ajax({

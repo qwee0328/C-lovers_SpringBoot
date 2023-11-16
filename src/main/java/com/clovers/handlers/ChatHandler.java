@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 import com.clovers.dto.ChatMessageDTO;
@@ -15,16 +16,15 @@ import com.clovers.services.MemberService;
 
 @Controller
 public class ChatHandler {
-	
-    @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
-    
+
 	@Autowired
-	private ChatMessageService cmService;
-	
+	private SimpMessageSendingOperations messagingTemplate;
+
 	@Autowired
 	private MemberService mService;
 	
+	@Autowired
+	private ChatMessageService cmService;
 
 	@MessageMapping("/chat/message")
 	public void message(ChatMessageDTO chatMessage) {

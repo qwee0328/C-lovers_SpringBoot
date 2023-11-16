@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -7,29 +7,31 @@
 <meta charset="UTF-8">
 <title>채팅 메인</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css"/>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
 
-<link rel="stylesheet" href="/css/chat/chat_common.css"/>
+<link rel="stylesheet" href="/css/chat/chat_common.css" />
 <link rel="stylesheet" href="/css/chat/chat_main.css" />
 <link rel="stylesheet" href="/css/chat/chat_profile.css">
 <script src="/js/chat/EmpListLoad.js"></script>
 </head>
 <body>
-	
-    <div class="header">
-        <div class="header__text fontEN colorGreen">
-            C-lovers
-        </div>
-    </div>
 
-    <div class="myInfo d-flex">
-        <div class="myInfo__profileImg d-flex">
-            <div class="profileImg__cover"><img class="profileImg__img" src="/css/chat/profileImg.png">
-                <div class="profileImg__state backLightGreen"></div>
-            </div>
-        </div>
+	<div class="header">
+		<div class="header__text fontEN colorGreen">C-lovers</div>
+	</div>
+
+	<div class="myInfo d-flex">
+		<div class="myInfo__profileImg d-flex">
+			<div class="profileImg__cover">
+				<img class="profileImg__img" src="/css/chat/profileImg.png">
+				<div class="profileImg__state backLightGreen"></div>
+			</div>
+		</div>
 
 		<div class="myInfo__infoTxt d-flex">
 			<div class="infoTxt__align">
@@ -38,11 +40,19 @@
 		</div>
 	</div>
 
-    <div class="chat-nav backLightGreen d-flex">
-        <a href="/chat/goMain"><div class="chat-nav__userList align-center"><i class="fa-solid fa-user nav-selected"></i></div></a>
-        <a href="/chat/chatList"><div class="chat-nav__chatList align-center"><i class="fa-solid fa-comment"></i></div></a>
-        <a href="/chat/fileList"><div class="chat-nav__fileList align-center"><i class="fa-solid fa-folder-open"></i></div></a>
-    </div>
+	<div class="chat-nav backLightGreen d-flex">
+		<a href="/chat/goMain"><div
+				class="chat-nav__userList align-center">
+				<i class="fa-solid fa-user nav-selected"></i>
+			</div></a> <a href="/chat/chatList">
+			<div
+				class="chat-nav__chatList align-center">
+				<i class="fa-solid fa-comment"></i>
+			</div></a> <a href="/chat/fileList"><div
+				class="chat-nav__fileList align-center">
+				<i class="fa-solid fa-folder-open"></i>
+			</div></a>
+	</div>
 
 	<div class="chat-search d-flex">
 		<div class="chat-search__icon align-center">
@@ -227,11 +237,13 @@
 			return false; 
 		});
 
-        // 컨텍스트 메뉴 생성 함수
-        function mkContextMenu(id){
-			let menuBox = $("<div>").attr("class","ctxMenuBox");
-			let menuList = $("<ul>").attr("class","ctxMenuBox__ctxMenuList");
-            let goChat = $("<li>").text("채팅하기").attr("class","ctxMenuList__goChat").attr("id",id);
+     	// 컨텍스트 메뉴 생성 함수
+        function mkContextMenu(employeeId) {
+     		console.log(employeeId);
+            let menuBox = $("<div>").attr("class", "ctxMenuBox");
+            let menuList = $("<ul>").attr("class", "ctxMenuBox__ctxMenuList");
+			let employee_id = employeeId
+            let goChat = $("<li>").text("채팅하기").attr("class", "ctxMenuList__goChat").attr("id", employeeId);
             menuList.append(goChat);
 
             goChat.on("mousedown", function() {
@@ -250,15 +262,31 @@
                 });
             });
 
-            let goProfile = $("<li>").text("프로필보기").attr("class","ctxMenuList__goProfile");
+            let goProfile = $("<li>").text("프로필보기").attr("class", "ctxMenuList__goProfile");
             menuList.append(goProfile);
-            goProfile.on("mousedown",function(){
-                $(".profile__modal").modal({
-                    fadeDuration:300,
-                    showClose:false
+
+            goProfile.on("mousedown", function() {
+                // AJAX 요청을 통해 사용자 정보 가져오기
+                $.ajax({
+                    url: '/chat/getOfficerInfoByEmployeeId',
+                    type: 'GET',
+                    data: { employee_id: employeeId },
+                    success: function(data) {
+                    	console.log(data);
+                        // 모달 내용 업데이트
+                        updateProfileModal(data);
+                        // 모달 표시
+                        $(".profile__modal").modal({
+                            fadeDuration: 300,
+                            showClose: false
+                        });
+                    },
+                    error: function(error) {
+                        console.log("Error: ", error);
+                    }
                 });
 
-                $(".close__btn").on("click",$.modal.close);
+                $(".close__btn").on("click", $.modal.close);
             });
 
             menuBox.append(menuList);
@@ -300,12 +328,14 @@
                 });
             });
         }
+
     
-        // 프로필 우클릭 시 컨텍스트 메뉴 생성 함수 호출
+     	// 프로필 우클릭 시 컨텍스트 메뉴 생성 함수 호출
         $(document).on("mouseup", ".chat-userList__chatUserInfo", function(e) {
-            if ((e.button == 2) || e.which == 3) {	
+            if ((e.button == 2) || e.which == 3) {  
                 $(".ctxMenuBox").remove();
-                let menuBox = mkContextMenu($(this).attr("id"));
+                let employeeId = $(this).data("employee-id"); // 여기서 employee_id를 가져옵니다.
+                let menuBox = mkContextMenu(employeeId); // 이 id를 함수에 전달합니다.
                 document.body.appendChild(menuBox[0]);
                 menuBox.css({"top": e.pageY, "left": e.pageX});  
             }              
@@ -405,6 +435,8 @@
             // HTML을 DOM에 삽입
             $('.chat-userList').html(userListHtml);
         }
+
+
 
         $(document).ready(function() {
         	$.ajax({

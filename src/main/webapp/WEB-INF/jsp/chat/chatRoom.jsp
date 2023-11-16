@@ -21,7 +21,6 @@
 <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.min.js"></script>
 
-<script src="/js/chat/chatMessageLoad.js"></script>
 </head>
 
 <body>
@@ -52,8 +51,8 @@
 
         <div class="chatHeader">
             <div class="header d-flex">
-                <div class="header__chatNameCover d-flex"><div class="header__chatName">채팅방 이름dddddddddddddddddddddddddddd</div>
-                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;10</div>
+                <div class="header__chatNameCover d-flex"><div class="header__chatName">${personalChatRoomInfo.name}</div>
+                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;${personalChatRoomInfo.emp_cnt}</div>
                 </div>
                 <div class="header__menuIcon d-flex">
                     <div class="menuIcon__searchBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -83,6 +82,7 @@
             	<!-- 날짜는 아래와 같이 작성 
             		$(".chatContainer__chatArea").append($("<div>").attr("class","chatArea__DayLine align-center").text("날짜"));
             	-->
+                
             </div>
 
             <div class="chatContainer__inputArea">
@@ -372,7 +372,6 @@
     		sendMessage();
     	})
     	
-
         window.onresize = function () {
             let h = window.innerHeight - 165;
             $(".chatContainer__chatArea").css("height", h - 0.1);
