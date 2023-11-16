@@ -161,12 +161,6 @@ function deleteImage(imageSrc) {
 	$.ajax({
 		url: "/mail/deleteImage",
 		type: "POST",
-		data: { src : imageSrc },
-		success: function(data) {
-			console.log("삭제 성공");
-		},
-		error: function(error) {
-			console.log("삭제 실패");
-		}
+		data: { src : imageSrc }
 	})
 }

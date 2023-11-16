@@ -392,7 +392,7 @@ public class MailController {
 	
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
-	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
+	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles, String deleteUrl) throws Exception {
 		String[] receiveIds = dto.getReceive_id().split("\\s*[,;]\\s*"); // 정규식 \s*는 0개 이상의 공백을 말함
 		for(int i = 0; i < receiveIds.length; i++) {
 			dto.setReceive_id(receiveIds[i]);
@@ -419,6 +419,16 @@ public class MailController {
 				mservice.submitSend(dto, uploadFiles);
 			}
 		}
+		
+		System.out.println("deleteUrl: " + deleteUrl);
+		// 삭제한 이미지가 있다면
+		if(!deleteUrl.isEmpty()) {
+			String[] urls = deleteUrl.split(":");
+	        for(int i = 1; i < urls.length; i++) {
+	        	System.out.println("urls: " + urls[i]);
+	        	deleteImage(urls[i]);
+	        }
+		}
 
 		return "redirect:/mail";
 	}
@@ -438,10 +448,6 @@ public class MailController {
 	public List<Map<String, String>> autoComplete(@RequestParam String keyword) {
 		String search = "%" + keyword + "%";
 		List<Map<String, String>> result = mservice.autoComplete(search);
-		for(int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i));
-		}
-		System.out.println("-----------------------------------------");
 		return mservice.autoComplete(search);
 	}
 	
@@ -455,8 +461,9 @@ public class MailController {
 	
 	// summernote 이미지 경로에서 삭제
 	@RequestMapping("/deleteImage")
-	public void  deleteImage(@RequestParam("src") String src) throws Exception {
+	public void deleteImage(@RequestParam("src") String src) throws Exception {
 		Path path = FileSystems.getDefault().getPath("/Users/" + src); // String을 Path 객체로 변환
+		System.out.println(path);
 		Files.deleteIfExists(path);
 	}
 	

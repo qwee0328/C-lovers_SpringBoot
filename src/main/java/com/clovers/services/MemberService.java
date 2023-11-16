@@ -40,4 +40,8 @@ public class MemberService {
 		return mdao.selectNameById(id);
 	}
 	
+	public String getAuthorityCategory(String id) {
+		return mdao.getAuthorityCategory(id);
+	}
+	
 }

@@ -107,13 +107,15 @@
 						</div>	
 					</c:when>
 				</c:choose>
-				<input type="hidden" id="deleteFiles" name="sysName">
+				<input type="hidden" id="deleteFiles" name="sysName" />
+				<input type="hidden" id="temporary" value="${reply.temporary }"/>
+				<input type="hidden" id="deleteUrl" name="deleteUrl" />
 				
 				<div class="send__contentBox">
 					<textarea id="summernote" name="content" class="contentBox__content"></textarea>
 					<c:choose>
 						<c:when test="${empty isReply }">
-							<script>
+							<script>							
 								$("#summernote").summernote({
 								    height: 500,
 								    disableResizeEditor: true,
@@ -123,21 +125,15 @@
 											uploadImage(files);
 										},
 										// 이미지 삭제 (삭제 버튼)
-										onMediaDelete: function($target, editor, $editable) {        
-											deleteImage($target.attr("src"));
-										},
-										// 이미지 삭제 (백스페이스)
-										onKeyup: function(e) {
-											if(e.key === "Backspace") {
-												setTimeout(function() {
-													let focusNode = $(document.getSelection().focusNode);
-													
-													if (focusNode.is('img')) {
-										                // 백스페이스를 누른 위치가 이미지인 경우
-										                // p 태그에 감싸져서 img 태그가 인식 안 됨...
-										                deleteImage(focusNode.attr('src'));
-										            }
-												})
+										onMediaDelete: function($target, editor, $editable) {  
+											// 수정일 때
+											if($("#temporary").val() == "true") {
+												let deleteUrl = $target.attr("src");
+												let prev = $("#deleteUrl").val();
+												$("#deleteUrl").val(prev + ":" + deleteUrl);
+											// 새 글일 때
+											} else {
+												deleteImage($target.attr("src"));
 											}
 										}
 									}
