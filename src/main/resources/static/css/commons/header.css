@@ -24,6 +24,7 @@
   font-size: 20px;
   font-weight: 800;
   color: #095544;
+  cursor: pointer;
 }
 
 .headerLeft__dropNav {
@@ -53,13 +54,20 @@
   font-size: 25px;
   color: #b5b5bb;
 }
+
 .headerRight div:not(:first-child) {
   margin-left: 18px;
 }
+
+#goChat {
+	cursor: pointer;
+}
+
 .profileImg {
   width: 35px;
   height: 35px;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 
