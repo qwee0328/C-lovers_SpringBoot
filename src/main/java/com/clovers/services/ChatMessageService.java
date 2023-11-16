@@ -40,7 +40,7 @@ public class ChatMessageService {
 	}
 	
 	public int selectLatestChatMsgIdByChatRoomId(String chat_room_id) {
-		return cmdao.selectLatestChatMsgIdByChatRoomId(chat_room_id);
+		return cmdao.selectLatestChatMsgIdByChatRoomIdForUpdate(chat_room_id);
 	}
 	
 	public int deleteExecModifyChatMessageById(int id) {

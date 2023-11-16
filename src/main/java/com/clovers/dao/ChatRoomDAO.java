@@ -1,7 +1,5 @@
 package com.clovers.dao;
 
-import java.util.List;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,14 +20,6 @@ public class ChatRoomDAO {
 		db.insert("ChatRoom.createChatRoom", crdto);
 		return crdto.getId();
 	}
-
-//	public List<ChatRoomDTO> findAllRoom() {
-//		return db.selectList("ChatRoom.findAllRoom");
-//	}
-//
-//	public List<ChatRoomDTO> findRoomsByChatGroupName(String chat_group_name) {
-//		return db.selectList("ChatRoom.findRoomsByChatRoomId", chat_group_name);
-//	}
 
 	// 채팅방 상태 업데이트
 	public int updateChatRoomState(ChatRoomDTO cdto) {

@@ -32,10 +32,18 @@
 		select * from chat_message_view where chat_room_id =
 		#{chat_room_id}
 	</select>
+	
+	<!-- 최신 메시지의 아이디 불러내기 -->
+	<select id="selectLatestChatMsgIdForInvite"
+		resultType="int">
+		SELECT id FROM
+		chat_message
+		ORDER BY id DESC LIMIT 1 FOR UPDATE
+	</select>
 
 	<!-- 최신 메시지의 아이디 불러내기 -->
 	<select id="selectLatestChatMsgIdByChatRoomIdForUpdate"
-		resultType="String">
+		resultType="int">
 		SELECT id FROM
 		chat_message where chat_room_id =
 		#{chat_room_id} ORDER BY id DESC LIMIT 1 FOR UPDATE

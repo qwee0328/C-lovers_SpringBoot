@@ -43,13 +43,17 @@
 
 	<select id="selectByEmpId" resultMap="chatRoomListInfo">
 		SELECT cri.*
-		FROM chat_room_list_info cri
+		FROM
+		chat_room_list_info cri
 		JOIN (
-		SELECT chat_room_id, MAX(write_date) AS latest_date
+		SELECT chat_room_id, MAX(write_date) AS
+		latest_date
 		FROM chat_room_list_info
 		GROUP BY chat_room_id
-		) AS latest_messages ON cri.chat_room_id = latest_messages.chat_room_id
-		AND cri.write_date = latest_messages.latest_date
+		) AS
+		latest_messages ON cri.chat_room_id = latest_messages.chat_room_id
+		AND
+		cri.write_date = latest_messages.latest_date
 		WHERE cri.emp_id=#{emp_id}
 		ORDER BY cri.write_date DESC;
 	</select>
@@ -91,5 +95,35 @@
 		resultType="com.clovers.dto.ChatGroupDTO">
 		select * from chat_group where emp_id = #{emp_id}
 	</select>
+
+	<update id="updateMsgEndId">
+		update chat_group set msg_end_id = #{msg_end_id}
+		where emp_id = #{emp_id} and chat_room_id = #{chat_room_id}
+	</update>
+
+	<update id="updateChatGroupName">
+		update chat_group set name = #{name} where emp_id =
+		#{emp_id} and chat_room_id = #{chat_room_id}
+	</update>
+
+	<delete id="deleteByEmpIdNChatId">
+		delete from chat_group where emp_id = #{emp_id} and
+		chat_room_id = #{chat_room_id}
+	</delete>
+
+	<delete id="closeChatGroup">
+		delete from chat_group
+		where chat_room_id IN (
+		select chat_room_id
+		from (
+		select chat_room_id, count(emp_id) as employee_count
+		from chat_group
+		group by chat_room_id
+		) as grouped
+		where employee_count = 1
+		);
+	</delete>
+
+
 
 </mapper>
