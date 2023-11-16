@@ -2,7 +2,6 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="member">
 	<select id="login" resultType="Boolean">
 		select count(*) from employee where id = #{id} and pw = #{pw}
@@ -27,9 +26,11 @@
 	<select id="selectNameById" resultType="String">
 		select name from employee where id = #{id};
 	</select>
+
 	
 	<!-- 관리자 접근 권한 가져오기 -->
 	<select id="getAuthorityCategory" resultType="String">
 		select authority_category_id from admin where emp_id = #{id}
 	</select>
 </mapper>
+

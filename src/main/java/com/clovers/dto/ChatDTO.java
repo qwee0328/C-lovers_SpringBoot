@@ -1,10 +1,6 @@
 package com.clovers.dto;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
-
-import org.springframework.web.socket.WebSocketSession;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,24 +13,30 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ChatRoomDTO {
+public class ChatDTO {
 	public enum ChatRoomStates{
-		ACTIVATE,
-		INACTVATE;
+		ACTIVATE(0),
+		INACTVATE(1);
+		
+		private int code;
+
+		ChatRoomStates(int code){
+			this.code = code;
+		}
+		
+		public int getCode() {
+			return code;
+		}
 	};
 	
 	private String id;				// 채팅방 아이디
 	private ChatRoomStates state;	// 채팅방 상태
-	private Set<WebSocketSession> sessions = new HashSet<>();
 	
-	
-	public static ChatRoomDTO create( ChatRoomStates state) {
-        ChatRoomDTO room = new ChatRoomDTO();
+	public static ChatDTO create(ChatRoomStates state) {
+        ChatDTO room = new ChatDTO();
         room.id = UUID.randomUUID().toString();
         room.state = state;
         return room;
     }
-	
-//	public void handleAction(WebSocketSession session, )
 
 }
