@@ -30,9 +30,6 @@ $(document).ready(function() {
 	        titleDiv.addClass("mailList__title");
 	        titleDiv.html(mail[i].title);
 	
-	        let rightDiv = $("<div>");
-	        rightDiv.addClass("mailList__right");
-	
 	        let fileIconDiv = $("<i>");
 	        $.ajax({
 	            url: "/mail/haveFile",
@@ -48,9 +45,8 @@ $(document).ready(function() {
 	        let dateDiv = $("<div>");
 	        dateDiv.addClass("right__date");
 	        dateDiv.html(send_date[i]);
-	
-	        rightDiv.append(fileIconDiv).append(dateDiv);
-	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
+
+	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(fileIconDiv).append(dateDiv);
 	
 	        $(".inBox__mailListBox").append(mailListDiv);
 	    }

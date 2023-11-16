@@ -480,7 +480,11 @@ public class MailController {
 		List<EmailDTO> mail = mservice.trashList(id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
 		for(int i = 0; i < mail.size(); i++) {
-			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+			if(mail.get(i).getSend_date() != null) {
+				send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+			} else {
+				send_date[i] = "";
+			}
 		}
 		
 		Map<String, Object> param = new HashMap<>();

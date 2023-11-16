@@ -17,7 +17,7 @@ $(document).ready(function() {
 	
 	    for (let i = 0; i < mail.length; i++) {
 	        let mailListDiv = $("<div>");
-	        mailListDiv.addClass("inBox__mailList");
+	        mailListDiv.addClass("tempBox__mailList");
 	
 	        let checkboxDiv = $("<input type='checkbox'>");
 	        checkboxDiv.attr("name", "selectedMails");
@@ -33,9 +33,6 @@ $(document).ready(function() {
 	        titleDiv.addClass("mailList__title");
 	        titleDiv.html(mail[i].title);
 	
-	        let rightDiv = $("<div>");
-	        rightDiv.addClass("mailList__right");
-	
 	        let fileIconDiv = $("<i>");
 	        $.ajax({
 	            url: "/mail/haveFile",
@@ -47,13 +44,8 @@ $(document).ready(function() {
 	                fileIconDiv.addClass("right__file");
 	            }
 	        })
-	
-	        let dateDiv = $("<div>");
-	        dateDiv.addClass("right__date");
-	        dateDiv.html(mail[i].send_date);
-	
-	        rightDiv.append(fileIconDiv).append(dateDiv);
-	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
+
+	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(fileIconDiv);
 	
 	        $(".inBox__mailListBox").append(mailListDiv);
 	    }
