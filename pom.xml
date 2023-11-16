@@ -76,7 +76,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+		
 		<!-- email -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

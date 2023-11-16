@@ -132,7 +132,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 		if ($("#processEmployeeIDList").val() !== "" && $("#date_selector").val()!=="" && $("#vacationReason").val() !== "") {
-			
+			$.ajax({
+				
+			}).done(function(){
+				
+			})
 		}
 	})
 
