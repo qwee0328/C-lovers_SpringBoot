@@ -118,24 +118,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$("#vacationdraftingBtn").on("click", function() {
 		console.log($("#vacationReason").val())
-		if($("#processEmployeeIDList").val() === ""){
+		if ($("#processEmployeeIDList").val() === "") {
 			alert("결제선을 설정해주세요.");
 			return;
 		}
-		if($("#date_selector").val()===""){
+		if ($("#date_selector").val() === "") {
 			alert("휴가 날짜를 선택해주세요.");
 			return;
 		}
-		if($("#vacationReason").val()===""){
+		if ($("#vacationReason").val() === "") {
 			alert("휴가 사유를 입력해주세요.");
 			$("#vacationReason").focus();
 			return;
 		}
-		if ($("#processEmployeeIDList").val() !== "" && $("#date_selector").val()!=="" && $("#vacationReason").val() !== "") {
+		if ($("#processEmployeeIDList").val() !== "" && $("#date_selector").val() !== "" && $("#vacationReason").val() !== "") {
 			$.ajax({
-				
-			}).done(function(){
-				
+				url: "/electronicSignature/insertVacation",
+				dataType: "json",
+				type: "POST"
+			}).done(function() {
+
 			})
 		}
 	})

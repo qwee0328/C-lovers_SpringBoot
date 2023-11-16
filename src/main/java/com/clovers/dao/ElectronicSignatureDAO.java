@@ -17,4 +17,12 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, Object>> selectEmpJobLevel(List<String> processUserIDList) {
 		return db.selectList("ElectronicSignature.selectEmpJobLevel", processUserIDList);
 	}
+
+	// 휴가 문서 생성
+	public int insertVacation(Map<String, Object> emp) {
+		db.insert("ElectronicSignature.insertVacation", emp);
+		Integer generatedKey = (Integer) emp.get("id");
+		System.out.println("자동 생성된 키: " + generatedKey);
+		return generatedKey;
+	}
 }

@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.services.ElectronicSignatureService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/electronicSignature")
 public class ElectronicSignatureController {
 	// 전자결재 컨트롤러
+	@Autowired
+	private HttpSession session;
+	
 	@Autowired
 	private ElectronicSignatureService esservices;
 
@@ -27,5 +32,13 @@ public class ElectronicSignatureController {
 		System.out.println(processUserIDList);
 		// return null;
 		return esservices.selectEmpJobLevel(processUserIDList);
+	}
+	
+	// 휴가 문서 생성
+	@ResponseBody
+	@RequestMapping("/insertVacation")
+	public int insertVacation() {
+		String emp_id = (String)session.getAttribute("loginID");
+		return esservices.insertVacation(emp_id);
 	}
 }

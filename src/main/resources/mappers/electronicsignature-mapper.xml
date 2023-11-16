@@ -14,4 +14,13 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<insert id="insertVacation" useGeneratedKeys="true"
+		keyProperty="id" parameterType="Map">
+		<selectKey keyProperty="id" resultType="Integer"
+			order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into vacation_document (emp_id) values (#{emp_id});
+	</insert>
 </mapper>
