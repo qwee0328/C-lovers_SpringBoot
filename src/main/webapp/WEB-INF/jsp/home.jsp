@@ -113,7 +113,7 @@
 				}).done(function(resp) {
 					console.log(resp);
 					if(resp == "인사") {
-						$("#humanresources").css("display", "block");
+						
 					}
 				})
 			})
