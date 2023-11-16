@@ -19,6 +19,6 @@ public class AddressBookController {
 	public String main() {
 		String title="주소록";
 		session.setAttribute("title", title);
-		return "/addressBook/addBook";
+		return "addressbook/addBook";
 	}
 }
