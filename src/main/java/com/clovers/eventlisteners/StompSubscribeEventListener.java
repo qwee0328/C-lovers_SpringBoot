@@ -12,8 +12,6 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import com.clovers.dto.ChatMessageDTO;
 import com.clovers.services.MemberService;
 
-import jakarta.servlet.http.HttpSession;
-
 @Component
 public class StompSubscribeEventListener implements ApplicationListener<SessionSubscribeEvent> {
 
