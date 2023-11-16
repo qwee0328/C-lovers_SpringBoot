@@ -39,5 +39,4 @@ public class MemberService {
 	public String selectNameById(String id) {
 		return mdao.selectNameById(id);
 	}
-	
 }

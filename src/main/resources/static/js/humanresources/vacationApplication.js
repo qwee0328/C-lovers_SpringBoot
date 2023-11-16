@@ -1,62 +1,13 @@
-$(document).ready(function() {
-	//console.log(typeof $.flatpickr);
-	// 날짜 선택용 달력
-	/*$("#date_selector").flatpickr({
-		altInput: false,
-		//altFormat: "F j, Y", // 형식을 altFormat으로 변경
-		mode: "multiple",
-		dateFormat: "F j, Y",
-		inline: true,
-		minDate: "today",
-		maxDate: new Date().getFullYear() + 1 + "-12-31",
-		disable: [
-			function(date) {
-				// return true to disable
-				return date.getDay() === 0 || date.getDay() === 6;
-			},
-		],
-		locale: {
-			months: {
-				shorthand: [
-					"1월",
-					"2월",
-					"3월",
-					"4월",
-					"5월",
-					"6월",
-					"7월",
-					"8월",
-					"9월",
-					"10월",
-					"11월",
-					"12월",
-				],
-				longhand: [
-					"1월",
-					"2월",
-					"3월",
-					"4월",
-					"5월",
-					"6월",
-					"7월",
-					"8월",
-					"9월",
-					"10월",
-					"11월",
-					"12월",
-				],
-			},
-
-			firstDayOfWeek: 1, // 월요일부터 시작
-		},
-	});*/
-
-	// 달력 input을 숨기고 div로 보이게 설정
-	/*$("#flatpickr_div").flatpickr({
-		altInput: "#date_selector", // 숨겨진 input과 연결
-		altFormat: "F j, Y",
-		dateFormat: "Y-m-d",
-	});*/
+document.addEventListener("DOMContentLoaded", function() {
+	let rest_reason_type = [];
+	$.ajax({
+		url: "/humanResources/selectRestReasonType",
+		dataType: "json",
+	}).done(function(resp) {
+		for (let i = 0; i < resp.length; i++) {
+			rest_reason_type.push(resp[i]);
+		}
+	})
 
 	// input의 value가 변경될 때 선택한 날짜가 옆에 나오도록 설정
 	$("#date_selector").on("change", function() {
@@ -83,11 +34,10 @@ $(document).ready(function() {
 			selectorType.append(typeName).append(selectorArrow);
 
 			let selector__option = $("<div>").attr("class", "selector__option");
-			let option__item1 = $("<div>").attr("class", "option__item").html("연차");
-			let option__item2 = $("<div>")
-				.attr("class", "option__item")
-				.html("경조사");
-			selector__option.append(option__item1).append(option__item2);
+			for (let i = 0; i < rest_reason_type.length; i++) {
+				let option__item = $("<div>").attr("class", "option__item").html(rest_reason_type[i]);
+				selector__option.append(option__item)
+			}
 
 			appStatus__line
 				.append(vacationDate)
@@ -165,4 +115,36 @@ $(document).ready(function() {
 			showSelector = false;
 		}
 	});
+
+	$("#vacationdraftingBtn").on("click", function() {
+		console.log($("#vacationReason").val())
+		if($("#processEmployeeIDList").val() === ""){
+			alert("결제선을 설정해주세요.");
+			return;
+		}
+		if($("#date_selector").val()===""){
+			alert("휴가 날짜를 선택해주세요.");
+			return;
+		}
+		if($("#vacationReason").val()===""){
+			alert("휴가 사유를 입력해주세요.");
+			$("#vacationReason").focus();
+			return;
+		}
+		if ($("#processEmployeeIDList").val() !== "" && $("#date_selector").val()!=="" && $("#vacationReason").val() !== "") {
+			
+		}
+	})
+
+});
+
+$(document).ready(function() {
+	$("#approvalLineBtn").on("click", function() {
+		$(".approvalLineModal").modal({
+			fadeDuration: 300,
+			showClose: false
+		});
+		$("#approvalLineModal__cancle").on("click", $.modal.close);
+	})
+
 });
