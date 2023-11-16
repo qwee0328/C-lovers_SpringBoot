@@ -16,8 +16,11 @@ body {
 }
 
 .container__read {
-	margin: 30px;
+	padding: 30px;
 	flex: 1;
+	overflow-x: auto;
+	height: calc(100vh - 60px);
+	overflow-y: auto;
 }
 
 .read__btns {

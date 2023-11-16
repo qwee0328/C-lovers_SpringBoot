@@ -162,7 +162,8 @@ blockquote {
 }
 
 .emailList__autoComplete {
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	padding: 5px 10px;
 	font-size: 12px;
 }

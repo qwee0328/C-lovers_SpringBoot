@@ -59,7 +59,7 @@ $(document).ready(function () {
 						
 						autoName = $("<div>");
 						autoName.addClass("autoComplete__name");
-						autoName.html(resp[i].name);
+						autoName.html(resp[i].name + "[" + resp[i].task_name + "]");
 						
 						autoEmail = $("<div>");
 						autoEmail.addClass("autoComplete__email");

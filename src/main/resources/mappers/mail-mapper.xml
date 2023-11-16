@@ -8,6 +8,7 @@
 	<resultMap type="HashMap" id="emailInfo">
       <result property="name" column="name"/>
       <result property="company_email" column="company_email"/>
+      <result property="task_name" column="task_name"/>
    </resultMap>
 	
 	<insert id="submitSend" useGeneratedKeys="true" keyProperty="id">
@@ -113,7 +114,7 @@
 	</update>
 	
 	<select id="autoComplete" resultMap="emailInfo">
-		select name, company_email from employee where name like #{keyword} or company_email like #{keyword}
+		select e.name, e.company_email, d.task_name from employee e join dept_task d on e.dept_task_id = d.id where name like #{keyword} or company_email like #{keyword}
 	</select>
 	
 	<select id="getEmailByLoginID" resultType="String">
