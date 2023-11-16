@@ -4,4 +4,66 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AddressBook">
 	<!-- 주소록 매퍼 -->
+	<insert id="tagInsert">
+		insert into address_book_tag values(null, #{name}, #{emp_id}, #{is_share});
+	</insert>
+	
+	<select id="tagSelect" resultType="com.clovers.dto.AddressBookTagDTO">
+		select * from address_book_tag where emp_id = #{emp_id} or is_share = true;
+	</select>
+	
+	<insert id="insert">
+		insert into address_book( id, name, emp_id, is_share			
+			<if test="email != null">
+				,email
+			</if>
+			<if test="number != null">
+				,numberType, number
+			</if>
+			<if test="company_name != null">
+				,company_name
+			</if>
+			<if test="dept_name != null">
+				,dept_name
+			</if>
+			<if test="job_name != null">
+				,job_name
+			</if>
+			<if test="address != null">
+				,addressType, address
+			</if>
+			<if test="birth != null">
+				,birthType, birth
+			</if>
+			<if test="memo != null">
+				,memo
+			</if>
+		)
+		values( null, #{name}, #{emp_id}, #{is_share}
+			<if test="email != null">
+				,#{email}
+			</if>
+			<if test="number != null">
+				,#{numberType}, #{number}
+			</if>
+			<if test="company_name != null">
+				,#{company_name}
+			</if>
+			<if test="dept_name != null">
+				,#{dept_name}
+			</if>
+			<if test="job_name != null">
+				,#{job_name}
+			</if>
+			<if test="address != null">
+				,#{addressType}, #{address}
+			</if>
+			<if test="birth != null">
+				,#{birthType}, #{birth}
+			</if>
+			<if test="memo != null">
+				,#{memo}
+			</if>
+		);
+	</insert>
 </mapper>
