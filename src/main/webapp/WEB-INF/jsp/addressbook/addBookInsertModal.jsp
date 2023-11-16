@@ -18,8 +18,8 @@
 		<div class="addBookInsertModal__modalBody">
 
 			<div class="modalBody__addBookType d-flex">
-				<div class="addBookType__personal align-center activeType personal">개인 주소록</div>
-				<div class="addBookType__share align-center shared">공유 주소록</div>
+				<div class="addBookType__personal align-center activeType" id="personal">개인 주소록</div>
+				<div class="addBookType__share align-center" id="shared">공유 주소록</div>
 			</div>
 
 			<div class="modalBody__line d-flex">
@@ -55,11 +55,8 @@
 				<div class="modalBody__title d-flex">태그</div>
 				<div class="modalBody__content">
 					<div class="modalBody__tagCover">
-						<select name="modalBody__tag"
-							class="modalBody__input modalBody__tag" placeholder="선택">
+						<select name="modalBody__tag" class="modalBody__input modalBody__tag" placeholder="선택">
 							<option value="" selected disabled>선택</option>
-							<option value="1">ceo</option>
-							<option value="2">체리</option>
 						</select> <span class="tag__arrow"><i
 							class="fa-solid fa-chevron-down"></i></span>
 					</div>
@@ -83,12 +80,6 @@
 						placeholder="YYYYMMDD">
 				</div>
 			</div>
-		<!-- 	<div class="modalBody__line d-flex">
-				<div class="modalBody__title d-flex">홈페이지</div>
-				<div class="modalBody__content modalBody__contentFull">
-					<input type="text" class="modalBody__input modalBody__homepage">
-				</div>
-			</div> -->
 			<div class="modalBody__line d-flex">
 				<div class="modalBody__title d-flex">회사</div>
 				<div

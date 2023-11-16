@@ -14,8 +14,8 @@ import lombok.ToString;
 public class AddressBookDTO {
 	private int id;
 	private String name;
+	private int is_share;
 	private String emp_id;
-	private boolean is_share;
 	private String email;
 	private String numberType;
 	private String number;

@@ -12,9 +12,9 @@
 .header__searchBar {
 	border: 1px solid #7d7d7d40;
 	border-radius: 4px;
-	margin-left: 30px;
+	margin-left: 20px;
 	margin-top: 20px;
-	width: 500px;
+	max-width: 500px;
 	height: 35px;
 }
 
@@ -33,6 +33,9 @@
 	align-items: center;
 	height: 100%;
 	width: 93%;
+}
+.addBook__body{
+	padding-left: 10px;
 }
 
 .searchBar__input {
@@ -60,6 +63,10 @@
 .addListHeader__chkBoxCover,
 .addessLine__chkBoxCover {
 	width: 4% !important;
+}
+
+.addList__addessLine, .body__addListHeader{
+	margin-left: 10px;
 }
 
 .addListHeader__email,
@@ -118,4 +125,8 @@ input[type='checkbox'] {
 	.addessLine__email {
 		width: 25% !important;
 	}
+
+/*	.header__searchBar {
+		margin-left: 10px;
+	}*/
 }

@@ -27,7 +27,8 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">개인 주소록</div>
 	           </div>
-	           <div class="naviConp toggleInner">
+	           
+	           <div class="naviConp toggleInner" authority="personal" data-title="개인 전체">
 	               <div class="naviConp__icon"><i class="fa-solid fa-address-book"></i></div>
 	               <div class="naviConp__title naviConp__titleMini">개인 전체</div>
 	           </div>
@@ -37,7 +38,7 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">공유 주소록</div>
 	           </div>
-	           <div class="naviConp sharedInner">
+	           <div class="naviConp toggleInner" authority="shared" data-title="공유 전체">
 	               <div class="naviConp__icon"><i class="fa-solid fa-address-book"></i></div>
 	               <div class="naviConp__title naviConp__titleMini">공유 전체</div>
 	           </div>

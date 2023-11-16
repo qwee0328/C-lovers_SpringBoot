@@ -15,5 +15,5 @@ public class AddressBookTagDTO {
 	private int id;
 	private String name;
 	private String emp_id;
-	private boolean is_share;
+	private int is_share;
 }

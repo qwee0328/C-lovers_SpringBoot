@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.dto.AddressBookDTO;
@@ -35,24 +36,38 @@ public class AddressBookController {
 	
 	@ResponseBody
 	@RequestMapping("/insert")
-	public int insert(AddressBookDTO dto) {
-		System.out.println(dto);
+	public int insert(AddressBookDTO dto, @RequestParam(value="selectedTagArray[]", required=false)List<Integer> selectedTagArray) {
 		dto.setEmp_id((String)session.getAttribute("loginID"));
-		return sbservice.insert(dto);
+		if(selectedTagArray == null || selectedTagArray.isEmpty())
+			return sbservice.insert(dto);
+		return sbservice.insert(dto, selectedTagArray);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/tagInsert")
 	public int tagInsert(AddressBookTagDTO dto) {
-		System.out.println(dto);
 		dto.setEmp_id((String)session.getAttribute("loginID"));
 		return sbservice.tagInsert(dto);
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/select")
+	public List<AddressBookDTO> select(String key, int value) {
+		return sbservice.select((String)session.getAttribute("loginID"), key, value);
+	}
+
 	
 	@ResponseBody
 	@RequestMapping("/tagSelect")
 	public List<AddressBookTagDTO> tagSelect() {
 		return sbservice.tagSelect((String)session.getAttribute("loginID"));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/tagSelectByIsShare")
+	public List<AddressBookTagDTO> tagSelectByIsShare(int is_share) {
+		return sbservice.tagSelectByIsShare((String)session.getAttribute("loginID"),is_share);
 	}
 	
 }
