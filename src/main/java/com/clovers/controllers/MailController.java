@@ -155,7 +155,7 @@ public class MailController {
 	
 	// 완전삭제
 	@RequestMapping("/perDeleteMail")
-	public String perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+	public String perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) throws Exception {
 		for(int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
 			mservice.perDeleteMail(id);
@@ -339,7 +339,7 @@ public class MailController {
 	
 	// 완전삭제
 	@RequestMapping("/read/perDelete")
-	public String perDeleteAtRead(@RequestParam int id) {
+	public String perDeleteAtRead(@RequestParam int id) throws Exception {
 		mservice.perDeleteMail(id);
 		return "redirect:/mail";
 	}
@@ -474,7 +474,6 @@ public class MailController {
 	@RequestMapping("/deleteImage")
 	public void deleteImage(@RequestParam("src") String src) throws Exception {
 		Path path = FileSystems.getDefault().getPath("/Users/" + src); // String을 Path 객체로 변환
-		System.out.println(path);
 		Files.deleteIfExists(path);
 	}
 	
