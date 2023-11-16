@@ -54,7 +54,7 @@
 		select * from scheduleAll where id=#{id};
 	</select>
 	
-	<select id="selectRecurringIdById" resultMap="scheduleInfo">
+	<select id="selectRecurringIdById" resultType="Integer">
 		select recurring_id from schedule where id=#{id};
 	</select>
 	
