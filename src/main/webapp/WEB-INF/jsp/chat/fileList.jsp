@@ -11,7 +11,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
-
 <link rel="stylesheet" href="/css/chat/chat_common.css" />
 <link rel="stylesheet" href="/css/chat/chat_fileList.css" />
 <script src="/js/chat/chatFileLoad.js"></script>

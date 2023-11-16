@@ -35,9 +35,7 @@
 
 		<div class="myInfo__infoTxt d-flex">
 			<div class="infoTxt__align">
-				<div class="infoTxt__name">${myInfo.dept_name}>${myInfo.task_name}>${myInfo.job_name}
-					&nbsp;&nbsp;${myInfo.employee_name}</div>
-				<div class="infoTxt__state colorGreen">업무중</div>
+			
 			</div>
 		</div>
 	</div>
@@ -65,77 +63,9 @@
 			<i class="fa-solid fa-xmark"></i>
 		</div>
 	</div>
-
+	
 	<div class="chat-userList">
-		<div class="chat-userList__chat-company chevronParent d-flex">
-			<div>${myInfo.office_name}</div>
-		</div>
-		<!-- <div class="chat-team__userInfoList">
-            <div class="chat-userList__chatUserInfo d-flex">
-                <div class="chatUserInfo__profileImg"><img class="profileImg__img" src="/css/chat/profileImg.png">
-                    <div class="profileImgSmall__state backLightGreen"></div>
-                </div>         
-                <div class="chatUserInfo__txt d-flex align-center">
-                    <div class="chatUserInfo__deptName">대표이사</div>
-                    <div class="chatUserInfo__name">대표이사</div>
-                </div>
-            </div>
-        </div> -->
-		<c:forEach items="${officerList}" var="officer" varStatus="status">
-			<c:if
-				test="${status.first || officer.department_id != officerList[status.index - 1].department_id}">
-				<!-- 새로운 부서가 시작될 때 -->
-				<div class="chat-userList__chat-dept chevronParent d-flex">
-					<div>${officer.dept_name}</div>
-					<div>
-						<i class="fa-solid fa-chevron-up userListChevronUp"></i>
-					</div>
-				</div>
-				<div class="chat-userList__chat-teams">
-			</c:if>
-
-			<c:if
-				test="${status.first || officer.task_id != officerList[status.index - 1].task_id}">
-				<!-- 새로운 팀이 시작될 때 -->
-				<div class="chat-userList__chat-team chevronParent d-flex">
-					<div>&nbsp;&nbsp;${officer.task_name}</div>
-					<div>
-						<i class="fa-solid fa-chevron-up userListChevronUp"></i>
-					</div>
-				</div>
-				<div class="chat-team__userInfoList">
-			</c:if>
-
-			<!-- 사용자 정보 -->
-			<div class="chat-userList__chatUserInfo d-flex" data-employee-id="${officer.employee_id}">
-				<div class="chatUserInfo__profileImg profileImg__cover">
-					<img class="profileImg__img"
-						src="${officer.profile_img != '' ? officer.profile_img : '/css/chat/profileImg.png'}">
-					<div class="profileImgSmall__state backLightGreen"></div>
-				</div>
-				<div class="chatUserInfo__txt d-flex align-center">
-					<div class="chatUserInfo__deptName">${officer.job_name}</div>
-					<div class="chatUserInfo__name">${officer.employee_name}</div>
-				</div>
-			</div>
-
-			<c:if
-				test="${status.last || officer.task_id != officerList[status.index + 1].task_id}">
-			</div>
-			<!-- chat-team__userInfoList 닫기 -->
-			</c:if>
-
-			<c:if
-				test="${status.last || officer.department_id != officerList[status.index + 1].department_id}">
-				</div>
-				<!-- chat-userList__chat-teams 닫기 -->
-			</c:if>
-		</c:forEach>
-
 	</div>
-
-
-
 
 	<!-- 프로필보기 모달창 -->
 	<div class="profile__modal">
@@ -247,23 +177,6 @@
 	
 
 	<script>
-		let sessionId = () => {
-			return("${loginID}");
-		}
-		
-		$(document).ready(function() {
-		    // 주어진 HTML 구조와 일치하는 요소만 제거
-		    $('.chat-userList__chatUserInfo').filter(function() {
-		        return $(this).find('.chatUserInfo__profileImg img').attr('src') === '/css/chat/profileImg.png' &&
-		               $(this).find('.chatUserInfo__deptName').text() === '직급' &&
-		               $(this).find('.chatUserInfo__name').text() === '이름';
-		    }).remove();
-		    
-		    
-
-
-		});
-
         // search input focus 시 우측에 검색 취소 버튼 생성
         $(".chat-search__txt").on("focus",function(){
             $(".chat-search__cancel").css("display","flex");
@@ -341,7 +254,7 @@
                     type: 'POST',
                     data: { employee_id : employeeId},
                     success: function(data) {
-                    	window.open("/chat/goChatRoom?id="+data, '새창2', 'width=400,height=585');
+                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
                     },
                     error: function(error) {
                         console.log("Error: ", error);
@@ -407,7 +320,7 @@
                     type: 'POST',
                     data: { employee_id : data.employee_id},
                     success: function(data) {
-                    	window.open("/chat/goChatRoom?id="+data, '새창2', 'width=400,height=585');
+                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
                     },
                     error: function(error) {
                         console.log("Error: ", error);
@@ -446,11 +359,123 @@
             $(".chat-search__txt").css("width",w);
 
         }
-
         
+        function updateMyInfo(myInfo) {
+            var myInfoHtml = '';
+
+            // myInfo 데이터를 사용하여 HTML 생성
+            myInfoHtml += '<div class="infoTxt__name">' + 
+                            myInfo.dept_name + '>' + myInfo.task_name + '>' + myInfo.job_name +
+                            '&nbsp;&nbsp;' + myInfo.employee_name + '</div>' +
+                          '<div class="infoTxt__state colorGreen">업무중</div>';
+
+            
+            $('.infoTxt__align').html(myInfoHtml);
+        }
         
+        function updateChatUserList(officerList, myInfo) {
+            var userListHtml = '';
+
+            // myInfo를 사용하여 HTML 추가
+            userListHtml += '<div class="chat-userList__chat-company chevronParent d-flex">' +
+                                '<div>' + myInfo.office_name + '</div>' +
+                            '</div>';
+
+            // officerList를 순회하며 HTML 생성
+            officerList.forEach(function(officer, index) {
+            	
+            	// 내 정보는 리스트에 출력되지 않도록 함.
+            	if (officer.employee_id === myInfo.employee_id) {
+                    return; // 현재 반복을 건너뛴ek.
+                }
+            	// 부서가 시작될 때
+            	if (index === 0 || officer.department_id !== officerList[index - 1].department_id) {
+            	    userListHtml += '<div class="chat-userList__chat-dept chevronParent d-flex">' +
+            	                        '<div>' + officer.dept_name + '</div>' +
+            	                        '<div>' +
+            	                            '<i class="fa-solid fa-chevron-up userListChevronUp"></i>' + // 드롭다운 아이콘 추가
+            	                        '</div>' +
+            	                    '</div>' +
+            	                    '<div class="chat-userList__chat-teams">';
+            	}
+
+            	// 팀이 시작될 때
+            	if (index === 0 || officer.task_id !== officerList[index - 1].task_id) {
+            	    userListHtml += '<div class="chat-userList__chat-team chevronParent d-flex">' +
+            	                        '<div>&nbsp;&nbsp;' + officer.task_name + '</div>' +
+            	                        '<div>' +
+            	                            '<i class="fa-solid fa-chevron-up userListChevronUp"></i>' + // 드롭다운 아이콘 추가
+            	                        '</div>' +
+            	                    '</div>' +
+            	                    '<div class="chat-team__userInfoList">';
+            	}
+
+                // 사용자 정보 추가
+                userListHtml += '<div class="chat-userList__chatUserInfo d-flex" data-employee-id="' + officer.employee_id + '">' +
+                                    '<div class="chatUserInfo__profileImg profileImg__cover">' +
+                                        '<img class="profileImg__img" src="' + (officer.profile_img ? officer.profile_img : '/css/chat/profileImg.png') + '">' +
+                                        '<div class="profileImgSmall__state backLightGreen"></div>' +
+                                    '</div>' +
+                                    '<div class="chatUserInfo__txt d-flex align-center">' +
+                                        '<div class="chatUserInfo__deptName">' + officer.job_name + '</div>' +
+                                        '<div class="chatUserInfo__name">' + officer.employee_name + '</div>' +
+                                    '</div>' +
+                                '</div>';
+
+                // 각 섹션의 끝 처리
+                if (index === officerList.length - 1 || officer.task_id !== officerList[index + 1].task_id) {
+                    userListHtml += '</div>'; // chat-team__userInfoList 닫기
+                }
+
+                if (index === officerList.length - 1 || officer.department_id !== officerList[index + 1].department_id) {
+                    userListHtml += '</div>'; // chat-userList__chat-teams 닫기
+                }
+            });
+
+            // HTML을 DOM에 삽입
+            $('.chat-userList').html(userListHtml);
+        }
 
 
+
+        $(document).ready(function() {
+        	$.ajax({
+        	    url: '/chat/getMainData',
+        	    type: 'GET',
+        	    dataType: 'json',
+        	    success: function(data) {
+        	        updateChatUserList(data.officerList, data.myInfo);
+        	        updateMyInfo(data.myInfo);
+        	    },
+        	    error: function(error) {
+        	        console.log(error);
+        	    }
+        	});
+        	
+        	$('.chat-search__txt').on('input', function() {
+                var searchText = $(this).val().toLowerCase();
+
+                if (searchText) {
+                    // 검색어가 있을 때, 모든 부서와 오피스 숨기기
+                    $('.chat-userList__chat-dept, .chat-userList__chat-team').hide();
+
+                    $('.chat-userList__chatUserInfo').each(function() {
+                        var employeeName = $(this).find('.chatUserInfo__name').text().toLowerCase();
+                        if (employeeName.includes(searchText)) {
+                            $(this).show(); // 검색어가 포함된 요소 표시
+                            // 관련된 부서와 오피스 표시
+                            $(this).closest('.chat-userList__chat-teams').prev('.chat-userList__chat-dept').show();
+                            $(this).closest('.chat-team__userInfoList').prev('.chat-userList__chat-team').show();
+                        } else {
+                            $(this).hide(); // 그렇지 않은 요소 숨김
+                        }
+                    });
+                } else {
+                    // 검색어가 없을 때, 모든 요소 표시
+                    $('.chat-userList__chat-dept, .chat-userList__chat-team, .chat-userList__chatUserInfo').show();
+                }
+            });
+        });
         
 
     </script>

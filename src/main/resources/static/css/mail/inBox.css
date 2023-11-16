@@ -47,18 +47,51 @@ input[type=checkbox] {
 	cursor: pointer;
 }
 
-.inBox__mailList {
-	display: flex;
+.inBox__mailList,
+.sentBox__mailList,
+.tempBox__mailList,
+.outBox__mailList,
+.trash__mailList {
+	display: grid;
+	margin: 7px 0px;
 	padding: 0px 30px;
 	height: 34px;
 	align-items: center;
 }
 
-.inBox__mailList div {
+.inBox__mailList {
+	grid-template-columns: 13px 1fr 6fr 10px 170px;
+}
+
+.sentBox__mailList {
+    grid-template-columns: 13px 1fr 6fr 10px 170px 90px;
+}
+
+.tempBox__mailList {
+    grid-template-columns: 13px 1fr 6fr 10px;
+}
+
+.outBox__mailList {
+    grid-template-columns: 13px 1fr 6fr 10px 220px;
+}
+
+.trash__mailList {
+    grid-template-columns: 13px 1fr 6fr 10px 170px;
+}
+
+.inBox__mailList,
+.sentBox__mailList,
+.tempBox__mailList,
+.outBox__mailList,
+.trash__mailList div {
 	font-size: 16px;
 }
 
-.inBox__mailList:hover {
+.inBox__mailList:hover,
+.sentBox__mailList:hover,
+.tempBox__mailList:hover,
+.outBox__mailList:hover,
+.trash__mailList:hover {
 	background-color: #DCEDD4;
 }
 
@@ -67,7 +100,6 @@ input[type=checkbox] {
 }
 
 .mailList__title {
-	margin-left: 50px;
 	text-decoration: none;
 	color: #000000;
 }
@@ -86,8 +118,13 @@ input[type=checkbox] {
 	color: #B5B5BB;
 }
 
-.right__date {
-	margin-left: 20px;
+.right__date, .right__confirm, .right__cancallation {
+	text-align: right;
+}
+
+.right__cancallation {
+	color: #095544;
+	cursor: pointer;
 }
 
 hr {
@@ -110,7 +147,11 @@ hr {
 }
 
 .bottom__pageNavi > div {
-	margin: 0px 3px;
+	margin: 0px 5px;
+}
+
+.bottom__pageNavi > div:hover {
+	cursor: pointer;
 }
 
 .pageNavi__circle {

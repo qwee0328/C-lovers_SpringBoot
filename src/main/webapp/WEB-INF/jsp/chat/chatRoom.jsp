@@ -19,6 +19,8 @@
 <script src="/js/chat/chat_invite.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.min.js"></script>
+
 </head>
 
 <body>
@@ -29,7 +31,7 @@
             </div>
             <div class="reName__body">
                 <div class="reName__input" contenteditable="true">
-                    채팅방 이름
+                    
                 </div>
             </div>
             <div class="reName__footer align-center">
@@ -57,18 +59,22 @@
                     <div class="menuIcon__hamBtn"><i class="fa-solid fa-bars"></i></div>
                 </div>
                 <div class="hamBtn__hamMenu">
-                    <div class="hamMenu__invite hamMenu_menu">초대하기</div>
-                    <div class="hamMenu__reName hamMenu_menu">이름 변경</div>
-                    <div class="hamMenu__exit hamMenu_menu">나가기</div>
+                    <div class="hamMenu__invite hamMenu_menu">채팅방 초대</div>
+                    <div class="hamMenu__reName hamMenu_menu">채팅방명 변경</div>
+                    <div class="hamMenu__exit hamMenu_menu">채팅그룹 탈퇴</div>
                 </div>
             </div>
             <div class="header__chatSearch d-flex">
                 <div class="chatSearch__inputCover d-flex">
-                    <i class="fa-solid fa-magnifying-glass"></i><input type="text" class="chatSearch__input" placeholder="대화 내용 검색">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="chatSearch__input" placeholder="대화 내용 검색">
+                    <button class="chatSearch__button search-prev"><i class="fa-solid fa-angle-up"></i></button>
+					<button class="chatSearch__button search-next"><i class="fa-solid fa-angle-down"></i></button>
                 </div>
                 <div class="chatSearch__cancel"><i class="fa-solid fa-xmark"></i></div>
             </div>
-            <div class="offlineCnt">최사장님 외 4명은 현재 부재중 입니다.</div>
+<!--             이 부분은 구현하지 않기로 함 -->
+<!--             <div class="offlineCnt">최사장님 외 4명은 현재 부재중 입니다.</div> -->
         </div>
 
         <div class="chatContainer">
@@ -76,12 +82,8 @@
             	<!-- 날짜는 아래와 같이 작성 
             		$(".chatContainer__chatArea").append($("<div>").attr("class","chatArea__DayLine align-center").text("날짜"));
             	-->
-                <div class="chatArea__DayLine align-center">2023년 10월 30일 월요일</div>
                 
             </div>
-
-
-
 
             <div class="chatContainer__inputArea">
                 <div class="inputArea__msg" contenteditable="true"></div>
@@ -283,31 +285,6 @@
     	            recvMessage(recv);
     	        });
     	        console.log("/sub/chat/room/"+roomId);
-
-    	        // 이벤트 리스너를 통해 다시한번 확인해볼것. 방법이 있을거다.
-//     	        $.ajax({
-//     	            url: '/chat/isExistThisRoom',
-//     	            method: 'GET',  // 여기에 쉼표 추가
-//     	            data: { chat_room_id: roomId },  // 객체 형태로 수정
-//     	            success: function(resp) {
-//     	                if (!resp) {
-//     	                    ws.send("/pub/chat/message", {}, JSON.stringify({
-//     	                        state: "JOIN",
-//     	                        chat_room_id: roomId,
-//     	                        emp_id: loginId
-//     	                    }));
-//     	                } else {
-//     	                    ws.send("/pub/chat/message", {}, JSON.stringify({
-//     	                        state: "REJOIN",
-//     	                        chat_room_id: roomId,
-//     	                        emp_id: loginId
-//     	                    }));
-//     	                }
-//     	            },
-//     	            error: function(error) {
-//     	                // 에러처리 코드
-//     	            }
-//     	        });
     	    });
     	}
 
@@ -323,34 +300,66 @@
     	        chat_room_id: roomId,
     	        emp_id: loginId,
     	        content: message
-    	    }));  // 여기에 있는 괄호 하나 제거
+    	    }));
     	    $(".inputArea__msg").text('');
     	}
 
-    	// 여기 스타일 한번 더 수정해야됨...
     	function recvMessage(recv) {
-    		console.log(recv);
-    	    var messageItem;
-    	    if (recv.emp_id === loginId) { // 본인이 보낸 메시지
-    	        messageItem = '<div class="chatArea__myChat d-flex">' +
-    	                      '<div class="myChat__chatContents d-flex">' +
-    	                      '<div class="myChat__chatMsg d-flex">' + recv.content + '</div>' +
-    	                      '</div></div>';
-    	    } else { // 타인이 보낸 메시지
-    	        messageItem = '<div class="chatArea__otherPersonChat d-flex">' +
-    	                      '<div class="otherPersonChat__profileImg"></div>' +
-    	                      '<div class="otherPersonChat__chatInfo">' +
-    	                      '<div class="otherPersonChat__userName">' + recv.emp_id + '</div>' +
-    	                      '<div class="otherPersonChat__chatContents d-flex">' +
-    	                      '<div class="otherPersonChat__chatMsg d-flex">' + recv.content + '</div>' +
-    	                      '</div></div></div>';
+    	    console.log(recv);
+    	    let lastDate = new Date().toDateString();
+    	    let formattedTime = formatChatTime(recv.write_date);
+    	    let currentDate = new Date(recv.write_date).toDateString();
+    	    console.log(currentDate);
+    	    console.log(lastDate);
+
+    	    // 날짜가 변경되었거나 첫 메시지인 경우
+    	    if (lastDate !== currentDate) {
+    	        let formattedDate = formatDate(recv.write_date);
+    	        $(".chatContainer__chatArea").append(
+    	            $("<div>").addClass("chatArea__DayLine align-center").text(formattedDate)
+    	        );
+    	        lastDate = currentDate;
     	    }
+
+    	    let messageItem;
+    	    if (recv.state !== "CHAT"){
+    	    	$("<div>").addClass("chatArea__DayLine align-center").text(recv.content)
+    	    }
+    	    if (recv.emp_id === loginId) { // 본인이 보낸 메시지
+    	        messageItem = $('<div>', {class: 'chatArea__myChat d-flex'}).append(
+    	            $('<div>', {class: 'myChat__chatContents d-flex'}).append(
+    	                $('<div>', {class: 'myChat__chatMsgLeft d-flex'}).append(
+    	                    $('<div>', {class: 'chatMsgLeft__align'}).append(
+    	                        $('<div>', {class: 'myChat__readCnt', text: '0'}),
+    	                        $('<div>', {class: 'myChat__sendTime', text: formattedTime})
+    	                    )
+    	                ),
+    	                $('<div>', {class: 'myChat__chatMsg d-flex', text: recv.content})
+    	            )
+    	        );
+    	    } 
+    	    else { // 타인이 보낸 메시지
+    	        messageItem = $('<div>', {class: 'chatArea__otherPersonChat d-flex'}).append(
+    	            $('<div>', {class: 'otherPersonChat__profileImg'}),
+    	            $('<div>', {class: 'otherPersonChat__chatInfo'}).append(
+    	                $('<div>', {class: 'otherPersonChat__userName', text: recv.emp_name}),
+    	                $('<div>', {class: 'otherPersonChat__chatContents d-flex'}).append(
+    	                    $('<div>', {class: 'otherPersonChat__chatMsg d-flex', text: recv.content}),
+    	                    $('<div>', {class: 'otherPersonChat__chatMsgRight d-flex'}).append(
+    	                        $('<div>', {class: 'chatMsgRight__align'}).append(
+    	                            $('<div>', {class: 'otherPersonChat__readCnt', text: '0'}),
+    	                            $('<div>', {class: 'otherPersonChat__sendTime', text: formattedTime})
+    	                        )
+    	                    )
+    	                )
+    	            )
+    	        );
+    	    }
+
     	    $('.chatContainer__chatArea').append(messageItem);
     	    $('.chatContainer__chatArea').scrollTop($('.chatContainer__chatArea')[0].scrollHeight);
     	}
 
-
-    	
     	
     	function handleKeyPress(event){
     		if (event.keyCode === 13 && !event.shiftKey) {
@@ -359,6 +368,9 @@
 			}
     	}
     	
+    	$(".inputArea__subminBtn").on("click",function(){
+    		sendMessage();
+    	})
     	
         window.onresize = function () {
             let h = window.innerHeight - 165;
@@ -421,6 +433,16 @@
             $(".close__btn").on("click",$.modal.close);
         });
         
+        function scrollToBottom() {
+            var chatArea = $(".chatContainer__chatArea")[0];
+
+            // chatArea가 존재하는 경우에만 실행
+            if (chatArea) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }
+
+        
         $(document).ready(function() {
         	$.ajax({
         		url: "/chat/chatMsgLoad",
@@ -432,15 +454,30 @@
         		console.log(resp);
         		//
         		
+        		let lastDate = null;
+        		
         		
         		for (let i = 0; i < resp.chat.length; i++) {
+        			let formattedTime = formatChatTime(resp.chat[i].write_date);
+        			let currentDate = new Date(resp.chat[i].write_date).toDateString();
+        			
+        			// 날짜가 변경되었거나 첫 메시지인 경우
+                    if (lastDate !== currentDate) {
+                        let formattedDate = formatDate(resp.chat[i].write_date);
+                        $(".chatContainer__chatArea").append(
+                            $("<div>").addClass("chatArea__DayLine align-center").text(formattedDate)
+                        );
+                        lastDate = currentDate;
+                    }
         			if (resp.chat[i].emp_id == resp.group.emp_id) {
+        				
+        				
         				let chatArea__myChat = $("<div>").attr("class","chatArea__myChat d-flex");
         				let myChat__chatContents = $("<div>").attr("class","myChat__chatContents d-flex");
         				let myChat__chatMsgLeft = $("<div>").attr("class","myChat__chatMsgLeft d-flex");
         				let chatMsgLeft__align = $("<div>").attr("class","chatMsgLeft__align");
-        				let myChat__readCnt = $("<div>").attr("class","myChat__readCnt").text("2"); //채팅 안 읽은 사람 수
-        				let myChat__sendTime = $("<div>").attr("class","myChat__sendTime").text("오후 8:48"); //채팅 보낸 시각
+        				let myChat__readCnt = $("<div>").attr("class","myChat__readCnt").text("0"); //채팅 안 읽은 사람 수
+        				let myChat__sendTime = $("<div>").attr("class","myChat__sendTime").text(formattedTime); //채팅 보낸 시각
         				
         				
         				let myChat__chatMsg = $("<div>").attr("class","myChat__chatMsg d-flex")				
@@ -470,7 +507,7 @@
         				let chatArea__otherPersonChat = $("<div>").attr("class", "chatArea__otherPersonChat d-flex");
         				let otherPersonChat__profileImg = $("<div>").attr("class", "otherPersonChat__profileImg");
         				let otherPersonChat__chatInfo = $("<div>").attr("class", "otherPersonChat__chatInfo");
-        				let otherPersonChat__userName = $("<div>").attr("class", "otherPersonChat__userName").text(resp.chat[i].emp_id); //사원이름, employee table과 join해 가져와야함.
+        				let otherPersonChat__userName = $("<div>").attr("class", "otherPersonChat__userName").text(resp.chat[i].emp_name); //사원이름, employee table과 join해 가져와야함.
         				let otherPersonChat__chatContents = $("<div>").attr("class", "otherPersonChat__chatContents d-flex");
         				
         				
@@ -489,14 +526,10 @@
         					otherPersonChat__chatMsg.text(resp.chat[i].content); // 채팅 내용	
         				}
         				
-        				
-        				
-        				
-        				
         				let otherPersonChat__chatMsgRight = $("<div>").attr("class", "otherPersonChat__chatMsgRight d-flex");
         				let chatMsgRight__align = $("<div>").attr("class", "chatMsgRight__align");
-        				let otherPersonChat__readCnt = $("<div>").attr("class", "otherPersonChat__readCnt").text("1"); //채팅 안 읽은 사람 수
-        				let otherPersonChat__sendTime = $("<div>").attr("class", "otherPersonChat__sendTime").text("오후 7:46"); // 채팅 보낸 시각
+        				let otherPersonChat__readCnt = $("<div>").attr("class", "otherPersonChat__readCnt").text("0"); //채팅 안 읽은 사람 수
+        				let otherPersonChat__sendTime = $("<div>").attr("class", "otherPersonChat__sendTime").text(formattedTime); // 채팅 보낸 시각
 
         				// 채팅 우측 읽지 않은 사람 수 및 보낸 시각
         				otherPersonChat__chatMsgRight.append(chatMsgRight__align.append(otherPersonChat__readCnt).append(otherPersonChat__sendTime));
@@ -513,12 +546,132 @@
         				$(".chatContainer__chatArea").append(chatArea__otherPersonChat);
         			}
         		}
+        		scrollToBottom();
         	});
+        	
+        	$(".inputArea__msg").on("keypress", handleKeyPress);
+        	
+        	
         	
         	connect();
         	
-        	$(".inputArea__msg").on("keypress", handleKeyPress);
+        	$('.reName__submitBtn').click(function() {
+        	    let newChatRoomName = $('.reName__input').text().trim();
+        	    let dataToSend = JSON.stringify({
+        	        chatRoomName: newChatRoomName,
+        	        chatRoomId: roomId
+        	    });
+
+        	    // AJAX 요청
+        	    $.ajax({
+        	        url: '/chat/updateChatGroupName',
+        	        type: 'POST',
+        	        contentType: 'application/json', // 추가
+        	        data: dataToSend, // JSON 문자열로 변환
+        	        success: function(response) {
+        	            console.log('Chat room name updated:', response);
+        	            location.reload();
+        	        },
+        	        error: function(xhr, status, error) {
+        	            console.error('Update failed:', error);
+        	        }
+        	    });
+        	});
+        	
+        	
+        	var currentIndex = -1;
+        	var searchResults = [];
+
+        	function updateSearchResults() {
+        	    searchResults = $('.highlight'); // 하이라이트된 모든 요소를 검색 결과로 저장
+        	    currentIndex = -1; // 초기 인덱스 재설정
+        	}
+
+        	function highlightSearchTerm(searchTerm) {
+        	    $('.chatContainer__chatArea').unmark({
+        	        done: function() {
+        	            $('.chatContainer__chatArea').mark(searchTerm, {
+        	                "element": "span",
+        	                "className": "highlight",
+        	                "separateWordSearch": false,
+        	                "accuracy": "partially",
+        	                "done": function() {
+        	                    updateSearchResults();
+        	                    moveToSearchResult(0); // 첫 번째 검색 결과로 이동
+        	                }
+        	            });
+        	        }
+        	    });
+        	}
+
+        	function moveToSearchResult(index) {
+        	    if (index >= 0 && index < searchResults.length) {
+        	        $('.current-highlight').removeClass('current-highlight'); // 기존 하이라이트 제거
+        	        $(searchResults[index]).addClass('current-highlight'); // 현재 선택된 요소 하이라이트
+
+        	        var position = $(searchResults[index]).offset().top - $('.chatContainer__chatArea').offset().top;
+        	        $('.chatContainer__chatArea').scrollTop($('.chatContainer__chatArea').scrollTop() + position - 50);
+
+        	        currentIndex = index;
+        	    }
+        	}
+
+        	$('.chatSearch__input').on('input', function() {
+        	    var searchTerm = $(this).val().trim();
+        	    highlightSearchTerm(searchTerm);
+        	});
+
+        	$('.search-next').on('click', function() {
+        	    if (currentIndex < searchResults.length - 1) {
+        	        moveToSearchResult(currentIndex + 1);
+        	    }
+        	});
+
+        	$('.search-prev').on('click', function() {
+        	    if (currentIndex > 0) {
+        	        moveToSearchResult(currentIndex - 1);
+        	    }
+        	});
+
+        	$('.menuIcon__searchBtn').on('click', function() {
+        	    // 입력 필드 비우기
+        	    $('.chatSearch__input').val('');
+
+        	    // 하이라이트된 텍스트 제거
+        	    $('.chatContainer__chatArea').unmark();
+        	    searchResults = [];
+        	    currentIndex = -1;
+        	});
+        	
+        	$('.chatSearch__cancel').on('click', function() {
+        	    // 입력 필드 비우기
+        	    $('.chatSearch__input').val('');
+
+        	    // 하이라이트된 텍스트 제거
+        	    $('.chatContainer__chatArea').unmark();
+        	    searchResults = [];
+        	    currentIndex = -1;
+        	});
+
+
+
+        	
         });
+        function formatChatTime(timestamp) {
+    	    let date = new Date(timestamp);
+
+    	    return date.toLocaleTimeString('ko-KR', {
+    	        hour: '2-digit',
+    	        minute: '2-digit',
+    	        hour12: true
+    	    });
+    	}
+    	
+    	function formatDate(timestamp) {
+    	    let date = new Date(timestamp);
+    	    let options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+    	    return date.toLocaleDateString('ko-KR', options);
+    	}
 
 </script>
 </body>

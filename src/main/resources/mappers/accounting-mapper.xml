@@ -3,8 +3,45 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Accounting">
+
 	<!-- 회계지원 매퍼 -->
 	<select id="selectAll" resultType="com.clovers.dto.AccountingDTO">
-		select * from emp_account
+		select * from employeeAccountList order by num desc
 	</select>
+	
+	<select id="searchBy" resultType="com.clovers.dto.AccountingDTO">
+		select * from employeeAccountList where emp_id like #{keyword} or name like #{keyword} order by num desc
+	</select>	
+	
+	<insert id="insert">
+		insert into emp_account values(0,#{id},#{emp_id},#{bank},default)
+	</insert>
+	
+	<delete id="deleteById">
+		delete from emp_account where id=#{value};
+	</delete>
+	
+	<update id="update">
+		update emp_account set id=#{id}, emp_id=#{emp_id}, bank=#{bank}, reg_date=default where num=#{num}
+	</update>
+	
+	<!--  -->
+	<select id="selectCardAll" resultType="com.clovers.dto.AccountingDTO">
+		select * from corp_card_view order by num desc
+	</select>
+	
+	<select id="searchCard" resultType="com.clovers.dto.AccountingDTO">
+		select * from corp_card_view where emp_id like #{keyword} or name like #{keyword} order by num desc
+	</select>
+	
+	<insert id="insertCard">
+		insert into corp_card values(0,#{id},#{emp_id},#{bank},default)
+	</insert>
+	
+	<delete id="deleteCard">
+		delete from corp_card where id=#{id}
+	</delete>
+	<update id="updateCard">
+		update corp_card set id=#{id}, emp_id=#{emp_id}, bank=#{bank}, reg_date=default where num=#{num}
+	</update>
 </mapper>

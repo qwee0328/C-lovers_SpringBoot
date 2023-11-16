@@ -1,6 +1,7 @@
 package com.clovers.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,18 @@ public class ChatMessageDAO {
 		return db.selectList("ChatMessage.selectMessagesByChatRoomId", chat_room_id);
 	};
 	
-	// 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 채팅방 아이디를 기준으로 가장 최신의 메시지의 아이디 값을 가져온다.
-	public int selectLatestChatMsgIdByChatRoomId(String chat_room_id) {
+	// 채팅방의 아이디를 기준으로 채팅 메시지를 가져옴 #2 (이름까지 가져오는 것)
+	public List<Map<String,Object>> selectMessageListByChatRoomId(String chat_room_id){
+		return db.selectList("ChatMessage.selectMessageListByChatRoomId", chat_room_id);
+	};
+	
+	// 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 가장 최신의 메시지의 아이디 값을 가져온다.
+	public int selectLatestChatMsgIdForInvite() {
+		return db.selectOne("ChatMessage.selectLatestChatMsgIdForInvite");
+	}
+	
+	// 기존의 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 채팅방 아이디를 기준으로 가장 최신의 메시지의 아이디 값을 가져온다.
+	public int selectLatestChatMsgIdByChatRoomIdForUpdate(String chat_room_id) {
 		return db.selectOne("ChatMessage.selectLatestChatMsgIdByChatRoomIdForUpdate", chat_room_id);
 	}
 	
