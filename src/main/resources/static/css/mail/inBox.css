@@ -53,6 +53,7 @@ input[type=checkbox] {
 .outBox__mailList,
 .trash__mailList {
 	display: grid;
+	margin: 7px 0px;
 	padding: 0px 30px;
 	height: 34px;
 	align-items: center;
@@ -95,7 +96,7 @@ input[type=checkbox] {
 }
 
 .mailList__name {
-	margin-left: 5px;
+	margin-left: 15px;
 }
 
 .mailList__title {
@@ -146,7 +147,7 @@ hr {
 }
 
 .bottom__pageNavi > div {
-	margin: 0px 3px;
+	margin: 0px 5px;
 }
 
 .bottom__pageNavi > div:hover {
