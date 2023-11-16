@@ -105,6 +105,10 @@
 				if($(this).siblings().html() == "일정") {
 					location.href = "/schedule";
 				}
+				
+				if($(this).siblings().html() == "주소록") {
+					location.href = "/addressbook";
+				}
 			})
 		</script>
 
