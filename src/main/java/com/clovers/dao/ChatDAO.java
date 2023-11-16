@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.clovers.dto.ChatDTO;
+import com.clovers.dto.ChatRoomDTO;
 
 @Repository
 public class ChatDAO {
@@ -15,12 +15,12 @@ public class ChatDAO {
 	private SqlSession db;
 	
 	// 채팅방 개설
-	public int insert(ChatDTO cdto) {
+	public int insert(ChatRoomDTO cdto) {
 		return db.insert("Chat.insert",cdto);
 	}
 	
 	// 채팅방 상태 업데이트
-	public int updateChatRoomState(ChatDTO cdto) {
+	public int updateChatRoomState(ChatRoomDTO cdto) {
 		return db.update("Chat.updateChatRoomState", cdto);
 	}
 	

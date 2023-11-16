@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import com.clovers.dto.ChatMessageDTO;
 import com.clovers.services.ChatMessageService;
 
 
@@ -30,23 +29,18 @@ public class WebSocketEventListener {
         logger.info("Received a new web socket connection");
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         
-
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        
-        // 세션에서 Stomp Header로 부터 가져오는 객체(바꿔야됨)
-        String username = (String) headerAccessor.getSessionAttributes().get("username"); 
+
+        String username = (String) headerAccessor.getSessionAttributes().get("username");
         if(username != null) {
-            logger.info(username + "님이 채팅방을 나갔습니다.");
+            logger.info("User Disconnected : " + username);
 
-            ChatMessageDTO chatMessage = new ChatMessageDTO();
-            chatMessage.setState(ChatMessageDTO.ChatMessageStates.EXIT);
-            chatMessage.setContent(username);
 
-            messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getChat_room_id(), chatMessage);
+            messagingTemplate.convertAndSend("/topic/public");
         }
     }
     

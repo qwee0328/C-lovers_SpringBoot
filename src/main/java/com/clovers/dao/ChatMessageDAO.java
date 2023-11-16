@@ -1,5 +1,6 @@
 package com.clovers.dao;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,6 @@ import com.clovers.dto.ChatMessageDTO;
 
 @Repository
 public class ChatMessageDAO {
-	// 채팅 메시지 관련 DAO
 	
 	@Autowired
 	private SqlSession db;

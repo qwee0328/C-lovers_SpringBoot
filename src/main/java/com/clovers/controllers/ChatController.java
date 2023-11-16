@@ -6,11 +6,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,8 +21,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.clovers.services.ChatGroupService;
 import com.clovers.services.ChatMessageService;
 
+
 @Controller
-@RequestMapping("/chat")
 public class ChatController {
 
 	@Autowired
@@ -44,7 +46,7 @@ public class ChatController {
 	public String goChatList() {
 		return "chat/chatList";
 	}
-	
+
 	// 파일 모아보기 
 	@RequestMapping("/fileList")
 	public String goFileList() {

@@ -162,4 +162,12 @@ public class HumanResourcesController {
 		String id = (String)session.getAttribute("loginID");
 		return hrservice.selectWorkConditionsList(id);
 	}
+	
+	// 휴가 신청 페이지로 이동
+	@RequestMapping("/showVacationApp")
+	public String showVacationApp() {
+		String currentMenu = "";
+		session.setAttribute("currentMenu", currentMenu);
+		return "humanresources/vacationApplication";
+	}
 }

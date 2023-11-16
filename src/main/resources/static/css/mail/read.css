@@ -13,11 +13,15 @@ body {
 	display: flex;
 	margin: 0px !important;
 	padding: 0px !important;
+	height: calc(100vh - 60px);
+	overflow-y: auto;
 }
 
 .container__read {
-	margin: 30px;
+	padding: 30px;
 	flex: 1;
+	width: calc(100vh - 250px);
+	overflow-x: auto;
 }
 
 .read__btns {
@@ -78,4 +82,12 @@ read__file div {
 
 .file__name {
 	margin-bottom: 3px;
+	text-decoration: none;
+	color: #000000;
+}
+
+.file__name:hover {
+	cursor: pointer;
+	text-decoration: none;
+	color: #75B47D;
 }

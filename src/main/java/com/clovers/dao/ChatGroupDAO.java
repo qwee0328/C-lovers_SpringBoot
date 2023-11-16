@@ -11,8 +11,8 @@ import com.clovers.dto.ChatGroupDTO;
 
 @Repository
 public class ChatGroupDAO {
-	// 채팅그룹 관리 DAO
 
+	// 채팅그룹 관리 DAO
 	@Autowired
 	private SqlSession db;
 
@@ -71,5 +71,7 @@ public class ChatGroupDAO {
 	public int closeChatGroup(int chat_id) {
 		return db.delete("ChatGroup.closeChatGroup", chat_id);
 	}
+	
+
 
 }

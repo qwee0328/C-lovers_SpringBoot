@@ -23,7 +23,6 @@ public class MemberDAO {
 		return db.update("member.updatePW",param);
 	}
 	
-	
 	public Map<String,String> selectUserInfo(String loginID){
 		System.out.println(db.selectOne("member.selectUserInfo", loginID).toString());
 		return db.selectOne("member.selectUserInfo", loginID);
@@ -37,4 +36,7 @@ public class MemberDAO {
 		return db.selectList("member.selectMembersByDeptTaskID",dept_task_id);
 	}
 	
+	public String getAuthorityCategory(String id) {
+		return db.selectOne("member.getAuthorityCategory", id);
+	}
 }
