@@ -27,4 +27,15 @@ public class MemberDAO {
 		return db.selectOne("member.selectUserInfo", loginID);
 	}
 	
+	public String selectNameById(String id) {
+		return db.selectOne("member.selectNameById",id);
+	}
+	
+	public List<MemberDTO> selectMembersByDeptTaskId(String dept_task_id){
+		return db.selectList("member.selectMembersByDeptTaskID",dept_task_id);
+	}
+	
+	public String getAuthorityCategory(String id) {
+		return db.selectOne("member.getAuthorityCategory", id);
+	}
 }

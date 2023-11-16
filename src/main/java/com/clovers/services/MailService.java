@@ -2,6 +2,7 @@ package com.clovers.services;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.dao.MailDAO;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.EmployeeDTO;
 
 @Service
 public class MailService {
@@ -28,7 +28,7 @@ public class MailService {
 	public int submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
 		int email_id = dao.submitSend(dto);
 		
-		String upload = "/Users/uploads";
+		String upload = "/Users/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();} // 만약 업로드 폴더가 존재하지 않는다면 생성
 		
@@ -44,11 +44,19 @@ public class MailService {
 	}
 	
 	@Transactional
-	public void submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files) throws Exception {
-		dao.submitTempSend(dto);
+	public void submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files, boolean send) throws Exception {
 		int email_id = dto.getId();
 		
-		String upload = "/Users/uploads";
+		// 임시 보관함 -> 보내기
+		if(send == true) {
+			dao.submitTempSend(dto);
+		// 임시 보관함 -> 저장
+		} else {
+			dao.updateMail(dto);
+		}
+		
+		
+		String upload = "/Users/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();} // 만약 업로드 폴더가 존재하지 않는다면 생성
 		
@@ -131,7 +139,19 @@ public class MailService {
 		return dao.deleteMail(id);
 	}
 	
+	@Transactional
 	public int perDeleteMail(int id) {
+		String upload = "/Users/mailUploads";
+		List<EmailFileDTO> fileList = dao.selectAllFileById(id);
+		
+        for(EmailFileDTO file : fileList) {
+        	System.out.println(file.getSys_name());
+           File filepath = new File(upload + "/" + file.getSys_name());
+           filepath.delete();
+           
+           dao.deleteFiles(file.getSys_name());
+        }
+
 		return dao.perDeleteMail(id);
 	}
 	
@@ -162,8 +182,29 @@ public class MailService {
 		return dao.confirmation(id);
 	}
 	
-	public List<EmployeeDTO> autoComplete(String keyword) {
+	public List<Map<String, String>> autoComplete(String keyword) {
 		return dao.autoComplete(keyword);
 	}
+	
+	public String getEmailByLoginID(String loginID) {
+		return dao.getEmailByLoginID(loginID);
+	}
+	
+	public List<String> saveImage(MultipartFile[] image) throws Exception {
+		String upload = "/Users/mailUploads";
+		File uploadPath = new File(upload);
+		if(!uploadPath.exists()) {uploadPath.mkdir();}
 		
+		List<String> fileList = new ArrayList<>();
+		
+		if(image != null) {
+			for(MultipartFile file : image) {
+				String oriName = file.getOriginalFilename();
+				String sysName = UUID.randomUUID() + "_" + oriName; // UUID.randomUUID() : String 값 반환 (해시코드와 비슷)
+				file.transferTo(new File(uploadPath+"/"+sysName));
+				fileList.add("/mailUploads/" + sysName);
+			}
+		}
+		return fileList;
+	}
 }

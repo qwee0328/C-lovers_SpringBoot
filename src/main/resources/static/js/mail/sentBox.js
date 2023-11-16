@@ -17,7 +17,7 @@ $(document).ready(function() {
 	
 	    for (let i = 0; i < mail.length; i++) {
 	        let mailListDiv = $("<div>");
-	        mailListDiv.addClass("inBox__mailList");
+	        mailListDiv.addClass("sentBox__mailList");
 	
 	        let checkboxDiv = $("<input type='checkbox'>");
 	        checkboxDiv.attr("name", "selectedMails");
@@ -26,15 +26,12 @@ $(document).ready(function() {
 	
 	        let nameDiv = $("<div>");
 	        nameDiv.addClass("mailList__name");
-	        nameDiv.html(mail[i].send_id);
+	        nameDiv.html(mail[i].receiver_name);
 	
 	        let titleDiv = $("<a>");
 	        titleDiv.attr("href", "/mail/read?id=" + mail[i].id);
 	        titleDiv.addClass("mailList__title");
 	        titleDiv.html(mail[i].title);
-	
-	        let rightDiv = $("<div>");
-	        rightDiv.addClass("mailList__right");
 	
 	        let fileIconDiv = $("<i>");
 	        $.ajax({
@@ -61,13 +58,10 @@ $(document).ready(function() {
 	        
 	        if(mail[i].confirmation) {
 	        	confirmDiv.html("읽음");
-	        	rightDiv.append(fileIconDiv).append(dateDiv).append(confirmDiv);
+	        	mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(fileIconDiv).append(dateDiv).append(confirmDiv);
 	        } else {
-	        	confirmDiv.html("읽지 않음");
-	        	rightDiv.append(fileIconDiv).append(dateDiv).append(confirmDiv).append(cancellationDiv);
+	        	mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(fileIconDiv).append(dateDiv).append(cancellationDiv);
 	        }
-	        
-	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
 	
 	        $(".inBox__mailListBox").append(mailListDiv);
 	    }
@@ -147,7 +141,7 @@ $(document).ready(function() {
 	$(document).on("click", ".right__cancallation", function() {
 		let result = confirm("발송을 취소하시겠습니까? 취소한 메일은 휴지통으로 이동합니다.");
 		let selectedMails = [];
-		let id = $(this).parent().siblings(".mailList__checkbox").val();
+		let id = $(this).siblings(".mailList__checkbox").val();
 		
 		if(result) {
 			selectedMails.push(id);
@@ -253,8 +247,8 @@ $(document).ready(function() {
 	        url: pageUrl,
 	        type: 'POST'
 	    }).done(function (resp) {
-	        mailList(resp.mail, resp.recordTotalCount);
-	        pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
+	        mailList(resp.mail, resp.send_date, resp.recordTotalCount);
+        	pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
 	    })
 	})
 })
