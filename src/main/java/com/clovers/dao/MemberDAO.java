@@ -39,4 +39,5 @@ public class MemberDAO {
 	public String getAuthorityCategory(String id) {
 		return db.selectOne("member.getAuthorityCategory", id);
 	}
+
 }

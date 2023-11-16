@@ -28,7 +28,12 @@ public class OfficeDAO {
 		return db.selectList("Office.selectPositionAll");
 	}
 
-	// 사용자 수 불러오기
+	// 실제 db에 저장된 실 사용자 수 불러오기
+	public int selectRealEmpCount() {
+		return db.selectOne("Office.selectRealEmpCount");
+	}
+
+	// 사번 입력할때 사용할 사용자 수 불러오기 -> 삭제된 사용자까지 합쳐서 숫자 셈
 	public int selectEmpCount() {
 		return db.selectOne("Office.selectEmpCount");
 	}
@@ -45,7 +50,7 @@ public class OfficeDAO {
 
 	// 사내 전화번호 사용중인번호인지 체크
 	public int usingCompanyPhoneCheck(String companyPhone) {
-		return db.selectOne("Office.usingCompanyPhoneCheck",companyPhone);
+		return db.selectOne("Office.usingCompanyPhoneCheck", companyPhone);
 	}
 
 	// 사용자 등록하기
@@ -77,5 +82,30 @@ public class OfficeDAO {
 	public List<Map<String, String>> searchUser(String keyword) {
 		keyword = "%" + keyword + "%";
 		return db.selectList("Office.searchUser", keyword);
+	}
+
+	// 부서별 부서명, 인원 수 불러오기
+	public List<Map<String, Object>> selectDeptInfo() {
+		return db.selectList("Office.selectDeptInfo");
+	}
+
+	// 부서별 팀별 인원 수 불러오기
+	public List<Map<String, Object>> selectTaskInfo() {
+		return db.selectList("Office.selectTaskInfo");
+	}
+
+	// 부서별 인원 정보 불러오기
+	public List<Map<String, Object>> selectDepartmentEmpInfo(String dept_id) {
+		return db.selectList("Office.selectDepartmentEmpInfo", dept_id);
+	}
+
+	// 모든 부서별 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectAllEmpInfo() {
+		return db.selectList("Office.selectAllEmpInfo");
+	}
+	
+	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
+		return db.selectList("Office.selectDetpTaskEmpInfo",task_id);
 	}
 }

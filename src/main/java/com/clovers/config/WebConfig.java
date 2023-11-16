@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/uploads/**").addResourceLocations("file:C:/C-lovers/");
-		registry.addResourceHandler("/mailUploads/**").addResourceLocations("file:/Users/mailUploads/");
+		registry.addResourceHandler("/mailUploads/**").addResourceLocations("file:C:/mailUploads/");
 	}
 	
 //	인터셉터

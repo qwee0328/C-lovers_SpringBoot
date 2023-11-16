@@ -62,9 +62,9 @@
             </div>
         </div>
     </div>
-    <%@ include file="../addressBook/addBookInsertModal.jsp"%>
-    <%@ include file="../addressBook/addBookViewModal.jsp"%>
-    <%@ include file="../addressBook/addBookTagInsertModal.jsp"%>
+    <%@ include file="../addressbook/addBookInsertModal.jsp"%>
+    <%@ include file="../addressbook/addBookViewModal.jsp"%>
+    <%@ include file="../addressbook/addBookTagInsertModal.jsp"%>
    	
  	<button id="modalOpen">클릭</button>
   
