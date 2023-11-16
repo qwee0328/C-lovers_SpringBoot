@@ -1,0 +1,322 @@
+@charset "UTF-8";
+
+/*view modal*/
+.addBookViewModal {
+	width: 400px;
+	padding: 20px;
+}
+
+.addBookViewModal__header {
+	padding: 10px 0;
+}
+
+.addBookModal__title {
+	color: #6C6C72;
+	font-weight: 500;
+	padding:10px 0;
+}
+
+.addBookModal__modalBody {
+	border-top: 1.5px solid #7d7d7d30;
+	padding: 30px 0;
+}
+
+.modalBody__line {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+
+.addBookViewModal .modalBody__content {
+	width: 80%;
+	height: 30px;
+	color: #6C6C72;
+	font-size: 15px;
+	display: flex;
+	align-items: center;
+}
+
+
+.mr15 {
+	margin-right: 15px;
+}
+
+.addBookViewModal__favorites>i {
+	color: #6C6C72;
+}
+
+.addBookViewModal__favorites>i.chk {
+	color: #ffd400;
+	font-weight: bold;
+}
+
+.addBookViewModal__header {
+	align-items: center;
+}
+
+
+/* insert modal */
+.addBookInsertModal {
+	width: 600px;
+	padding: 20px;
+	height: 650px;
+}
+
+.addBookInsertModal__title {
+	color: #6C6C72;
+	font-weight: 500;
+}
+
+.addBookInsertModal__modalBody {
+	border-top: 1.5px solid #7d7d7d30;
+	border-bottom: 1.5px solid #7d7d7d30;
+	margin: 20px 0;
+	padding: 20px 0;
+	height: 80%;
+}
+
+.modalBody__title {
+	width: 20%;
+	color: #6C6C72;
+	align-items: center;
+}
+
+.modalBody__content {
+	width: 60%;
+	height: 30px;
+}
+
+.modalBody__input {
+	width: 100%;
+	height: 100%;
+	border: 1px solid #7d7d7d30;
+	border-radius: 4px;
+	padding-left: 5px;
+}
+
+.modalBody__plusBtn {
+	width: 10%;
+	display: flex;
+	align-items: center;
+}
+
+.modalBody__plusBtn>i:hover {
+	color: #75B47D90;
+	cursor: pointer;
+}
+
+.modalBody__plusBtn>i {
+	padding-left: 10px;
+	display: flex;
+	align-items: center;
+	color: #75B47D;
+}
+
+
+.addBookInsertModal .addBookModal__btns {
+	height: 7%;
+	align-items: center;
+	justify-content: space-between;
+}
+.addBookModal__btns>div>button {
+	width: 70px;
+	height: 35px;
+	border-radius: 4px;
+	background-color: #7d7d7d20;
+	color: #6C6C72;
+	border: 1px solid #7d7d7d20;
+	cursor:pointer;
+}
+
+
+.modalBody__numberTypeCover,
+.modalBody__tagCover,
+.modalBody__birthTypeCover,
+.modalBody__addressTypeCover {
+	width: 20%;
+	height: 100%;
+	margin-right: 10px;
+	background-color: #FFFFFF;
+	border-radius: 10px;
+	position: relative;
+	z-index: 1;
+}
+
+.modalBody__tagCover {
+	width: 100%
+}
+
+.modalBody__tagCover{
+	margin: 0;
+}
+
+.modalBody__numberType,
+.modalBody__tag,
+.modalBody__birthType,
+.modalBody__addressType {
+	width: 100%;
+	height: 100%;
+	padding-left: 5px;
+	color: #7d7d7d;
+	border-radius: 4px;
+	outline: none;
+	appearance: none;
+	position: relative;
+	z-index: 3;
+	background: transparent;
+	border: 1px solid #7d7d7d30;
+}
+
+.modalBody__numberType>option,
+.modalBody__tag>option,
+.modalBody__birthType>option,
+.modalBody__addressType>option {
+	background-color: #FFFFFF;
+}
+
+.numberType__arrow,
+.tag__arrow,
+.birthType__arrow,
+.addressType__arrow {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 2;
+	width: 25px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.numberType__arrow>i,
+.tag__arrow>i,
+.birthType__arrow>i,
+.addressType__arrow>i {
+	width: 50%;
+	font-size: 10px;
+	color: #7d7d7d;
+	transition: .3s;
+}
+
+.modalBody__numberType:focus+.numberType__arrow>i,
+.modalBody__tag:focus+.tag__arrow>i,
+.modalBody__birthType:focus+.birthType__arrow>i,
+.modalBody__addressType:focus+.addressType__arrow>i {
+	transform: rotate(180deg);
+}
+
+.modalBody__number,
+.modalBody__birth,
+.modalBody__address {
+	width: 80%;
+}
+
+.modalBody__memo {
+	border: 1px solid #7d7d7d20;
+	border-radius: 4px;
+	width: 100%;
+	height: 60px;
+	padding: 5px;
+	font-size: 13px;
+	overflow-y: auto;
+}
+
+[contenteditable="true"]:empty:before {
+	content: attr(placeholder);
+	color: #7d7d7d;
+}
+
+select option[value=""][disabled] {
+	display: none;
+}
+
+.modalBody__memo::-webkit-scrollbar {
+	width: 5px;
+
+}
+
+.modalBody__memo::-webkit-scrollbar-thumb {
+	background-color: #7d7d7d20;
+	border-radius: 10px;
+
+	border: 7px solid transparent
+		/* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+
+.modalBody__memo::-webkit-scrollbar-track {
+	background-color: transparent
+		/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.modalBody__contentFull {
+	width: 70%;
+}
+
+.modalBody__companyInfo>input {
+	width: 33.33%;
+}
+
+.mr10 {
+	margin-right: 10px;
+}
+
+.modalBody__addBookType>div {
+	/* width: 140px; */
+	width: 50%;
+	height: 35px;
+	border: 1px solid #7d7d7d20;
+	background-color: #7D7D7D20;
+	color: #7d7d7d;
+	font-size: 14px;
+	font-weight: 500;
+	margin-bottom: 20px;
+	cursor:pointer;
+}
+
+.modalBody__addBookType>div.activeType {
+	border: 1px solid #75B47D;
+	color: #75B47D;
+	background-color: transparent;
+}
+
+
+/* tag insert modal*/
+.addBookTagInsertModal {
+	width: 400px;
+	padding: 20px;
+	height: 200px;
+}
+
+
+.addBookModal__btns {
+	align-items: center;
+	justify-content: center;
+}
+
+.addBookModal__btns>div>button {
+	width: 70px;
+	height: 35px;
+	border-radius: 4px;
+	background-color: #7d7d7d20;
+	color: #6C6C72;
+	border: 1px solid #7d7d7d20;
+	cursor:pointer;
+}
+
+.addBookModal__insertBtn {
+	color: #FFFFFF !important;
+	background-color: #75B47D !important;
+}
+
+.addBookTagInsertModal .addBookModal__modalBody{
+	padding:20px 0;
+}
+
+.mr15 {
+	margin-right: 15px;
+}
+
+.addBookTagInsertModal .modalBody__input{
+	height: 50px;
+}
