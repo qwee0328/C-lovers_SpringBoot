@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -160,4 +161,13 @@ public class MemberController {
 		mservice.updatePW(id,pwEnc);
 		return "redirect:/humanResources/mypage";
 	}
+	
+// 관리자 접근 권한 불러오기
+	@ResponseBody
+	@RequestMapping("/isAdmin")
+	public String getAuthorityCategory() {
+		String id = (String)session.getAttribute("loginID");
+		return mservice.getAuthorityCategory(id);
+	}
 }
+

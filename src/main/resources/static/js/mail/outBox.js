@@ -17,7 +17,7 @@ $(document).ready(function() {
 	
 	    for (let i = 0; i < mail.length; i++) {
 	        let mailListDiv = $("<div>");
-	        mailListDiv.addClass("inBox__mailList");
+	        mailListDiv.addClass("outBox__mailList");
 	
 	        let checkboxDiv = $("<input type='checkbox'>");
 	        checkboxDiv.attr("name", "selectedMails");
@@ -26,15 +26,12 @@ $(document).ready(function() {
 	
 	        let nameDiv = $("<div>");
 	        nameDiv.addClass("mailList__name");
-	        nameDiv.html(mail[i].send_id);
+	        nameDiv.html(mail[i].receiver_name);
 	
 	        let titleDiv = $("<a>");
 	        titleDiv.attr("href", "/mail/read?id=" + mail[i].id);
 	        titleDiv.addClass("mailList__title");
 	        titleDiv.html(mail[i].title);
-	
-	        let rightDiv = $("<div>");
-	        rightDiv.addClass("mailList__right");
 	
 	        let fileIconDiv = $("<i>");
 	        $.ajax({
@@ -50,10 +47,9 @@ $(document).ready(function() {
 	
 	        let dateDiv = $("<div>");
 	        dateDiv.addClass("right__date");
-	        dateDiv.html(mail[i].send_date);
-	
-	        rightDiv.append(fileIconDiv).append(dateDiv);
-	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(rightDiv);
+	        dateDiv.html("예약시간 " + mail[i].reservation_date);
+
+	        mailListDiv.append(checkboxDiv).append(nameDiv).append(titleDiv).append(fileIconDiv).append(dateDiv);
 	
 	        $(".inBox__mailListBox").append(mailListDiv);
 	    }
@@ -220,8 +216,8 @@ $(document).ready(function() {
 	        url: pageUrl,
 	        type: 'POST'
 	    }).done(function (resp) {
-	        mailList(resp.mail, resp.recordTotalCount);
-	        pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
+	        mailList(resp.mail, resp.send_date, resp.recordTotalCount);
+        	pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
 	    })
 	})
 })

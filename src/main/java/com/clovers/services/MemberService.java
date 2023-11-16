@@ -41,5 +41,9 @@ public class MemberService {
 	public String selectNameById(String id) {
 		return mdao.selectNameById(id);
 	}
-
+	
+	public String getAuthorityCategory(String id) {
+		return mdao.getAuthorityCategory(id);
+	}
+	
 }
