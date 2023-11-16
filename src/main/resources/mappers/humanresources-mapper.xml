@@ -80,4 +80,8 @@
 		where date(work_date) = curdate() and emp_id=#{id};
 	</select>
 
+	<!-- // 휴가 사유 구분 불러오기 -->
+	<select id="selectRestReasonType" resultType="String">
+		select * from rest_reason_type
+	</select>
 </mapper>

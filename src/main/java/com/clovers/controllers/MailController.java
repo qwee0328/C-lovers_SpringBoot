@@ -1,5 +1,11 @@
 package com.clovers.controllers;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -24,9 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.constants.Constants;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.EmployeeDTO;
+import com.clovers.dto.MemberDTO;
 import com.clovers.services.MailService;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -71,53 +79,6 @@ public class MailController {
 	@RequestMapping("/send")
 	public String send() {
 		return "mail/send";
-	}
-	
-	// 보내기 (메일 발송)
-	@RequestMapping("/submitSend")
-	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles) throws Exception {
-		
-		// 예약 메일이라면
-		if(!reserve_date.isEmpty()) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date date = dateFormat.parse(reserve_date);
-			Timestamp reservation_date = new Timestamp(date.getTime());
-			
-			dto.setReservation(true);
-			dto.setReservation_date(reservation_date);
-			mservice.submitSend(dto, uploadFiles);
-			
-			return "redirect:/mail";
-		}
-		
-		dto.setReservation(false);
-		dto.setSend_date(new Timestamp(System.currentTimeMillis()));
-		
-		// 임시 메일이라면
-		if(dto.isTemporary() == true) {
-			mservice.submitTempSend(dto, sysName, uploadFiles);
-		} else {
-			dto.setTemporary(false);
-			mservice.submitSend(dto, uploadFiles);
-		}
-
-		return "redirect:/mail";
-	}
-	
-	// 저장하기
-	@RequestMapping("/tempSend")
-	public String tempSend(EmailDTO dto, MultipartFile[] uploadFiles) throws Exception {
-		dto.setTemporary(true);
-		mservice.submitSend(dto, uploadFiles);
-		
-		return "redirect:/mail";
-	}
-	
-	// 받는 사람 자동완성
-	@ResponseBody
-	@RequestMapping("/autoComplete")
-	public List<EmployeeDTO> autoComplete(String keyword) {
-		return mservice.autoComplete(keyword);
 	}
 	
 	// 받은 편지함으로 이동
@@ -170,20 +131,6 @@ public class MailController {
 		return mservice.selectFileByEmailId(email_id);
 	}
 	
-	// 파일 리스트
-	@ResponseBody
-	@RequestMapping("/fileList")
-	public List<EmailFileDTO> fileList(@RequestParam("email_id") int email_id) {
-		List<EmailFileDTO> fileList = new ArrayList<>();
-		
-		boolean result = mservice.selectFileByEmailId(email_id);
-		if(result) {
-			fileList = mservice.selectAllFileById(email_id);
-		} 
-		
-		return fileList;
-	}
-	
 	// 답장
 	@RequestMapping("/send/reply")
 	public String replyMail(int id, Model model) {
@@ -200,6 +147,7 @@ public class MailController {
 	public String deleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
 		for(int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
+			
 			mservice.deleteMail(id);
 		}
 		return "redirect:/mail";
@@ -244,7 +192,7 @@ public class MailController {
 	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String receive_id = (String) session.getAttribute("loginID");
+		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.inBoxList(receive_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
 		for(int i = 0; i < mail.size(); i++) {
@@ -271,7 +219,7 @@ public class MailController {
 	public Map<String, Object> sentBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String send_id = (String) session.getAttribute("loginID");
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		boolean temporary = false;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
@@ -299,7 +247,7 @@ public class MailController {
 	public Map<String, Object> tempBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String send_id = (String) session.getAttribute("loginID");
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		boolean temporary = true;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		Map<String, Object> param = new HashMap<>();
@@ -338,7 +286,7 @@ public class MailController {
 	public Map<String, Object> outBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String send_id = (String) session.getAttribute("loginID");
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.outBoxList(send_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
@@ -378,31 +326,156 @@ public class MailController {
 	@RequestMapping("/read")
 	public String read(@RequestParam("id") int id, Model model) {
 		EmailDTO mail = mservice.selectAllById(id);
-		
 		model.addAttribute("mail", mail);
-		
 		return "/mail/read";
 	}
 	
 	// 삭제
 	@RequestMapping("/read/delete")
-	public String deleteAtRead(int id) {
+	public String deleteAtRead(@RequestParam int id) {
 		mservice.deleteMail(id);
 		return "redirect:/mail";
 	}
 	
 	// 완전삭제
 	@RequestMapping("/read/perDelete")
-	public String perDeleteAtRead(int id) {
+	public String perDeleteAtRead(@RequestParam int id) {
 		mservice.perDeleteMail(id);
 		return "redirect:/mail";
 	}
 	
 	// 읽음 처리
 	@RequestMapping("/confirmation")
-	public String confirmation(int id) {
-		mservice.confirmation(id);
+	public String confirmation(int id, String receive_id) {
+		String getReceiveId = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+
+		// 로그인한 사용자의 이메일과 받는 사람의 이메일이 같다면
+		if(getReceiveId.equals(receive_id)) {
+			mservice.confirmation(id);
+		}
 		return "redirect:/mail/read?id="+id;
+	}
+	
+	// 파일 리스트
+	@ResponseBody
+	@RequestMapping("/fileList")
+	public List<EmailFileDTO> fileList(@RequestParam("email_id") int email_id) {
+		List<EmailFileDTO> fileList = new ArrayList<>();
+		
+		boolean result = mservice.selectFileByEmailId(email_id);
+		if(result) {
+			fileList = mservice.selectAllFileById(email_id);
+		} 
+		return fileList;
+	}
+	
+	// 파일 다운로드
+	@RequestMapping("/downloadFile")
+	public void downloadFile(@RequestParam String sysname, @RequestParam String oriname, HttpServletResponse response) throws Exception {
+		String realPath = "C:/mailUploads";
+		File targetFile = new File(realPath + "/" + sysname);
+		
+		oriname = new String(oriname.getBytes("utf8"), "ISO-8859-1");
+		response.setHeader("content-disposition", "attachement;filename="+oriname);
+		byte[] fileContents = new byte[(int) targetFile.length()];
+		
+		try(DataInputStream dis = new DataInputStream(new FileInputStream(targetFile))){
+			ServletOutputStream sos = response.getOutputStream();
+			dis.readFully(fileContents);
+			sos.write(fileContents);
+			sos.flush();
+		}
+	}
+	
+	
+	// ---------- send ----------
+	
+	// 보내기 (메일 발송)
+	@RequestMapping("/submitSend")
+	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles, String deleteUrl) throws Exception {
+		String[] receiveIds = dto.getReceive_id().split("\\s*[,;]\\s*"); // 정규식 \s*는 0개 이상의 공백을 말함
+		for(int i = 0; i < receiveIds.length; i++) {
+			dto.setReceive_id(receiveIds[i]);
+			
+			// 예약 메일이라면
+			if(!reserve_date.isEmpty() && dto.isTemporary() == false) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date = dateFormat.parse(reserve_date);
+				Timestamp reservation_date = new Timestamp(date.getTime());
+				
+				dto.setReservation(true);
+				dto.setReservation_date(reservation_date);
+				mservice.submitSend(dto, uploadFiles);
+				
+				return "redirect:/mail";
+			}
+			
+			dto.setReservation(false);
+			dto.setSend_date(new Timestamp(System.currentTimeMillis()));
+			
+			// 임시 메일이라면
+			if(dto.isTemporary() == true) {
+				boolean send = true;
+				mservice.submitTempSend(dto, sysName, uploadFiles, send);
+			} else {
+				dto.setTemporary(false);
+				mservice.submitSend(dto, uploadFiles);
+			}
+		}
+		
+		System.out.println("deleteUrl: " + deleteUrl);
+		// 삭제한 이미지가 있다면
+		if(!deleteUrl.isEmpty()) {
+			String[] urls = deleteUrl.split(":");
+	        for(int i = 1; i < urls.length; i++) {
+	        	System.out.println("urls: " + urls[i]);
+	        	deleteImage(urls[i]);
+	        }
+		}
+
+		return "redirect:/mail";
+	}
+	
+	// 저장하기
+	@RequestMapping("/tempSend")
+	public String tempSend(EmailDTO dto, String sysName, MultipartFile[] uploadFiles) throws Exception {
+		
+		// 기존 메일 업데이트
+		if(dto.getId() != 0) {
+			boolean send = false;
+			mservice.submitTempSend(dto, sysName, uploadFiles, false);
+		// 새 메일 작성
+		} else {
+			dto.setTemporary(true);
+			mservice.submitSend(dto, uploadFiles);
+		}
+		
+		return "redirect:/mail";
+	}
+	
+	// 받는 사람 자동완성
+	@ResponseBody
+	@RequestMapping("/autoComplete")
+	public List<Map<String, String>> autoComplete(@RequestParam String keyword) {
+		String search = "%" + keyword + "%";
+		List<Map<String, String>> result = mservice.autoComplete(search);
+		return mservice.autoComplete(search);
+	}
+	
+	// summernote 이미지 경로 설정
+	@ResponseBody
+	@RequestMapping("/uploadImage")
+	public List<String> uploadImage(@RequestParam("files") MultipartFile[] files) throws Exception {
+		List<String> fileList = mservice.saveImage(files);
+		return fileList;
+	}
+	
+	// summernote 이미지 경로에서 삭제
+	@RequestMapping("/deleteImage")
+	public void deleteImage(@RequestParam("src") String src) throws Exception {
+		Path path = FileSystems.getDefault().getPath("C:/" + src); // String을 Path 객체로 변환
+		System.out.println(path);
+		Files.deleteIfExists(path);
 	}
 	
 	
@@ -414,11 +487,15 @@ public class MailController {
 	public Map<String, Object> trashList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String id = (String) session.getAttribute("loginID");
+		String id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.trashList(id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
 		for(int i = 0; i < mail.size(); i++) {
-			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+			if(mail.get(i).getSend_date() != null) {
+				send_date[i] = formatTimestamp(mail.get(i).getSend_date());
+			} else {
+				send_date[i] = "";
+			}
 		}
 		
 		Map<String, Object> param = new HashMap<>();

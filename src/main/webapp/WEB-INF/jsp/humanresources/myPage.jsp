@@ -16,7 +16,7 @@
 	<div class="container">
         <!-- 네비바 자리 -->
         <div class="naviBar">
-            <div class="navi">네비</div>
+        	<%@ include file="../humanresources/hrNaviBar.jsp" %>
         </div>
 
         <div class="mypageBox">

@@ -13,9 +13,9 @@
 	<select id="selectEmpCountById" resultType="int">
 		select count(*)
 		from
-		employee e 
-		join dept_task dt on e.dept_task_id = dt.id
-		where dt.id = #{id}
+		employee e join dept_task dt on e.dept_task_id = dt.id
+		where dt.id =
+		#{id}
 	</select>
 
 	<!-- 상위 부서를 기반으로 불러오기 -->
