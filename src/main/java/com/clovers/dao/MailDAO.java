@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.EmployeeDTO;
+import com.clovers.dto.MemberDTO;
 
 @Repository
 public class MailDAO {
@@ -110,7 +110,15 @@ public class MailDAO {
 		return db.update("Mail.confirmation", id);
 	}
 	
-	public List<EmployeeDTO> autoComplete(String keyword) {
+	public List<Map<String, String>> autoComplete(String keyword) {
 		return db.selectList("Mail.autoComplete", keyword);
+	}
+
+	public String getEmailByLoginID(String loginID) {
+		return db.selectOne("Mail.getEmailByLoginID", loginID);
+	}
+	
+	public int updateMail(EmailDTO dto) {
+		return db.update("Mail.updateMail", dto);
 	}
 }

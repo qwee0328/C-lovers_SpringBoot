@@ -73,7 +73,7 @@
 					</div>
 					<div class="naviItem__title">예약</div>
 				</div>
-				<div class="naviItems__naviItem">
+				<div class="naviItems__naviItem" id="humanresources">
 					<div class="naviItem__itemCurcle">
 						<div class="itemCurcle__Icon">
 							<i class="fa-solid fa-sitemap"></i>
@@ -105,6 +105,21 @@
 				if($(this).siblings().html() == "일정") {
 					location.href = "/schedule";
 				}
+				
+				if($(this).siblings().html() == "주소록") {
+					location.href = "/addressbook";
+				}
+			})
+			
+			$(document).ready(function() {
+				$.ajax({
+					url: "/members/isAdmin"
+				}).done(function(resp) {
+					console.log(resp);
+					if(resp == "인사") {
+						
+					}
+				})
 			})
 		</script>
 
