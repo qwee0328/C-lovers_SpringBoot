@@ -31,6 +31,7 @@ public class HomeController {
 		System.out.println(userWorkRule.toString());
 		session.setAttribute("daily_work_rule_id", userWorkRule.get("daily_work_rule_id"));
 		session.setAttribute("attend_time", userWorkRule.get("attend_time"));
+		session.removeAttribute("currentMenu");
 		System.out.println(session.getAttribute("attend_time"));
 		return "home";
 	}
