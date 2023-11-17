@@ -7,8 +7,7 @@ $(document).ready(function() {
 		let title = $(this).children(".naviConp__title").html();
 		let icon = $(this).children(".naviConp__icon").children("i");
 		let location = $(this).children(".naviLocation").val();
-		
-		console.log(title);
+
 		if(title === "진행 중인 문서") {
 			$(icon.toggleClass("fa-chevron-up fa-chevron-down"));
 			$(".progressDocument").toggle();
@@ -22,8 +21,6 @@ $(document).ready(function() {
 
 	 $(".naviConp__title").each(function() {
         if ($(this).text() === $("#currentMenu").val()) {
-			console.log($(this).text());
-			console.log($("#currentMenu").val());
             $(this).parent().css("background-color", "#DCEDD4");
         }
     });
