@@ -1,0 +1,158 @@
+@charset "UTF-8";
+
+*{
+    box-sizing: border-box;
+    padding: 0; margin: 0;
+}
+@media(max-width: 786px){
+    .container{
+        max-width: 786px;
+    }
+}
+
+@media(min-width: 786px){
+    .container{
+        max-width: 1920px;
+    }
+}
+
+.employeeInfo__Container{
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto';
+}
+.employeeInfo__navi{
+    width: 20%;
+}
+.employeeInfo__chart{
+    width: 80%;
+}
+/* 제일 위에 부분 */
+.chart__searchBox{
+    display: flex;
+    margin: 20px;
+    justify-content: space-between;
+}
+/* 임직원 검색 */
+.searchBox{
+    border: 1px solid #7D7D7D40;
+    width: 360px; height: 34px;
+    display: flex;
+}
+.searchBox>div{
+    padding: 5px;
+    width: 8%;
+}
+.searchBox input[type="text"]{
+    border: none; width: 92%; height: 100%;
+    outline: none;
+}
+
+/* 내정보보기 버튼 */
+.myPageBtn{
+    width: 100px; height: 30px; border: #6C6C72; border-radius: 4px;
+    background-color: #7D7D7D20; color: #6C6C72;
+    margin-right: 20px;
+}
+/* 아래 내용 하이웍스 산업, 프로필 부분 */
+.chart_content{
+    display: flex;
+    /* margin: 0 20px; */
+    border-top: 1px solid #7D7D7D40;
+}
+.chart_content_left{
+    width: 20%;
+    height: 100vh;
+    border-right: 1px solid #7D7D7D40;
+}
+.chart_content_right{
+    width: 80%;
+}
+
+/* 처음에 아코디언 내용 안보이게 */
+.manageInner,.productInner,.saleInner{
+    display: none;
+}
+
+/* 클로버 산업 메뉴  */
+.innerBox__title{
+    padding-left: 5px;
+    font-weight: 800; 
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #7D7D7D40;
+}
+/* 타이틀 */
+.Title{
+    font-weight: 800; 
+    padding-left: 5px;
+}
+.naviIcon{
+    width: 25px;
+    text-align: center;
+}
+.ContentBox {
+    color: #333;
+    border-bottom: 1px solid #7D7D7D40;
+}
+.manageContent,.productContent,.saleContent{
+    padding: 5px;
+    padding-left: 30px;
+    font-size: 14px;
+}
+.manageBox,.productBox,.saleBox{
+    width: 100%;
+}
+.Box__title{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    height: 33px;
+}
+/* 팀 높이 */
+.innerBox__title,.manageContent,.productContent,.saleContent{
+    height: 33px;
+}
+
+/* 토글메뉴 hover하면 배경색 */
+.Box__title:hover,.innerBox__title:hover{
+    background-color: #dcedd4 !important; 
+}
+.ContentBox :hover{
+    background-color: #F3F7F1;
+}
+
+/*  */
+/* div{border: 1px solid black;} */
+
+
+/* 오른쪽 조직도 css */
+.chart_content_right{
+    padding-top: 40px; padding-left: 40px;
+}
+.members__Title{
+    margin-bottom: 15px;
+}
+/* 멤버 한줄씩 */
+.member__unitBox{
+    display: flex;
+    margin-bottom: 30px;
+}
+.memberPhoto{
+    width: 80px; height: 80px; 
+    margin-right: 20px;
+}
+.memberPhoto>img{
+    width: 100%; height: 100%; border-radius: 50%;
+}
+/* 이름직급 */
+.memberText div{
+    height: calc(100%/3);
+    display: flex; align-items: center;
+    font-size: 14px;
+}
+.member__name{
+    font-weight: 600;
+}

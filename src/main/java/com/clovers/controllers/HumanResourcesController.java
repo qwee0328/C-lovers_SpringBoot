@@ -170,4 +170,10 @@ public class HumanResourcesController {
 		session.setAttribute("currentMenu", currentMenu);
 		return "humanresources/vacationApplication";
 	}
+	
+	// 임직원 관리 페이지 이동 
+	@RequestMapping("/employeeInfo")
+	public String employeeInfo() {
+		return "humanresources/employeeInfo";
+	}
 }

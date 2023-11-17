@@ -39,4 +39,9 @@ $(document).ready(function() {
 	$("#vacationAppBtn").on("click",function(){
 		location.href = "/humanResources/showVacationApp";
 	})
+	
+	 // 임직원 관리 이동
+   	$("#employeeInfo").on("click",function(){
+   		location.href = "/humanResources/employeeInfo";
+   	})
 });
