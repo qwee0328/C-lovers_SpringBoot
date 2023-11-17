@@ -16,15 +16,15 @@
 	<div class="addBookTagInsertModal modal">
 		<div class="addBookModal__title">태그 만들기</div>
 		<div class="addBookModal__modalBody">
-			<input type="text" class="modalBody__input"
+			<input type="text" class="modalBody__input modalBody__tagName"
 				placeholder="새로 생성할 태그명을 입력하세요">
 		</div>
 		<div class="addBookModal__btns d-flex">
-			<div class="addBookModal__cancelBtnCover">
-				<button class="addBookModal__cancelBtn mr15">취소</button>
+			<div class="addBookModal__cancelBtnCover mr15">
+				<button class="addBookModal__cancelBtn">취소</button>
 			</div>
 			<div class="addBookModal__insertBtnCover">
-				<button class="addBookModal__insertBtn">저장</button>
+				<button class="addBookModal__insertBtn" id="addressBookTagInsert">저장</button>
 			</div>
 		</div>
 	</div>

@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class StompChatConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketChatConfig implements WebSocketMessageBrokerConfigurer {
 	// WebSocket - Stomp 메시지를 관리하는 메시지브로커 클래스
 	// 메시지에 헤더에 정보를 나누어서 메시지의 속성마다 메시지를 다르게 처리하는것이 가능해짐. 
 	// 채팅창을 만드는 것 - publish
@@ -21,8 +21,8 @@ public class StompChatConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/topic");   // Enables a simple in-memory broker
+        registry.setApplicationDestinationPrefixes("/pub");
+        registry.enableSimpleBroker("/sub");   // Enables a simple in-memory broker
 
 
         //   Use this for enabling a Full featured broker like RabbitMQ

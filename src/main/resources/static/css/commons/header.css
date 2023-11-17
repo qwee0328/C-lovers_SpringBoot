@@ -74,6 +74,7 @@
 	border-radius: 5px;
 	box-shadow: 3px 3px #7D7D7D40;
 	background-color: white;
+	z-index: 999;
 }
 .header__userinfo{
 	padding: 20px;

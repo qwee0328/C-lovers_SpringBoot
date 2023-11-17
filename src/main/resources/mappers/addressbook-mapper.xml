@@ -4,4 +4,99 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AddressBook">
 	<!-- 주소록 매퍼 -->
+	<select id="tagSelectByIsShare" resultType="com.clovers.dto.AddressBookTagDTO">
+		select * from address_book_tag where 
+		<if test="is_share == 1">
+			is_share = #{is_share};
+		</if>
+		<if test="is_share == 0">
+			emp_id = #{emp_id} and is_share =#{is_share};
+		</if>
+	</select>
+
+	<select id="tagSelect" resultType="com.clovers.dto.AddressBookTagDTO">
+		select * from address_book_tag where emp_id = #{emp_id} or is_share = 1;
+	</select>
+	
+	<select id="select" resultType="com.clovers.dto.AddressBookDTO">
+		select id, is_share, name, emp_id, email, numberType, number, company_name, dept_name, job_name, addressType, address, birthType, birth, memo from address_book_all where 
+		<if test="key.equals('is_share')">
+			<if test="value == 1">
+				is_share = #{value};
+			</if>
+			<if test="value == 0">
+				emp_id = #{emp_id} and is_share = #{value};
+			</if>
+		</if>
+		<if test="key.equals('id')">
+			tag_id = #{value}
+		</if>
+		
+	</select>
+	
+	<insert id="tagInsert" useGeneratedKeys="true" keyProperty="id">
+		insert into address_book_tag values(null, #{name}, #{emp_id}, #{is_share});
+	</insert>
+	
+	<insert id="tagListInsert" parameterType="java.util.List">
+		insert into address_book_tag_list values
+		<foreach collection="selectedTagArray" item="selectedTag" separator=",">
+			(null, #{selectedTag}, #{address_book_id})
+		</foreach>
+	</insert>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into address_book( id, name, emp_id, is_share		
+			<if test="email != null">
+				,email
+			</if>
+			<if test="number != null">
+				,numberType, number
+			</if>
+			<if test="company_name != null">
+				,company_name
+			</if>
+			<if test="dept_name != null">
+				,dept_name
+			</if>
+			<if test="job_name != null">
+				,job_name
+			</if>
+			<if test="address != null">
+				,addressType, address
+			</if>
+			<if test="birth != null">
+				,birthType, birth
+			</if>
+			<if test="memo != null">
+				,memo
+			</if>
+		)
+		values( null, #{name}, #{emp_id}, #{is_share}
+			<if test="email != null">
+				,#{email}
+			</if>
+			<if test="number != null">
+				,#{numberType}, #{number}
+			</if>
+			<if test="company_name != null">
+				,#{company_name}
+			</if>
+			<if test="dept_name != null">
+				,#{dept_name}
+			</if>
+			<if test="job_name != null">
+				,#{job_name}
+			</if>
+			<if test="address != null">
+				,#{addressType}, #{address}
+			</if>
+			<if test="birth != null">
+				,#{birthType}, #{birth}
+			</if>
+			<if test="memo != null">
+				,#{memo}
+			</if>
+		);
+	</insert>
 </mapper>

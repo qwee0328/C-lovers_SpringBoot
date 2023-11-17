@@ -171,6 +171,16 @@ public class HumanResourcesController {
 		return "humanresources/vacationApplication";
 	}
 	
+	
+	// 휴가 사유 구분 불러오기
+	@ResponseBody
+	@RequestMapping("/selectRestReasonType")
+	public List<String> selectRestReasonType() {
+		List<String> result = hrservice.selectRestReasonType();
+		System.out.println(result.toString());
+		return result;
+	}
+	
 	// 임직원 관리 페이지 이동 
 	@RequestMapping("/employeeInfo")
 	public String employeeInfo() {

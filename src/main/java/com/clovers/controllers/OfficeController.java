@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clovers.dto.DeptTaskDTO;
@@ -40,10 +41,11 @@ public class OfficeController {
 		return ResponseEntity.ok(list);
 	}
 	
-	// 사용자 수 불러오기
+	// 실제 db에 저장된 실 사용자 수 불러오기
 	@GetMapping("/empCount")
-	public ResponseEntity<Integer> selectEmpCount(){
-		int count= oservice.selectEmpCount();
+	@RequestMapping("/empCount")
+	public ResponseEntity<Integer> selectRealEmpCount(){
+		int count= oservice.selectRealEmpCount();
 		return ResponseEntity.ok(count);
 	}
 	
@@ -95,12 +97,49 @@ public class OfficeController {
 	
 	// 사용자 이름, id 검색하기
 	@GetMapping("/searchUser")
+	@RequestMapping("/searchUserAjax")
 	public ResponseEntity<List<Map<String, String>>> searchUser(String keyword){
 		System.out.println(keyword);
+		System.out.println("durl");
 		List<Map<String, String>> list = oservice.searchUser(keyword);
 		for(Map<String,String>d :list) {
 			System.out.println(d.toString());
 		}
 		return ResponseEntity.ok(list);
+	}
+	
+	// 부서별 부서명, 인원 수 불러오기
+	@ResponseBody
+	@RequestMapping("/selectDeptInfo")
+	public List<Map<String, Object>> selectDeptInfo(){
+		return oservice.selectDeptInfo();
+	}
+	
+	// 부서별 팀별 인원 수 불러오기
+	@ResponseBody
+	@RequestMapping("/selectTaskInfo")
+	public List<Map<String, Object>> selectTaskInfo(){
+		return oservice.selectTaskInfo();
+	}
+	
+	// 부서별 인원 정보 불러오기 - 이름, 부서명, id
+	@ResponseBody
+	@RequestMapping("/selectDepartmentEmpInfo")
+	public List<Map<String, Object>> selectDepartmentEmpInfo(String dept_id){
+		return oservice.selectDepartmentEmpInfo(dept_id);
+	}
+	
+	// 모든 부서별 정보 불러오기 - 이름, 부서명, id
+	@ResponseBody
+	@RequestMapping("/selectAllEmpInfo")
+	public List<Map<String, Object>> selectAllEmpInfo(){
+		return oservice.selectAllEmpInfo();
+	}
+	
+	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
+	@ResponseBody
+	@RequestMapping("/selectDetpTaskEmpInfo")
+	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
+		return oservice.selectDetpTaskEmpInfo(task_id);
 	}
 }

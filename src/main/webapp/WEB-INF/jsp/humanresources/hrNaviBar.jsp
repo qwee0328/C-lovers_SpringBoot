@@ -15,10 +15,10 @@
 	<div class="naviBar">
 	   <div class="naviBar__applyBtns">
 	       <button id="vacationAppBtn"><i class="fa-solid fa-plus"></i>휴가신청</button>
-	       <div class="naviConp">
+	       <!-- <div class="naviConp">
 	           <div class="naviConp__icon"><i class="fa-solid fa-plus"></i></div>
 	           <div class="naviConp__title">시차출퇴근제 신청</div>
-	       </div>
+	       </div> -->
 	   </div>
 	   <div class="naviScrollBox">
 	   		<input type="hidden" value="${currentMenu}" id="hrCurrentMenu">
@@ -27,7 +27,7 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">내 근무</div>
 	           </div>
-	           <div class="naviConp toggleInner">
+	           <div class="naviConp toggleInner" id="vacationWork">
 	               <div class="naviConp__icon"><i class="fa-solid fa-calendar"></i></div>
 	               <div class="naviConp__title">휴가/근무</div>
 	           </div>
@@ -43,7 +43,7 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-sitemap"></i></div>
 	               <div class="naviConp__title">임직원 정보</div>
 	           </div>
-	           <div class="naviConp">
+	           <div class="naviConp" id = "profileSettings">
 	               <div class="naviConp__icon"><i class="fa-regular fa-id-badge"></i></div>
 	               <div class="naviConp__title">프로필 설정</div>
 	           </div>
