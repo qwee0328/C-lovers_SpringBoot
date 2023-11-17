@@ -1,7 +1,6 @@
 package com.clovers.services;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,5 +64,10 @@ public class ElectronicSignatureService {
 		System.out.println(reson);
 
 		return 0;
+	}
+
+	// 진행 중인 문서 전체 리스트 출력
+	public List<Map<String, Object>> progressTotalList(String loginID) {
+		return dao.progressTotalList(loginID);
 	}
 }

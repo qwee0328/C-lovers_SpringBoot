@@ -5,6 +5,4 @@ $(document).ready(function() {
 		// 드롭 메뉴바 보임
 		$(".approvalForm__dropMenu").toggle();
 	});
-	
-	
 })

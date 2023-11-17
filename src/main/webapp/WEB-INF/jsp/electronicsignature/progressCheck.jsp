@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>진행 중인 문서 전체</title>
+<title>진행 중인 문서 확인</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <!-- css, js -->
-<link rel="stylesheet" href="/css/electronicsignature/progressTotal.css">
-<script src="/js/electronicsignature/progressTotal.js"></script>
+<link rel="stylesheet" href="/css/electronicsignature/progressCheck.css">
+<script src="/js/electronicsignature/progressCheck.js"></script>
 </head>
 <body>
 	<%@ include file="../commons/header.jsp" %>
@@ -44,11 +44,24 @@
 					<div>기안자</div>
 					<div>기안일</div>
 					<div>구분</div>
-					<div>상태</div>
+					<div>결과</div>
 				</div>
 				
 				<div class="documentTable__body">
-					
+					<div class="document__list">
+						<div class="documentTable__checkbox">
+							<label><input type="checkbox" /></label>
+						</div>
+						<div class="documentTable__documentSeq">GA-업연-20231117-0001</div>
+						<div class="documentTable__title">
+						<div class="title">1212131</div>
+							<i class="fa-solid fa-paperclip fileIcon"></i>
+						</div>
+						<div class="documentTable__drafter">김이사</div>
+						<div class="documentTable__draftDate">2023-11-17</div>
+						<div class="documentTable__category">기안</div>
+						<div class="documentTable__status">승인</div>
+					</div>
 				</div>
 			</div>
 		</div>
