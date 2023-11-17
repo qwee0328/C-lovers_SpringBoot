@@ -11,12 +11,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	/*// 메뉴바 설정
-	$(".naviConp__title").each(function(){
-		if($("#abCurrentMenu").val()!==""&&$(this).text() == $("#abCurrentMenu").val()){
-			$(this).parent().css("background-color", "#DCEDD4");
-		}
-	})*/
 	$("div[data-title='"+$("#abCurrentMenu").val()+"']").css("background-color", "#DCEDD4");
 	
 	// 주소 추가 모달창 띄우기

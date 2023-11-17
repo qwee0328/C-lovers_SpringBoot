@@ -20,7 +20,7 @@ public class ElectronicSignatureController {
 
 	@Autowired
 	private HttpSession session;
-	
+
 	@Autowired
 	private ElectronicSignatureService esservices;
 	
@@ -55,12 +55,15 @@ public class ElectronicSignatureController {
 		// return null;
 		return esservices.selectEmpJobLevel(processUserIDList);
 	}
-	
+
 	// 휴가 문서 생성
 	@ResponseBody
 	@RequestMapping("/insertVacation")
-	public int insertVacation() {
-		String emp_id = (String)session.getAttribute("loginID");
-		return esservices.insertVacation(emp_id);
+	public int insertVacation(@RequestParam("processEmployeeIDArray[]") List<String> processEmployeeIDArray,
+			@RequestParam("vacationDateList[]") List<String> vacationDateList,
+			@RequestParam("vacationTypeList[]") List<String> vacationTypeList,
+			@RequestParam("reson") String reson) throws Exception {
+		String emp_id = (String) session.getAttribute("loginID");
+		return esservices.insertVacation(emp_id, processEmployeeIDArray, vacationDateList, vacationTypeList, reson);
 	}
 }

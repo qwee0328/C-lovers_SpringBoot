@@ -21,7 +21,8 @@ public class AddressBookService {
 	public int insert(AddressBookDTO dto, List<Integer> selectedTagArray) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("selectedTagArray", selectedTagArray);	
-		param.put("address_book_id", dao.insert(dto));
+		dao.insert(dto);
+		param.put("address_book_id",dto.getId());
 		return dao.tagListInsert(param);
 	}
 	

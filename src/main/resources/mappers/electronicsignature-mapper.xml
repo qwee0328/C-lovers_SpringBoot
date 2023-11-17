@@ -14,13 +14,25 @@
 			#{item}
 		</foreach>
 	</select>
-
-	<insert id="insertVacation" useGeneratedKeys="true"
-		keyProperty="id" parameterType="Map">
-		<selectKey keyProperty="id" resultType="Integer"
-			order="AFTER">
-			SELECT LAST_INSERT_ID() AS id
-		</selectKey>
-		insert into vacation_document (emp_id) values (#{emp_id});
+	
+	<!-- // 휴가 문서 생성 -->
+	<insert id="insertVacation" useGeneratedKeys="true" keyProperty="id">
+		insert into vacation_document (emp_id, report_date) values (#{emp_id}, convert_tz(now(), '+00:00', '+09:00'));
+	</insert>
+	
+	<!-- // 휴가 결재선 등록 -->
+	<insert id="insertVacationApprovals" parameterType="java.util.List">
+		insert into vacation_emp_approvals (vacation_document_id, emp_approvals_id) values 
+		<foreach collection="list" item="empApprovals" separator=",">
+			(#{empApprovals.vacation_document_id}, #{empApprovals.emp_approvals_id})
+		</foreach>
+	</insert>
+	
+	<!-- // 휴가 신청일 정보 등록 -->
+	<insert id="insertVacationApplicationInfo" parameterType="java.util.List">
+		insert into vacation_application_info (vacation_document_id, vacation_date, rest_reson_type, vacation_reason) values
+		<foreach collection="list" item="vacationInfo" separator=",">
+			(#{vacationInfo.vacation_document_id}, #{vacationInfo.vacation_date}, #{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
+		</foreach>
 	</insert>
 </mapper>
