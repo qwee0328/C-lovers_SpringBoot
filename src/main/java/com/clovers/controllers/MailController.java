@@ -55,21 +55,9 @@ public class MailController {
 	@RequestMapping("")
 	public String main() {
 		String title = "메일";
-		String naviBtn = "편지 쓰기";
-		String naviBtnLocation = "send";
-		String[] naviIcon = {"fa-inbox", "fa-paper-plane", "fa-box-archive", "fa-clock", "fa-trash"};
-		String[] naviMenu = {"받은 편지함", "보낸 편지함", "임시 편지함", "보낼 편지함", "휴지통"}; 
-		String [] naviMenuLocation = {"inBox", "sentBox", "tempBox", "outBox", "trash"};
-		int naviMenuLength = naviMenu.length;
 		String currentMenu = "받은 편지함";
 		
 		session.setAttribute("title", title);
-		session.setAttribute("naviBtn", naviBtn);
-		session.setAttribute("naviBtnLocation", naviBtnLocation);
-		session.setAttribute("naviIcon", naviIcon);
-		session.setAttribute("naviMenu", naviMenu);
-		session.setAttribute("naviMenuLocation", naviMenuLocation);
-		session.setAttribute("naviMenuLength", naviMenuLength);
 		session.setAttribute("currentMenu", currentMenu);
 		
 		return "mail/inBox";

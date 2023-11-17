@@ -17,7 +17,7 @@
 	<%@ include file="../commons/header.jsp" %>
 	
 	<div class="container">
-		<%@ include file="../commons/naviBar.jsp" %>
+		<%@ include file="../commons/mailNaviBar.jsp" %>
 		
 		<div class="container__inBox">
 			<div class="inBox__allCheck">

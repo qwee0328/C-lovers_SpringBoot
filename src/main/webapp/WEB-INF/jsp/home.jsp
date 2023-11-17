@@ -5,12 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>C-lovers</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
+<!-- css, js -->
 <link rel="stylesheet" href="/css/home.css">
+<script src="/js/home.js"></script>
 </head>
 <body>
 	<%@ include file="./commons/header.jsp"%>
