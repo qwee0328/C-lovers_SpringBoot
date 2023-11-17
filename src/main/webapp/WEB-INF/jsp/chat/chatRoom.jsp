@@ -322,9 +322,6 @@
     	    }
 
     	    let messageItem;
-    	    if (recv.state !== "CHAT"){
-    	    	$("<div>").addClass("chatArea__DayLine align-center").text(recv.content)
-    	    }
     	    if (recv.emp_id === loginId) { // 본인이 보낸 메시지
     	        messageItem = $('<div>', {class: 'chatArea__myChat d-flex'}).append(
     	            $('<div>', {class: 'myChat__chatContents d-flex'}).append(
