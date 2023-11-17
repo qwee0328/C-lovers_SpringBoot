@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChatMessage">
+
+	<resultMap id="chatMessageMap" type="HashMap">
+		<result column="id" property="id" />
+		<result column="chat_room_id" property="chat_room_id" />
+		<result column="emp_id" property="emp_id" />
+		<result column="emp_name" property="emp_name" />
+		<result column="content" property="content" />
+		<result column="write_date" property="write_date" />
+		<result column="state" property="state" />
+	</resultMap>
+
+	<!-- 채팅 기록하기 -->
+	<insert id="recordChat">
+		insert into chat_message values
+		(#{id},#{chat_room_id},#{emp_id},#{content},#{write_date},#{state})
+	</insert>
+
+	<!-- 채팅방 아이디를 기준으로 채팅 메시지를 가져옴 -->
+	<select id="selectMessagesByChatRoomId"
+		resultType="com.clovers.dto.ChatMessageDTO">
+		select * from chat_message where chat_room_id =
+		#{chat_room_id}
+	</select>
+	
+	<select id="selectMessageListByChatRoomId"
+		resultMap="chatMessageMap">
+		select * from chat_message_view where chat_room_id =
+		#{chat_room_id}
+	</select>
+	
+	<!-- 최신 메시지의 아이디 불러내기 -->
+	<select id="selectLatestChatMsgIdForInvite"
+		resultType="int">
+		SELECT id FROM
+		chat_message
+		ORDER BY id DESC LIMIT 1 FOR UPDATE
+	</select>
+
+	<!-- 최신 메시지의 아이디 불러내기 -->
+	<select id="selectLatestChatMsgIdByChatRoomIdForUpdate"
+		resultType="int">
+		SELECT id FROM
+		chat_message where chat_room_id =
+		#{chat_room_id} ORDER BY id DESC LIMIT 1 FOR UPDATE
+	</select>
+</mapper>

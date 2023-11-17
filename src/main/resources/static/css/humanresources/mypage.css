@@ -9,6 +9,7 @@
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;
 }
+body{margin:0px;}
 
 .container{
     margin: auto;
@@ -26,6 +27,7 @@
 /*  */
 .mypageBox{
     width: 80%;
+    margin-left: 22px;
     border-radius: 10px;
 }
 
@@ -118,7 +120,7 @@
         max-width: 786px;
     }
     .profileImageBox{
-        display: none;
+        display: none !important;
     }
     .profileDesBox{
         width: 100%;

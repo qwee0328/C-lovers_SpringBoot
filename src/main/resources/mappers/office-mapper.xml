@@ -20,8 +20,13 @@
 		resultType="com.clovers.dto.JobDTO">
 		select * from job;
 	</select>
+	
+	<!-- // 실제 db에 저장된 실 사용자 수 불러오기 -->
+	<select id="selectRealEmpCount" resultType="int">
+		select count(*) from employee;
+	</select>
 
-	<!-- // 사용자 수 불러오기 -->
+	<!-- // 사번 입력할때 사용할 사용자 수 불러오기 -> 삭제된 사용자까지 합쳐서 숫자 셈 -->
 	<select id="selectEmpCount" resultType="int">
 		select substring(id, char_length(id)-2) as last_three_digits
 		from employee
@@ -67,7 +72,7 @@
 	</delete>
 
 
-<!-- 	오피스 이름 수정하기 -->
+	<!-- 	오피스 이름 수정하기 -->
 	<update id="updateOfficeName">
 		update office set office_name = #{office_name} where id =#{id};
 	</update>
@@ -86,7 +91,37 @@
 	<select id="searchUser" resultMap="userList">
 		select name, id, job_name, task_name 
 		from mypageData 
-		where e.id like #{keyword} or e.name like #{keyword} 
+		where id like #{keyword} or name like #{keyword} 
 		order by cast(right(id,3)as unsigned) desc;
+	</select>
+	
+	<!-- // 부서별 부서명, 인원 수 불러오기 -->
+	<select id="selectDeptInfo" resultType="map">
+		select count(*) as count, dept_name, group_concat(distinct department_id) as department_id from company_hierarchy_view where dept_name != "미분류" group by dept_name;
+	</select>
+	
+	<!-- // 부서별 팀별 인원 수 불러오기 -->
+	<select id="selectTaskInfo" resultType="map">
+		select * from dept_task_employee_count;
+	</select>
+	
+	<!-- // 관리부 인원 정보 불러오기 -->
+	<select id="selectDepartmentEmpInfo" resultType="map">
+		select name, id, task_name
+		from mypageData
+		where dept_id = #{dept_id};
+	</select>
+	
+	<!-- // 모든 부서별 정보 불러오기 - 이름, 부서명, id -->
+	<select id="selectAllEmpInfo" resultType="map">
+		select name, id, task_name
+		from mypageData;
+	</select>
+	
+	<!-- // 팀별 인원 정보 불러오기 - 이름, 부서명, id -->
+	<select id="selectDetpTaskEmpInfo" resultType="map">
+		select name, id, task_name
+		from mypageData
+		where dept_task_id = #{task_id};
 	</select>
 </mapper>

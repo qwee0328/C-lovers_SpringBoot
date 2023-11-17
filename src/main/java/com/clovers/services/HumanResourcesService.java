@@ -120,4 +120,9 @@ public class HumanResourcesService {
 	public List<WorkConditionDTO> selectWorkConditionsList(String id){
 		return dao.selectWorkConditionsList(id);
 	}
+	
+	// 휴가 사유 구분 불러오기
+	public List<String> selectRestReasonType() {
+		return dao.selectRestReasonType();
+	}
 }

@@ -34,7 +34,7 @@ public class MailService {
 	public int submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
 		int email_id = dao.submitSend(dto);
 		
-		String upload = "/Users/mailUploads";
+		String upload = "C:/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();} // 만약 업로드 폴더가 존재하지 않는다면 생성
 		
@@ -62,7 +62,7 @@ public class MailService {
 		}
 		
 		
-		String upload = "/Users/mailUploads";
+		String upload = "C:/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();} // 만약 업로드 폴더가 존재하지 않는다면 생성
 		
@@ -147,7 +147,7 @@ public class MailService {
 	
 	@Transactional
 	public int perDeleteMail(int id) throws Exception {
-		String upload = "/Users/mailUploads";
+		String upload = "C:/mailUploads";
 		List<EmailFileDTO> fileList = dao.selectAllFileById(id);
 		
 		// 파일 삭제
@@ -209,7 +209,7 @@ public class MailService {
 	}
 	
 	public List<String> saveImage(MultipartFile[] image) throws Exception {
-		String upload = "/Users/mailUploads";
+		String upload = "C:/mailUploads";
 		File uploadPath = new File(upload);
 		if(!uploadPath.exists()) {uploadPath.mkdir();}
 		

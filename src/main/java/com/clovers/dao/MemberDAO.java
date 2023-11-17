@@ -1,7 +1,6 @@
 package com.clovers.dao;
 
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -40,4 +39,5 @@ public class MemberDAO {
 	public List<String> getAuthorityCategory(String id) {
 		return db.selectList("member.getAuthorityCategory", id);
 	}
+
 }

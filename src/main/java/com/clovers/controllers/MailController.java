@@ -360,7 +360,7 @@ public class MailController {
 	// 파일 다운로드
 	@RequestMapping("/downloadFile")
 	public void downloadFile(@RequestParam String sysname, @RequestParam String oriname, HttpServletResponse response) throws Exception {
-		String realPath = "/Users/mailUploads";
+		String realPath = "C:/mailUploads";
 		File targetFile = new File(realPath + "/" + sysname);
 		
 		oriname = new String(oriname.getBytes("utf8"), "ISO-8859-1");
@@ -461,7 +461,7 @@ public class MailController {
 	// summernote 이미지 경로에서 삭제
 	@RequestMapping("/deleteImage")
 	public void deleteImage(@RequestParam("src") String src) throws Exception {
-		Path path = FileSystems.getDefault().getPath("/Users/" + src); // String을 Path 객체로 변환
+		Path path = FileSystems.getDefault().getPath("C:/" + src); // String을 Path 객체로 변환
 		Files.deleteIfExists(path);
 	}
 	

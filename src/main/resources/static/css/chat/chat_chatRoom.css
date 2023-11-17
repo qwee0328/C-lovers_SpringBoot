@@ -327,3 +327,24 @@
 	padding: 0px;
 	display: none;
 }
+
+.chatSearch__button{
+	width:15px;
+	border:none;
+	background-color: #75B47D;
+	margin:2px;
+	border-radius: 4px;
+}
+
+.search__arrow{
+	color:#F3F7F1;
+	padding:2px
+}
+.highlight {
+    background-color: yellow;
+    color: black;
+}
+
+.current-highlight {
+    background-color: orange;
+}

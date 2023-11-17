@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.clovers.commons.EncryptionUtils;
@@ -35,7 +36,12 @@ public class OfficeService {
 		return dao.selectPositionAll();
 	}
 
-	// 사용자 수 불러오기
+	// 실제 db에 저장된 실 사용자 수 불러오기
+	public int selectRealEmpCount() {
+		return dao.selectRealEmpCount();
+	}
+
+	// 사번 입력할때 사용할 사용자 수 불러오기 -> 삭제된 사용자까지 합쳐서 숫자 셈
 	public int selectEmpCount() {
 		return dao.selectEmpCount();
 	}
@@ -113,5 +119,30 @@ public class OfficeService {
 	// 사용자 이름, id 검색하기
 	public List<Map<String, String>> searchUser(String keyword) {
 		return dao.searchUser(keyword);
+	}
+
+	// 부서별 부서명, 인원 수 불러오기
+	public List<Map<String, Object>> selectDeptInfo() {
+		return dao.selectDeptInfo();
+	}
+
+	// 부서별 팀별 인원 수 불러오기
+	public List<Map<String, Object>> selectTaskInfo() {
+		return dao.selectTaskInfo();
+	}
+
+	// 부서별 인원 정보 불러오기
+	public List<Map<String, Object>> selectDepartmentEmpInfo(String dept_id) {
+		return dao.selectDepartmentEmpInfo(dept_id);
+	}
+
+	// 모든 부서별 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectAllEmpInfo() {
+		return dao.selectAllEmpInfo();
+	}
+	
+	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
+		return dao.selectDetpTaskEmpInfo(task_id);
 	}
 }
