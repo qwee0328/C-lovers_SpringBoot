@@ -31,7 +31,7 @@ public class WebSocketChatConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/pub");
-        registry.enableSimpleBroker("/sub");   // Enables a simple in-memory broker
+        registry.enableSimpleBroker("/app","/sub");   // Enables a simple in-memory broker
 
 
         //   Use this for enabling a Full featured broker like RabbitMQ

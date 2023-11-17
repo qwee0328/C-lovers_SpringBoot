@@ -6,35 +6,46 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatRoomSubscriptions {
-	// 웹소켓 구독정보와 관련된 DTO. DB에 연결하지 않는다. 채팅방마다 다르게 처리할 생
-	private final Map<String, Map<String,String>> sessionSubscriptions = new ConcurrentHashMap<>();
-	
-	
-	public void addSubscription(String sessionId, String SubscriptionId, String loginId) {
-		sessionSubscriptions.computeIfAbsent(sessionId, k -> new HashMap<>()).put(SubscriptionId, loginId);
+	// 각 채팅방의 구독 정보를 관리하는 Map
+	// Key: 채팅방 ID, Value: 해당 채팅방의 구독 정보 Map (Key: 세션 ID, Value: 로그인 ID)
+	private final Map<String, Map<String, String>> chatRoomSubscriptions = new ConcurrentHashMap<>();
+
+	// 채팅방에 새로운 구독 정보 추가
+	public void addSubscription(String chatRoomId, String sessionId, String loginId) {
+		chatRoomSubscriptions.computeIfAbsent(chatRoomId, k -> new ConcurrentHashMap<>()).put(sessionId, loginId);
 	}
-	
-	public void removeSubscription(String sessionId, String subscriptionId) {
-		Map<String,String> subscriptions = sessionSubscriptions.get(sessionId);
-		if(subscriptions != null) {
-			subscriptions.remove(subscriptionId);
-			if(subscriptions.isEmpty()) {
-				sessionSubscriptions.remove(sessionId);
+
+	// 특정 채팅방에서 구독 정보 제거
+	public void removeSubscription(String chatRoomId, String sessionId) {
+		Map<String, String> subscriptions = chatRoomSubscriptions.get(chatRoomId);
+		if (subscriptions != null) {
+			subscriptions.remove(sessionId);
+			if (subscriptions.isEmpty()) {
+				chatRoomSubscriptions.remove(chatRoomId);
 			}
 		}
 	}
-	
-	// 특정 세션의 구독을 조회 : 특정 세션 Id에 대한 모든 구독 Id와 로그인 Id 조회
-	public Map<String,String> getSubscriptions(String sessionId){
-		return sessionSubscriptions.getOrDefault(sessionId, Collections.emptyMap());
-	}
-	
-	public void clearSubscriptions(String sessionId) {
-		sessionSubscriptions.remove(sessionId);
-	}
-	
-    public boolean isEmpty() {
-        return sessionSubscriptions.isEmpty();
-    }
 
+	// 특정 채팅방의 모든 구독 정보 조회
+	public Map<String, String> getSubscriptions(String chatRoomId) {
+		return chatRoomSubscriptions.getOrDefault(chatRoomId, Collections.emptyMap());
+	}
+
+	// 특정 채팅방의 구독 정보를 모두 제거
+	public void clearSubscriptions(String chatRoomId) {
+		chatRoomSubscriptions.remove(chatRoomId);
+	}
+
+	// 특정 채팅방에 구독 정보가 비어 있는지 확인
+	public boolean isEmpty(String chatRoomId) {
+		return chatRoomSubscriptions.getOrDefault(chatRoomId, Collections.emptyMap()).isEmpty();
+	}
+
+	// 특정 세션 ID와 연관된 모든 구독 정보를 제거
+    public void removeSubscriptionForSession(String sessionId) {
+        // 모든 채팅방을 순회하면서 특정 세션 ID와 연결된 구독 정보만 제거
+        for (Map<String, String> subscriptions : chatRoomSubscriptions.values()) {
+            subscriptions.remove(sessionId);
+        }
+    }
 }

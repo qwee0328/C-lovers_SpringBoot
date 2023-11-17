@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="/css/chat/chat_common.css" />
 <link rel="stylesheet" href="/css/chat/chat_invite.css">
 <link rel="stylesheet" href="/css/chat/chat_rename.css">
+<link rel="stylesheet" href="/css/chat/chat_exit.css">
 <link rel="stylesheet" href="/css/chat/chat_profile.css">
 <link rel="stylesheet" href="/css/chat/chat_chatRoom.css">
 <script src="/js/chat/chat_invite.js"></script>
@@ -36,6 +37,21 @@
             </div>
             <div class="reName__footer align-center">
                 <button class="reName__cancelBtn">취소</button><div class="reName_margin"></div><button class="reName__submitBtn">확인</button>
+            </div>
+           
+        </div>
+        
+        <div class="exit__modal">
+            <div class="exit__header d-flex">
+                <div class="exit__name">채팅그룹 나가기</div><div class="exit__cancel"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="exit__body">
+                <div class="exit__input">
+                    정말 나가시겠습니까?
+                </div>
+            </div>
+            <div class="exit__footer align-center">
+                <button class="exit__cancelBtn">취소</button><div class="exit_margin"></div><button class="exit__submitBtn">확인</button>
             </div>
            
         </div>
@@ -98,71 +114,44 @@
    
 
     <!-- 초대하기 모달 -->
-    <div class="invite__modal">
-        <div class="invite__header d-flex">
-            <div class="invite__name">대화 상대 추가</div>
-            <div class="invite__cancel"><i class="fa-solid fa-xmark"></i></div>
-        </div>
-        <div class="invite-search d-flex">
-            <div class="invite-search__icon align-center"><i class="fa-solid fa-magnifying-glass"></i></div>
-            <input class="invite-search__txt" type="text" placeholder="이름으로 검색해주세요.">
-        </div>
-        <div class="invite__body">
-            <div class="invite__selectList">
-                <div class="invite__selectEmp">황민경</div>
-                <div class="invite__selectEmp">장유나</div>
-                <div class="invite__selectEmp">김서영</div>
-                <div class="invite__selectEmp">이윤진</div>
-                <div class="invite__selectEmp">김창균</div>
-                <div class="invite__selectEmp">오부장</div>
-                <div class="invite__selectEmp">최사장</div>
-                <div class="invite__selectEmp">김이사</div>
-                <div class="invite__selectEmp">오부장</div>
-                <div class="invite__selectEmp">최사장</div>
-                <div class="invite__selectEmp">김이사</div>
-                <div class="invite__selectEmp">오부장</div>
-            </div>
-            <div class="invite__allList">
-                <div class="allList__companyName">c-lover</div>
-                <div class="allList__list">
-                    <div class="allList__employee d-flex">
-                        <div class="allList__empProfileImgCover"><div class="allList__empProfileImg"></div></div>
-                        <div class="allList__empName">이름임</div>
-                        <div class="allList__empcheckBox"><input type="checkBox"></div>
-                    </div>
-                    <div class="allList__employee d-flex">
-                        <div class="allList__empProfileImgCover"><div class="allList__empProfileImg"></div></div>
-                        <div class="allList__empName">이름임</div>
-                        <div class="allList__empcheckBox"><input type="checkBox"></div>
-                    </div>
-                    <div class="allList__employee d-flex">
-                        <div class="allList__empProfileImgCover"><div class="allList__empProfileImg"></div></div>
-                        <div class="allList__empName">이름임</div>
-                        <div class="allList__empcheckBox"><input type="checkBox"></div>
-                    </div>
-                    <div class="allList__employee d-flex">
-                        <div class="allList__empProfileImgCover"><div class="allList__empProfileImg"></div></div>
-                        <div class="allList__empName">이름임</div>
-                        <div class="allList__empcheckBox"><input type="checkBox"></div>
-                    </div>
-                    <div class="allList__employee d-flex">
-                        <div class="allList__empProfileImgCover"><div class="allList__empProfileImg"></div></div>
-                        <div class="allList__empName">이름임</div>
-                        <div class="allList__empcheckBox"><input type="checkBox"></div>
-                    </div>
-                    <div class="allList__employee d-flex">
-                        <div class="allList__empProfileImgCover"><div class="allList__empProfileImg"></div></div>
-                        <div class="allList__empName">이름임</div>
-                        <div class="allList__empcheckBox"><input type="checkBox"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="invite__footer align-center">
-            <button class="invite__cancelBtn">취소</button>
-            <div class="invite_margin"></div><button class="invite__submitBtn">확인</button>
-        </div>
-    </div>
+	<div class="invite__modal">
+		<div class="invite__header d-flex">
+			<div class="invite__name">채팅방 초대</div>
+			<div class="invite__cancel">
+				<i class="fa-solid fa-xmark"></i>
+			</div>
+		</div>
+		<div class="invite-search d-flex">
+			<div class="invite-search__icon align-center">
+				<i class="fa-solid fa-magnifying-glass"></i>
+			</div>
+			<input class="invite-search__txt" type="text"
+				placeholder="이름으로 검색해주세요.">
+		</div>
+		<div class="invite__body">
+			<div class="invite__selectList"></div>
+			<div class="invite__allList">
+				<div class="allList__companyName">c-lover</div>
+				<div class="allList__list">
+					<div class="allList__employee d-flex">
+						<div class="allList__empProfileImgCover">
+							<div class="allList__empProfileImg"></div>
+						</div>
+						<div class="allList__empName">이름임</div>
+						<div class="allList__empcheckBox">
+							<input type="checkBox">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="invite__footer align-center">
+			<button class="invite__cancelBtn">취소</button>
+			<div class="invite_margin"></div>
+			<button class="invite__submitBtn">확인</button>
+		</div>
+	</div>
 
 
     <!-- 프로필보기 모달창 -->
@@ -411,6 +400,15 @@
             $(".invite__cancel").on("click",$.modal.close);
             $(".invite__cancelBtn").on("click",$.modal.close);
         })
+        
+        $(".hamMenu__exit").on("click",function(){
+        	$(".exit__modal").modal({
+                fadeDuration:300,
+                showClose:false
+            });
+            $(".exit__cancel").on("click",$.modal.close);
+            $(".exit__cancelBtn").on("click",$.modal.close);
+        });
 
 
         // 컨텍스트 메뉴 존재할 경우, 다른 곳 클릭 시 컨텍스트 메뉴 삭제, 메뉴 누르면 해당 버튼 이벤트 실행
@@ -438,6 +436,111 @@
                 chatArea.scrollTop = chatArea.scrollHeight;
             }
         }
+        
+        $(document).ready(function() {
+        	$.ajax({
+        	    url: '/chat/getMainData',
+        	    type: 'GET',
+        	    dataType: 'json',
+        	    success: function(data) {
+        	        var allListHtml = '';
+        	        data.officerList.forEach(function(officer) {
+        	        	if(officer.employee_id===data.myInfo.employee_id){
+        	        		return;
+        	        	}
+        	            allListHtml += '<div class="allList__employee d-flex" data-employee-name=' + officer.employee_name + '>' +
+        	                               '<div class="allList__empProfileImgCover">' +
+        	                                   '<div class="allList__empProfileImg" style="background-image: url(' + getProfileImageUrl(officer.profile_img) + ');"></div>' +
+        	                               '</div>' +
+        	                               '<div class="allList__deptName">' + officer.dept_name + " > " + officer.task_name +"<br>" +"  >  "+officer.job_name+ '</div>' +
+        	                               '<div class="allList__empName">' + officer.employee_name + '</div>' +
+        	                               '<div class="allList__empcheckBox"><input type="checkBox" value="' + officer.employee_id + '"></div>' +
+        	                           '</div>';
+        	        });
+        	        $('.invite__allList .allList__list').html(allListHtml);
+        	    },
+        	    error: function(error) {
+        	        console.log(error);
+        	    }
+        	});
+        	
+        	// 선택된 직원들을 저장할 객체
+        	var selectedEmployees = {};
+
+        	// 부모 요소에 이벤트 위임을 사용하여 체크박스 변경 감지
+        	$(document).on('change', 'input[type="checkBox"]', function() {
+        	    var empId = $(this).val();
+        	    var empName = $(this).closest('.allList__employee').find('.allList__empName').text();
+				let i = 0;
+        	    if (this.checked) {
+        	        // 체크된 경우, 선택된 직원 목록에 추가
+        	        selectedEmployees[empId] = empName;
+        	        console.log(selectedEmployees);
+        	    } else {
+        	        // 체크 해제된 경우, 선택된 직원 목록에서 제거
+        	        delete selectedEmployees[empId];
+        	    }
+
+        	    updateSelectedEmployeesList();
+
+        	});
+
+
+        	// 선택된 직원 목록 업데이트
+        	function updateSelectedEmployeesList() {
+        	    var listHtml = '';
+        	    $.each(selectedEmployees, function(empId, empName) {
+        	        listHtml += '<div class="invite__selectEmp" data-emp-id="' + empId + '">' + empName + '</div>';
+        	    });
+        	    $('.invite__selectList').html(listHtml);
+        	}
+			
+        	function getProfileImageUrl(imageUrl) {
+                return imageUrl ? imageUrl : '/css/chat/profileImg.png'; // 기본 이미지 경로 지정
+            }
+        	
+        	$('.invite-search__txt').on('input', function() {
+                var searchText = $(this).val().toLowerCase();
+
+                // 모든 직원 목록 항목에 대해 반복
+                $('.allList__employee').each(function() {
+                    var employeeName = $(this).data('employee-name').toLowerCase();
+
+                    // 검색어가 직원 이름에 포함되어 있으면 표시, 그렇지 않으면 숨김
+                    if (employeeName.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        	
+        	
+//         	// '확인' 버튼 클릭 이벤트 리스너
+//             $('.invite__submitBtn').click(function() {
+//                 // 서버로 보낼 데이터 준비
+//                 var dataToSend = {
+//                     // 데이터 예시: 선택된 직원들의 ID를 서버로 전송
+//                     selectedEmployees: Object.keys(selectedEmployees)
+//                 };
+                
+               
+
+//                 // AJAX 요청
+//                 $.ajax({
+//                 	url: '/chat/setGroupChattingRoom', // 서버의 URL
+//                     type: 'POST', // 요청 방식
+// 				    contentType: 'application/json', // JSON 형식으로 데이터 전송
+// 				    data: JSON.stringify({ selectedEmployees: Object.keys(selectedEmployees) }),
+// 				    success: function(data) {
+//                     	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
+//                     },
+// 				    error: function(xhr, status, error) {
+// 				        //console.error('Error:', error);
+// 				    }
+// 				});
+//             });
+        })
 
         
         $(document).ready(function() {

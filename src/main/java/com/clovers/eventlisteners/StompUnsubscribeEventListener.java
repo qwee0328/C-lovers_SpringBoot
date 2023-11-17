@@ -1,15 +1,24 @@
 package com.clovers.eventlisteners;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
+import com.clovers.services.SubscriptionService;
+
 @Component
 public class StompUnsubscribeEventListener implements ApplicationListener<SessionUnsubscribeEvent> {
-
+	
+	@Autowired
+	private SubscriptionService subscriptionService;
+	
+	
     @Override
     public void onApplicationEvent(SessionUnsubscribeEvent event) {
+    	
+    	
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         // 구독 해제 정보 추출

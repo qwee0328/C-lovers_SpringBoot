@@ -15,7 +15,7 @@
 	</resultMap>
 
 	<!-- 채팅 기록하기 -->
-	<insert id="recordChat">
+	<insert id="recordChat" useGeneratedKeys="true" keyProperty="id">
 		insert into chat_message values
 		(#{id},#{chat_room_id},#{emp_id},#{content},#{write_date},#{state})
 	</insert>
