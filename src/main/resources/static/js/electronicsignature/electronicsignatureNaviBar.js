@@ -20,7 +20,13 @@ $(document).ready(function() {
 	})
 
 	 $(".naviConp__title").each(function() {
-        if ($(this).text() === $("#currentMenu").val()) {
+		 // 진행 중인 문서의 전체 네비일 경우
+        if($("currentMenu").val() === "진행전체") {
+			$(".progressTotal").css("background-color", "#DCEDD4");
+		// 문서함의 전체 네비일 경우
+		} else if($("currentMenu").val() === "문서전체") {
+			$(".documentTotal").css("background-color", "#DCEDD4");
+		} else if ($(this).text() === $("#currentMenu").val()) {
             $(this).parent().css("background-color", "#DCEDD4");
         }
     });

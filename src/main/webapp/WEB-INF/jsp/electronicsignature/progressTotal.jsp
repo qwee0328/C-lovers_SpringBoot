@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>진행 중인 문서 대기</title>
+<title>진행 중인 문서 전체</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <!-- css, js -->
-<link rel="stylesheet" href="/css/electronicsignature/progressWait.css">
-<script src="/js/electronicsignature/progressWait.js"></script>
+<link rel="stylesheet" href="/css/electronicsignature/progressTotal.css">
+<script src="/js/electronicsignature/progressTotal.js"></script>
 </head>
 <body>
 	<%@ include file="../commons/header.jsp" %>
@@ -44,6 +44,7 @@
 					<div>기안자</div>
 					<div>기안일</div>
 					<div>구분</div>
+					<div>상태</div>
 				</div>
 				
 				<div class="documentTable__body">
@@ -59,6 +60,7 @@
 						<div class="documentTable__drafter">김이사</div>
 						<div class="documentTable__draftDate">2023-11-17</div>
 						<div class="documentTable__category">기안</div>
+						<div class="documentTable__status">진행</div>
 					</div>
 				</div>
 			</div>

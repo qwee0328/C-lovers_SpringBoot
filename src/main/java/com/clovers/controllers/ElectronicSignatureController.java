@@ -24,7 +24,7 @@ public class ElectronicSignatureController {
 	@Autowired
 	private ElectronicSignatureService esservices;
 	
-	// 메인 화면 
+	// 메인 화면으로 이동
 	@RequestMapping("")
 	public String main() {
 		String title = "전자결재";
@@ -36,7 +36,16 @@ public class ElectronicSignatureController {
 		return "/electronicsignature/progressWait";
 	}
 	
-	// 대기
+	// 진행 중인 문서 전체로 이동
+	@RequestMapping("/progressTotal")
+	public String progressTotal() {
+		String currentMenu = "진행전체";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/progressTotal";
+	}
+	
+	// 대기로 이동
 	@RequestMapping("/progressWait")
 	public String progressWait() {
 		String currentMenu = "대기";

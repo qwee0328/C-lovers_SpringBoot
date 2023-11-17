@@ -59,7 +59,7 @@ body {
 
 .documentTable__header {
 	display: grid;
-	grid-template-columns: 40px 220px 360px 140px 140px 140px;
+	grid-template-columns: 40px 220px 220px 140px 140px 140px 140px;
 	background-color: #F3F7F1;
 	border-top: 1px solid #7d7d7d40;
 	border-bottom: 1px solid #7d7d7d40;
@@ -72,7 +72,7 @@ body {
 
 .document__list {
 	display: grid;
-  	grid-template-columns: 40px 220px 360px 140px 140px 140px;
+  	grid-template-columns: 40px 220px 220px 140px 140px 140px 140px;
 }
 
 .document__list:hover {

@@ -32,7 +32,7 @@
 	            <input type="hidden" class="naviLocation" value="progressDocument">
 	        </div>
 	        <div class="innerNavi progressDocument">  
-		        <div class="naviConp">
+		        <div class="naviConp progressTotal">
 		            <div class="naviConp__icon">
 		                <i class="fa-solid fa-file"></i>
 		            </div>
@@ -55,13 +55,6 @@
 		        </div>
 		        <div class="naviConp">
 		            <div class="naviConp__icon">
-		                <i class="fa-solid fa-clock"></i>
-		            </div>
-		            <div class="naviConp__title">예정</div>
-		            <input type="hidden" class="naviLocation" value="progressExpected">
-		        </div>
-		        <div class="naviConp">
-		            <div class="naviConp__icon">
 		                <i class="fa-solid fa-spinner"></i>
 		            </div>
 		            <div class="naviConp__title">진행</div>
@@ -77,7 +70,7 @@
 	            <input type="hidden" class="naviLocation" value="document">
 	        </div>
 	        <div class="innerNavi document">  
-		        <div class="naviConp">
+		        <div class="naviConp documentTotal">
 		            <div class="naviConp__icon">
 		                <i class="fa-solid fa-file"></i>
 		            </div>
@@ -97,20 +90,6 @@
 		            </div>
 		            <div class="naviConp__title">결재</div>
 		            <input type="hidden" class="naviLocation" value="documentApproval">
-		        </div>
-		        <div class="naviConp">
-		            <div class="naviConp__icon">
-		                <i class="fa-solid fa-user"></i>
-		            </div>
-		            <div class="naviConp__title">수신</div>
-		            <input type="hidden" class="naviLocation" value="documentReception">
-		        </div>
-		        <div class="naviConp">
-		            <div class="naviConp__icon">
-		                <i class="fa-solid fa-user-plus"></i>
-		            </div>
-		            <div class="naviConp__title">회람/참조</div>
-		            <input type="hidden" class="naviLocation" value="CirculationReference">
 		        </div>
 		        <div class="naviConp">
 		            <div class="naviConp__icon">
