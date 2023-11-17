@@ -23,7 +23,7 @@
 	<%@ include file="../commons/header.jsp" %>
 	
 	<div class="container">
-		<%@ include file="../commons/mailNaviBar.jsp" %>
+		<%@ include file="../mail/mailNaviBar.jsp" %>
 		
 		<div class="container__send">
 			<form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">

@@ -15,7 +15,7 @@ $(document).ready(function() {
 			location.href = "/addressbook";
 		}
 		
-		if($(this).siblings().html() == "전자결제") {
+		if($(this).siblings().html() == "전자결재") {
 			location.href = "/electronicsignature";
 		}
 	})

@@ -10,8 +10,8 @@
 
 <!-- css, js -->
 <link rel="stylesheet" href="/css/commons/basicSetting.css">
-<link rel="stylesheet" href="/css/commons/naviBar.css">
-<script src="/js/commons/naviBar.js"></script>
+<link rel="stylesheet" href="/css/mail/mailNaviBar.css">
+<script src="/js/commons/mailNaviBar.js"></script>
 </head>
 <body>
 	 <div class="naviBar">

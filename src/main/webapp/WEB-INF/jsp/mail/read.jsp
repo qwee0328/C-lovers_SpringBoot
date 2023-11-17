@@ -23,7 +23,7 @@
 	<%@ include file="../commons/header.jsp" %>
 	
 	<div class="container">
-		<%@ include file="../commons/mailNaviBar.jsp" %>
+		<%@ include file="../mail/mailNaviBar.jsp" %>
 		
 		<div class="container__read">
 			<form method="post" enctype="multipart/form-data">

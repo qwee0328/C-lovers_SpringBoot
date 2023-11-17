@@ -14,7 +14,7 @@ import com.clovers.services.ElectronicSignatureService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/electronicsignature/")
+@RequestMapping("/electronicsignature")
 public class ElectronicSignatureController {
 	// 전자결재 컨트롤러
 
@@ -29,7 +29,20 @@ public class ElectronicSignatureController {
 	public String main() {
 		String title = "전자결재";
 		String currentMenu = "대기";
-		return "/electronicsignature/wait";
+		
+		session.setAttribute("title", title);
+		session.setAttribute("currentMenu", currentMenu);
+		
+		return "/electronicsignature/progressWait";
+	}
+	
+	// 대기
+	@RequestMapping("/progressWait")
+	public String progressWait() {
+		String currentMenu = "대기";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/progressWait";
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

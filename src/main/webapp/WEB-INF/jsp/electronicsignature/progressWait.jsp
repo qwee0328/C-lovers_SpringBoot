@@ -16,7 +16,7 @@
 	<%@ include file="../commons/header.jsp" %>
 	
 	<div class="container">
-		<%@ include file="../commons/naviBar.jsp" %>
+		<%@ include file="../electronicsignature/electronicsignatureNaviBar.jsp" %>
 		
 		<div class="container__wait">
 		
