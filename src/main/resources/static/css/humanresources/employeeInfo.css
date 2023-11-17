@@ -16,18 +16,16 @@
     }
 }
 
+
 .employeeInfo__Container{
     margin: auto;
     display: flex;
-    align-items: center;
     justify-content: center;
     font-family: 'Roboto';
 }
-.employeeInfo__navi{
-    width: 20%;
-}
+
 .employeeInfo__chart{
-    width: 80%;
+    width: 87%;
 }
 /* 제일 위에 부분 */
 .chart__searchBox{
@@ -78,7 +76,7 @@
 
 /* 클로버 산업 메뉴  */
 .innerBox__title{
-    padding-left: 5px;
+    padding-left: 10px;
     font-weight: 800; 
     display: flex;
     align-items: center;
@@ -110,6 +108,7 @@
     text-align: center;
     align-items: center;
     height: 33px;
+    padding-left: 5px;
 }
 /* 팀 높이 */
 .innerBox__title,.manageContent,.productContent,.saleContent{

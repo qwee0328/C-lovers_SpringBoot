@@ -16,9 +16,7 @@
 <body>
 <%@ include file="../commons/header.jsp" %>
 	<div class="employeeInfo__Container">
-		<div class="employeeInfo__navi">
 			<%@ include file="../humanresources/hrNaviBar.jsp" %>
-		</div>
 		<div class="employeeInfo__chart">
 			<div class="chart__searchBox">
 				<div class="searchBox">
