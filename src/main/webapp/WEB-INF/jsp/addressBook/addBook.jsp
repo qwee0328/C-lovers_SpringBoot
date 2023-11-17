@@ -19,7 +19,7 @@
 <script src="/js/addressbook/addressBook.js"></script>
 <style>
 	.addBook__container{
-		width: calc(100vw - 250px);
+		width: calc(100vw - 300px);
 	}
 </style>
 </head>
