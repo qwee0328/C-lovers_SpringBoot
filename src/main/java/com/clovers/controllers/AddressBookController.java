@@ -13,6 +13,7 @@ import com.clovers.dto.AddressBookDTO;
 import com.clovers.dto.AddressBookTagDTO;
 import com.clovers.services.AddressBookService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -26,11 +27,13 @@ public class AddressBookController {
 	private AddressBookService sbservice;
 	
 	@RequestMapping("")
-	public String main(Model model) { // index 데이터
+	public String main(Model model, HttpServletRequest request) { // index 데이터
 		String title="주소록";
-		String currentMenu = "개인 전체";
+		if(session.getAttribute("currentMenu") == null) {
+			session.setAttribute("currentMenu", "개인 전체");
+		}
+		
 		session.setAttribute("title", title);
-		session.setAttribute("currentMenu", currentMenu);
 		return "/addressbook/addBook";
 	}
 	
@@ -53,7 +56,8 @@ public class AddressBookController {
 	
 	@ResponseBody
 	@RequestMapping("/select") // 주소록 검색
-	public List<AddressBookDTO> select(String key, int value) {
+	public List<AddressBookDTO> select(String key, int value, String currentMenu) {
+		session.setAttribute("currentMenu", currentMenu);
 		return sbservice.select((String)session.getAttribute("loginID"), key, value);
 		// key : 전체 주소록을 검색할 것인지, 태그로 주소록을 검색할 것인지 (key 값이 is_shard일 경우 개인 전체/공유 전체이며, key 값이 id일 경우 태그로 검색함.)
 		// value : key 값에 대한 실제 값 (개인: personal, 공유: shared, id: id 값(기본키)
