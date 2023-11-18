@@ -3,7 +3,30 @@ let status = "";
 window.onload = function() {
 	setClock();
 	setInterval(setClock, 1000);
-
+	
+	// 사용자 지각 현황 불러오기
+	$.ajax({
+		url: "/humanResources/selectLateInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userLateCount").html(resp+"회");
+	});
+	
+	// 사용자 조기퇴근 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectEarlyLeaveInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userEarlyLeaceCount").html(resp+"회");
+	});
+	
+	// 사용자 퇴근 미체크 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectNotCheckedLeaveInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userNotCheckedLeaveCount").html(resp+"회");
+	});
 
 	$.ajax({
 		url: "/humanResources/selectEmployeeWorkRule",

@@ -33,6 +33,21 @@ public class HumanResourcesDAO {
 		return db.update("HumanResources.update", param);
 	}
 
+	// 사용자 지각 정보 불러오기
+	public int selectLateInfo(String id) {
+		return db.selectOne("HumanResources.selectLateInfo", id);
+	}
+
+	//사용자 조기퇴근 정보 불러오기
+	public int selectEarlyLeaveInfo(String id) {
+		return db.selectOne("HumanResources.selectEarlyLeaveInfo", id);
+	}
+
+	// 사용자 퇴근 미체크 정보 불러오기
+	public int selectNotCheckedLeaveInfo(String id) {
+		return db.selectOne("HumanResources.selectNotCheckedLeaveInfo", id);
+	}
+
 	// 사용자 근무 규칙 정보 불러오기
 	public Map<String, Object> selectEmployeeWorkRule(String id) {
 		return db.selectOne("HumanResources.selectEmployeeWorkRule", id);
