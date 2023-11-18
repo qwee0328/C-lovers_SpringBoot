@@ -8,7 +8,7 @@
 .naviBar__favoriteAddress,
 .naviBar__personalAddress,
 .naviBar__sharedAddress {
-  padding: 20px;
+  padding: 0px 20px;
 }
 .naviBar__applyBtns,
 .naviBar__regularEmployeeMenu {

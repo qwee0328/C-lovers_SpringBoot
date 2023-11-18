@@ -48,7 +48,7 @@
 	       </div>
 	       
 	       <div class="naviConp toggleInner trashMenuNavi" authority="trash" data-title="휴지통" data-id="-3">
-               <div class="naviConp__icon"><i class="fa-solid fa-star"></i></div>
+               <div class="naviConp__icon"><i class="fa-solid fa-trash"></i></div>
                <div class="naviConp__title naviConp__titleMini">휴지통</div>
            </div>
 	    </div>
