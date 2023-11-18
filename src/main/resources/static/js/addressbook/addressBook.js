@@ -319,8 +319,6 @@ $(document).on("click", ".toggleInner", function() {
 function indexSelect(target){
 	$(".activeMenu").removeClass("activeMenu");
 	
-	
-	// 삭제되지는 않았나.. 판단해야함
 	if($(target).length == 0){ // 만약 메뉴가 삭제되었다면 개인 전체 선택
 		reloadAddressBook("personal", 0);
 		$(".toggleInner[authority='personal']").addClass("activeMenu");
@@ -329,8 +327,6 @@ function indexSelect(target){
 		reloadAddressBook($(target).attr("authority"), $(target).attr("data-id"));
 	else reloadAddressBook(parseInt($(target).attr("data-id")), $(target).attr("data-id")); // 그 외 태그 선택
 
-	
-	// 여기 다시 보기 $("#abCurrentMenu").val($(target).attr("data-id"));
 	$(target).addClass("activeMenu");
 }
 
