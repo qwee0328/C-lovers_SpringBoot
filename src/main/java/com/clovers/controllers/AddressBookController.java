@@ -75,22 +75,31 @@ public class AddressBookController {
 	// 주소 휴지통으로 이동
 	@ResponseBody
 	@RequestMapping("/trash") 
-	public int trash(int id) {
-		return abservice.trash(id,1);
+	public int trash(@RequestParam(value="id", required=false, defaultValue = "-1")int id, @RequestParam(value="ids[]", required=false)List<Integer> ids) {
+		if(ids == null || ids.isEmpty()) {
+			return abservice.trash(id,1);
+		}
+		return abservice.trash(ids,1);
 	}
 	
 	// 주소 휴지통에서 기존 태그로 복원
 	@ResponseBody
 	@RequestMapping("/restore") 
-	public int restore(int id) {
-		return abservice.trash(id,0);
+	public int restore(@RequestParam(value="id", required=false, defaultValue = "-1")int id, @RequestParam(value="ids[]", required=false)List<Integer> ids) {
+		if(ids == null || ids.isEmpty()) {
+			return abservice.trash(id,0);
+		}
+		return abservice.trash(ids,0);
 	}
 	
 	// 주소 영구 삭제
 	@ResponseBody
 	@RequestMapping("/delete")
-	public int delete(int id) {
-		return abservice.delete(id);
+	public int delete(@RequestParam(value="id", required=false, defaultValue = "-1")int id, @RequestParam(value="ids[]", required=false)List<Integer> ids) {
+		if(ids == null || ids.isEmpty()) {
+			return abservice.delete(id);
+		}
+		return abservice.delete(ids);
 	}
 	
 	// 주소 변경
@@ -103,7 +112,13 @@ public class AddressBookController {
 		return abservice.update(dto,selectedTagArray); // 기존 태그 삭제 및 새로운 태그 추가 및 주소 내용 업데이트
 	}
 	
-	
+	// 주소 복사 ( 개인 <-> 공유 )
+	@ResponseBody
+	@RequestMapping("/copyAddress") // 주소 변경
+	public int copyAddress(int is_share, @RequestParam(value="ids[]")List<Integer> ids) {
+		return abservice.copyAddress(is_share, ids);
+	}
+
 	
 	// 태그 관련
 	

@@ -41,13 +41,16 @@
 	outline: none;
 }
 
-.body__addListHeader {
+.body__addListHeader, .body__addListSelectHeader, .body__addListSelectTrashHeader {
 	height: 35px;
 	width: 100%;
 }
 
+
 .body__addListHeader>div,
-.addList__addessLine>div {
+.addList__addessLine>div,
+.body__addListSelectHeader>div,
+.body__addListSelectTrashHeader>div {
 	width: 15%;
 	display: flex;
 	align-items: center;
@@ -55,6 +58,26 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	padding: 0 5px;
+}
+
+
+.addListHeader__select, .addListHeader__selectInTrash {
+	width: fit-content !important;
+	margin-right: 10px;
+	color: #095544;
+	font-weight: 500;
+	display:none !important;
+}
+
+.addListHeader__select:hover,
+.addListHeader__selectInTrash:hover{
+	cursor: pointer;
+	text-decoration: underline;
+} 
+
+.addListHeader__selectCnt:hover{
+	text-decoration: none !important;
+	cursor:default !important;
 }
 
 .addListHeader__chkBoxCover,

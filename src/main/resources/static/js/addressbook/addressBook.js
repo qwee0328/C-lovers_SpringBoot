@@ -189,6 +189,10 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 		},
 		type: "post"
 	}).done(function(resp) {
+		$(".addListHeader__chkBox").prop("checked", false);
+		$(".addListHeader__default").css("display","flex");
+		$(".addListHeader__select").attr("style","display: none !important");
+		$(".addListHeader__selectInTrash").attr("style","display: none !important");
 		if(resp.length>0){
 			if(resp[0].deleteTag === undefined){ // 삭제된 태그이면 개인 전체 선택되도록
 				$("#abCurrentMenu").val(value);
@@ -423,12 +427,40 @@ $(document).on("click", ".addessLine__chkBox", function(e) {
 	if ($(this).is(":checked")) {
 		$(this).closest(".addList__addessLine").css("backgroundColor", "#DCEDD4");
 		// 선택하면 위에 목록 출력
-		
-		
+		$(".addListHeader__default").css("display","none");
+
+		let currentMenu = parseInt($("#abCurrentMenu").val());
+		if(currentMenu == -3){ // 휴지통
+			$(".addListHeader__selectInTrash").attr("style","display: flex !important");
+			$(".addListHeader__select").attr("style","display: none !important");	
+		}else{
+			$(".addListHeader__selectInTrash").attr("style","display: none !important");
+			$(".addListHeader__select").attr("style","display: flex !important");
+			
+			if(currentMenu == -2){ // 중요 주소록
+				$(".addListHeader__copy").attr("style","display: none !important");
+			}else{
+				let currentNaviParent = $(".toggleInner[data-id='"+parseInt($("#abCurrentMenu").val())+"']").parent().find(".toggleMenu .naviConp__title").text();
+				let id;
+				if(currentNaviParent == "개인 주소록") {currentNaviParent = "공유 주소록"; id=1;}
+				else {currentNaviParent = "개인 주소록"; id=0;}
+				$(".addListHeader__copy").text(currentNaviParent+"에 복사").attr("data-id",id);
+			}
+		}
+	
 	} else {
 		$(this).closest(".addList__addessLine").css("backgroundColor", "transparent");
+		
+		if($(".addessLine__chkBox:checked").length==0){
+			$(".addListHeader__default").css("display","flex");
+			$(".addListHeader__select").attr("style","display: none !important");
+			$(".addListHeader__selectInTrash").attr("style","display: none !important");
+		}
+
 	}
 
+	$(".addListHeader__selectCnt").text($(".addessLine__chkBox:checked").length);
+	$(".addListHeader__copy").text();
 	if ($(".addListHeader__chkBox").is(":checked")) $(".addListHeader__chkBox").prop("checked", false);
 });
 
@@ -438,12 +470,94 @@ $(document).on("click", ".addListHeader__chkBox", function() {
 	if ($(this).is(":checked") == true) {
 		$(".addList__addessLine").css("backgroundColor", "#DCEDD4");
 		$(".addessLine__chkBox").prop("checked", true);
+		
+		$(".addListHeader__default").css("display","none");
+		if(parseInt($("#abCurrentMenu").val()) == -3){
+			$(".addListHeader__selectInTrash").attr("style","display: flex !important");
+			$(".addListHeader__select").attr("style","display: none !important");	
+		}else{
+			$(".addListHeader__selectInTrash").attr("style","display: none !important");
+			$(".addListHeader__select").attr("style","display: flex !important");
+			
+			if(parseInt($("#abCurrentMenu").val()) == -2){ // 중요 주소록
+				$(".addListHeader__copy").attr("style","display: none !important");
+			}else{
+				let currentNaviParent = $(".toggleInner[data-id='"+parseInt($("#abCurrentMenu").val())+"']").parent().find(".toggleMenu .naviConp__title").text();
+				let id;
+				if(currentNaviParent == "개인 주소록") {currentNaviParent = "공유 주소록"; id=1;}
+				else {currentNaviParent = "개인 주소록"; id=0;}
+				$(".addListHeader__copy").text(currentNaviParent+"에 복사").attr("data-id",id);
+			}
+		}
+		$(".addListHeader__selectCnt").text($(".addessLine__chkBox:checked").length);
 	} else {
 		$(".addList__addessLine").css("backgroundColor", "transparent");
 		$(".addessLine__chkBox").prop("checked", false);
+		$(".addListHeader__default").css("display","flex");
+		$(".addListHeader__select").attr("style","display: none !important");
+		$(".addListHeader__selectInTrash").attr("style","display: none !important");
 	}
 });
 
+
+
+// 주소 삭제 함수
+function deleteAddress(data){
+	let url
+	if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
+		 url="/addressbook/delete";
+	}else{ // 아니면 휴지통으로 이동
+		url="/addressbook/trash";
+	}
+	
+	$.ajax({
+		url:url,
+		data:data,
+		type:"post"
+	}).done(function(){
+		$.modal.close();
+		indexSelect($(".activeMenu"));	
+	});
+}
+
+// 정보창에서 삭제하기 클릭 (주소록 휴지통으로 이동)
+$(document).on("click","#addBookModal__deleteBtn",function(){
+	deleteAddress({id:$(this).attr("data-id")})
+});
+
+// 체크 박스로 주소 삭제
+$(document).on("click",".addListHeader__trash",function(){
+	let ids = $(".addessLine__chkBox:checked").toArray().map((e)=>{
+		return parseInt($(e).closest(".addList__addessLine").attr("data-id"));
+	})
+	deleteAddress({ids:ids});
+});
+
+// 체크 박스로 영구 삭제
+$(document).on("click",".addListHeader__delete",function(){
+	let ids = $(".addessLine__chkBox:checked").toArray().map((e)=>{
+		return parseInt($(e).closest(".addList__addessLine").attr("data-id"));
+	})
+	deleteAddress({ids:ids});
+});
+
+// 체크 박스로 다른 주소록에 주소 복사
+$(document).on("click",".addListHeader__copy",function(){
+	let ids = $(".addessLine__chkBox:checked").toArray().map((e)=>{
+		return parseInt($(e).closest(".addList__addessLine").attr("data-id"));
+	})
+	
+	let is_share = $(this).attr("data-id");
+	$.ajax({
+		url:"/addressbook/copyAddress",
+		data:{
+			is_share: is_share,
+			ids: ids
+		}
+	});
+	
+	
+});
 
 
 // 주소록 클릭 시 샂세 정보창
@@ -567,15 +681,32 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 
 
 // 휴지통에서 주소 복원
-$(document).on("click","#addBookModal__restoreBtn",function(){
+
+
+
+// 복원 함수
+function restoreAddress(data){
 	$.ajax({
 		url:"/addressbook/restore",
-		data:{id:$(this).attr("data-id")},
+		data:data,
 		type:"post"
 	}).done(function(){
 		$.modal.close();
 		indexSelect($(".activeMenu"));	
 	})
+}
+
+// 휴지통 내 상세보기 모달창에서 복원하기
+$(document).on("click","#addBookModal__restoreBtn",function(){
+	restoreAddress({id:$(this).attr("data-id")})
+});
+
+// 체크 박스로 복원
+$(document).on("click",".addListHeader__restore",function(){	
+	let ids = $(".addessLine__chkBox:checked").toArray().map((e)=>{
+		return parseInt($(e).closest(".addList__addessLine").attr("data-id"));
+	})
+	restoreAddress({ids:ids});
 });
 
 // 주소 업데이트
@@ -596,25 +727,7 @@ $(document).on("click","#addressBookUpdate",function(){
 });
 
 
-// 정보창에서 삭제하기 클릭 (주소록 휴지통으로 이동)
-$(document).on("click","#addBookModal__deleteBtn",function(){
-	let url
-	
-	console.log(parseInt($("#abCurrentMenu").val()));
-	if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
-		 url="/addressbook/delete";
-	}else{ // 아니면 휴지통으로 이동
-		url="/addressbook/trash";
-	}
-	$.ajax({
-		url:url,
-		data:{id:$(this).attr("data-id")},
-		type:"post"
-	}).done(function(){
-		$.modal.close();
-		indexSelect($(".activeMenu"));	
-	});
-});
+
 
 
 

@@ -30,7 +30,18 @@
 	
 	<!-- 주소 관련 -->
 	<delete id="delete">
-		delete from address_book where id=#{id};
+		delete from address_book where id
+		<if test="ids == null">
+			= #{id};
+		</if>
+		
+		<if test="ids != null">
+			in (
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			);
+		</if>
 	</delete>
 	
 	<select id="select" resultMap="addressBookAll">
@@ -140,6 +151,18 @@
 		);
 	</insert>
 	
+	<insert id="copyAddress">
+		insert into address_book
+		
+		select null, name, #{is_share}, emp_id, email, numberType, number, company_name, dept_name, job_name, addressType, address, birthType, birth, memo, trash, trash_date
+		from address_book
+		where id in
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		
+	</insert>
+	
 	<update id="update">
 		update 
 			address_book 
@@ -168,8 +191,22 @@
 		<if test="trash == 1">
 			now()
 		</if>
-		where id = #{id};
+		
+		where id
+		<if test="ids == null">
+			= #{id};
+		</if>
+		
+		<if test="ids != null">
+			in (
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			);
+		</if>
 	</update>
+	
+
 	
 	<!-- 태그 관련 -->
 	<insert id="tagInsert" useGeneratedKeys="true" keyProperty="id">

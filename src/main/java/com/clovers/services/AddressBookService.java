@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.dao.AddressBookDAO;
 import com.clovers.dto.AddressBookDTO;
@@ -64,15 +67,38 @@ public class AddressBookService {
 	
 	// 주소 휴지통으로 이동
 	public int trash(int id, int trash) {
-		Map<String,Integer> param = new HashMap<>();
+		Map<String,Object> param = new HashMap<>();
 		param.put("id", id);
+		param.put("trash", trash);
+		return dao.trash(param);
+	}
+	
+	public int trash(List<Integer> ids, int trash) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("ids", ids);
 		param.put("trash", trash);
 		return dao.trash(param);
 	}
 	
 	// 주소 완전 삭제
 	public int delete(int id) {
-		return dao.delete(id);
+		Map<String,Object> param = new HashMap<>();
+		param.put("id", id);
+		return dao.delete(param);
+	}
+	public int delete(List<Integer> ids) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("ids", ids);
+		return dao.delete(param);
+	}
+		
+	
+	// 주소 복사 (공유 <-> 개인)
+	public int copyAddress(int is_share, List<Integer> ids) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("is_share", is_share);
+		param.put("ids", ids);
+		return dao.copyAddress(param);
 	}
 	
 	

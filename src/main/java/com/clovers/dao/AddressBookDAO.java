@@ -1,5 +1,6 @@
 package com.clovers.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +31,21 @@ public class AddressBookDAO {
 		return db.selectOne("AddressBook.selectById",id);
 	}
 	
-	public int delete(int id) {
-		return db.delete("AddressBook.delete",id);
+	public int delete(Map<String,Object> param) {
+		return db.delete("AddressBook.delete",param);
 	}
 	
 	public int update(AddressBookDTO dto) {
 		return db.update("AddressBook.update",dto);
 	}
 	
-	public int trash(Map<String,Integer> param) {
+	public int trash(Map<String,Object> param) {
 		return db.update("AddressBook.trash", param);
+	}
+	
+	// 주소 복사 (공유 <-> 개인)
+	public int copyAddress(Map<String,Object> param) {
+		return db.insert("AddressBook.copyAddress",param);
 	}
 	
 	

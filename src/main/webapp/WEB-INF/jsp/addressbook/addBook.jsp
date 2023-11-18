@@ -50,12 +50,22 @@
 					<div class="addListHeader__chkBoxCover align-center">
 						<input type="checkbox" class="addListHeader__chkBox">
 					</div>
-					<div class="addessLint__favorites"></div>
-					<div class="addListHeader__name">이름</div>
-					<div class="addListHeader__email">이메일</div>
-					<div class="addListHeader__phone">전화번호</div>
-					<div class="addListHeader__company">회사</div>
-					<div class="addListHeader__tag">태그</div>
+					<div class="addessLint__favorites addListHeader__default"></div>
+					<div class="addListHeader__name addListHeader__default">이름</div>
+					<div class="addListHeader__email addListHeader__default">이메일</div>
+					<div class="addListHeader__phone addListHeader__default">전화번호</div>
+					<div class="addListHeader__company addListHeader__default">회사</div>
+					<div class="addListHeader__tag addListHeader__default">태그</div>
+					
+					<!-- 체크 박스 선택 시 -->
+					<div class="addListHeader__selectCnt addListHeader__select">1</div>
+					<div class="addListHeader__trash addListHeader__select">삭제</div>
+					<div class="addListHeader__copy addListHeader__select">공유 주소록에 복사</div>
+				
+					<!-- 휴지통에사 체크 박스 선택 시 -->
+					<div class="addListHeader__selectCnt addListHeader__selectInTrash">1</div>
+					<div class="addListHeader__delete addListHeader__selectInTrash">영구 삭제</div>
+					<div class="addListHeader__restore addListHeader__selectInTrash">복구</div>
 				</div>
 				<div class="body__addList"></div>
 			</div>
