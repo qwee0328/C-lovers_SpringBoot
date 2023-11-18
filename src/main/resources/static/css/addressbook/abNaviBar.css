@@ -73,3 +73,12 @@
 .activeMenu{
 	background-color: #DCEDD4;
 }
+
+.favoriteMenuNavi{
+	margin: 20px 20px 0px 20px;
+	padding: 10px 15px;
+}
+
+.favoriteMenuNavi .naviConp__titleMini{
+	font-size: 17px;
+}

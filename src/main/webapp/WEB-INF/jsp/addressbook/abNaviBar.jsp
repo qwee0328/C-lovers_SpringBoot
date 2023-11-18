@@ -15,14 +15,10 @@
 	<div class="naviBar">
 	   <div class="naviBar__applyBtns">
 	       <button id="addressAddBtn"><i class="fa-solid fa-plus"></i>주소 추가</button>
-	      <!--  <div class="naviConp">
-	           <div class="naviConp__icon"><i class="fa-solid fa-star"></i></div>
-	           <div class="naviConp__title">중요 주소록</div>
-	       </div> -->
 	   </div>
 	   <div class="naviScrollBox">
 	   		<input type="hidden" value="${currentMenu}" id="abCurrentMenu">
-           <div class="naviConp toggleInner" authority="favorite" data-title="중요 주소록" data-id="-2">
+           <div class="naviConp toggleInner favoriteMenuNavi" authority="favorite" data-title="중요 주소록" data-id="-2">
                <div class="naviConp__icon"><i class="fa-solid fa-star"></i></div>
                <div class="naviConp__title naviConp__titleMini">중요 주소록</div>
            </div>

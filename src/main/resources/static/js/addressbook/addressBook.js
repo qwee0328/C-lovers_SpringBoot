@@ -265,13 +265,17 @@ function settingData(){
 	
 	return data;
 }
+
+
+
+
+
+
 $(document).ready(function() {
-	reloadTags(function(){
+	reloadTags(function(){ // 존재하는 태그 출력
 		indexSelect($("div[data-id='" + $("#abCurrentMenu").val() + "']"));	
 	});
 	
-	
-
 	$(".modalBody__addBookType>div").on("click", function() { // 주소록 선택 (개인 주소록 / 공유 주소록)
 		$(".activeType").removeClass("activeType");
 		$(this).addClass("activeType");
