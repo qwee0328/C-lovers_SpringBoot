@@ -42,9 +42,10 @@ public class AddressBookDAO {
 		return db.selectList("AddressBook.tagSelectByIsShare",param);
 	}
 	
-//	public List<AddressBookDTO> select(Map<String,Object> param) {
-//		return db.selectList("AddressBook.select",param);
-//	}
+	
+	public int existTag(int id) {
+		return db.selectOne("AddressBook.existTag",id);
+	}
 	
 	public List<Map<String,Object>> select(Map<String,Object> param) {
 		return db.selectList("AddressBook.select",param);

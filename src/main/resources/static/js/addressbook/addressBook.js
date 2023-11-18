@@ -191,40 +191,50 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 		},
 		type: "post"
 	}).done(function(resp) {
-		$("#abCurrentMenu").val(value);
-		$(".body__addList>*").remove();
-		$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
-		for (let i = 0; i < resp.length; i++) {
-			let addList__addessLine = $("<div>").attr("class", "addList__addessLine d-flex").attr("data-id",resp[i].id);
-			let addessLine__chkBoxCover = $("<div>").attr("class", "addessLine__chkBoxCover align-center");
-			let addessLine__chkBox = $("<input type='checkbox'>").attr("class", "addessLine__chkBox")
-			addessLine__chkBoxCover.append(addessLine__chkBox);
-
-			let addessLint__favorites = $("<div>").attr("class", "addessLint__favorites align-center");
-			//.html(`<i class="fa-regular fa-star align-center favorites__icon"></i>`);
-			let favorites__icon = $("<i>").attr("class","fa-regular fa-star align-center favorites__icon")
-			addessLint__favorites.append(favorites__icon);
-			let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
-			let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
-			let addessLine__phone = $("<div>").attr("class", "addessLine__phone").text(resp[i].number);
-			let addessLine__company = $("<div>").attr("class", "addessLine__company").text(resp[i].company_name);
-			let addessLine__tag = $("<div>").attr("class", "addessLine__tag d-flex");
-		
-			if (resp[i].tag_ids && resp[i].tag_names) {
-				let tagIdArr = resp[i].tag_ids.split(",");
-				let tagNameArr = resp[i].tag_names.split(",");
-				for(let i=0; i<tagIdArr.length; i++){
-					let addBook__tag = $("<div>").attr("class", "addBook__tag align-center").text(tagNameArr[i]).attr("selectid",tagIdArr[i]);
-					addessLine__tag.append(addBook__tag);
+		if(resp[0].deleteTag !== undefined){ // 삭제된 태그이면 개인 전체 선택되도록
+			reloadTags(function(){
+				indexSelect($("div[data-id='"+0+"']"));	
+			});
+			Swal.fire({
+				icon: "error",
+				text: "삭제된 태그입니다."
+			});
+		}else{
+			$("#abCurrentMenu").val(value);
+			$(".body__addList>*").remove();
+			$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
+			for (let i = 0; i < resp.length; i++) {
+				let addList__addessLine = $("<div>").attr("class", "addList__addessLine d-flex").attr("data-id",resp[i].id);
+				let addessLine__chkBoxCover = $("<div>").attr("class", "addessLine__chkBoxCover align-center");
+				let addessLine__chkBox = $("<input type='checkbox'>").attr("class", "addessLine__chkBox")
+				addessLine__chkBoxCover.append(addessLine__chkBox);
+	
+				let addessLint__favorites = $("<div>").attr("class", "addessLint__favorites align-center");
+				//.html(`<i class="fa-regular fa-star align-center favorites__icon"></i>`);
+				let favorites__icon = $("<i>").attr("class","fa-regular fa-star align-center favorites__icon")
+				addessLint__favorites.append(favorites__icon);
+				let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
+				let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
+				let addessLine__phone = $("<div>").attr("class", "addessLine__phone").text(resp[i].number);
+				let addessLine__company = $("<div>").attr("class", "addessLine__company").text(resp[i].company_name);
+				let addessLine__tag = $("<div>").attr("class", "addessLine__tag d-flex");
+			
+				if (resp[i].tag_ids && resp[i].tag_names) {
+					let tagIdArr = resp[i].tag_ids.split(",");
+					let tagNameArr = resp[i].tag_names.split(",");
+					for(let i=0; i<tagIdArr.length; i++){
+						let addBook__tag = $("<div>").attr("class", "addBook__tag align-center").text(tagNameArr[i]).attr("selectid",tagIdArr[i]);
+						addessLine__tag.append(addBook__tag);
+					}
+				}			
+	
+				if(resp[i].existFavorite == resp[i].id){
+					favorites__icon.addClass("chk");
 				}
-			}			
-
-			if(resp[i].existFavorite == resp[i].id){
-				favorites__icon.addClass("chk");
+	
+				addList__addessLine.append(addessLine__chkBoxCover).append(addessLint__favorites).append(addessLine__name).append(addessLine__email).append(addessLine__phone).append(addessLine__company).append(addessLine__tag)
+				$(".body__addList").append(addList__addessLine);
 			}
-
-			addList__addessLine.append(addessLine__chkBoxCover).append(addessLint__favorites).append(addessLine__name).append(addessLine__email).append(addessLine__phone).append(addessLine__company).append(addessLine__tag)
-			$(".body__addList").append(addList__addessLine);
 		}
 	});
 }

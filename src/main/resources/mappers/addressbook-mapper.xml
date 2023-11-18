@@ -51,21 +51,9 @@
 		select * from address_book_tag where emp_id = #{emp_id} or is_share = 1;
 	</select>
 	
-	<!-- <select id="select" resultType="com.clovers.dto.AddressBookDTO">
-		select id, is_share, name, emp_id, email, numberType, number, company_name, dept_name, job_name, addressType, address, birthType, birth, memo from address_book_all where 
-		<if test="key.equals('is_share')">
-			<if test="value == 1">
-				is_share = #{value};
-			</if>
-			<if test="value == 0">
-				emp_id = #{emp_id} and is_share = #{value};
-			</if>
-		</if>
-		<if test="key.equals('id')">
-			tag_id = #{value}
-		</if>
-	</select>  -->
-	
+	<select id="existTag" resultType="java.lang.Integer">
+		select count(*) from address_book_tag where id = #{id};
+	</select>	
 	
 	<select id="select" resultMap="addressBookAll">
 		 SELECT

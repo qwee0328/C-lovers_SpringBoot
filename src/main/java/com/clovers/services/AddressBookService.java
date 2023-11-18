@@ -1,5 +1,6 @@
 package com.clovers.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,17 @@ public class AddressBookService {
 		param.put("key", key);
 		param.put("value", value);
 		param.put("keyword", keyword);
+		
+					
+		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
+			Map<String,Object> result = new HashMap<>();
+			result.put("deleteTag", true);
+			List<Map<String,Object>> deleteTag = new ArrayList<>();
+			deleteTag.add(result);
+			return deleteTag;
+		}
+			
+
 		return dao.select(param);
 	}
 	
