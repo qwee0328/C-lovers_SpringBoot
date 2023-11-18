@@ -97,7 +97,20 @@ public class AddressBookService {
 		return dao.favoriteDelete(param);
 	}
 	
+	// 병행 제어
 	public int update(AddressBookDTO dto) {
+		dao.tagListDelete(dto.getId()); // 기존 태그 내용 삭제
+		return dao.update(dto);
+	}
+	
+	public int update(AddressBookDTO dto, List<Integer> selectedTagArray) {	
+		dao.tagListDelete(dto.getId()); // 기존 태그 내용 삭제
+		
+		// 새로운 태그 내용 추가
+		Map<String, Object> param = new HashMap<>();
+		param.put("selectedTagArray", selectedTagArray);	
+		param.put("address_book_id",dto.getId());
+		dao.tagListInsert(param);
 		return dao.update(dto);
 	}
 }

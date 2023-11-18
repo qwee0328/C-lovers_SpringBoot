@@ -1,6 +1,5 @@
 package com.clovers.controllers;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,7 +111,11 @@ public class AddressBookController {
 
 	@ResponseBody
 	@RequestMapping("/update") // 주소 변경
-	public int update(AddressBookDTO dto) {
-		return abservice.update(dto);
+	public int update(AddressBookDTO dto, @RequestParam(value="selectedTagArray[]", required=false)List<Integer> selectedTagArray) {
+		if(selectedTagArray == null || selectedTagArray.isEmpty()) { // 선택된 태그가 없다면
+			return abservice.update(dto); // 기존 태그 삭제 및 주소 내용 업데이트
+		}
+			
+		return abservice.update(dto,selectedTagArray); // 기존 태그 삭제 및 새로운 태그 추가 및 주소 내용 업데이트
 	}
 }

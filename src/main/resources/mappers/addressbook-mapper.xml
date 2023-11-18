@@ -4,6 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AddressBook">
 	<!-- 주소록 매퍼 -->
+	
+	<!-- 주소 목록 resultMap -->
 	<resultMap id="addressBookAll" type="java.util.HashMap">
 	    <result property="id" column="id" />
 	    <result property="name" column="name" />
@@ -25,35 +27,10 @@
         <result property="existFavorite" column="existFavorite"/>
 	</resultMap>
 	
+	<!-- 주소 관련 -->
 	<delete id="delete">
 		delete from address_book where id=#{id};
 	</delete>
-	
-	<delete id="tagDelete">
-		delete from address_book_tag where id=#{id};
-	</delete>
-	
-	<delete id="favoriteDelete">
-		delete from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
-	</delete>
-	
-	<select id="tagSelectByIsShare" resultType="com.clovers.dto.AddressBookTagDTO">
-		select * from address_book_tag where 
-		<if test="is_share == 1">
-			is_share = #{is_share};
-		</if>
-		<if test="is_share == 0">
-			emp_id = #{emp_id} and is_share =#{is_share};
-		</if>
-	</select>
-
-	<select id="tagSelect" resultType="com.clovers.dto.AddressBookTagDTO">
-		select * from address_book_tag where emp_id = #{emp_id} or is_share = 1;
-	</select>
-	
-	<select id="existTag" resultType="java.lang.Integer">
-		select count(*) from address_book_tag where id = #{id};
-	</select>	
 	
 	<select id="select" resultMap="addressBookAll">
 		 SELECT
@@ -103,24 +80,6 @@
 	<select id="selectById" resultMap="addressBookAll">
 		select * from address_book_select_including_tags where id= #{id}
 	</select>
-	
-	<insert id="tagInsert" useGeneratedKeys="true" keyProperty="id">
-		insert into address_book_tag values(null, #{name}, #{emp_id}, #{is_share});
-	</insert>
-	
-	<insert id="tagListInsert" parameterType="java.util.List">
-		insert into address_book_tag_list values
-		<foreach collection="selectedTagArray" item="selectedTag" separator=",">
-			(null, #{selectedTag}, #{address_book_id})
-		</foreach>
-	</insert>
-	
-	<select id="isFavorite" resultType="java.lang.Integer">
-		select count(*) from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
-	</select>
-	<insert id="favoriteInsert">
-		insert into address_favorite values(#{address_book_id}, #{emp_id});
-	</insert>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
 		insert into address_book( id, name, emp_id, is_share		
@@ -196,5 +155,60 @@
 		where
 			id = #{id};
 	</update>
+	
+	
+	<!-- 태그 관련 -->
+	<insert id="tagInsert" useGeneratedKeys="true" keyProperty="id">
+		insert into address_book_tag values(null, #{name}, #{emp_id}, #{is_share});
+	</insert>
+	
+	<delete id="tagDelete">
+		delete from address_book_tag where id=#{id};
+	</delete>
+	
+	<select id="tagSelectByIsShare" resultType="com.clovers.dto.AddressBookTagDTO">
+		select * from address_book_tag where 
+		<if test="is_share == 1">
+			is_share = #{is_share};
+		</if>
+		<if test="is_share == 0">
+			emp_id = #{emp_id} and is_share =#{is_share};
+		</if>
+	</select>
+	
+	<select id="tagSelect" resultType="com.clovers.dto.AddressBookTagDTO">
+		select * from address_book_tag where emp_id = #{emp_id} or is_share = 1;
+	</select>
+	
+	<select id="existTag" resultType="java.lang.Integer">
+		select count(*) from address_book_tag where id = #{id};
+	</select>	
+	
+	
+	<!-- 태그 목록 관련 -->
+	<insert id="tagListInsert" parameterType="java.util.List">
+		insert into address_book_tag_list values
+		<foreach collection="selectedTagArray" item="selectedTag" separator=",">
+			(null, #{selectedTag}, #{address_book_id})
+		</foreach>
+	</insert>
+	
+	<delete id="tagListDelete">
+		delete from address_book_tag_list where address_book_id = #{id};
+	</delete>
+	
+	<!-- 즐겨 찾기 관련 -->	
+	<insert id="favoriteInsert">
+		insert into address_favorite values(#{address_book_id}, #{emp_id});
+	</insert>
+	
+	<delete id="favoriteDelete">
+		delete from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
+	</delete>
+	
+	<select id="isFavorite" resultType="java.lang.Integer">
+		select count(*) from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
+	</select>
+
 	
 </mapper>
