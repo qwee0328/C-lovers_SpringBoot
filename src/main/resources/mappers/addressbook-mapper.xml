@@ -4,6 +4,34 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AddressBook">
 	<!-- 주소록 매퍼 -->
+	<resultMap id="addressBookAll" type="java.util.HashMap">
+	    <result property="id" column="id" />
+	    <result property="name" column="name" />
+	    <result property="is_share" column="is_share" />
+	    <result property="emp_id" column="emp_id" />
+	    <result property="email" column="email" />
+	    <result property="numberType" column="numberType" />
+	    <result property="number" column="number" />
+	    <result property="company_name" column="company_name" />
+	    <result property="dept_name" column="dept_name" />
+	    <result property="job_name" column="job_name" />
+	    <result property="addressType" column="addressType" />
+	    <result property="address" column="address" />
+	    <result property="birthType" column="birthType" />
+	    <result property="birth" column="birth" />
+	    <result property="memo" column="memo" />
+        <result property="tag_ids" column="tag_ids" />
+        <result property="tag_names" column="tag_names" />
+	</resultMap>
+	
+	<delete id="delete">
+		delete from address_book where id=#{id};
+	</delete>
+	
+	<delete id="tagDelete">
+		delete from address_book_tag where id=#{id};
+	</delete>
+	
 	<select id="tagSelectByIsShare" resultType="com.clovers.dto.AddressBookTagDTO">
 		select * from address_book_tag where 
 		<if test="is_share == 1">
@@ -18,7 +46,7 @@
 		select * from address_book_tag where emp_id = #{emp_id} or is_share = 1;
 	</select>
 	
-	<select id="select" resultType="com.clovers.dto.AddressBookDTO">
+	<!-- <select id="select" resultType="com.clovers.dto.AddressBookDTO">
 		select id, is_share, name, emp_id, email, numberType, number, company_name, dept_name, job_name, addressType, address, birthType, birth, memo from address_book_all where 
 		<if test="key.equals('is_share')">
 			<if test="value == 1">
@@ -31,7 +59,48 @@
 		<if test="key.equals('id')">
 			tag_id = #{value}
 		</if>
+	</select>  -->
+	
+	
+	<select id="select" resultMap="addressBookAll">
+		 SELECT
+		    id,
+		    name,
+		    is_share,
+		    emp_id,
+		    email,
+		    numberType,
+		    number,
+		    company_name,
+		    dept_name,
+		    job_name,
+		    addressType,
+		    address,
+		    birthType,
+		    birth,
+		    memo,
+		    GROUP_CONCAT(tag_id ORDER BY tag_id) AS tag_ids,
+		    GROUP_CONCAT(tag_name ORDER BY tag_id) AS tag_names
+		FROM address_book_all_including_tags
 		
+		WHERE
+		<if test="key.equals('is_share')">
+			<if test="value == 1">
+				is_share = #{value}
+			</if>
+			<if test="value == 0">
+				emp_id = #{emp_id} and is_share = #{value}
+			</if>
+		</if>
+		<if test="key.equals('id')">
+			id in (select address_book_id from address_book_tag_list where address_book_tag_id = #{value})
+		</if>
+		
+		GROUP BY id; 
+	</select>
+	
+	<select id="selectById" resultMap="addressBookAll">
+		select * from address_book_select_including_tags where id= #{id}
 	</select>
 	
 	<insert id="tagInsert" useGeneratedKeys="true" keyProperty="id">
@@ -43,6 +112,10 @@
 		<foreach collection="selectedTagArray" item="selectedTag" separator=",">
 			(null, #{selectedTag}, #{address_book_id})
 		</foreach>
+	</insert>
+	
+	<insert id="favoriteInsert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into address_favorite values(null, #{address_book_id}, #{emp_id});
 	</insert>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -99,4 +172,25 @@
 			</if>
 		);
 	</insert>
+	
+	<update id="update">
+		update 
+			address_book 
+		set
+			name = #{name, jdbcType=VARCHAR},
+			email = #{email, jdbcType=VARCHAR},
+			numberType = #{numberType, jdbcType=VARCHAR},
+			number = #{number, jdbcType=VARCHAR},
+			company_name = #{company_name, jdbcType=VARCHAR},
+			dept_name = #{dept_name, jdbcType=VARCHAR},
+			job_name = #{job_name, jdbcType=VARCHAR},
+			addressType = #{addressType, jdbcType=VARCHAR},
+			address = #{address, jdbcType=VARCHAR},
+			birthType = #{birthType, jdbcType=VARCHAR},
+			birth = #{birth, jdbcType=VARCHAR},
+			memo = #{memo, jdbcType=VARCHAR}
+		where
+			id = #{id};
+	</update>
+	
 </mapper>

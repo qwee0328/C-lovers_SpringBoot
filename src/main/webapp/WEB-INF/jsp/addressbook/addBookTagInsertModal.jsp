@@ -15,7 +15,7 @@
 <body>
 	<div class="addBookTagInsertModal modal">
 		<div class="addBookModal__title">태그 만들기</div>
-		<div class="addBookModal__modalBody">
+		<div class="addBookTagInsertModal__modalBody">
 			<input type="text" class="modalBody__input modalBody__tagName"
 				placeholder="새로 생성할 태그명을 입력하세요">
 		</div>

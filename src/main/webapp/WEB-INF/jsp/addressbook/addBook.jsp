@@ -19,7 +19,12 @@
 <script src="/js/addressbook/addressBook.js"></script>
 <style>
 	.addBook__container{
-		width: calc(100vw - 300px);
+		width: calc(100vw - 250px);
+		height: calc(100vh - 60px);
+		overflow:auto;
+	}
+	.addBook__body{
+		min-width:1200px;
 	}
 </style>
 </head>
@@ -52,24 +57,7 @@
 					<div class="addListHeader__company">회사</div>
 					<div class="addListHeader__tag">태그</div>
 				</div>
-				<div class="body__addList">
-				<!-- 	<div class="addList__addessLine d-flex">
-						<div class="addessLine__chkBoxCover align-center">
-							<input type="checkbox" class="addessLine__chkBox">
-						</div>
-						<div class="addessLint__favorites align-center">
-							<i class="fa-regular fa-star align-center favorites__icon"></i>
-						</div>
-						<div class="addessLine__name">김체리 대표</div>
-
-						<div class="addessLine__email">cherrykin@cherryhongsam.kr</div>
-						<div class="addessLine__phone">010-7777-7777</div>
-						<div class="addessLine__company">체리홍삼(주)</div>
-						<div class="addessLine__tag d-flex">
-							<div class="addBook__tag align-center">ceo</div>
-						</div>
-					</div> -->
-				</div>
+				<div class="body__addList"></div>
 			</div>
 		</div>
 		<%@ include file="../addressbook/addBookInsertModal.jsp"%>

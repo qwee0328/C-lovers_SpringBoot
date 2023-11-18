@@ -20,44 +20,21 @@
 			<div class="addBookViewModal__favorites align-center mr15">
 				<i class="fa-regular fa-star align-center favorites__icon"></i>
 			</div>
-			<div class="addBookViewModal__title">김체리 대표</div>
+			<div class="addBookViewModal__title"></div>
 		</div>
 
-		<div class="addBookModal__modalBody">
-			<div class="modalBody__line d-flex">
-				<div class="modalBody__title d-flex">이메일</div>
-				<div class="modalBody__content addBookViewModal__email">
-					cherrykinm@~~~~~~~~.kr</div>
-			</div>
-			<div class="modalBody__line d-flex">
-				<div class="modalBody__title d-flex">전화</div>
-				<div class="modalBody__content addBookViewModal__number">
-					010-7777-7777</div>
-			</div>
-			<div class="modalBody__line d-flex">
-				<div class="modalBody__title d-flex">회사</div>
-				<div class="modalBody__content addBookViewModal__company">
-					체리홍삼(주)</div>
-			</div>
-		</div>
+		<div class="addBookModal__modalBody"></div>
 		<div class="addBookModal__btns d-flex">
-			<div class="addBookModal__cancelBtnCover">
-				<button class="addBookModal__cancelBtn mr15">닫기</button>
+			<div class="addBookModal__cancelBtnCover mr15">
+				<button class="addBookModal__cancelBtn">닫기</button>
 			</div>
-			<div class="addBookModal__insertBtnCover">
-				<button class="addBookModal__insertBtn">저장</button>
+			<div class="addBookModal__deleteBtnCover mr15">
+				<button class="addBookModal__deleteBtn" id="addBookModal__deleteBtn">삭제</button>
+			</div>
+			<div class="addBookModal__updateBtnCover">
+				<button class="addBookModal__updateBtn" id="addBookModal__updateBtn">수정</button>
 			</div>
 		</div>
 	</div>
-
-	<script>
-		$(document).on("click", ".addBookViewModal__header .favorites__icon", function() {
-			if ($(this).hasClass("chk")) {
-				$(this).removeClass("chk");
-			} else {
-				$(this).addClass("chk");
-			}
-		});
-	</script>
 </body>
 </html>

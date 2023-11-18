@@ -34,6 +34,15 @@ public class AddressBookService {
 		return dao.tagInsert(dto);
 	}
 	
+	public int favoriteInsert(String address_book_id, String emp_id) {
+		Map<String,String> param = new HashMap<>();
+		param.put("id", null);
+		param.put("address_book_id", address_book_id);
+		param.put("emp_id", emp_id);
+		
+		return dao.favoriteInsert(param);
+	}
+	
 	public List<AddressBookTagDTO> tagSelect(String emp_id){
 		return dao.tagSelect(emp_id);
 	}
@@ -45,11 +54,27 @@ public class AddressBookService {
 		return dao.tagSelectByIsShare(param);
 	}
 	
-	public List<AddressBookDTO> select(String emp_id, String key, int value) {
+	public List<Map<String,Object>> select(String emp_id, String key, int value) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("emp_id", emp_id);
 		param.put("key", key);
 		param.put("value", value);
 		return dao.select(param);
+	}
+	
+	public Map<String,Object> selectById(int id) {
+		return dao.selectById(id);
+	}
+	
+	public int delete(int id) {
+		return dao.delete(id);
+	}
+	
+	public int tagDelete(int id) {
+		return dao.tagDelete(id);
+	}
+	
+	public int update(AddressBookDTO dto) {
+		return dao.update(dto);
 	}
 }

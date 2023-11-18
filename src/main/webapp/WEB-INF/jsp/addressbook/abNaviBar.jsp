@@ -23,22 +23,24 @@
 	   <div class="naviScrollBox">
 	   		<input type="hidden" value="${currentMenu}" id="abCurrentMenu">
 	        <div class="naviBar__personalAddress">
-	           <div class="naviConp personalToggle" toggleView="true">
+	           <div class="naviConp toggleMenu" toggleView="true">
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">개인 주소록</div>
+	               <div class="naviConp__addTag" data-isShare="0"><i class="fa-solid fa-plus"></i></div>
 	           </div>
 	           
-	           <div class="naviConp toggleInner" authority="personal" data-title="개인 전체">
+	           <div class="naviConp toggleInner" authority="personal" data-title="개인 전체" data-id="0">
 	               <div class="naviConp__icon"><i class="fa-solid fa-address-book"></i></div>
 	               <div class="naviConp__title naviConp__titleMini">개인 전체</div>
 	           </div>
 	        </div>
 	        <div class="naviBar__sharedAddress">
-	           <div class="naviConp sharedToggle" toggleView="true">
+	           <div class="naviConp toggleMenu" toggleView="true">
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">공유 주소록</div>
+	               <div class="naviConp__addTag" data-isShare="1"><i class="fa-solid fa-plus"></i></div>
 	           </div>
-	           <div class="naviConp toggleInner" authority="shared" data-title="공유 전체">
+	           <div class="naviConp toggleInner" authority="shared" data-title="공유 전체" data-id="-1">
 	               <div class="naviConp__icon"><i class="fa-solid fa-address-book"></i></div>
 	               <div class="naviConp__title naviConp__titleMini">공유 전체</div>
 	           </div>

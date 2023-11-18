@@ -84,10 +84,10 @@
 				<div class="modalBody__title d-flex">회사</div>
 				<div
 					class="modalBody__content modalBody__contentFull d-flex modalBody__companyInfo">
-					<input type="text" class="modalBody__input modalBody__company mr10"
+					<input type="text" class="modalBody__input modalBody__company_name mr10"
 						placeholder="회사"> <input type="text"
-						class="modalBody__input modalBody__dept mr10" placeholder="부서">
-					<input type="text" class="modalBody__input modalBody__job"
+						class="modalBody__input modalBody__dept_name mr10" placeholder="부서">
+					<input type="text" class="modalBody__input modalBody__job_name"
 						placeholder="직급">
 				</div>
 			</div>

@@ -59,11 +59,16 @@
 .naviConp__icon {
   margin-right: 10px;
 }
-.toggleInner,
-.sharedInner{
+.toggleInner{
   padding-left: 45px;
 }
 
 .naviConp__titleMini{
 	font-size: 16px;	
+}
+
+
+
+.activeMenu{
+	background-color: #DCEDD4;
 }
