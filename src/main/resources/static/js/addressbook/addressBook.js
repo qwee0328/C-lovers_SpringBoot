@@ -8,7 +8,10 @@
 	}
 });*/
 
-function modalInit() { //insert modal 창 내용 초기화
+
+
+// insert modal 창 내용 초기화
+function modalInit() { 
 	$(".addBookInsertModal__title").text("주소 추가");
 	$(".modalBody__addBookType").css("display","flex");
 	$("#addressBookUpdate").attr("id","addressBookInsert");
@@ -23,7 +26,9 @@ function modalInit() { //insert modal 창 내용 초기화
 	changeTab($(".activeType").attr("id"));
 }
 
-function changeTab(tapName, callback) { // 주소록 변경 시, 태그 새로 불러오기
+
+// 주소록 변경 시, 태그 새로 불러오기 
+function changeTab(tapName, callback) { 
 	let is_share = 1;
 	if (tapName == "personal") is_share = 0;
 
@@ -47,7 +52,9 @@ function changeTab(tapName, callback) { // 주소록 변경 시, 태그 새로 �
 }
 
 
-$(document).on("click", ".modalBody__plusBtn>i", function() { // 태그 추가 모달 (주소 추가 내)
+
+// 주소 추가 모달 내에서 태그 추가 모달 띄우기
+$(document).on("click", ".modalBody__plusBtn>i", function() {
 	$(".modalBody__tagName").val("");
 	$(".addBookTagInsertModal").modal({
 		showClose: false,
@@ -55,32 +62,17 @@ $(document).on("click", ".modalBody__plusBtn>i", function() { // 태그 추가 �
 	});
 });
 
-/*$(document).on("click",".naviConp__addTag",function(e){ // 태그 추가 모달 (주소록 오른쪽 hover 버튼	 -> 실행 순서 때문에 navi js파일로 이동
-	e.stopPropagation(); // 삭제 버튼 누르면 페이지 이동하지 않음. (이벤트 중단)
-	
-	$(".modalBody__tagName").val("");
-	$(".activeType").removeClass("activeType");
-	if($(this).attr("data-isShare") == 0){
-		$("#personal").addClass("activeType");
-	}else{
-		$("#shared").addClass("activeType");
-	}
-	changeTab($(".activeType").attr("id"));
-	
-	$(".addBookTagInsertModal").modal({
-		showClose: false,
-		closeExisting: false
-	});
-});
-*/
-$(document).on("click", ".selectedTag__delete", function() { // 선택한 태그 취소 및 비활성화 취소
+
+// 선택한 태그 선택 취소 및 태그 선택 비활성화 해제 (다시 선택 가능하도록)
+$(document).on("click", ".selectedTag__delete", function() { 
 	let id = $(this).attr("selectId");
 	$(`.modalBody__tag option[value=${id}]`).removeAttr("disabled");
 	$(this).closest(".selectedTag").remove();
 });
 
 
-$(document).on("change", "select[name='modalBody__tag']", function() { // 태그 선택	
+// 태그 선택
+$(document).on("change", "select[name='modalBody__tag']", function() { 
 	tagSelect();
 });
 
@@ -102,7 +94,10 @@ function tagSelect(){
 	$(".modalBody__tag").val(""); // select 선택 값 초기화
 }
 
-function reloadTags(callback) { // 태그 목록 불러와서 인덱스에 넣어주기
+
+
+// 태그 목록 불러와서 인덱스에 넣어주기
+function reloadTags(callback) { 
 	$.ajax({
 		url: "/addressbook/tagSelect",
 		async:"false"
@@ -164,6 +159,8 @@ $(document).on("click",".removeNavi",function(e){
 });
 
 
+
+// 주소록 출력
 function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 	//console.log(`authOrId: ${authorityOrTagId}, id: ${tagId}`);
 
@@ -244,6 +241,8 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 		}
 	});
 }
+
+
 
 // 주소 UPDATE OR INSERT 시 데이터 셋팅
 function settingData(){
@@ -403,7 +402,9 @@ $(document).on("click", ".addBookViewModal__header .favorites__icon", function()
 	}
 });
 
-$(document).on("click", ".addList__addessLine .favorites__icon", function(e) { // 즐겨찾기 (메인 홈)
+
+// 즐겨찾기 (메인 홈)
+$(document).on("click", ".addList__addessLine .favorites__icon", function(e) { 
 	e.stopPropagation(); // 상세보기 창 뜨지 않도록 이벤트 중단
 	let selectedFav = $(this);
 	if ($(this).hasClass("chk")) {
@@ -413,7 +414,9 @@ $(document).on("click", ".addList__addessLine .favorites__icon", function(e) { /
 	}
 });
 
-$(document).on("click", ".addessLine__chkBox", function(e) { // 주소록 home 선택 toggle
+
+// 주소록 home 선택 toggle
+$(document).on("click", ".addessLine__chkBox", function(e) { 
 	e.stopPropagation();
 	if ($(this).is(":checked")) {
 		$(this).closest(".addList__addessLine").css("backgroundColor", "#DCEDD4");
@@ -424,7 +427,9 @@ $(document).on("click", ".addessLine__chkBox", function(e) { // 주소록 home �
 	if ($(".addListHeader__chkBox").is(":checked")) $(".addListHeader__chkBox").prop("checked", false);
 });
 
-$(document).on("click", ".addListHeader__chkBox", function() { // 주소록 home 전체 선택 toggle
+
+// 주소록 home 전체 선택 toggle
+$(document).on("click", ".addListHeader__chkBox", function() { 
 	if ($(this).is(":checked") == true) {
 		$(".addList__addessLine").css("backgroundColor", "#DCEDD4");
 		$(".addessLine__chkBox").prop("checked", true);
