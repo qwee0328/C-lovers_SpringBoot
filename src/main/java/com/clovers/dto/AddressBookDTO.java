@@ -1,7 +1,5 @@
 package com.clovers.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +27,5 @@ public class AddressBookDTO {
 	private String birthType;
 	private String birth;
 	private String memo;
+	private int trash;
 }

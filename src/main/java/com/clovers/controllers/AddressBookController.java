@@ -72,9 +72,23 @@ public class AddressBookController {
 		return abservice.selectById(id);
 	}
 	
-	// 주소 삭제
+	// 주소 휴지통으로 이동
 	@ResponseBody
-	@RequestMapping("/delete") // 주소 삭제
+	@RequestMapping("/trash") 
+	public int trash(int id) {
+		return abservice.trash(id,1);
+	}
+	
+	// 주소 휴지통에서 기존 태그로 복원
+	@ResponseBody
+	@RequestMapping("/restore") 
+	public int restore(int id) {
+		return abservice.trash(id,0);
+	}
+	
+	// 주소 영구 삭제
+	@ResponseBody
+	@RequestMapping("/delete")
 	public int delete(int id) {
 		return abservice.delete(id);
 	}

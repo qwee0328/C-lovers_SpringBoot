@@ -74,11 +74,16 @@
 	background-color: #DCEDD4;
 }
 
-.favoriteMenuNavi{
+.favoriteMenuNavi, .trashMenuNavi{
 	margin: 20px 20px 0px 20px;
 	padding: 10px 15px;
 }
 
-.favoriteMenuNavi .naviConp__titleMini{
+.favoriteMenuNavi .naviConp__titleMini, .trashMenuNavi .naviConp__titleMini{
 	font-size: 17px;
 }
+
+.trashMenuNavi{
+	margin: 0px 20px 0px 20px;
+}
+

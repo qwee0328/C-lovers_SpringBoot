@@ -38,6 +38,11 @@ public class AddressBookDAO {
 		return db.update("AddressBook.update",dto);
 	}
 	
+	public int trash(Map<String,Integer> param) {
+		return db.update("AddressBook.trash", param);
+	}
+	
+	
 	// 태그 관련
 	public int tagInsert(AddressBookTagDTO dto) {
 		return db.insert("AddressBook.tagInsert",dto);

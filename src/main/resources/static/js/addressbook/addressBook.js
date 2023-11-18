@@ -171,6 +171,7 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 		if (authorityOrTagId == "personal") value = 0;
 		else if (authorityOrTagId == "shared")value = -1;
 		else if (authorityOrTagId == "favorite")value = -2;
+		else if (authorityOrTagId == "trash")value = -3;
 	} else {
 		key = "id";
 		value = authorityOrTagId;
@@ -200,9 +201,14 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 					addessLine__chkBoxCover.append(addessLine__chkBox);
 		
 					let addessLint__favorites = $("<div>").attr("class", "addessLint__favorites align-center");
-					//.html(`<i class="fa-regular fa-star align-center favorites__icon"></i>`);
-					let favorites__icon = $("<i>").attr("class","fa-regular fa-star align-center favorites__icon")
-					addessLint__favorites.append(favorites__icon);
+					if(value != -3){ // 휴지통이면 즐겨찾기 출력하지 않음.
+						let favorites__icon = $("<i>").attr("class","fa-regular fa-star align-center favorites__icon")
+						addessLint__favorites.append(favorites__icon);
+						
+						if(resp[i].existFavorite == resp[i].id){
+							favorites__icon.addClass("chk");
+						}
+					}
 					let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
 					let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
 					let addessLine__phone = $("<div>").attr("class", "addessLine__phone").text(resp[i].number);
@@ -217,10 +223,6 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 							addessLine__tag.append(addBook__tag);
 						}
 					}			
-		
-					if(resp[i].existFavorite == resp[i].id){
-						favorites__icon.addClass("chk");
-					}
 		
 					addList__addessLine.append(addessLine__chkBoxCover).append(addessLint__favorites).append(addessLine__name).append(addessLine__email).append(addessLine__phone).append(addessLine__company).append(addessLine__tag)
 					$(".body__addList").append(addList__addessLine);
@@ -342,7 +344,7 @@ function indexSelect(target){
 		reloadAddressBook("personal", 0);
 		$(".toggleInner[authority='personal']").addClass("activeMenu");
 	}
-	else if ($(target).attr("authority") == "personal" || $(target).attr("authority") == "shared" || $(target).attr("authority") == "favorite") // 선택한 메뉴가 개인 전체 혹은 공유 전체일 경우
+	else if ($(target).attr("authority") == "personal" || $(target).attr("authority") == "shared" || $(target).attr("authority") == "favorite" || $(target).attr("authority") == "trash") // 선택한 메뉴가 개인 전체 혹은 공유 전체일 경우
 		reloadAddressBook($(target).attr("authority"), $(target).attr("data-id"));
 	else reloadAddressBook(parseInt($(target).attr("data-id")), $(target).attr("data-id")); // 그 외 태그 선택
 
@@ -453,7 +455,7 @@ $(document).on("click",".addList__addessLine ",function(){
 		$(".viewFavorite").removeClass("chk");
 		
 		for(let key in resp){
-			if(resp[key]!==""&&(key!="id"&&key!="is_share"&&key!="addressType"&&key!="birthType"&&key!="emp_id"&&key!="numberType"&&key!="name"&&key!="tag_names"&&key!="existFavorite")){
+			if(resp[key]!==""&&(key!="id"&&key!="is_share"&&key!="addressType"&&key!="birthType"&&key!="emp_id"&&key!="numberType"&&key!="name"&&key!="tag_names"&&key!="existFavorite"&&key!="trash")){
 				let modalBody__line = $("<div>").attr("class","modalBody__line d-flex");
 				let modalBody__title = $("<div>").attr("class","modalBody__title d-flex");
 				let modalBody__content = $("<div>").attr("class","modalBody__content modalView__content");
@@ -488,9 +490,28 @@ $(document).on("click",".addList__addessLine ",function(){
 			}
 		}
 		
+		if($("#abCurrentMenu").val()==-3){ // 휴지통이면
+			// 즐겨찾기 가리기
+			$(".addBookViewModal__favorites").css("display","none");
+			
+			// 수정 버튼 대신 복구 버튼 출력
+			$("#addBookModal__updateBtn").attr("id","addBookModal__restoreBtn").text("복구");
+			// 삭제 버튼 대신 영구 삭제 버튼 출력
+			$("#addBookModal__deleteBtn").text("영구 삭제");
+		}else{ // 휴지통 아니면 	
+			// 즐겨찾기 출력
+			$(".addBookViewModal__favorites").css("display","flex");
+			
+			// 복구 버튼 대신 수정 버튼 출력
+			$("#addBookModal__restoreBtn").attr("id","addBookModal__updateBtn").text("수정");
+			// 영구 삭제 버튼 대신 삭제 버튼 출력
+			$("#addBookModal__deleteBtn").text("삭제");
+		}
+		
 		$(".addBookViewModal__title").text(resp.name);
 		$("#addressBookInsert").attr("id","addressBookUpdate");
 		$("#addBookModal__updateBtn").attr("data-id",resp.id);
+		$("#addBookModal__restoreBtn").attr("data-id",resp.id);
 		$("#addBookModal__deleteBtn").attr("data-id",resp.id);	
 		
 		$(".addBookViewModal").modal({
@@ -542,6 +563,18 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 });
 
 
+// 휴지통에서 주소 복원
+$(document).on("click","#addBookModal__restoreBtn",function(){
+	$.ajax({
+		url:"/addressbook/restore",
+		data:{id:$(this).attr("data-id")},
+		type:"post"
+	}).done(function(){
+		$.modal.close();
+		indexSelect($(".activeMenu"));	
+	})
+});
+
 // 주소 업데이트
 $(document).on("click","#addressBookUpdate",function(){
 	let data = settingData();
@@ -560,10 +593,18 @@ $(document).on("click","#addressBookUpdate",function(){
 });
 
 
-// 정보창에서 삭제하기 클릭 (주소록 삭제)
+// 정보창에서 삭제하기 클릭 (주소록 휴지통으로 이동)
 $(document).on("click","#addBookModal__deleteBtn",function(){
+	let url
+	
+	console.log(parseInt($("#abCurrentMenu").val()));
+	if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
+		 url="/addressbook/delete";
+	}else{ // 아니면 휴지통으로 이동
+		url="/addressbook/trash";
+	}
 	$.ajax({
-		url:"/addressbook/delete",
+		url:url,
 		data:{id:$(this).attr("data-id")},
 		type:"post"
 	}).done(function(){

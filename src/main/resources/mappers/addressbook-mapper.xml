@@ -22,6 +22,7 @@
 	    <result property="birthType" column="birthType" />
 	    <result property="birth" column="birth" />
 	    <result property="memo" column="memo" />
+	    <result property="trash" column="trash" />
         <result property="tag_ids" column="tag_ids" />
         <result property="tag_names" column="tag_names" />
         <result property="existFavorite" column="existFavorite"/>
@@ -57,17 +58,20 @@
 		WHERE
 		<if test="key.equals('is_share')">
 			<if test="value == -1">
-				is_share = 1
+				is_share = 1 and trash = 0
 			</if>
 			<if test="value == 0">
-				emp_id = #{emp_id} and is_share = #{value}
+				emp_id = #{emp_id} and is_share = #{value} and trash = 0
 			</if>
 			<if test="value == -2">
-				 existFavorite is not null
+				existFavorite is not null and trash = 0
+			</if>
+			<if test="value == -3">
+				trash = 1
 			</if>
 		</if>
 		<if test="key.equals('id')">
-			id in (select address_book_id from address_book_tag_list where address_book_tag_id = #{value})
+			id in (select address_book_id from address_book_tag_list where address_book_tag_id = #{value} and trash = 0)
 		</if>
 		
 		<if test="keyword != null">
@@ -82,7 +86,7 @@
 	</select>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
-		insert into address_book( id, name, emp_id, is_share		
+		insert into address_book( id, name, emp_id, is_share, trash		
 			<if test="email != null">
 				,email
 			</if>
@@ -108,7 +112,7 @@
 				,memo
 			</if>
 		)
-		values( null, #{name}, #{emp_id}, #{is_share}
+		values( null, #{name}, #{emp_id}, #{is_share}, default
 			<if test="email != null">
 				,#{email}
 			</if>
@@ -156,6 +160,9 @@
 			id = #{id};
 	</update>
 	
+	<update id="trash">
+		update address_book set trash = #{trash} where id = #{id};
+	</update>
 	
 	<!-- 태그 관련 -->
 	<insert id="tagInsert" useGeneratedKeys="true" keyProperty="id">

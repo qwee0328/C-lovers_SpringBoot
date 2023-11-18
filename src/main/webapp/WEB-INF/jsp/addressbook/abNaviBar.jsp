@@ -46,6 +46,11 @@
 	               <div class="naviConp__title naviConp__titleMini">공유 전체</div>
 	           </div>
 	       </div>
+	       
+	       <div class="naviConp toggleInner trashMenuNavi" authority="trash" data-title="휴지통" data-id="-3">
+               <div class="naviConp__icon"><i class="fa-solid fa-star"></i></div>
+               <div class="naviConp__title naviConp__titleMini">휴지통</div>
+           </div>
 	    </div>
 	</div>
 </body>
