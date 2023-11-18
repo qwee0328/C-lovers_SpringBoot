@@ -34,13 +34,14 @@ public class AddressBookService {
 		return dao.tagInsert(dto);
 	}
 	
-	public int favoriteInsert(String address_book_id, String emp_id) {
-		Map<String,String> param = new HashMap<>();
-		param.put("id", null);
+	public int favoriteInsertIfNotExist(int address_book_id, String emp_id) {
+		Map<String,Object> param = new HashMap<>();
 		param.put("address_book_id", address_book_id);
 		param.put("emp_id", emp_id);
 		
-		return dao.favoriteInsert(param);
+		if(dao.isFavorite(param)==1) // 이미 존재한다면
+			return 0;
+		return dao.favoriteInsert(param); // 존재하지 않으면
 	}
 	
 	public List<AddressBookTagDTO> tagSelect(String emp_id){
@@ -72,6 +73,15 @@ public class AddressBookService {
 	
 	public int tagDelete(int id) {
 		return dao.tagDelete(id);
+	}
+	
+	
+	public int favoriteDelete(int address_book_id, String emp_id) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("address_book_id", address_book_id);
+		param.put("emp_id", emp_id);
+		
+		return dao.favoriteDelete(param);
 	}
 	
 	public int update(AddressBookDTO dto) {

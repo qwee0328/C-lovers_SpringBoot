@@ -18,7 +18,7 @@
 	<div class="addBookViewModal modal">
 		<div class="addBookViewModal__header d-flex">
 			<div class="addBookViewModal__favorites align-center mr15">
-				<i class="fa-regular fa-star align-center favorites__icon"></i>
+				<i class="fa-regular fa-star align-center favorites__icon viewFavorite"></i>
 			</div>
 			<div class="addBookViewModal__title"></div>
 		</div>

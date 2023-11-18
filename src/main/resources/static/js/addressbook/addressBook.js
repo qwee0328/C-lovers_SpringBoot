@@ -55,7 +55,7 @@ $(document).on("click", ".modalBody__plusBtn>i", function() { // 태그 추가 �
 	});
 });
 
-/*$(document).on("click",".naviConp__addTag",function(e){ // 태그 추가 모달 (주소록 오른쪽 hover 버튼	
+/*$(document).on("click",".naviConp__addTag",function(e){ // 태그 추가 모달 (주소록 오른쪽 hover 버튼	 -> 실행 순서 때문에 navi js파일로 이동
 	e.stopPropagation(); // 삭제 버튼 누르면 페이지 이동하지 않음. (이벤트 중단)
 	
 	$(".modalBody__tagName").val("");
@@ -196,7 +196,10 @@ function reloadAddressBook(authorityOrTagId, tagId) {
 			let addessLine__chkBox = $("<input type='checkbox'>").attr("class", "addessLine__chkBox")
 			addessLine__chkBoxCover.append(addessLine__chkBox);
 
-			let addessLint__favorites = $("<div>").attr("class", "addessLint__favorites align-center").html(`<i class="fa-regular fa-star align-center favorites__icon"></i>`);
+			let addessLint__favorites = $("<div>").attr("class", "addessLint__favorites align-center");
+			//.html(`<i class="fa-regular fa-star align-center favorites__icon"></i>`);
+			let favorites__icon = $("<i>").attr("class","fa-regular fa-star align-center favorites__icon")
+			addessLint__favorites.append(favorites__icon);
 			let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
 			let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
 			let addessLine__phone = $("<div>").attr("class", "addessLine__phone").text(resp[i].number);
@@ -211,6 +214,10 @@ function reloadAddressBook(authorityOrTagId, tagId) {
 					addessLine__tag.append(addBook__tag);
 				}
 			}			
+
+			if(resp[i].existFavorite == resp[i].id){
+				favorites__icon.addClass("chk");
+			}
 
 			addList__addessLine.append(addessLine__chkBoxCover).append(addessLint__favorites).append(addessLine__name).append(addessLine__email).append(addessLine__phone).append(addessLine__company).append(addessLine__tag)
 			$(".body__addList").append(addList__addessLine);
@@ -323,29 +330,61 @@ function indexSelect(target){
 }
 
 
-$(document).on("click", ".addList__addessLine .favorites__icon", function(e) { // 즐겨찾기
+// 즐겨찾기 추가
+function favoriteInsert(selectedFav,address_book_id){
+	$.ajax({
+		url:"/addressbook/favoriteInsert",
+		data:{address_book_id:address_book_id},
+		type:"post"
+	}).done(function(resp){
+		if(resp != 0){
+			$(selectedFav).addClass("chk");
+			if($(selectedFav).hasClass("viewFavorite")){
+				$(".addList__addessLine[data-id='"+$(selectedFav).attr("data-id")+"']").find(".favorites__icon").addClass("chk");
+			}
+			
+		}else{
+			Swal.fire({
+				icon: "error",
+				text: "이미 즐겨찾기한 주소록입니다."
+			});
+			$(selectedFav).addClass("chk");
+		}
+	});
+}
+
+// 즐겨찾기 삭제
+function favoriteDelete(selectedFav, address_book_id){
+	$.ajax({
+		url:"/addressbook/favoriteDelete",
+		data:{address_book_id:address_book_id},
+		type:"post"
+	}).done(function(){
+		$(selectedFav).removeClass("chk");
+		if($(selectedFav).hasClass("viewFavorite")){
+			$(".addList__addessLine[data-id='"+$(selectedFav).attr("data-id")+"']").find(".favorites__icon").removeClass("chk");
+		}
+	});
+}
+
+// 주소록 상세보기 즐겨찾기 버튼 토글
+$(document).on("click", ".addBookViewModal__header .favorites__icon", function() {
+	let selectedFav = $(this);
+	if ($(this).hasClass("chk")) {
+		favoriteDelete(selectedFav, $(selectedFav).attr("data-id"));
+		
+	} else {
+		favoriteInsert(selectedFav, $(selectedFav).attr("data-id"));
+	}
+});
+
+$(document).on("click", ".addList__addessLine .favorites__icon", function(e) { // 즐겨찾기 (메인 홈)
 	e.stopPropagation(); // 상세보기 창 뜨지 않도록 이벤트 중단
 	let selectedFav = $(this);
 	if ($(this).hasClass("chk")) {
-		$.ajax({
-			url:"/addressbook/favoriteDelete",
-			data:{address_book_id:$(selectedFav).attr("data-id")},
-			type:"post"
-		}).done(function(){
-			$(selectedFav).removeClass("chk");
-		});
-	} else { // 즐겨찾기 버튼 출력할 때 data-id 값 넣어주기 
-		
-		
-		$.ajax({
-			url:"/addressbook/favoriteInsert",
-			data:{address_book_id:$(selectedFav).closest(".addList__addessLine").attr("data-id")},
-			type:"post"
-		}).done(function(resp){
-			console.log(resp);
-			$(selectedFav).addClass("chk");
-			$(selectedFav).attr("data-id",resp);
-		});
+		favoriteDelete(selectedFav, $(selectedFav).closest(".addList__addessLine").attr("data-id"));
+	} else { 
+		favoriteInsert(selectedFav,$(selectedFav).closest(".addList__addessLine").attr("data-id"));
 	}
 });
 
@@ -381,8 +420,10 @@ $(document).on("click",".addList__addessLine ",function(){
 		type:"post"
 	}).done(function(resp){
 		$(".addBookModal__modalBody>*").remove();
+		$(".viewFavorite").removeClass("chk");
+		
 		for(let key in resp){
-			if(resp[key]!==""&&(key!="id"&&key!="is_share"&&key!="addressType"&&key!="birthType"&&key!="emp_id"&&key!="numberType"&&key!="name"&&key!="tag_names")){
+			if(resp[key]!==""&&(key!="id"&&key!="is_share"&&key!="addressType"&&key!="birthType"&&key!="emp_id"&&key!="numberType"&&key!="name"&&key!="tag_names"&&key!="existFavorite")){
 				let modalBody__line = $("<div>").attr("class","modalBody__line d-flex");
 				let modalBody__title = $("<div>").attr("class","modalBody__title d-flex");
 				let modalBody__content = $("<div>").attr("class","modalBody__content modalView__content");
@@ -411,6 +452,10 @@ $(document).on("click",".addList__addessLine ",function(){
 								
 			}			
 			
+			$(".viewFavorite").attr("data-id",resp.id);
+			if(resp.existFavorite == resp.id){
+				$(".viewFavorite").addClass("chk");
+			}
 		}
 		
 		$(".addBookViewModal__title").text(resp.name);
@@ -466,6 +511,8 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 	})
 });
 
+
+// 주소 업데이트
 $(document).on("click","#addressBookUpdate",function(){
 	let data = settingData();
 	data.id = $(this).attr("data-id");
@@ -496,11 +543,3 @@ $(document).on("click","#addBookModal__deleteBtn",function(){
 });
 
 
-// 주소록 상세보기 즐겨찾기 버튼 토글
-$(document).on("click", ".addBookViewModal__header .favorites__icon", function() {
-	if ($(this).hasClass("chk")) {
-		$(this).removeClass("chk");
-	} else {
-		$(this).addClass("chk");
-	}
-});

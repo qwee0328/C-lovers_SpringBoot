@@ -1,5 +1,7 @@
 package com.clovers.dao;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +27,11 @@ public class AddressBookDAO {
 	}
 	
 	public int tagInsert(AddressBookTagDTO dto) {
-		db.insert("AddressBook.tagInsert",dto);
-		return dto.getId();
+		return db.insert("AddressBook.tagInsert",dto);
 	}
 	
-	public int favoriteInsert(Map<String, String> param) {
-		db.insert("AddressBook.favoriteInsert",param);
-		System.out.println(Integer.parseInt(param.get("id")));
-		return Integer.parseInt(param.get("id"));
+	public int favoriteInsert(Map<String, Object> param) {
+		return db.insert("AddressBook.favoriteInsert",param);
 	}
 	
 	public List<AddressBookTagDTO> tagSelect(String emp_id){
@@ -55,6 +54,10 @@ public class AddressBookDAO {
 		return db.selectOne("AddressBook.selectById",id);
 	}
 	
+	public int isFavorite(Map<String,Object> param) {
+		return db.selectOne("AddressBook.isFavorite", param);
+	}
+	
 	public int delete(int id) {
 		return db.delete("AddressBook.delete",id);
 	}
@@ -63,6 +66,10 @@ public class AddressBookDAO {
 		return db.delete("AddressBook.tagDelete",id);
 	}
 	
+	public int favoriteDelete(Map<String,Object> param) {
+		return db.delete("AddressBook.favoriteDelete",param);
+	}
+
 	public int update(AddressBookDTO dto) {
 		return db.update("AddressBook.update",dto);
 	}

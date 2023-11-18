@@ -22,6 +22,7 @@
 	    <result property="memo" column="memo" />
         <result property="tag_ids" column="tag_ids" />
         <result property="tag_names" column="tag_names" />
+        <result property="existFavorite" column="existFavorite"/>
 	</resultMap>
 	
 	<delete id="delete">
@@ -30,6 +31,10 @@
 	
 	<delete id="tagDelete">
 		delete from address_book_tag where id=#{id};
+	</delete>
+	
+	<delete id="favoriteDelete">
+		delete from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
 	</delete>
 	
 	<select id="tagSelectByIsShare" resultType="com.clovers.dto.AddressBookTagDTO">
@@ -79,6 +84,7 @@
 		    birthType,
 		    birth,
 		    memo,
+		    existFavorite,
 		    GROUP_CONCAT(tag_id ORDER BY tag_id) AS tag_ids,
 		    GROUP_CONCAT(tag_name ORDER BY tag_id) AS tag_names
 		FROM address_book_all_including_tags
@@ -114,8 +120,11 @@
 		</foreach>
 	</insert>
 	
-	<insert id="favoriteInsert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		insert into address_favorite values(null, #{address_book_id}, #{emp_id});
+	<select id="isFavorite" resultType="java.lang.Integer">
+		select count(*) from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
+	</select>
+	<insert id="favoriteInsert">
+		insert into address_favorite values(#{address_book_id}, #{emp_id});
 	</insert>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">

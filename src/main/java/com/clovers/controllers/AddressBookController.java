@@ -57,8 +57,8 @@ public class AddressBookController {
 	
 	@ResponseBody
 	@RequestMapping("/favoriteInsert") // 즐겨찾기 추가
-	public int favoriteInsert(String address_book_id) {
-		return abservice.favoriteInsert(address_book_id, (String)session.getAttribute("loginID"));
+	public int favoriteInsert(int address_book_id) {
+		return abservice.favoriteInsertIfNotExist(address_book_id, (String)session.getAttribute("loginID"));
 	}
 	
 	@ResponseBody
@@ -101,6 +101,12 @@ public class AddressBookController {
 		return abservice.tagDelete(id);
 	}
 	
+	@ResponseBody
+	@RequestMapping("/favoriteDelete") // 즐겨찾기 삭제
+	public int favoriteDelete(int address_book_id) {
+		return abservice.favoriteDelete(address_book_id, (String)session.getAttribute("loginID"));
+	}
+
 	@ResponseBody
 	@RequestMapping("/update") // 주소 변경
 	public int update(AddressBookDTO dto) {
