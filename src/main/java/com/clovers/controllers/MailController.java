@@ -519,4 +519,15 @@ public class MailController {
 		}
 		return "redirect:/mail";
 	}
+	
+	
+	
+	// 주소록에서 메일 보내기
+	@RequestMapping("/sendSetEmail")
+	public String sendSetEmail(@RequestParam("addressEmail") String addressEmail, Model model) {
+		EmailDTO reply = new EmailDTO();
+		reply.setSend_id(addressEmail);
+		model.addAttribute("reply", reply);
+		return "/mail/send";
+	}
 }
