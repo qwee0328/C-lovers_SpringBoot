@@ -7,9 +7,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.clovers.dto.DocumentApprovalsDTO;
+import com.clovers.dto.DocumentDTO;
+import com.clovers.dto.DocumentDrafterDTO;
 import com.clovers.dto.VacationApplicationInfoDTO;
-import com.clovers.dto.VacationDocumentDTO;
-import com.clovers.dto.VacationEmpApprovalsDTO;
 
 @Repository
 public class ElectronicSignatureDAO {
@@ -21,17 +22,37 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, Object>> selectEmpJobLevel(List<String> processUserIDList) {
 		return db.selectList("ElectronicSignature.selectEmpJobLevel", processUserIDList);
 	}
-
-	// 휴가 문서 생성
-	public int insertVacation(VacationDocumentDTO document) {
-		db.insert("ElectronicSignature.insertVacation", document);
-		return document.getId();
+	
+	// 휴가 문서 번호 구하기
+	public int selectVcationDocmuentCount() {
+		return db.selectOne("ElectronicSignature.selectVcationDocmuentCount");
 	}
-
-	// 휴가 결재선 등록
-	public void insertVacationApprovals(List<VacationEmpApprovalsDTO> approvalsList) {
-		db.insert("ElectronicSignature.insertVacationApprovals", approvalsList);
+	
+	// 문서 생성
+	public int insertDocument(DocumentDTO document) {
+		return db.insert("ElectronicSignature.insertDocument", document);
 	}
+	
+	// 문서 등록자 정보 생성
+	public int insertDrafter(DocumentDrafterDTO drafter) {
+		return db.insert("ElectronicSignature.insertDrafter", drafter);
+	}
+	
+	// 문서 결재선 등록 
+	public int insertApprovals(List<DocumentApprovalsDTO> approvals) {
+		return db.insert("ElectronicSignature.insertApprovals", approvals);
+	}
+	
+//	// 휴가 문서 생성
+//	public int insertVacation(DocumentDTO document) {
+//		db.insert("ElectronicSignature.insertVacation", document);
+//		return document.getId();
+//	}
+//
+//	// 휴가 결재선 등록
+//	public void insertVacationApprovals(List<VacationEmpApprovalsDTO> approvalsList) {
+//		db.insert("ElectronicSignature.insertVacationApprovals", approvalsList);
+//	}
 
 	// 휴가 신청일 정보 등록
 	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
