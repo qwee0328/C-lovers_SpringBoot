@@ -14,14 +14,82 @@ import com.clovers.services.ElectronicSignatureService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/electronicSignature")
+@RequestMapping("/electronicsignature")
 public class ElectronicSignatureController {
 	// 전자결재 컨트롤러
+
 	@Autowired
 	private HttpSession session;
 
 	@Autowired
 	private ElectronicSignatureService esservices;
+	
+	// 메인 화면으로 이동
+	@RequestMapping("")
+	public String main() {
+		String title = "전자결재";
+		String currentMenu = "대기";
+		
+		session.setAttribute("title", title);
+		session.setAttribute("currentMenu", currentMenu);
+		
+		return "/electronicsignature/progressWait";
+	}
+	
+	// 진행 중인 문서 전체로 이동
+	@RequestMapping("/progressTotal")
+	public String progressTotal() {
+		String currentMenu = "진행전체";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/progressTotal";
+	}
+	
+	// 진행 중인 문서 전체 리스트 출력
+	@ResponseBody 
+	@RequestMapping("/progressTotalList")
+	public List<Map<String, Object>> progressTotalList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<Map<String, Object>> result = esservices.progressTotalList(loginID);
+		System.out.println("대기 중인 문서 : " + result.get(0));
+		return result;
+	}
+	
+	// 대기로 이동
+	@RequestMapping("/progressWait")
+	public String progressWait() {
+		String currentMenu = "대기";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/progressWait";
+	}
+	
+	// 확인으로 이동
+	@RequestMapping("/progressCheck")
+	public String progressCheck() {
+		String currentMenu = "확인";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/progressCheck";
+	}
+	
+	// 진행으로 이동
+	@RequestMapping("/progress")
+	public String progress() {
+		String currentMenu = "진행";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/progress";
+	}
+	
+	// 문서함 전체로 이동
+		@RequestMapping("/documentTotal")
+		public String documentTotal() {
+			String currentMenu = "문서전체";
+			
+			session.setAttribute("currentMenu", currentMenu);
+			return "/electronicsignature/documentTotal";
+		}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	@ResponseBody

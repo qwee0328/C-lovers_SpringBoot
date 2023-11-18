@@ -109,4 +109,9 @@ public class ElectronicSignatureService {
 
 		return 0;
 	}
+
+	// 진행 중인 문서 전체 리스트 출력
+	public List<Map<String, Object>> progressTotalList(String loginID) {
+		return dao.progressTotalList(loginID);
+	}
 }
