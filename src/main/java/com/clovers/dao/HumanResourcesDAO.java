@@ -79,4 +79,9 @@ public class HumanResourcesDAO {
 	public List<String> selectRestReasonType() {
 		return db.selectList("HumanResources.selectRestReasonType");
 	}
+	
+	// 임직원 정보 전부 불러오기
+	public List<MemberDTO> employeeSelectAll() {
+		return db.selectList("HumanResources.employeeSelectAll");
+	}
 }

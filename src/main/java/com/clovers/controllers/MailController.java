@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.constants.Constants;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.MemberDTO;
 import com.clovers.services.MailService;
 
 import jakarta.servlet.ServletOutputStream;

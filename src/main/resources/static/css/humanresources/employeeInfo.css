@@ -16,7 +16,6 @@
     }
 }
 
-
 .employeeInfo__Container{
     margin: auto;
     display: flex;
@@ -26,6 +25,8 @@
 
 .employeeInfo__chart{
     width: 87%;
+    position: relative;
+    
 }
 /* 제일 위에 부분 */
 .chart__searchBox{
@@ -56,21 +57,30 @@
 }
 /* 아래 내용 하이웍스 산업, 프로필 부분 */
 .chart_content{
-    display: flex;
-    /* margin: 0 20px; */
+	    display: flex;
     border-top: 1px solid #7D7D7D40;
 }
+.chart_content{
+    position: absolute;
+    top: 73px;
+    bottom: 0; left: 0; right: 0;
+    overflow: auto;
+    
+}
+
+
+
 .chart_content_left{
     width: 20%;
     height: 100vh;
-    border-right: 1px solid #7D7D7D40;
 }
 .chart_content_right{
     width: 80%;
+    border-left: 1px solid #7D7D7D40;
 }
 
 /* 처음에 아코디언 내용 안보이게 */
-.manageInner,.productInner,.saleInner{
+.Inner{
     display: none;
 }
 
@@ -80,27 +90,34 @@
     font-weight: 800; 
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #7D7D7D40;
+    border-bottom: 1px solid #dcedd4;
 }
 /* 타이틀 */
 .Title{
     font-weight: 800; 
     padding-left: 5px;
+    cursor: pointer;
+    display: flex;
 }
+
 .naviIcon{
     width: 25px;
     text-align: center;
+}
+.naviIcon:hover{
+	color: #BBBE8F;
 }
 .ContentBox {
     color: #333;
     border-bottom: 1px solid #7D7D7D40;
 }
-.manageContent,.productContent,.saleContent{
+.Content{
     padding: 5px;
-    padding-left: 30px;
+    padding-left: 35px;
     font-size: 14px;
+    display: flex;
 }
-.manageBox,.productBox,.saleBox{
+.Box{
     width: 100%;
 }
 .Box__title{
@@ -129,10 +146,14 @@
 
 /* 오른쪽 조직도 css */
 .chart_content_right{
-    padding-top: 40px; padding-left: 40px;
+    padding-top: 30px; padding-left: 40px;
 }
 .members__Title{
-    margin-bottom: 15px;
+    margin-bottom: 25px;
+    display: flex;
+}
+.officeArrow{
+	margin-right: 5px; margin-left: 5px;
 }
 /* 멤버 한줄씩 */
 .member__unitBox{
@@ -154,4 +175,10 @@
 }
 .member__name{
     font-weight: 600;
+}
+/* 인원수 */
+.count{
+	margin-left: 3px;
+	font-size: 13px;
+	display: flex; align-items: center;
 }

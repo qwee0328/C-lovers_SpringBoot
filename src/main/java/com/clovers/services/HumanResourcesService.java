@@ -125,4 +125,10 @@ public class HumanResourcesService {
 	public List<String> selectRestReasonType() {
 		return dao.selectRestReasonType();
 	}
+	
+	// 임직원 정보 전부 불러오기
+	public List<MemberDTO> employeeSelectAll() {
+		return dao.employeeSelectAll();
+	}
+	
 }

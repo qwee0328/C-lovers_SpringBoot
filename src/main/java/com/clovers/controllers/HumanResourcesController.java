@@ -186,4 +186,6 @@ public class HumanResourcesController {
 	public String employeeInfo() {
 		return "humanresources/employeeInfo";
 	}
+	
+	
 }
