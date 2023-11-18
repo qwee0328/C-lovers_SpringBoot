@@ -164,8 +164,7 @@ $(document).on("click",".removeNavi",function(e){
 });
 
 
-
-function reloadAddressBook(authorityOrTagId, tagId) {
+function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 	//console.log(`authOrId: ${authorityOrTagId}, id: ${tagId}`);
 
 	let key, value;
@@ -181,12 +180,14 @@ function reloadAddressBook(authorityOrTagId, tagId) {
 	}
 
 
+	console.log(`${key} : ${value} : ${tagId} : ${keyword}`);
 	$.ajax({
 		url: "/addressbook/select",
 		data: {
 			key: key,
 			value: value,
-			currentMenu: tagId
+			currentMenu: tagId,
+			keyword: keyword
 		},
 		type: "post"
 	}).done(function(resp) {
@@ -311,6 +312,7 @@ $(document).ready(function() {
 
 // 주소록 보기 변경 (인덱스 선택)
 $(document).on("click", ".toggleInner", function() {
+	$(".searchBar__input").val("");
 	indexSelect($(this));
 });
 
@@ -553,3 +555,21 @@ $(document).on("click","#addBookModal__deleteBtn",function(){
 
 
 // 검색 기능
+$(document).on("keyup",".searchBar__input",function(){
+	
+	let tagId = parseInt($("#abCurrentMenu").val());
+	let authorityOrTagId;
+	if(tagId == 0){
+		authorityOrTagId = "personal";
+	}else if(tagId == -1){
+		authorityOrTagId = "shared";
+	}else if(tagId == -2){
+		authorityOrTagId = "favorite";
+	}else if(tagId > 0){
+		authorityOrTagId = tagId;
+	}
+	let keyword = $(".searchBar__input").val();
+	
+	reloadAddressBook(authorityOrTagId, tagId, keyword);
+	
+});

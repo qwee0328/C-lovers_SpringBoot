@@ -55,11 +55,12 @@ public class AddressBookService {
 		return dao.tagSelectByIsShare(param);
 	}
 	
-	public List<Map<String,Object>> select(String emp_id, String key, int value) {
+	public List<Map<String,Object>> select(String emp_id, String key, int value, String keyword) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("emp_id", emp_id);
 		param.put("key", key);
 		param.put("value", value);
+		param.put("keyword", keyword);
 		return dao.select(param);
 	}
 	

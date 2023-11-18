@@ -105,6 +105,10 @@
 			id in (select address_book_id from address_book_tag_list where address_book_tag_id = #{value})
 		</if>
 		
+		<if test="keyword != null">
+			and (name like #{keyword} or company_name like #{keyword} or number like #{keyword})
+		</if>
+		
 		GROUP BY id; 
 	</select>
 	
