@@ -516,30 +516,31 @@
             });
         	
         	
-//         	// '확인' 버튼 클릭 이벤트 리스너
-//             $('.invite__submitBtn').click(function() {
-//                 // 서버로 보낼 데이터 준비
-//                 var dataToSend = {
-//                     // 데이터 예시: 선택된 직원들의 ID를 서버로 전송
-//                     selectedEmployees: Object.keys(selectedEmployees)
-//                 };
+        	// '확인' 버튼 클릭 이벤트 리스너
+            $('.invite__submitBtn').click(function() {
+                // 서버로 보낼 데이터 준비
+                var dataToSend = {
+                    // 데이터 예시: 선택된 직원들의 ID를 서버로 전송
+                    selectedEmployees: Object.keys(selectedEmployees)
+                };
                 
                
 
-//                 // AJAX 요청
-//                 $.ajax({
-//                 	url: '/chat/setGroupChattingRoom', // 서버의 URL
-//                     type: 'POST', // 요청 방식
-// 				    contentType: 'application/json', // JSON 형식으로 데이터 전송
-// 				    data: JSON.stringify({ selectedEmployees: Object.keys(selectedEmployees) }),
-// 				    success: function(data) {
-//                     	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
-//                     },
-// 				    error: function(xhr, status, error) {
-// 				        //console.error('Error:', error);
-// 				    }
-// 				});
-//             });
+                // AJAX 요청
+                $.ajax({
+                	url: '/chat/setGroupChattingRoom', // 서버의 URL
+                    type: 'POST', // 요청 방식
+				    contentType: 'application/json', // JSON 형식으로 데이터 전송
+				    data: JSON.stringify({ selectedEmployees: Object.keys(selectedEmployees),
+				    						chat_room_id : roomId}),
+				    success: function(data) {
+                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
+                    },
+				    error: function(xhr, status, error) {
+				        //console.error('Error:', error);
+				    }
+				});
+            });
         })
 
         

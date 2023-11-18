@@ -19,8 +19,9 @@ import lombok.ToString;
 @ToString
 public class ChatRoomDTO {
 	public enum ChatRoomStates{
-		ACTIVATE,
-		INACTVATE;
+		ACTIVEPERSONAL,
+		ACTIVEGROUP,
+		INACTIVE;
 	};
 	
 	private String id;				// 채팅방 아이디

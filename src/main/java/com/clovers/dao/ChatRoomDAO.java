@@ -14,11 +14,22 @@ public class ChatRoomDAO {
 	@Autowired
 	private SqlSession db;
 
-	// 채팅방 개설 후 아이디 값을 반환
-	public String createChatRoom() {
-		ChatRoomDTO crdto = ChatRoomDTO.create(ChatRoomDTO.ChatRoomStates.ACTIVATE);
+	// 개인 채팅방 개설 후 아이디 값을 반환
+	public String createPersonalChat() {
+		ChatRoomDTO crdto = ChatRoomDTO.create(ChatRoomDTO.ChatRoomStates.ACTIVEPERSONAL);
 		db.insert("ChatRoom.createChatRoom", crdto);
 		return crdto.getId();
+	}
+	
+	// 단체 채팅방 개설 후 아이디 값을 반환
+	public String createGroupChat() {
+		ChatRoomDTO crdto = ChatRoomDTO.create(ChatRoomDTO.ChatRoomStates.ACTIVEGROUP);
+		db.insert("ChatRoom.createChatRoom", crdto);
+		return crdto.getId();
+	}
+	
+	public String selectStateByChatRoomId(String id) {
+		return db.selectOne("ChatRoom.selectStateByChatRoomId",id);
 	}
 
 	// 채팅방 상태 업데이트
