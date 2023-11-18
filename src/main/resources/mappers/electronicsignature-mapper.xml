@@ -15,24 +15,40 @@
 		</foreach>
 	</select>
 	
-	<!-- // 휴가 문서 생성 -->
-	<insert id="insertVacation" useGeneratedKeys="true" keyProperty="id">
-		insert into vacation_document (emp_id, report_date) values (#{emp_id}, convert_tz(now(), '+00:00', '+09:00'));
+	<!-- // 휴가 문서 번호 구하기 -->
+	<select id="selectVcationDocmuentCount" resultType="int">
+		select substring(id, char_length(id)-3) as last_four_digits
+		from document
+		where id like '%휴가%'
+		order by cast(substring(id, -4) as unsigned) desc
+		limit 1;
+	</select>
+	
+	<!-- // 문서 생성 -->
+	<insert id="insertDocument">
+		insert into document (id, document_type_id, save_period, security_grade, report_date, title, content)
+		values (#{id}, #{document_type_id}, #{save_period} ,#{security_grade},convert_tz(now(), '+00:00', '+09:00'), #{title}, #{content})
 	</insert>
 	
-	<!-- // 휴가 결재선 등록 -->
-	<insert id="insertVacationApprovals" parameterType="java.util.List">
-		insert into vacation_emp_approvals (vacation_document_id, emp_approvals_id) values 
-		<foreach collection="list" item="empApprovals" separator=",">
-			(#{empApprovals.vacation_document_id}, #{empApprovals.emp_approvals_id})
+	<!-- // 문서 등록자 정보 생성 -->
+	<insert id="insertDrafter">
+		insert into document_drafter (document_id, emp_id)
+		values (#{document_id}, #{emp_id})
+	</insert>
+	
+	<!-- // 문서 결재선 등록 -->
+	<insert id="insertApprovals">
+		insert into document_approvals (document_id, emp_id, sec_level) values
+		<foreach collection="list" item="approvals" separator=",">
+			(#{approvals.document_id}, #{approvals.emp_id}, #{approvals.sec_level})
 		</foreach>
 	</insert>
 	
 	<!-- // 휴가 신청일 정보 등록 -->
 	<insert id="insertVacationApplicationInfo" parameterType="java.util.List">
-		insert into vacation_application_info (vacation_document_id, vacation_date, rest_reson_type, vacation_reason) values
+		insert into vacation_application_info (document_id, vacation_date, rest_reson_type, vacation_reason) values
 		<foreach collection="list" item="vacationInfo" separator=",">
-			(#{vacationInfo.vacation_document_id}, #{vacationInfo.vacation_date}, #{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
+			(#{vacationInfo.document_id}, #{vacationInfo.vacation_date}, #{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
 		</foreach>
 	</insert>
 </mapper>

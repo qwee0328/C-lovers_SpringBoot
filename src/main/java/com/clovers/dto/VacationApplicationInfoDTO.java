@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class VacationApplicationInfoDTO {
 	private int id;
-	private int vacation_document_id;
+	private String document_id;
 	private Timestamp vacation_date;
 	private String rest_reson_type;
 	private String vacation_reason;
