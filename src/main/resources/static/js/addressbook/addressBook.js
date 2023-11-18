@@ -173,7 +173,8 @@ function reloadAddressBook(authorityOrTagId, tagId) {
 	if (typeof authorityOrTagId == "string") {
 		key = "is_share";
 		if (authorityOrTagId == "personal") value = 0;
-		else value = 1;
+		else if (authorityOrTagId == "shared")value = -1;
+		else if (authorityOrTagId == "favorite")value = -2;
 	} else {
 		key = "id";
 		value = authorityOrTagId;
@@ -189,7 +190,9 @@ function reloadAddressBook(authorityOrTagId, tagId) {
 		},
 		type: "post"
 	}).done(function(resp) {
+		$("#abCurrentMenu").val(value);
 		$(".body__addList>*").remove();
+		$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
 		for (let i = 0; i < resp.length; i++) {
 			let addList__addessLine = $("<div>").attr("class", "addList__addessLine d-flex").attr("data-id",resp[i].id);
 			let addessLine__chkBoxCover = $("<div>").attr("class", "addessLine__chkBoxCover align-center");
@@ -320,9 +323,9 @@ function indexSelect(target){
 		reloadAddressBook("personal", 0);
 		$(".toggleInner[authority='personal']").addClass("activeMenu");
 	}
-	else if ($(target).attr("authority") == "personal" || $(target).attr("authority") == "shared")
+	else if ($(target).attr("authority") == "personal" || $(target).attr("authority") == "shared" || $(target).attr("authority") == "favorite") // 선택한 메뉴가 개인 전체 혹은 공유 전체일 경우
 		reloadAddressBook($(target).attr("authority"), $(target).attr("data-id"));
-	else reloadAddressBook(parseInt($(target).attr("data-id")), $(target).attr("data-id"));
+	else reloadAddressBook(parseInt($(target).attr("data-id")), $(target).attr("data-id")); // 그 외 태그 선택
 
 	
 	// 여기 다시 보기 $("#abCurrentMenu").val($(target).attr("data-id"));
@@ -363,6 +366,10 @@ function favoriteDelete(selectedFav, address_book_id){
 		$(selectedFav).removeClass("chk");
 		if($(selectedFav).hasClass("viewFavorite")){
 			$(".addList__addessLine[data-id='"+$(selectedFav).attr("data-id")+"']").find(".favorites__icon").removeClass("chk");
+		}
+		if($("#abCurrentMenu").val()==-2){
+			$(".addList__addessLine[data-id='"+address_book_id+"']").remove();
+			$(".addressCnt").text(parseInt($(".addressCnt").text())-1);
 		}
 	});
 }
@@ -543,3 +550,6 @@ $(document).on("click","#addBookModal__deleteBtn",function(){
 });
 
 
+
+
+// 검색 기능

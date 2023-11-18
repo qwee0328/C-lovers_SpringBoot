@@ -34,16 +34,16 @@
 	<div class="container d-flex">
 		<%@ include file="../addressbook/abNaviBar.jsp"%>
 		<div class="addBook__container">
-			<div class="addBook__header">
+			<div class="addBook__header d-flex">
 				<div class="header__searchBar d-flex">
 					<div class="searchBar__icon">
 						<i class="fa-solid fa-magnifying-glass align-center"></i>
 					</div>
 					<div class="searchBar__inputCover d-flex">
-						<input type="text" class="searchBar__input"
-							placeholder="이름, 회사명, 전화번호 검색">
+						<input type="text" class="searchBar__input" placeholder="이름, 회사명, 전화번호 검색">
 					</div>
 				</div>
+				<div class="header__tagName align-center"></div>
 			</div>
 			<div class="addBook__body">
 				<div class="body__addListHeader d-flex">

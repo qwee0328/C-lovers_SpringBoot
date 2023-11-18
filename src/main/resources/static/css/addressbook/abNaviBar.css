@@ -5,6 +5,7 @@
   height: calc(100vh - 60px);
 }
 .naviBar__applyBtns,
+.naviBar__favoriteAddress,
 .naviBar__personalAddress,
 .naviBar__sharedAddress {
   padding: 20px;

@@ -91,11 +91,14 @@
 		
 		WHERE
 		<if test="key.equals('is_share')">
-			<if test="value == 1">
-				is_share = #{value}
+			<if test="value == -1">
+				is_share = 1
 			</if>
 			<if test="value == 0">
 				emp_id = #{emp_id} and is_share = #{value}
+			</if>
+			<if test="value == -2">
+				 existFavorite is not null
 			</if>
 		</if>
 		<if test="key.equals('id')">
