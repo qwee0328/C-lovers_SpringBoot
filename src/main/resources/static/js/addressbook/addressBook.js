@@ -422,6 +422,9 @@ $(document).on("click", ".addessLine__chkBox", function(e) {
 	e.stopPropagation();
 	if ($(this).is(":checked")) {
 		$(this).closest(".addList__addessLine").css("backgroundColor", "#DCEDD4");
+		// 선택하면 위에 목록 출력
+		
+		
 	} else {
 		$(this).closest(".addList__addessLine").css("backgroundColor", "transparent");
 	}

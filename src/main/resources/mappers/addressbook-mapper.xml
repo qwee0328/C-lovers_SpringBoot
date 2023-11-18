@@ -161,7 +161,14 @@
 	</update>
 	
 	<update id="trash">
-		update address_book set trash = #{trash} where id = #{id};
+		update address_book set trash = #{trash}, trash_date =
+		<if test="trash == 0">
+			null 
+		</if>
+		<if test="trash == 1">
+			now()
+		</if>
+		where id = #{id};
 	</update>
 	
 	<!-- 태그 관련 -->
