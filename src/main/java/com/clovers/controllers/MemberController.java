@@ -1,6 +1,5 @@
 package com.clovers.controllers;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -165,8 +164,18 @@ public class MemberController {
 // 관리자 접근 권한 불러오기
 	@ResponseBody
 	@RequestMapping("/isAdmin")
-	public String getAuthorityCategory() {
+	public List<String> getAuthorityCategory() {
 		String id = (String)session.getAttribute("loginID");
+		List<String> authority = mservice.getAuthorityCategory(id);
+		for(int i = 0; i < authority.size(); i++) {	
+			if(authority.get(i).equals("인사") || authority.get(i).equals("총괄")) {
+				session.setAttribute("HumanResourcesAdmin", true);
+			}
+			if(authority.get(i).equals("전자결재") || authority.get(i).equals("총괄")) {
+				session.setAttribute("ElectronicSignatureAdmin", true);
+			}
+		}
+		
 		return mservice.getAuthorityCategory(id);
 	}
 }

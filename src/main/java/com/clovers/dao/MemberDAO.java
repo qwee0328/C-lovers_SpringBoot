@@ -36,8 +36,8 @@ public class MemberDAO {
 		return db.selectList("member.selectMembersByDeptTaskID",dept_task_id);
 	}
 	
-	public String getAuthorityCategory(String id) {
-		return db.selectOne("member.getAuthorityCategory", id);
+	public List<String> getAuthorityCategory(String id) {
+		return db.selectList("member.getAuthorityCategory", id);
 	}
 
 }

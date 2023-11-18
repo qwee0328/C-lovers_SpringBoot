@@ -48,4 +48,9 @@ public class ElectronicSignatureDAO {
 	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
 		db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
 	}
+
+	// 진행 중인 문서 전체 리스트 출력
+	public List<Map<String, Object>> progressTotalList(String loginID) {
+		return db.selectList("ElectronicSignature.progressTotalList", loginID);
+	}
 }
