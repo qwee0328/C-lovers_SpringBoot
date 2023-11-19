@@ -5,7 +5,7 @@ window.onload = function() {
 	setInterval(setClock, 1000);
 
 	// 현재 근무상태 불러오기
-	selectWorkConditionsList();
+	//selectWorkConditionsList();
 
 	// 사용자 지각 현황 불러오기
 	$.ajax({
@@ -321,7 +321,7 @@ function selectWorkConditionsList() {
 		dataType: "json"
 	}).done(function(respList) {
 		if (respList.length === 0) {
-			window.status = "출근전";
+			window.status = "근무중";
 			$(".statusBox").html(window.status);
 		} else {
 			console.log(respList)

@@ -4,8 +4,6 @@ $(document).ready(function() {
 	setClock();
 	setInterval(setClock, 1000);
 
-	// 현재 근무상태 불러오기
-	selectWorkConditionsList();
 
 	$(document).on("click", ".naviItem__itemCurcle", function() {
 		if ($(this).siblings().html() == "메일") {
@@ -198,7 +196,7 @@ function selectWorkConditionsList() {
 		dataType: "json"
 	}).done(function(respList) {
 		if (respList.length === 0) {
-			window.status = "출근전";
+			window.status = "근무중";
 			$(".timeline__status").html(window.status);
 		} else {
 			console.log(respList)
