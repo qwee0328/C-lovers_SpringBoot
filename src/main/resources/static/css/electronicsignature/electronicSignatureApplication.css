@@ -160,6 +160,7 @@ input[type=radio]{
 
 .lineDiv:not(:last-child) {
 	margin-bottom: 10px;
+	
 }
 .table__applyLine>.lineDiv>i.fas,
 .table__approvalLine>.lineDiv>i.fas {
