@@ -506,4 +506,16 @@ public class MailController {
 		}
 		return "redirect:/mail";
 	}
+	
+	
+	
+	
+	// ------------- 주소록에서 이메일 눌렀을 때 메일 창으로 이동
+	@RequestMapping("/sendSetEmail")
+	public String sendSetEmail(@RequestParam("addressEmail") String addressEmail, Model model) {
+		EmailDTO reply = new EmailDTO();
+		reply.setSend_id(addressEmail);
+		model.addAttribute("reply", reply);
+		return "/mail/send";
+	}
 }
