@@ -256,22 +256,41 @@ function settingData(){
 	for (let i = 0; i < $(".selectedTag").length; i++) { // 선택한 태그 값 불러오기
 		selectedTagArray.push(parseInt($($(".selectedTag")[i]).find(".selectedTag__delete").attr("selectid")));
 	}
+	
+	if($(".modalBody__name").val() == ""){ // 이름 필수 입력
+		Swal.fire({
+			icon: "error",
+			text: "이름을 입력해주세요."
+		});
+		$(".modalBody__name").focus();
+		return ;
+	}
+	
+	if($(".modalBody__email").val() != ""){ // 이메일 정규식
+		// 둘 중 하나. 진짜 이메일 형식 or 2023DT02020 형식에 맞게
+		
+	}
+	
+	if($(".modalBody__number").val()!=""){ // 전화번호 정규식
+		
+	}
+	
 
 	let data = {
 		name: $(".modalBody__name").val(),
-			is_share: $(".activeType").text() == "공유 주소록" ? 1 : 0,
-			email: $(".modalBody__email").val(),
-			numberType: $(".modalBody__numberType option:selected").val(),
-			number: $(".modalBody__number").val(),
-			company_name: $(".modalBody__company_name").val(),
-			dept_name: $(".modalBody__dept_name").val(),
-			job_name: $(".modalBody__job_name").val(),
-			addressType: $(".modalBody__addressType option:selected").val(),
-			address: $(".modalBody__address").val(),
-			birthType: $(".modalBody__birthType option:selected").val(),
-			birth: $(".modalBody__birth").val(),
-			memo: $(".modalBody__memo").text(),
-			selectedTagArray: selectedTagArray
+		is_share: $(".activeType").text() == "공유 주소록" ? 1 : 0,
+		email: $(".modalBody__email").val(),
+		numberType: $(".modalBody__numberType option:selected").val(),
+		number: $(".modalBody__number").val(),
+		company_name: $(".modalBody__company_name").val(),
+		dept_name: $(".modalBody__dept_name").val(),
+		job_name: $(".modalBody__job_name").val(),
+		addressType: $(".modalBody__addressType option:selected").val(),
+		address: $(".modalBody__address").val(),
+		birthType: $(".modalBody__birthType option:selected").val(),
+		birth: $(".modalBody__birth").val(),
+		memo: $(".modalBody__memo").text(),
+		selectedTagArray: selectedTagArray
 	}
 	
 	return data;
@@ -280,7 +299,9 @@ function settingData(){
 
 
 
-
+$(document).on("keydown",".modalBody__number",function(){
+	let regex = /[\W_]/;
+});
 
 $(document).ready(function() {
 	reloadTags(function(){ // 존재하는 태그 출력
@@ -299,17 +320,24 @@ $(document).ready(function() {
 	});
 
 	$(document).on("click","#addressBookInsert", function() { // 주소록 저장
-		$.ajax({
-			url: "/addressbook/insert",
-			data: settingData(),
-			type: "post"
-
-		}).done(function(resp) {
-			if (resp >= 1) {
-				$.modal.close();
-				indexSelect($(".activeMenu"));	
-			}
-		});
+	// 유효성 검사
+	
+		let data = settingData();
+		console.log(data);
+		if(data != null){
+			$.ajax({
+				url: "/addressbook/insert",
+				data: data,
+				type: "post"
+	
+			}).done(function(resp) {
+				if (resp >= 1) {
+					$.modal.close();
+					indexSelect($(".activeMenu"));	
+				}
+			});
+		}
+		
 	});
 
 	$("#addressBookTagInsert").on("click", function() { // 태그 저장

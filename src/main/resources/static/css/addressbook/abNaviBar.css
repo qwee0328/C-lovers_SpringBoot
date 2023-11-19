@@ -4,7 +4,10 @@
   width: 250px;
   height: calc(100vh - 60px);
 }
-.naviBar__applyBtns,
+.naviBar__applyBtns{
+	padding:20px;
+}
+
 .naviBar__favoriteAddress,
 .naviBar__personalAddress,
 .naviBar__sharedAddress {
@@ -23,6 +26,7 @@
   border-radius: 5px;
   color: white;
   font-size: 18px;
+  cursor:pointer;
 }
 .naviBar__applyBtns button > i {
   color: white;
@@ -52,6 +56,7 @@
   font-size: 18px;
   padding: 10px 15px;
   margin-top: 5px;
+  cursor: pointer;
 }
 .naviConp:hover {
   background-color: #dcedd4 !important;
