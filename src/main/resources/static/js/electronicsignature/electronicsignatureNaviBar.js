@@ -31,4 +31,8 @@ $(document).ready(function() {
         }
     });
     
+    $("#electronicSignatureWriteBtn").on("click",function(){
+		location.href = "/electronicsignature/electronicSignatureWrite";
+	})
+    
 })
