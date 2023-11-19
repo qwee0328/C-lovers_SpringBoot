@@ -70,12 +70,21 @@
     overflow: auto;
     
 }
-
-
+/*스크롤*/
+.chart_content::-webkit-scrollbar {
+  width: 7px;
+}
+.chart_content::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d40;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.chart_content::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
 
 .chart_content_left{
     width: 20%;
-    height: 100vh;
 }
 .chart_content_right{
     width: 80%;
