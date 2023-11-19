@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,40 @@ public class ElectronicSignatureController {
 
 	@Autowired
 	private ElectronicSignatureService esservices;
+	
+	// 로그인한 결재자의 순서인 문서 번호를 담은 리스트 반환
+	public List<String> signatureDocumentIds(String loginID) {
+		// 직전 결재자들의 결재 결과
+		List<Map<String, String>> approvalStatus = esservices.previousApprovalResult(loginID);
+		
+		// 결재 리스트에서 제외될 문서 번호를 담은 배열
+		List<String> ExcludedIds = new ArrayList<>();
+		
+		for (Map<String, String> status : approvalStatus) {
+			String documentId = status.get("document_id");
+            String approverStatus = status.get("approver_status");
+			
+			// 직전 결재자들의 결재 결과가 승인이 아니고, 문서 번호 배열에 포함되지 않았을 경우 문서 번호 저장
+            if(!"승인".equals(approverStatus) && !ExcludedIds.contains(documentId)) {
+            	ExcludedIds.add(documentId);
+            }
+		}
+		return ExcludedIds;
+	}
+	
+	// 기안 또는 결재 구분
+	public void setDivision(String loginID, List<Map<String, Object>> list) {
+		for (Map<String, Object> item : list) {
+	        // approver_id와 loginID가 같으면 "결재"
+	        if (item.get("approver_id").equals(loginID)) {
+	            item.put("division", "결재");
+	        }
+	        // drafter_id와 loginID가 같으면 "기안"
+	        if (item.get("drafter_id").equals(loginID)) {
+	            item.put("division", "기안");
+	        }
+	    }
+	}
 	
 	// 메인 화면으로 이동
 	@RequestMapping("")
@@ -51,20 +86,12 @@ public class ElectronicSignatureController {
 	public List<Map<String, Object>> progressTotalList() {
 		String loginID = (String) session.getAttribute("loginID");
 		
-		boolean isTurn = esservices.isApproverTurn(loginID);
+		// 결재 리스트에서 제외할 문서 번호
+		List<String> ExcludedIds = signatureDocumentIds(loginID);
+		System.out.println("제외할 문서 번호: " + ExcludedIds);
 		
-		List<Map<String, Object>> list = esservices.progressTotalList(loginID);
-		
-	    for (Map<String, Object> item : list) {
-	        // approver_id와 loginID가 같으면 "결재"
-	        if (item.get("approver_id").equals(loginID)) {
-	            item.put("division", "결재");
-	        }
-	        // drafter_id와 loginID가 같으면 "기안"
-	        if (item.get("drafter_id").equals(loginID)) {
-	            item.put("division", "기안");
-	        }
-	    }
+		List<Map<String, Object>> list = esservices.progressTotalList(loginID, ExcludedIds);
+		setDivision(loginID, list);
 
 		return list;
 	}

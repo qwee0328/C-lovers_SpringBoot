@@ -52,13 +52,27 @@
 		</foreach>
 	</insert>
 	
-<!-- 	<select id="isApproverTurn" resultType="boolean">
-		select count(*) from document_list_info where approver_id = #{loginID} and not exists(select 1 from document_list_info other where other.approver_id <> #{loginID} and other.approver_lever < document_list_info.approver_level and other.approver_status <> '승인')
-	</select> -->
+	<!-- // 직전 결재자들의 결재 결과 -->
+	<!-- 로그인한 결재자와 같은 document_id를 가지고, 로그인한 결재자보다 높은 레벨(낮은 직급)인 사람의 결재 결과를 가져옴 -->
+	<select id="previousApprovalResult" resultType="map">
+		select document_id, approver_status from document_list_info dli where exists (select 1 from document_list_info where approver_id = #{loginID} and dli.document_id = document_list_info.document_id and dli.approver_level > document_list_info.approver_level)
+	</select>
 	
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-		select document_id, title, drafter_name, drafter_id, approver_id, report_date, approver_status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID})
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, report_date, approver_status
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   )
 	</select>
 	
 	<!-- // 진행 중인 문서 대기 리스트 출력 -->

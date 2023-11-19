@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,14 +111,17 @@ public class ElectronicSignatureService {
 		return 0;
 	}
 	
-	// 로그인한 결재자의 결재 순서인지
-	public boolean isApproverTurn(String loginID) {
-		return dao.isApproverTurn(loginID);
+	// 직전 결재자들의 결재 결과
+	public List<Map<String, String>> previousApprovalResult(String loginID) {
+		return dao.previousApprovalResult(loginID);
 	}
 
 	// 진행 중인 문서 전체 리스트 출력
-	public List<Map<String, Object>> progressTotalList(String loginID) {
-		return dao.progressTotalList(loginID);
+	public List<Map<String, Object>> progressTotalList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressTotalList(userInfo);
 	}
 
 	// 진행 중인 문서 대기 리스트 출력
