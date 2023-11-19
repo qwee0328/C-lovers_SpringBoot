@@ -11,11 +11,40 @@
 
 body {
 	margin: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+body::-webkit-scrollbar {
+  height: 7px;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d60;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+body::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
 }
 
+
 .container {
-	min-width: 744px;
-	margin-bottom: 50px;
+	min-width: 1104px;
+	padding-bottom: 50px;
+	height: calc(100vh - 60px);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.container::-webkit-scrollbar {
+  width: 7px;
+}
+.container::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d60;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.container::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
 }
 
 
@@ -23,15 +52,15 @@ body {
 
 .mainNavi {
 	width: 100%;
-	height: 160px;
 	background-color: #E8F3E3;
+	min-width: 1104px;
 }
 
 .mainNavi__naviItems {
 	display: flex;
 	justify-content: space-between;
 	margin: auto;
-	padding-top: 30px;
+	padding: 30px;
 	width: 1104px;
 }
 
