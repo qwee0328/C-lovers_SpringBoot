@@ -509,7 +509,8 @@ public class MailController {
 	
 	
 	
-	// 주소록에서 메일 보내기
+	
+	// ------------- 주소록에서 이메일 눌렀을 때 메일 창으로 이동
 	@RequestMapping("/sendSetEmail")
 	public String sendSetEmail(@RequestParam("addressEmail") String addressEmail, Model model) {
 		EmailDTO reply = new EmailDTO();
