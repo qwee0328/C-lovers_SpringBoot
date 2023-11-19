@@ -59,6 +59,20 @@ public class ElectronicSignatureController {
 	    }
 	}
 	
+	// 품의서 또는 휴가 신청서 구분
+	public void setCategory(List<Map<String, Object>> list) {
+		for(Map<String, Object> item : list) {
+			// document_id에 '품의'가 포함되어 있으면 품의서
+	        if (item.get("document_id").toString().contains("품의")) {
+	            item.put("category", "품의서");
+	        }
+	        // document_id에 '휴가'가 포함되어 있으면 휴가 신청서
+	        if (item.get("document_id").toString().contains("휴가")) {
+	            item.put("category", "휴가 신청서");
+	        }
+		}
+	}
+	
 	// 메인 화면으로 이동
 	@RequestMapping("")
 	public String main() {
@@ -159,13 +173,103 @@ public class ElectronicSignatureController {
 	}
 	
 	// 문서함 전체로 이동
-		@RequestMapping("/documentTotal")
-		public String documentTotal() {
-			String currentMenu = "문서전체";
-			
-			session.setAttribute("currentMenu", currentMenu);
-			return "/electronicsignature/documentTotal";
-		}
+	@RequestMapping("/documentTotal")
+	public String documentTotal() {
+		String currentMenu = "문서전체";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/documentTotal";
+	}
+		
+	// 문서함 전체 리스트 출력
+	@ResponseBody
+	@RequestMapping("/documentTotalList")
+	public List<Map<String, Object>> documentTotalList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<Map<String, Object>> list = esservices.documentTotalList(loginID);
+		setDivision(loginID, list);
+		setCategory(list);
+		return list;
+	}
+	
+	// 문서함 기안으로 이동
+	@RequestMapping("/documentDrafting")
+	public String documentDrafting() {
+		String currentMenu = "기안";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/documentDrafting";
+	}
+	
+	// 문서함 기안 리스트 출력
+	@ResponseBody
+	@RequestMapping("/documentDraftingList")
+	public List<Map<String, Object>> documentDraftingList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<Map<String, Object>> list = esservices.documentDraftingList(loginID);
+		setCategory(list);
+		return list;
+	}
+	
+	// 문서함 결재로 이동
+	@RequestMapping("/documentApproval")
+	public String documentApproval() {
+		String currentMenu = "결재";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/documentApproval";
+	}
+	
+	// 문서함 결재 리스트 출력
+	@ResponseBody
+	@RequestMapping("/documentApprovalList")
+	public List<Map<String, Object>> documentApprovalList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<Map<String, Object>> list = esservices.documentApprovalList(loginID);
+		setCategory(list);
+
+		return list;
+	}
+	
+	// 문서함 반려로 이동
+	@RequestMapping("/documentRejection")
+	public String documentRejection() {
+		String currentMenu = "반려";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/documentRejection";
+	}
+	
+	// 문서함 반려 리스트 출력
+	@ResponseBody
+	@RequestMapping("/documentRejectionList")
+	public List<Map<String, Object>> documentRejectionList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<Map<String, Object>> list = esservices.documentRejectionList(loginID);
+		setCategory(list);
+
+		return list;
+	}
+	
+	// 임시저장으로 이동
+	@RequestMapping("/temporary")
+	public String temporary() {
+		String currentMenu = "임시저장";
+		
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/temporary";
+	}
+	
+	// 임시저장 리스트 출력
+	@ResponseBody
+	@RequestMapping("/temporaryList")
+	public List<Map<String, Object>> temporaryList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<Map<String, Object>> list = esservices.temporaryList(loginID);
+		setCategory(list);
+
+		return list;
+	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	@ResponseBody

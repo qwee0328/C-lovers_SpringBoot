@@ -8,7 +8,7 @@ $(document).ready(function() {
 	
 	// 전체 리스트 출력
 	$.ajax({
-		url: "/electronicsignature/documentTotalList"
+		url: "/electronicsignature/documentApprovalList"
 	}).done(function(resp){
 		for(let i = 0; i < resp.length; i++) {
 			let listDiv = $("<div>");

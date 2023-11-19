@@ -6,9 +6,9 @@ $(document).ready(function() {
 		$(".approvalForm__dropMenu").toggle();
 	});
 	
-	// 전체 리스트 출력
+	// 기안 리스트 출력
 	$.ajax({
-		url: "/electronicsignature/documentTotalList"
+		url: "/electronicsignature/documentDraftingList"
 	}).done(function(resp){
 		for(let i = 0; i < resp.length; i++) {
 			let listDiv = $("<div>");
@@ -57,11 +57,7 @@ $(document).ready(function() {
 			categoryDiv.addClass("documentTable__documentCategory");
 			categoryDiv.html(resp[i].category);
 			
-			let divisionDiv = $("<div>");
-			divisionDiv.addClass("documentTable__division");
-			divisionDiv.html(resp[i].division);
-			
-			listDiv.append(checkboxDiv).append(favoritesDiv).append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv).append(divisionDiv);
+			listDiv.append(checkboxDiv).append(favoritesDiv).append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	})

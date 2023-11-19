@@ -147,4 +147,29 @@ public class ElectronicSignatureService {
 		userInfo.put("ExcludedIds", ExcludedIds);
 		return dao.progressList(userInfo);
 	}
+
+	// 문서함 전체 리스트 출력
+	public List<Map<String, Object>> documentTotalList(String loginID) {
+		return dao.documentList(loginID);
+	}
+
+	// 문서함 기안 리스트 출력
+	public List<Map<String, Object>> documentDraftingList(String loginID) {
+		return dao.documentDraftingList(loginID);
+	}
+
+	// 문서함 결재 리스트 출력
+	public List<Map<String, Object>> documentApprovalList(String loginID) {
+		return dao.documentApprovalList(loginID);
+	}
+
+	// 문서함 반려 리스트 출력
+	public List<Map<String, Object>> documentRejectionList(String loginID) {
+		return dao.documentRejectionList(loginID);
+	}
+
+	// 임시저장 리스트 출력
+	public List<Map<String, Object>> temporaryList(String loginID) {
+		return dao.temporaryList(loginID);
+	}
 }

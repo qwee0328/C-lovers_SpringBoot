@@ -73,4 +73,29 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, Object>> progressList(Map<String, Object> userInfo) {
 		return db.selectList("ElectronicSignature.progressList", userInfo);
 	}
+
+	// 문서함 전체 리스트 출력
+	public List<Map<String, Object>> documentList(String loginID) {
+		return db.selectList("ElectronicSignature.documentTotalList", loginID);
+	}
+
+	// 문서함 기안 리스트 출력
+	public List<Map<String, Object>> documentDraftingList(String loginID) {
+		return db.selectList("ElectronicSignature.documentDraftingList", loginID);
+	}
+
+	// 문서함 결재 리스트 출력
+	public List<Map<String, Object>> documentApprovalList(String loginID) {
+		return db.selectList("ElectronicSignature.documentApprovalList", loginID);
+	}
+
+	// 문서함 반려 리스트 출력
+	public List<Map<String, Object>> documentRejectionList(String loginID) {
+		return db.selectList("ElectronicSignature.documentRejectList", loginID);
+	}
+
+	// 임시저장 리스트 출력
+	public List<Map<String, Object>> temporaryList(String loginID) {
+		return db.selectList("ElectronicSignature.temporaryList", loginID);
+	}
 }
