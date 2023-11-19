@@ -58,9 +58,24 @@ public class ElectronicSignatureDAO {
 	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
 		db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
 	}
+	
+	// 로그인한 결재자의 결재 순서인지
+	public boolean isApproverTurn(String loginID) {
+		return db.selectOne("ElectronicSignature.isApproverTurn");
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
 	public List<Map<String, Object>> progressTotalList(String loginID) {
 		return db.selectList("ElectronicSignature.progressTotalList", loginID);
+	}
+
+	// 진행 중인 문서 대기 리스트 출력
+	public List<Map<String, Object>> progressWaitList(String loginID) {
+		return db.selectList("ElectronicSignature.progressWaitList", loginID);
+	}
+
+	// 진행 중인 문서 확인 리스트 출력
+	public List<Map<String, Object>> progressCheckList(String loginID) {
+		return db.selectList("ElectronicSignature.progressCheckList", loginID);
 	}
 }

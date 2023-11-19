@@ -109,9 +109,24 @@ public class ElectronicSignatureService {
 
 		return 0;
 	}
+	
+	// 로그인한 결재자의 결재 순서인지
+	public boolean isApproverTurn(String loginID) {
+		return dao.isApproverTurn(loginID);
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
 	public List<Map<String, Object>> progressTotalList(String loginID) {
 		return dao.progressTotalList(loginID);
+	}
+
+	// 진행 중인 문서 대기 리스트 출력
+	public List<Map<String, Object>> proggressWaitLlist(String loginID) {
+		return dao.progressWaitList(loginID);
+	}
+
+	// 진행 중인 문서 확인 리스트 출력
+	public List<Map<String, Object>> progressCheckList(String loginID) {
+		return dao.progressCheckList(loginID);
 	}
 }

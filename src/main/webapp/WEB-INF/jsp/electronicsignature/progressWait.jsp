@@ -47,19 +47,7 @@
 				</div>
 				
 				<div class="documentTable__body">
-					<div class="document__list">
-						<div class="documentTable__checkbox">
-							<label><input type="checkbox" /></label>
-						</div>
-						<div class="documentTable__documentSeq">GA-업연-20231117-0001</div>
-						<div class="documentTable__title">
-						<div class="title">1212131</div>
-							<i class="fa-solid fa-paperclip fileIcon"></i>
-						</div>
-						<div class="documentTable__drafter">김이사</div>
-						<div class="documentTable__draftDate">2023-11-17</div>
-						<div class="documentTable__category">기안</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>

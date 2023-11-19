@@ -52,8 +52,22 @@
 		</foreach>
 	</insert>
 	
+<!-- 	<select id="isApproverTurn" resultType="boolean">
+		select count(*) from document_list_info where approver_id = #{loginID} and not exists(select 1 from document_list_info other where other.approver_id <> #{loginID} and other.approver_lever < document_list_info.approver_level and other.approver_status <> '승인')
+	</select> -->
+	
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-		select document_id, title, drafter_name, report_date, status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and status = '대기'
+		select document_id, title, drafter_name, drafter_id, approver_id, report_date, approver_status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID})
+	</select>
+	
+	<!-- // 진행 중인 문서 대기 리스트 출력 -->
+	<select id="progressWaitList" resultType="map">
+		select document_id, title, drafter_name, drafter_id, approver_id, report_date from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and approver_status = '대기'
+	</select>
+	
+	<!-- // 진행 중인 문서 확인 리스트 출력 -->
+	<select id="progressCheckList" resultType="map">
+		select document_id, title, drafter_name, drafter_id, approver_id, report_date, approver_status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and approver_status = '승인'
 	</select>
 </mapper>
