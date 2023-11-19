@@ -34,7 +34,7 @@
 			<div>
 				<i class="fa-regular fa-bell"></i>
 			</div>
-			<div>
+			<div class="mainHeader_profileBox">
 				<img src="/assets/profile.png" alt="" class="profileImg"/>
 			</div>
 		</div>
@@ -42,34 +42,7 @@
 	
 	<!-- 민경 추가부분 -->
 	<div class="header__userinfoBox">
-		<div class="header__userinfo">
-			<div class="header__myinfo">
-
-				<div class="header__profileImageBox">
-					<img src="/assets/profile.png" alt="" class="header__profileImage">
-				</div>
-
-				<div class="header__profileInfoBox">
-					<div class="profileName">
-						이사원
-					</div>
-
-					<div class="profileEmail">
-						lee@clovers.com
-					</div>
-				</div>
-
-			</div>
-
-			<div class="header__myinfoBottom">
-
-				<div class="header__setting"><a href="/humanResources/mypage">설정</a></div>
-
-				<div class="header__logoutBtnBox">
-					<button><a href="/members/logout">로그아웃</a></button>
-				</div>
-			</div>
-		</div>
+<!-- 		프로필 -->
 	</div>
 	
 </body>
@@ -84,23 +57,61 @@
 		
 	})
 	
-	// 민경 추가
-	// 프로필 이미지 누르면 창 뜨게 바깥 누르면 닫힘
-	$(document).click(function (e) {
-		if (e.target.className == "profileImg") {
-			$(".header__userinfoBox").toggle(
-				function () {
-					$(".header__userinfoBox").addClass("show");
-				},
-				function () {
-					$(".header__userinfoBox").addClass("hide");
-				}
-			)
-		}else if($(".header__userinfoBox").has(e.target).length>0){
-			return true;
-		}else{
-			$(".header__userinfoBox").css("display", "none");
-		}
+	// 데이터 부르기
+	$(document).ready(function(){
+		$.ajax({
+			url:"/humanResources/headerProfile"
+		}).done(function(resp){
+			console.log(resp);
+			
+				let header__userinfo = $("<div class='header__userinfo'>");
+					let header_myinfo = $("<div class='header__myinfo'>");
+					
+						let header__profileImageBox = $("<div class='header__profileImageBox'>");
+							let profileImg = $("<img class='header__profileImage'>");
+								profileImg.attr("src","/uploads/"+resp.profile_img);
+						header__profileImageBox.append(profileImg);
+						
+						let header__profileInfoBox = $("<div class='header__profileInfoBox'>");
+							let profileName = $("<div class='profileName'>");
+								profileName.html(resp.name);
+							let profileEmail = $("<div class='profileEmail'>");
+								profileEmail.html(resp.email);
+								
+						header__profileInfoBox.append(profileName).append(profileEmail);
+						
+					header_myinfo.append(header__profileImageBox).append(header__profileInfoBox);
+					
+					let header__myinfoBottom = $("<div class='header__myinfoBottom'>");
+						
+						let header__setting = $("<div class='header__setting'>");
+							header__setting.append("<a href='/humanResources/mypage'>설정</a>");
+							
+						let header__logoutBtnBox = $("<div class='header__logoutBtnBox'>");
+								let btn = $("<button><a href='/members/logout'>로그아웃</a></button>");
+								
+							header__logoutBtnBox.append(btn);
+							
+						header__myinfoBottom.append(header__setting).append(header__logoutBtnBox);
+						
+					header__userinfo.append(header_myinfo).append(header__myinfoBottom);
+					
+				$(".header__userinfoBox").append(header__userinfo);	
+						
+			
+		});
 	})
+	
+	// 민경 추가
+	$(document).on("click",".mainHeader_profileBox",function(){
+		if($(".header__userinfoBox").hasClass("active")){
+			$(".header__userinfoBox").removeClass("active");
+
+			
+		}else{
+			$(".header__userinfoBox").addClass("active");
+		}
+	});
+	
 </script>
 </html>

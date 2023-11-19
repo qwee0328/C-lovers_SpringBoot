@@ -23,7 +23,7 @@
 					<input type="text" class="em_search" placeholder="임직원 검색">
 				</div>
 				<div class="myPageBtnBox">
-					<button class="myPageBtn">내 정보 보기</button>
+					<button type="button" class="myPageBtn"><a href="/humanResources/mypage">내 정보 보기</a></button>
 				</div>
 			</div>
 			<div class="chart_content">

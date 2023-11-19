@@ -54,6 +54,9 @@
     width: 100px; height: 30px; border: #6C6C72; border-radius: 4px;
     background-color: #7D7D7D20; color: #6C6C72;
     margin-right: 20px;
+}.myPageBtn>a{
+	text-decoration: none;
+	color: #6C6C72;
 }
 /* 아래 내용 하이웍스 산업, 프로필 부분 */
 .chart_content{

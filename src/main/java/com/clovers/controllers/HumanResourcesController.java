@@ -187,5 +187,14 @@ public class HumanResourcesController {
 		return "humanresources/employeeInfo";
 	}
 	
-	
+//	// view로 헤더에 필요한 정보 가져오기
+	@ResponseBody
+	@RequestMapping("/headerProfile")
+	public MemberDTO selectProfile() {
+		
+		String id = (String)session.getAttribute("loginID");
+		MemberDTO profile = hrservice.selectById(id);
+		
+		return profile;
+	}
 }

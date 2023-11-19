@@ -76,6 +76,9 @@
 	background-color: white;
 	z-index: 999;
 }
+.header__userinfoBox.active{
+	display: block;
+}
 .header__userinfo{
 	padding: 20px;
 }
