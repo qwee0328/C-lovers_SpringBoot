@@ -121,12 +121,20 @@ public class HumanResourcesController {
 		return hrservice.selectEarlyLeaveInfo(id);
 	}
 	
-	//사용자 퇴근 미체크 정보 불러오기
+	// 사용자 퇴근 미체크 정보 불러오기
 	@ResponseBody
 	@RequestMapping("/selectNotCheckedLeaveInfo")
 	public int selectNotCheckedLeaveInfo() {
 		String id = (String)session.getAttribute("loginID");
 		return hrservice.selectNotCheckedLeaveInfo(id);
+	}
+	
+	// 사용자 결근 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectAbsenteeismInfo")
+	public int selectAbsenteeismInfo() {
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectAbsenteeismInfo(id);
 	}
 	
 	// 사용자 근무 규칙 정보 불러오기

@@ -38,11 +38,11 @@
                             </div>
                             <div>
                                 <div class="detail__title">퇴근 미체크</div>
-                                <div class="detail_conf" id="userNotCheckedLeaveCount">1회</div>
+                                <div class="detail_conf" id="userNotCheckedLeaveCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">결근</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userAbsenteeismCount"></div>
                             </div>
                         </div>
                     </div>

@@ -27,6 +27,14 @@ window.onload = function() {
 	}).done(function(resp){
 		$("#userNotCheckedLeaveCount").html(resp+"회");
 	});
+	
+	// 사용자 결근 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectAbsenteeismInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userAbsenteeismCount").html(resp+"회");
+	});
 
 	$.ajax({
 		url: "/humanResources/selectEmployeeWorkRule",

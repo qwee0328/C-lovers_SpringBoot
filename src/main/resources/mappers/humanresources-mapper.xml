@@ -45,11 +45,12 @@
 		= year(now());
 	</select>
 
-	<!-- //사용자 퇴근 미체크 정보 불러오기 -->
+	<!-- //사용자 조기퇴근 정보 불러오기 -->
 	<select id="selectEarlyLeaveInfo" resultType="Integer">
 		select count(*)
 		from leave_work_early
-		where emp_id = #{id} and actual_leave_time is not null and
+		where emp_id = #{id} and actual_leave_time is not
+		null and
 		time(actual_leave_time) &lt; leave_time;
 	</select>
 
@@ -61,6 +62,18 @@
 		from attend_status
 		where leave_time is
 		null and emp_id=#{id};
+	</select>
+
+	<!-- // 이번달 공휴일 정보 불러오기 -->
+	<select id="selectHoliDays" resultType="map">
+		select holiday_date
+		from holidays
+		where year(holiday_date) = year(curdate()) and month(holiday_date) = month(curdate());
+	</select>
+	
+	<!-- // 이번달 근무일 정보 불러오기 -->
+	<select id="selectWorkingDaysThisMonth" resultType="map">
+		select work_date from attend_status where emp_id=#{id};
 	</select>
 
 	<!-- // 사용자 근무 규칙 정보 불러오기 -->

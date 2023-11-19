@@ -1,12 +1,15 @@
 package com.clovers.services;
 
-import java.util.HashMap;
+import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +22,13 @@ import com.clovers.dao.HumanResourcesDAO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.dto.WorkConditionDTO;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class HumanResourcesService {
 	// 인사 서비스 레이어
+	@Autowired
+	private HttpSession session;
 
 	@Autowired
 	private HumanResourcesDAO dao;
@@ -54,15 +61,71 @@ public class HumanResourcesService {
 	public int selectLateInfo(String id) {
 		return dao.selectLateInfo(id);
 	}
-	
-	//사용자 조기퇴근 정보 불러오기
-		public int selectEarlyLeaveInfo(String id) {
-			return dao.selectEarlyLeaveInfo(id);
-		}
 
-	//사용자 퇴근 미체크 정보 불러오기
+	// 사용자 조기퇴근 정보 불러오기
+	public int selectEarlyLeaveInfo(String id) {
+		return dao.selectEarlyLeaveInfo(id);
+	}
+
+	// 사용자 퇴근 미체크 정보 불러오기
 	public int selectNotCheckedLeaveInfo(String id) {
 		return dao.selectNotCheckedLeaveInfo(id);
+	}
+	
+	// 사용자 결근 정보 불러오기
+	public int selectAbsenteeismInfo(String id) {
+		// 평일 근무일 계산하기
+		List<LocalDate> weekdays = getWeekDaysForCurrentMonth();
+        
+		// 이번달 공휴일 정보 불러오기
+        List<Map<String, Date>> holidays = dao.selectHoliDays();
+        
+        // 평일 중 공휴일인날을 근무 일수에서 제거하기
+        for (int i =0; i<weekdays.size();i++) {
+            LocalDate date = weekdays.get(i);
+            for(Map<String, Date> holiday:holidays) {
+            	LocalDate holidayDate = holiday.get("holiday_date").toLocalDate();
+            	if(date.isEqual(holidayDate)) {
+            		// 해당하는 날짜가 공휴일이면 제거
+            		weekdays.remove(i);
+            		i--;
+            	}
+            }
+        }
+        
+        // 이번달 근무일 정보 불러오기
+        List<Map<String, Timestamp>> workingDays = dao.selectWorkingDaysThisMonth(id);
+        System.out.println(workingDays);
+        
+        // 평일 중 근무를 한 날은 제거
+        for(int i =0;i<weekdays.size();i++) {
+        	LocalDate date = weekdays.get(i);
+        	for(Map<String, Timestamp> workingDay : workingDays) {
+        		LocalDate workingDate = workingDay.get("work_date").toLocalDateTime().toLocalDate();
+        		if(date.isEqual(workingDate)) {
+        			weekdays.remove(i);
+        			i--;
+        		}
+        	}
+        }
+		return weekdays.size();
+	}
+	
+	// 평일 근무일 계산하기
+	public List<LocalDate> getWeekDaysForCurrentMonth(){
+		List<LocalDate> weekdays = new ArrayList<>();
+		LocalDate today = LocalDate.now();
+		LocalDate firstDayOfMonth = today.withDayOfMonth(1);
+		LocalDate lastDayOfMonth = today;
+		
+		LocalDate currentDate = firstDayOfMonth;
+		while(!currentDate.isAfter(lastDayOfMonth)) {
+			if(currentDate.getDayOfWeek()!=DayOfWeek.SATURDAY && currentDate.getDayOfWeek()!=DayOfWeek.SUNDAY) {
+				weekdays.add(currentDate);
+			}
+			currentDate = currentDate.plusDays(1);
+		}
+		return weekdays;
 	}
 
 	// 사용자 근무 규칙 정보 불러오기
