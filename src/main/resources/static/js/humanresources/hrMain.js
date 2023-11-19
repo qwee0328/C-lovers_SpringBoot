@@ -3,38 +3,65 @@ let status = "";
 window.onload = function() {
 	setClock();
 	setInterval(setClock, 1000);
-	
+
 	// 사용자 지각 현황 불러오기
 	$.ajax({
 		url: "/humanResources/selectLateInfo",
 		dataType: "json"
-	}).done(function(resp){
-		$("#userLateCount").html(resp+"회");
+	}).done(function(resp) {
+		$("#userLateCount").html(resp + "회");
 	});
-	
+
 	// 사용자 조기퇴근 정보 불러오기
 	$.ajax({
 		url: "/humanResources/selectEarlyLeaveInfo",
 		dataType: "json"
-	}).done(function(resp){
-		$("#userEarlyLeaceCount").html(resp+"회");
+	}).done(function(resp) {
+		$("#userEarlyLeaceCount").html(resp + "회");
 	});
-	
+
 	// 사용자 퇴근 미체크 정보 불러오기
 	$.ajax({
 		url: "/humanResources/selectNotCheckedLeaveInfo",
 		dataType: "json"
-	}).done(function(resp){
-		$("#userNotCheckedLeaveCount").html(resp+"회");
+	}).done(function(resp) {
+		$("#userNotCheckedLeaveCount").html(resp + "회");
 	});
-	
+
 	// 사용자 결근 정보 불러오기
 	$.ajax({
 		url: "/humanResources/selectAbsenteeismInfo",
 		dataType: "json"
-	}).done(function(resp){
-		$("#userAbsenteeismCount").html(resp+"회");
+	}).done(function(resp) {
+		$("#userAbsenteeismCount").html(resp + "회");
 	});
+
+	// 사용자 근무 시간 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectWorkingDaysThisMonth",
+		dataType: "json"
+	}).done(function(resp) {
+		console.log(resp)
+		$("#workingDyas").html(resp.length + "일");
+		calculateAndAddTimeDifference(resp);
+		console.log(resp)
+		let totalWorkingTime=0;
+		for(let i=0;i<resp.length;i++){
+			if(resp[i].timeDifference){
+				totalWorkingTime = totalWorkingTime+resp[i].timeDifference
+			}
+		}
+		console.log(totalWorkingTime);
+		let hour = Math.floor(totalWorkingTime/(1000*60*60));
+		let min = Math.floor(totalWorkingTime%(1000*60*60)/(1000*60));
+		
+		$("#totalWorkingTime").html(hour + "시간 " + min+"분");
+		
+		let average = totalWorkingTime/resp.length;
+		hour = Math.floor(average/(1000*60*60));
+		min = Math.floor(average%(1000*60*60)/(1000*60));
+		$("#calibratedAverage").html(hour + "시간 " + min+"분");
+	})
 
 	$.ajax({
 		url: "/humanResources/selectEmployeeWorkRule",
@@ -96,8 +123,8 @@ window.onload = function() {
 					$.ajax({
 						url: "/humanResources/selectWorkConditionsList",
 						dataType: "json"
-					}).done(function(respList){
-						for(let i =0; i<respList.length;i++){
+					}).done(function(respList) {
+						for (let i = 0; i < respList.length; i++) {
 							createWorkCondition(respList[i]);
 						}
 					})
@@ -136,12 +163,12 @@ window.onload = function() {
 					} else {
 						createCommute_Attend(resp.attend_time, "출근");
 					}
-					
+
 					$.ajax({
 						url: "/humanResources/selectWorkConditionsList",
 						dataType: "json"
-					}).done(function(respList){
-						for(let i =0; i<respList.length;i++){
+					}).done(function(respList) {
+						for (let i = 0; i < respList.length; i++) {
 							createWorkCondition(respList[i]);
 						}
 						createCommute_Attend(resp.leave_time, "퇴근");
@@ -229,7 +256,26 @@ window.onload = function() {
 		});
 	}
 }
+// 근무 시간 계산을 위한 시간 차이를 계산해 더하는 함수
+function calculateAndAddTimeDifference(dateList) {
+	for (let i = 0; i < dateList.length; i++) {
+		let item = dateList[i];
 
+		// 출퇴근 시간이 모두 존재할때만 계산 수행
+		if (item.leave_time && item.attend_time) {
+			let leaveTime = new Date(item.leave_time);
+			let attendTime = new Date(item.attend_time);
+
+			// 두 시간 차이 계산
+			let timeDifference = leaveTime.getTime() - attendTime.getTime();
+
+			// 시간차를 dateList에 추가
+			dateList[i].timeDifference = timeDifference;
+		}
+	}
+}
+
+// 근무 현황 업데이트
 function createWorkCondition(resp) {
 	let startTimestamp = resp.start_time;
 	let time = new Date(startTimestamp);
@@ -249,6 +295,7 @@ function createWorkCondition(resp) {
 	$(".commuteTable").append(commuteTable__row);
 }
 
+// 시계 움직이기
 function setClock() {
 	let dateInfo = new Date();
 	let weekKR = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
@@ -271,6 +318,7 @@ function setClock() {
 	$(".nowTime").append(statusDiv);
 }
 
+// 시계 시간 보정
 function modifyNumber(time) {
 	if (parseInt(time) < 10) {
 		return "0" + time;
@@ -279,6 +327,7 @@ function modifyNumber(time) {
 	}
 }
 
+// 근무 현황 출력
 function createCommute_Attend(attend_time, title) {
 	let attendTimestamp = attend_time;
 	let time = new Date(attendTimestamp);

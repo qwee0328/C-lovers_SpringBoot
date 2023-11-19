@@ -127,6 +127,11 @@ public class HumanResourcesService {
 		}
 		return weekdays;
 	}
+	
+	// 사용자 근무 시간 정보 불러오기
+	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(String id){
+		return dao.selectWorkingDaysThisMonth(id);
+	}
 
 	// 사용자 근무 규칙 정보 불러오기
 	public Map<String, Object> selectEmployeeWorkRule(String id) {

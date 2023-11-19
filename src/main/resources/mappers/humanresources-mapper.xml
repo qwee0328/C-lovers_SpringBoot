@@ -73,7 +73,7 @@
 	
 	<!-- // 이번달 근무일 정보 불러오기 -->
 	<select id="selectWorkingDaysThisMonth" resultType="map">
-		select work_date from attend_status where emp_id=#{id};
+		select * from attend_status where emp_id=#{id};
 	</select>
 
 	<!-- // 사용자 근무 규칙 정보 불러오기 -->
