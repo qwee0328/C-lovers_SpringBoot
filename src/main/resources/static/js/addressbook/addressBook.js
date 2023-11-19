@@ -755,6 +755,8 @@ $(document).on("keyup",".searchBar__input",function(){
 
 // 이메일 눌러 메일 작성 페이지로 이동
 $(document).on("click",".addessLine__email",function(e){
-	e.stopPropagation(); // 상세보기 모달창 뜨지 않게 함. (기존 이벤트 중단)
-	location.href = "/mail/sendSetEmail?addressEmail="+$(this).text();
+	if($(this).text() != ""){
+		e.stopPropagation(); // 상세보기 모달창 뜨지 않게 함. (기존 이벤트 중단)
+		location.href = "/mail/sendSetEmail?addressEmail="+$(this).text();	
+	}
 });
