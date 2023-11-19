@@ -60,12 +60,17 @@ public class ElectronicSignatureDAO {
 	}
 
 	// 진행 중인 문서 대기 리스트 출력
-	public List<Map<String, Object>> progressWaitList(String loginID) {
-		return db.selectList("ElectronicSignature.progressWaitList", loginID);
+	public List<Map<String, Object>> progressWaitList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressWaitList", userInfo);
 	}
 
 	// 진행 중인 문서 확인 리스트 출력
-	public List<Map<String, Object>> progressCheckList(String loginID) {
-		return db.selectList("ElectronicSignature.progressCheckList", loginID);
+	public List<Map<String, Object>> progressCheckList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressCheckList", userInfo);
+	}
+
+	// 진행 중인 문서 진행 리스트 출력
+	public List<Map<String, Object>> progressList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressList", userInfo);
 	}
 }

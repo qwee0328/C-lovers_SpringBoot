@@ -73,15 +73,42 @@
                </foreach>
            </if>
 		   )
+		   ORDER BY report_date desc;
 	</select>
 	
 	<!-- // 진행 중인 문서 대기 리스트 출력 -->
 	<select id="progressWaitList" resultType="map">
-		select document_id, title, drafter_name, drafter_id, approver_id, report_date from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and approver_status = '대기'
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   ) AND approver_status = '대기'
+		   ORDER BY report_date desc;
 	</select>
 	
 	<!-- // 진행 중인 문서 확인 리스트 출력 -->
-	<select id="progressCheckList" resultType="map">
-		select document_id, title, drafter_name, drafter_id, approver_id, report_date, approver_status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and approver_status = '승인'
+	<select id="progressList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   ) AND approver_status = '승인'
+		   ORDER BY report_date desc;
 	</select>
 </mapper>

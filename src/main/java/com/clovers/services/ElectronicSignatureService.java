@@ -125,12 +125,26 @@ public class ElectronicSignatureService {
 	}
 
 	// 진행 중인 문서 대기 리스트 출력
-	public List<Map<String, Object>> proggressWaitLlist(String loginID) {
-		return dao.progressWaitList(loginID);
+	public List<Map<String, Object>> proggressWaitLlist(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressWaitList(userInfo);
 	}
 
 	// 진행 중인 문서 확인 리스트 출력
-	public List<Map<String, Object>> progressCheckList(String loginID) {
-		return dao.progressCheckList(loginID);
+	public List<Map<String, Object>> progressCheckList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressCheckList(userInfo);
+	}
+
+	// 진행 중인 문서 진행 리스트 출력
+	public List<Map<String, Object>> progressList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressList(userInfo);
 	}
 }

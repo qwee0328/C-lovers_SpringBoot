@@ -26,7 +26,7 @@ public class ElectronicSignatureController {
 	private ElectronicSignatureService esservices;
 	
 	// 로그인한 결재자의 순서인 문서 번호를 담은 리스트 반환
-	public List<String> signatureDocumentIds(String loginID) {
+	public List<String> ExcludedIds(String loginID) {
 		// 직전 결재자들의 결재 결과
 		List<Map<String, String>> approvalStatus = esservices.previousApprovalResult(loginID);
 		
@@ -87,8 +87,7 @@ public class ElectronicSignatureController {
 		String loginID = (String) session.getAttribute("loginID");
 		
 		// 결재 리스트에서 제외할 문서 번호
-		List<String> ExcludedIds = signatureDocumentIds(loginID);
-		System.out.println("제외할 문서 번호: " + ExcludedIds);
+		List<String> ExcludedIds = ExcludedIds(loginID);
 		
 		List<Map<String, Object>> list = esservices.progressTotalList(loginID, ExcludedIds);
 		setDivision(loginID, list);
@@ -110,19 +109,10 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressWaitList")
 	public List<Map<String, Object>> progressWaitList() {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.proggressWaitLlist(loginID);
+		List<String> ExcludedIds = ExcludedIds(loginID);
 		
-		for (Map<String, Object> item : list) {
-	        // approver_id와 loginID가 같으면 "결재"
-	        if (item.get("approver_id").equals(loginID)) {
-	            item.put("division", "결재");
-	        }
-	        // drafter_id와 loginID가 같으면 "기안"
-	        if (item.get("drafter_id").equals(loginID)) {
-	            item.put("division", "기안");
-	        }
-	    }
-		
+		List<Map<String, Object>> list = esservices.proggressWaitLlist(loginID, ExcludedIds);
+		setDivision(loginID, list);
 		return list;
 	}
 	
@@ -140,19 +130,10 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressCheckList")
 	public List<Map<String, Object>> progressCheckList() {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.progressCheckList(loginID);
+		List<String> ExcludedIds = ExcludedIds(loginID);
 		
-		for (Map<String, Object> item : list) {
-	        // approver_id와 loginID가 같으면 "결재"
-	        if (item.get("approver_id").equals(loginID)) {
-	            item.put("division", "결재");
-	        }
-	        // drafter_id와 loginID가 같으면 "기안"
-	        if (item.get("drafter_id").equals(loginID)) {
-	            item.put("division", "기안");
-	        }
-	    }
-		
+		List<Map<String, Object>> list = esservices.progressCheckList(loginID, ExcludedIds);
+		setDivision(loginID, list);
 		return list;
 	}
 	
@@ -163,6 +144,18 @@ public class ElectronicSignatureController {
 		
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progress";
+	}
+	
+	// 진행 중인 문서 진행 리스트 출력
+	@ResponseBody
+	@RequestMapping("/progressList")
+	public List<Map<String, Object>> progressList() {
+		String loginID = (String) session.getAttribute("loginID");
+		List<String> ExcludedIds = ExcludedIds(loginID);
+		
+		List<Map<String, Object>> list = esservices.progressList(loginID, ExcludedIds);
+		setDivision(loginID, list);
+		return list;
 	}
 	
 	// 문서함 전체로 이동
