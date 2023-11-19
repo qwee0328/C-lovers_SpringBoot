@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
 	let rest_reason_type = [];
+	//let vacationDateBackup = [];
+	//let vacationTypeBackup = [];
+	let dateTypePairs = {};  // 추가: 날짜와 타입을 쌍으로 백업할 배열
 	$.ajax({
 		url: "/humanResources/selectRestReasonType",
 		dataType: "json",
@@ -12,40 +15,67 @@ document.addEventListener("DOMContentLoaded", function() {
 	// input의 value가 변경될 때 선택한 날짜가 옆에 나오도록 설정
 	$("#date_selector").on("change", function() {
 		console.log($("#date_selector").val());
-		$(".appStatus").html("");
-		let dateArr = [];
-		dateArr = $("#date_selector").val().split(",");
-		console.log(dateArr);
-		for (let i = 0; i < dateArr.length; i++) {
-			let dayOfWeek = new Date(dateArr[i]).toLocaleString("ko", {
-				weekday: "short",
-			});
+		if ($("#date_selector").val() !== "") {
+			$(".appStatus").html("");
+			let dateArr = [];
+			dateArr = $("#date_selector").val().split(", ");
 
-			let appStatus__line = $("<div>").attr("class", "appStatus__line");
-			let vacationDate = $("<div>")
-				.attr("class", "vacationDate")
-				.html(dateArr[i] + "(" + dayOfWeek + ")");
+			for (let i = 0; i < dateArr.length; i++) {
+				let dayOfWeek = new Date(dateArr[i]).toLocaleString("ko", {
+					weekday: "short",
+				});
 
-			let selectorType = $("<div>").attr("class", "selectorType");
-			let typeName = $("<div>").attr("class", "typeName").html("연차");
-			let selectorArrow = $("<div>")
-				.attr("class", "selectorArrow")
-				.html($("<i>").attr("class", "fa-solid fa-chevron-down"));
-			selectorType.append(typeName).append(selectorArrow);
+				let vacationType = $("<input>").attr("type", "hidden").attr("class", "vacationType").val("연차");
+				let appStatus__line = $("<div>").attr("class", "appStatus__line");
+				let vacationDate = $("<div>")
+					.attr("class", "vacationDate")
+					.html(dateArr[i] + "(" + dayOfWeek + ")");
 
-			let selector__option = $("<div>").attr("class", "selector__option");
-			for (let i = 0; i < rest_reason_type.length; i++) {
-				let option__item = $("<div>").attr("class", "option__item").html(rest_reason_type[i]);
-				selector__option.append(option__item)
+				let selectorType = $("<div>").attr("class", "selectorType");
+				let typeName = $("<div>").attr("class", "typeName").html("연차");
+
+				// 이전에 선택한 타입이 있다면 해당 타입으로 설정
+				let savedType = findTypeForDate(dateArr[i]);
+				if (savedType) {
+					typeName.html(savedType);
+					vacationType.val(savedType);
+				}
+
+				let selectorArrow = $("<div>")
+					.attr("class", "selectorArrow")
+					.html($("<i>").attr("class", "fa-solid fa-chevron-down"));
+				selectorType.append(typeName).append(selectorArrow);
+
+				let selector__option = $("<div>").attr("class", "selector__option");
+				for (let i = 0; i < rest_reason_type.length; i++) {
+					let option__item = $("<div>").attr("class", "option__item").html(rest_reason_type[i]);
+					selector__option.append(option__item)
+				}
+				appStatus__line.append(vacationType)
+					.append(vacationDate)
+					.append(selectorType)
+					.append(selector__option);
+				$(".appStatus").append(appStatus__line);
+
+				// 선택한 날짜와 타입을 기억
+				dateTypePairs[dateArr[i]] = vacationType.val();
 			}
-
-			appStatus__line
-				.append(vacationDate)
-				.append(selectorType)
-				.append(selector__option);
-			$(".appStatus").append(appStatus__line);
+		} else {
+			$(".appStatus").html("");
+			dateTypePairs = {};
 		}
+
 	});
+
+	// 선택한 날짜에 대한 이전에 선택한 타입을 찾는 함수
+	function findTypeForDate(date) {
+		return dateTypePairs[date];
+	}
+
+	// 선택한 타입을 dateTypePairs에 업데이트하는 함수
+	function updateTypeForDate(date, type) {
+		dateTypePairs[date] = type;
+	}
 
 	// selector 커스텀 해서 만들기
 	let showSelector = false;
@@ -59,9 +89,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				.children()
 				.attr("class", "fa-solid fa-chevron-up");
 			$(this).parent().find(".selector__option").css("display", "block");
+
+			// 선택한 타입 업데이트
 			$(".option__item").on("click", function() {
-				console.log($(this).parent().parent().find(".typeName"));
+				// 선택한 날짜에 대한 타입을 업데이트
+				updateTypeForDate($(this).closest(".appStatus__line").find(".vacationDate").text().split("(")[0].trim(), $(this).html());
+
 				$(this).parent().parent().find(".typeName").html($(this).html());
+				$(this).parent().parent().find(".vacationType").val($(this).html());
 			});
 			showSelector = true;
 		} else {
@@ -117,7 +152,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	$("#vacationdraftingBtn").on("click", function() {
-		console.log($("#vacationReason").val())
 		if ($("#processEmployeeIDList").val() === "") {
 			alert("결제선을 설정해주세요.");
 			return;
@@ -132,12 +166,20 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 		if ($("#processEmployeeIDList").val() !== "" && $("#date_selector").val() !== "" && $("#vacationReason").val() !== "") {
+			let processEmployeeIDList = $("#processEmployeeIDList").val();
+			let processEmployeeIDArray = processEmployeeIDList.split(",");
+
+			let vacationTypeList = [];
+			$(".vacationType").each(function() {
+				vacationTypeList.push($(this).val())
+			});
 			$.ajax({
 				url: "/electronicSignature/insertVacation",
 				dataType: "json",
-				type: "POST"
+				type: "POST",
+				data: { processEmployeeIDArray: processEmployeeIDArray, vacationDateList: $("#date_selector").val().split(", "), vacationTypeList: vacationTypeList, reson: $("#vacationReason").val() },
 			}).done(function() {
-
+				location.href = "/humanResources";
 			})
 		}
 	})

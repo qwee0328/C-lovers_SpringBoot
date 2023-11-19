@@ -30,19 +30,19 @@
                         <div class="conf_detail">
                             <div>
                                 <div class="detail__title">지각</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userLateCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">조기퇴근</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userEarlyLeaceCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">퇴근 미체크</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userNotCheckedLeaveCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">결근</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userAbsenteeismCount"></div>
                             </div>
                         </div>
                     </div>

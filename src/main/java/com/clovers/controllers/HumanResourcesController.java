@@ -105,16 +105,44 @@ public class HumanResourcesController {
 		return "redirect:/humanResources/mypage";
 	}
 	
+	// 사용자 지각 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectLateInfo")
+	public int selectLateInfo() {
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectLateInfo(id);
+	}
 	
+	// 사용자 조기퇴근 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectEarlyLeaveInfo")
+	public int selectEarlyLeaveInfo() {
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectEarlyLeaveInfo(id);
+	}
+	
+	// 사용자 퇴근 미체크 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectNotCheckedLeaveInfo")
+	public int selectNotCheckedLeaveInfo() {
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectNotCheckedLeaveInfo(id);
+	}
+	
+	// 사용자 결근 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectAbsenteeismInfo")
+	public int selectAbsenteeismInfo() {
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectAbsenteeismInfo(id);
+	}
 	
 	// 사용자 근무 규칙 정보 불러오기
 	@ResponseBody
 	@RequestMapping("/selectEmployeeWorkRule")
 	public Map<String, Object> selectEmployeeWorkRule() {
 		String id = (String)session.getAttribute("loginID");
-		Map<String, Object> userWorkRule = hrservice.selectEmployeeWorkRule(id);
-		System.out.println(userWorkRule.toString());
-		return userWorkRule;
+		return hrservice.selectEmployeeWorkRule(id);
 	}
 	
 	// 출근 전인지 확인
@@ -123,7 +151,6 @@ public class HumanResourcesController {
 	public Map<String, Object> selectAttendStatus() {
 		String id = (String)session.getAttribute("loginID");
 		Map<String, Object> result = hrservice.selectAttendStatus(id);
-		System.out.println(result);
 		if(result != null) {
 			return result;
 		}else {
@@ -175,8 +202,6 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/selectRestReasonType")
 	public List<String> selectRestReasonType() {
-		List<String> result = hrservice.selectRestReasonType();
-		System.out.println(result.toString());
-		return result;
+		return hrservice.selectRestReasonType();
 	}
 }

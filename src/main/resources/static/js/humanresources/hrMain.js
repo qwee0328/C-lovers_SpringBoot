@@ -3,7 +3,38 @@ let status = "";
 window.onload = function() {
 	setClock();
 	setInterval(setClock, 1000);
-
+	
+	// 사용자 지각 현황 불러오기
+	$.ajax({
+		url: "/humanResources/selectLateInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userLateCount").html(resp+"회");
+	});
+	
+	// 사용자 조기퇴근 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectEarlyLeaveInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userEarlyLeaceCount").html(resp+"회");
+	});
+	
+	// 사용자 퇴근 미체크 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectNotCheckedLeaveInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userNotCheckedLeaveCount").html(resp+"회");
+	});
+	
+	// 사용자 결근 정보 불러오기
+	$.ajax({
+		url: "/humanResources/selectAbsenteeismInfo",
+		dataType: "json"
+	}).done(function(resp){
+		$("#userAbsenteeismCount").html(resp+"회");
+	});
 
 	$.ajax({
 		url: "/humanResources/selectEmployeeWorkRule",
@@ -14,8 +45,6 @@ window.onload = function() {
 		// 출근 및 퇴근 시간 추출
 		let attendTimeParts = resp.attend_time.split(':');
 		let leaveTimeParts = resp.leave_time.split(':');
-		console.log(resp.attend_time);
-		console.log(resp.leave_time)
 
 		let leave = new Date(today.getFullYear(), today.getMonth(), today.getDate(), parseInt(leaveTimeParts[0]), parseInt(leaveTimeParts[1]), parseInt(leaveTimeParts[2]));
 		let attend = new Date(today.getFullYear(), today.getMonth(), today.getDate(), parseInt(attendTimeParts[0]), parseInt(attendTimeParts[1]), parseInt(attendTimeParts[2]));
@@ -29,8 +58,6 @@ window.onload = function() {
 		} else {
 			breakTime = 0.5;
 		}
-		console.log(leave);
-		console.log(attend)
 
 		$("#work_rule_name").html(resp.name);
 		$("#work_rule_time").html(resp.attend_time + " ~ " + resp.leave_time + "(소정 " + (workTime - breakTime) + "시간)");
@@ -42,7 +69,6 @@ window.onload = function() {
 		}).done(function(resp) {
 			if (Object.keys(resp).length > 0) {
 				// 출근 했을 경우
-
 				let attendTimestamp = resp.attend_time;
 				let time = new Date(attendTimestamp);
 				let hour = time.getHours();
@@ -55,7 +81,6 @@ window.onload = function() {
 
 				if (resp.leave_time == null) {
 					// 근무 중인경우
-					console.log("근무중")
 					window.status = "근무중"
 					$(".statusBox").html(window.status);
 
@@ -72,8 +97,6 @@ window.onload = function() {
 						url: "/humanResources/selectWorkConditionsList",
 						dataType: "json"
 					}).done(function(respList){
-						console.log(respList);
-						console.log(respList.length);
 						for(let i =0; i<respList.length;i++){
 							createWorkCondition(respList[i]);
 						}
@@ -90,7 +113,6 @@ window.onload = function() {
 					})
 				} else {
 					// 퇴근한 경우
-					console.log("퇴근함")
 					window.status = "근무 종료"
 					$(".statusBox").html(window.status);
 
@@ -119,21 +141,14 @@ window.onload = function() {
 						url: "/humanResources/selectWorkConditionsList",
 						dataType: "json"
 					}).done(function(respList){
-						console.log(respList);
-						console.log(respList.length);
 						for(let i =0; i<respList.length;i++){
 							createWorkCondition(respList[i]);
 						}
 						createCommute_Attend(resp.leave_time, "퇴근");
 					})
-					
-					
-
 				}
 
-
 			} else {
-				console.log("출근 전")
 				// 출근을 아직 안한 경우
 				$("#leaveBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
 				$("#attendBtn").css({ "color": "#75b47d", "pointer-events": "auto" });
@@ -142,7 +157,6 @@ window.onload = function() {
 				$(".statusBox").html(window.status);
 
 				$("#attendBtn").on("click", function() {
-					console.log("출근함")
 					$.ajax({
 						url: "/humanResources/insertAttendingWork",
 						dataType: "json"
@@ -152,21 +166,14 @@ window.onload = function() {
 				})
 			}
 		})
-		if (attend < today) {
-			console.log('attend 시간은 이미 지났습니다.');
-		} else {
-			console.log('attend 시간은 아직 지나지 않았습니다.');
-		}
 	});
 
 	if (!$("#working").prop("disabled")) {
 		$("#working").on("click", function() {
-			console.log("업무중 클릭")
 			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=업무",
 				dataType: "json"
 			}).done(function(resp) {
-				console.log(resp)
 				$("#working").prop("disabled", true);
 				$("#goingOut").prop("disabled", false);
 				$("#conference").prop("disabled", false);
@@ -178,7 +185,6 @@ window.onload = function() {
 	}
 	if (!$("#goingOut").prop("disabled")) {
 		$("#goingOut").on("click", function() {
-			console.log("외출중 클릭")
 			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=외출",
 				dataType: "json"
@@ -194,7 +200,6 @@ window.onload = function() {
 	}
 	if (!$("#conference").prop("disabled")) {
 		$("#conference").on("click", function() {
-			console.log("회의중 클릭")
 			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=회의",
 				dataType: "json"
@@ -210,7 +215,6 @@ window.onload = function() {
 	}
 	if (!$("#outside").prop("disabled")) {
 		$("#outside").on("click", function() {
-			console.log("외근중 클릭")
 			$.ajax({
 				url: "/humanResources/insertWorkCondition?status=외근",
 				dataType: "json"
@@ -264,7 +268,6 @@ function setClock() {
 	$(".nowTime").html(hour + " : " + min + " : " + sec);
 
 	let statusDiv = $("<div>").attr("class", "statusBox").html(window.status);
-	console.log(window.status)
 	$(".nowTime").append(statusDiv);
 }
 

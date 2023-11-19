@@ -5,83 +5,142 @@
 <mapper namespace="HumanResources">
 	<!-- 인사 매퍼 -->
 
-	
-<!-- 	<select id="selectByIdGetName" resultType="String"> -->
-<!-- 		select name from employee where id = #{id} -->
-<!-- 	</select> -->
-	
+
+	<!-- <select id="selectByIdGetName" resultType="String"> -->
+	<!-- select name from employee where id = #{id} -->
+	<!-- </select> -->
+
 	<select id="selectById" resultType="com.clovers.dto.MemberDTO">
-		select * from mypageData where id = #{id};
+		select * from mypageData
+		where id = #{id};
 	</select>
-	
+
 	<select id="getPw" resultType="String">
-		select pw from employee where id = #{id};
+		select pw from employee where id =
+		#{id};
 	</select>
-	
+
 	<update id="update">
-		update employee set profile_img=#{profile_img},company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+		update employee set
+		profile_img=#{profile_img},company_phone=#{company_phone},phone=#{phone},email=#{email}
+		where id=#{id}
 	</update>
 
 	<!-- 사용자 근무 규칙 맵 -->
-	<!-- 
-	<resultMap type="HashMap" id="userWorkRuleMap">
-		<result column="emp_id" property="emp_id" />
-		<result column="daily_work_rule_id" property="daily_work_rule_id" />
-		<result column="name" property="name" />
-		<result column="attend_time" property="attend_time" />
-		<result column="leave_time" property="leave_time" />
-	</resultMap>
-	
-	 -->
-	
-	<!-- // 사용자 근무 규칙 정보 불러오기 -->
-	<select id="selectEmployeeWorkRule" resultType="map">
-		select * from employee_work_rule where emp_id = #{id};
+	<!-- <resultMap type="HashMap" id="userWorkRuleMap"> <result column="emp_id" 
+		property="emp_id" /> <result column="daily_work_rule_id" property="daily_work_rule_id" 
+		/> <result column="name" property="name" /> <result column="attend_time" 
+		property="attend_time" /> <result column="leave_time" property="leave_time" 
+		/> </resultMap> -->
+
+	<!-- // 사용자 지각 정보 불러오기 -->
+	<select id="selectLateInfo" resultType="Integer">
+		select count(*) as
+		late_count
+		from attend_status
+		where work_status_id = '지각' and
+		emp_id=#{id}
+		and month(attend_time) = month(now())
+		and year(attend_time)
+		= year(now());
+	</select>
+
+	<!-- //사용자 조기퇴근 정보 불러오기 -->
+	<select id="selectEarlyLeaveInfo" resultType="Integer">
+		select count(*)
+		from leave_work_early
+		where emp_id = #{id} and actual_leave_time is not
+		null and
+		time(actual_leave_time) &lt; leave_time;
+	</select>
+
+	<!-- //사용자 퇴근 미체크 정보 불러오기 -->
+	<select id="selectNotCheckedLeaveInfo" resultType="Integer">
+		select
+		count(*) as
+		no_leave_time_count
+		from attend_status
+		where leave_time is
+		null and emp_id=#{id};
+	</select>
+
+	<!-- // 이번달 공휴일 정보 불러오기 -->
+	<select id="selectHoliDays" resultType="map">
+		select holiday_date
+		from holidays
+		where year(holiday_date) = year(curdate()) and month(holiday_date) = month(curdate());
 	</select>
 	
+	<!-- // 이번달 근무일 정보 불러오기 -->
+	<select id="selectWorkingDaysThisMonth" resultType="map">
+		select work_date from attend_status where emp_id=#{id};
+	</select>
+
+	<!-- // 사용자 근무 규칙 정보 불러오기 -->
+	<select id="selectEmployeeWorkRule" resultType="map">
+		select * from
+		employee_work_rule where emp_id = #{id};
+	</select>
+
 	<!-- 출근 전인지 확인 -->
 	<select id="selectAttendStatus" resultType="map">
 		select *
-		from attend_status
+		from
+		attend_status
 		where date(work_date) = curdate() and emp_id=#{id};
 	</select>
-	
+
 	<!-- 출근 기록 남기기 -->
 	<insert id="insertAttendingWork">
-		insert into attend_status (emp_id , attend_time, leave_time, work_status_id, work_date) values (#{emp_id}, convert_tz(now(),'+00:00', '+09:00'), null, #{daily_work_rule_id}, curdate());
+		insert into attend_status (emp_id , attend_time,
+		leave_time, work_status_id, work_date) values (#{emp_id},
+		convert_tz(now(),'+00:00', '+09:00'), null, #{daily_work_rule_id},
+		curdate());
 	</insert>
-	
+
 	<!-- 퇴근 기록 남기기 -->
 	<update id="updateLeavingWork">
-		update attend_status set leave_time = convert_tz(now(),'+00:00', '+09:00') where date(work_date) = curdate() and emp_id=#{id};
+		update attend_status set leave_time =
+		convert_tz(now(),'+00:00', '+09:00') where date(work_date) = curdate()
+		and emp_id=#{id};
 	</update>
-	
+
 	<!-- 업무 상태 기록 남기기 -->
-	<insert id="insertWorkCondition" useGeneratedKeys="true" keyProperty="id">
-		insert into work_conditioin (attend_status_id, work_condition_status_id, emp_id, start_time, work_date) values (#{attend_status_id},#{status}, #{id}, convert_tz(now(),'+00:00', '+09:00'), curdate());
+	<insert id="insertWorkCondition" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into work_conditioin (attend_status_id,
+		work_condition_status_id, emp_id, start_time, work_date) values
+		(#{attend_status_id},#{status}, #{id}, convert_tz(now(),'+00:00',
+		'+09:00'), curdate());
 	</insert>
-	
+
 	<!-- 업무 상태 종료시간 업데이터 -->
 	<update id="updateWorkCondtionEndTime">
-		update work_conditioin set end_time = convert_tz(now(),'+00:00', '+09:00') where attend_status_id = #{attend_status_id};
+		update work_conditioin set end_time =
+		convert_tz(now(),'+00:00', '+09:00') where attend_status_id =
+		#{attend_status_id};
 	</update>
-	
+
 	<!-- 입력한 업무 상태 확인 -->
-	<select id="selectWorkCondition" resultType="com.clovers.dto.WorkConditionDTO">
+	<select id="selectWorkCondition"
+		resultType="com.clovers.dto.WorkConditionDTO">
 		select *
 		from work_conditioin
 		where id=#{id};
 	</select>
-	
+
 	<!-- 업무 상태 리스트 불러오기 -->
-	<select id="selectWorkConditionsList" resultType="com.clovers.dto.WorkConditionDTO">
+	<select id="selectWorkConditionsList"
+		resultType="com.clovers.dto.WorkConditionDTO">
 		select *
 		from work_conditioin
-		where date(work_date) = curdate() and emp_id=#{id};
+		where date(work_date) =
+		curdate() and emp_id=#{id};
 	</select>
 
 	<!-- // 휴가 사유 구분 불러오기 -->
 	<select id="selectRestReasonType" resultType="String">
-		select * from rest_reason_type
+		select * from
+		rest_reason_type
 	</select>
 </mapper>

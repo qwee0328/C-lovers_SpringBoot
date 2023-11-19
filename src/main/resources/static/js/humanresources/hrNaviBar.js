@@ -39,4 +39,10 @@ $(document).ready(function() {
 	$("#vacationAppBtn").on("click",function(){
 		location.href = "/humanResources/showVacationApp";
 	})
+	$("#vacationWork").on("click", function(){
+		location.href = "/humanResources";
+	})
+	$("#profileSettings").on("click",function(){
+		location.href = "/humanResources/mypage";
+	})
 });
