@@ -288,12 +288,12 @@ function settingData(){
 	}
 	
 	if($(".modalBody__number").val()!=""){ // 전화번호 정규식		
-		let regex = /^.{12,13}$/; // 10~11자 사이만 입력가능
+		let regex = /^.{11,13}$/; // 10~11자 사이만 입력가능
 		console.log(regex.test($(".modalBody__number").val()));
 		if(!regex.test($(".modalBody__number").val())){
 			Swal.fire({
 				icon: "error",
-				text: "전화번호는 10 ~ 11자로 입력해주세요."
+				text: "전화번호는 9 ~ 11자로 입력해주세요."
 			});
 			$(".modalBody__number").focus();
 			return ;
