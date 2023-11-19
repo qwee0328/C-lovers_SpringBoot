@@ -184,9 +184,7 @@ function setClock() {
 
 // 시계 시간 보정
 function modifyNumber(time) {
-	console.log(parseInt(time))
 	if (parseInt(time) < 10) {
-		console.log("초")
 		return "0" + time;
 	} else {
 		return time;
