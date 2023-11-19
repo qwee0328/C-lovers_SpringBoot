@@ -35,7 +35,7 @@
 				<i class="fa-regular fa-bell"></i>
 			</div>
 			<div class="mainHeader_profileBox">
-				<img src="/assets/profile.png" alt="" class="profileImg"/>
+<!-- 				<img src="/assets/profile.png" alt="" class="profileImg"/> -->
 			</div>
 		</div>
 	</div>
@@ -63,6 +63,13 @@
 			url:"/humanResources/headerProfile"
 		}).done(function(resp){
 			console.log(resp);
+			
+			let main_img = $("<img class='profileImg'/>");
+				main_img.attr("src","/uploads/"+resp.profile_img);
+			$(".mainHeader_profileBox").append(main_img);
+			
+			
+			
 			
 				let header__userinfo = $("<div class='header__userinfo'>");
 					let header_myinfo = $("<div class='header__myinfo'>");
