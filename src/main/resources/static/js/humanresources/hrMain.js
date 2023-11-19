@@ -43,24 +43,35 @@ window.onload = function() {
 	}).done(function(resp) {
 		console.log(resp)
 		$("#workingDyas").html(resp.length + "일");
+		// 현재 날짜를 얻기
+		let currentDate = new Date();
+		let currentDateString = currentDate.toISOString().split('T')[0]; // 날짜만 추출
+		for (let i = 0; i < resp.length; i++) {
+			// 오늘 날짜의 퇴근 시간이 있다면
+			if (resp[i].work_date.split(' ')[0] === currentDateString && resp[i].leave_time) {
+				$("#workingDyas").html(resp.length + "일");
+			} else {
+				$("#workingDyas").html(resp.length - 1 + "일");
+			}
+		}
 		calculateAndAddTimeDifference(resp);
 		console.log(resp)
-		let totalWorkingTime=0;
-		for(let i=0;i<resp.length;i++){
-			if(resp[i].timeDifference){
-				totalWorkingTime = totalWorkingTime+resp[i].timeDifference
+		let totalWorkingTime = 0;
+		for (let i = 0; i < resp.length; i++) {
+			if (resp[i].timeDifference) {
+				totalWorkingTime = totalWorkingTime + resp[i].timeDifference
 			}
 		}
 		console.log(totalWorkingTime);
-		let hour = Math.floor(totalWorkingTime/(1000*60*60));
-		let min = Math.floor(totalWorkingTime%(1000*60*60)/(1000*60));
-		
-		$("#totalWorkingTime").html(hour + "시간 " + min+"분");
-		
-		let average = totalWorkingTime/resp.length;
-		hour = Math.floor(average/(1000*60*60));
-		min = Math.floor(average%(1000*60*60)/(1000*60));
-		$("#calibratedAverage").html(hour + "시간 " + min+"분");
+		let hour = Math.floor(totalWorkingTime / (1000 * 60 * 60));
+		let min = Math.floor(totalWorkingTime % (1000 * 60 * 60) / (1000 * 60));
+
+		$("#totalWorkingTime").html(hour + "시간 " + min + "분");
+
+		let average = totalWorkingTime / resp.length;
+		hour = Math.floor(average / (1000 * 60 * 60));
+		min = Math.floor(average % (1000 * 60 * 60) / (1000 * 60));
+		$("#calibratedAverage").html(hour + "시간 " + min + "분");
 	})
 
 	$.ajax({
