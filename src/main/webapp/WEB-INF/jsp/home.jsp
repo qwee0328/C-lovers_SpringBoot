@@ -105,30 +105,30 @@
 				<div class="workCheck">
 					<div class="mainContents__title">근무체크</div>
 					<div class="mainContents__contentBox">
-						<div class="contentBox__date">10월 26일 (목)</div>
+						<div class="contentBox__date"></div>
 						<div class="contentBox__timeline">
 							<div class="timeline__time">15:03:48</div>
 							<div class="timeline__status">출근전</div>
 						</div>
 						<div class="contentBox__commute">
-							<div class="commute__work">
+							<div class="commute__work" id="attendBtn">
 								<div class="work__text">출근하기</div>
-								<div class="work__time">00:00:00</div>
+								<div class="work__time" id="attendTime">00:00:00</div>
 							</div>
 							<div class="mainContents__line"></div>
-							<div class="commute__work">
+							<div class="commute__work" id="leaveBtn">
 								<div class="work__text">퇴근하기</div>
-								<div class="work__time">00:00:00</div>
+								<div class="work__time" id="leaveTime">00:00:00</div>
 							</div>
 						</div>
-						<div class="contentBox__btns">
+						<div class="contentBox__btns" id="workConditionBtns">
 							<div class="btns__line">
-								<button>업무</button>
-								<button>외출</button>
+								<button id="working">업무</button>
+								<button id="goingOut">외출</button>
 							</div>
 							<div class="btns__line">
-								<button>회의</button>
-								<button>외근</button>
+								<button id="conference">회의</button>
+								<button id="outside">외근</button>
 							</div>
 						</div>
 					</div>

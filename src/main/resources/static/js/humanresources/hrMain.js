@@ -4,6 +4,9 @@ window.onload = function() {
 	setClock();
 	setInterval(setClock, 1000);
 
+	// 현재 근무상태 불러오기
+	selectWorkConditionsList();
+
 	// 사용자 지각 현황 불러오기
 	$.ajax({
 		url: "/humanResources/selectLateInfo",
@@ -109,9 +112,9 @@ window.onload = function() {
 				// 출근 했을 경우
 				let attendTimestamp = resp.attend_time;
 				let time = new Date(attendTimestamp);
-				let hour = time.getHours();
-				let minutes = time.getMinutes();
-				let sec = time.getSeconds();
+				let hour = modifyNumber(time.getHours());
+				let minutes = modifyNumber(time.getMinutes());
+				let sec = modifyNumber(time.getSeconds());
 				if (minutes == 0) {
 					minutes = minutes.toString().padStart(2, '0');
 				}
@@ -131,12 +134,15 @@ window.onload = function() {
 						createCommute_Attend(resp.attend_time, "출근");
 					}
 
+					// 현재 근무상태 불러오기
+					selectWorkConditionsList();
+
 					$.ajax({
 						url: "/humanResources/selectWorkConditionsList",
 						dataType: "json"
 					}).done(function(respList) {
 						for (let i = 0; i < respList.length; i++) {
-							createWorkCondition(respList[i]);
+							updateWorkCondition(respList[i]);
 						}
 					})
 
@@ -156,9 +162,9 @@ window.onload = function() {
 
 					let leaveTimestamp = resp.leave_time;
 					let time = new Date(leaveTimestamp);
-					let hour = time.getHours();
-					let minutes = time.getMinutes();
-					let sec = time.getSeconds();
+					let hour = modifyNumber(time.getHours());
+					let minutes = modifyNumber(time.getMinutes());
+					let sec = modifyNumber(time.getSeconds());
 
 					if (minutes == 0) {
 						minutes = minutes.toString().padStart(2, '0');
@@ -180,7 +186,7 @@ window.onload = function() {
 						dataType: "json"
 					}).done(function(respList) {
 						for (let i = 0; i < respList.length; i++) {
-							createWorkCondition(respList[i]);
+							updateWorkCondition(respList[i]);
 						}
 						createCommute_Attend(resp.leave_time, "퇴근");
 					})
@@ -212,12 +218,9 @@ window.onload = function() {
 				url: "/humanResources/insertWorkCondition?status=업무",
 				dataType: "json"
 			}).done(function(resp) {
-				$("#working").prop("disabled", true);
-				$("#goingOut").prop("disabled", false);
-				$("#conference").prop("disabled", false);
-				$("#outside").prop("disabled", false);
+				statusWorking();
 
-				createWorkCondition(resp);
+				updateWorkCondition(resp);
 			})
 		});
 	}
@@ -227,12 +230,9 @@ window.onload = function() {
 				url: "/humanResources/insertWorkCondition?status=외출",
 				dataType: "json"
 			}).done(function(resp) {
-				$("#working").prop("disabled", false);
-				$("#goingOut").prop("disabled", true);
-				$("#conference").prop("disabled", false);
-				$("#outside").prop("disabled", false);
+				statusGoingOut();
 
-				createWorkCondition(resp);
+				updateWorkCondition(resp);
 			})
 		});
 	}
@@ -242,12 +242,9 @@ window.onload = function() {
 				url: "/humanResources/insertWorkCondition?status=회의",
 				dataType: "json"
 			}).done(function(resp) {
-				$("#working").prop("disabled", false);
-				$("#goingOut").prop("disabled", false);
-				$("#conference").prop("disabled", true);
-				$("#outside").prop("disabled", false);
+				statusConference();
 
-				createWorkCondition(resp);
+				updateWorkCondition(resp);
 			})
 		});
 	}
@@ -257,12 +254,9 @@ window.onload = function() {
 				url: "/humanResources/insertWorkCondition?status=외근",
 				dataType: "json"
 			}).done(function(resp) {
-				$("#working").prop("disabled", false);
-				$("#goingOut").prop("disabled", false);
-				$("#conference").prop("disabled", false);
-				$("#outside").prop("disabled", true);
+				statusOutside();
 
-				createWorkCondition(resp);
+				updateWorkCondition(resp);
 			})
 		});
 	}
@@ -286,25 +280,7 @@ function calculateAndAddTimeDifference(dateList) {
 	}
 }
 
-// 근무 현황 업데이트
-function createWorkCondition(resp) {
-	let startTimestamp = resp.start_time;
-	let time = new Date(startTimestamp);
-	let hour = time.getHours();
-	let minutes = time.getMinutes();
-	if (minutes == 0) {
-		minutes = minutes.toString().padStart(2, '0');
-	}
 
-	let commuteTable__row = $("<div>").attr("class", "commuteTable__row");
-	let commute__left = $("<div>").attr("class", "commute__left");
-	let commute__circle = $("<div>").attr("class", "commute__circle");
-	let commute__time = $("<div>").attr("class", "commute__time").html(hour + " : " + minutes);
-
-	commute__left.append(commute__circle).append(commute__time).append($("<div>").html(resp.work_condition_status_id));
-	commuteTable__row.append(commute__left);
-	$(".commuteTable").append(commuteTable__row);
-}
 
 // 시계 움직이기
 function setClock() {
@@ -338,6 +314,30 @@ function modifyNumber(time) {
 	}
 }
 
+function selectWorkConditionsList() {
+	// 현재 근무 상태 불러오기
+	$.ajax({
+		url: "/humanResources/selectWorkConditionsList",
+		dataType: "json"
+	}).done(function(respList) {
+		if (respList.length === 0) {
+			window.status = "출근전";
+			$(".statusBox").html(window.status);
+		} else {
+			console.log(respList)
+			if (respList[respList.length - 1].work_condition_status_id === "업무") {
+				statusWorking();
+			} else if (respList[respList.length - 1].work_condition_status_id === "외출") {
+				statusGoingOut();
+			} else if (respList[respList.length - 1].work_condition_status_id === "회의") {
+				statusConference();
+			} else if (respList[respList.length - 1].work_condition_status_id === "외근") {
+				statusOutside();
+			}
+		}
+	})
+}
+
 // 근무 현황 출력
 function createCommute_Attend(attend_time, title) {
 	let attendTimestamp = attend_time;
@@ -363,4 +363,64 @@ function createCommute_Attend(attend_time, title) {
 	commute__right.append($("<div>").html(title));
 	commuteTable__row.append(commute__left).append(commute__right);
 	$(".commuteTable").append(commuteTable__row);
+}
+
+// 근무 현황 업데이트
+function updateWorkCondition(resp) {
+	let startTimestamp = resp.start_time;
+	let time = new Date(startTimestamp);
+	let hour = time.getHours();
+	let minutes = time.getMinutes();
+	if (minutes == 0) {
+		minutes = minutes.toString().padStart(2, '0');
+	}
+
+	let commuteTable__row = $("<div>").attr("class", "commuteTable__row");
+	let commute__left = $("<div>").attr("class", "commute__left");
+	let commute__circle = $("<div>").attr("class", "commute__circle");
+	let commute__time = $("<div>").attr("class", "commute__time").html(hour + " : " + minutes);
+
+	commute__left.append(commute__circle).append(commute__time).append($("<div>").html(resp.work_condition_status_id));
+	commuteTable__row.append(commute__left);
+	$(".commuteTable").append(commuteTable__row);
+}
+
+function statusWorking() {
+	$("#working").prop("disabled", true);
+	$("#goingOut").prop("disabled", false);
+	$("#conference").prop("disabled", false);
+	$("#outside").prop("disabled", false);
+
+	window.status = "업무중";
+	$(".statusBox").html(window.status);
+}
+
+function statusGoingOut() {
+	$("#working").prop("disabled", false);
+	$("#goingOut").prop("disabled", true);
+	$("#conference").prop("disabled", false);
+	$("#outside").prop("disabled", false);
+
+	window.status = "외출중";
+	$(".statusBox").html(window.status);
+}
+
+function statusConference() {
+	$("#working").prop("disabled", false);
+	$("#goingOut").prop("disabled", false);
+	$("#conference").prop("disabled", true);
+	$("#outside").prop("disabled", false);
+
+	window.status = "회의중";
+	$(".statusBox").html(window.status);
+}
+
+function statusOutside() {
+	$("#working").prop("disabled", false);
+	$("#goingOut").prop("disabled", false);
+	$("#conference").prop("disabled", false);
+	$("#outside").prop("disabled", true);
+
+	window.status = "외근중";
+	$(".statusBox").html(window.status);
 }
