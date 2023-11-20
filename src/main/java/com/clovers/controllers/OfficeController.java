@@ -19,6 +19,8 @@ import com.clovers.dto.JobDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.services.OfficeService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RestController
 @RequestMapping("/office")
@@ -26,6 +28,9 @@ public class OfficeController {
 	// 오피스 관리 컨트롤러
 	@Autowired
 	private OfficeService oservice;
+	
+	@Autowired
+	private HttpSession session;
 	
 	// 부서 명 불러오기
 	@GetMapping("/detpTask")
@@ -141,5 +146,12 @@ public class OfficeController {
 	@RequestMapping("/selectDetpTaskEmpInfo")
 	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
 		return oservice.selectDetpTaskEmpInfo(task_id);
+	}
+	
+	
+	// 내 정보 불러오기 - 이름, 부서명, id, session 정보 이용
+	@RequestMapping("/getMyInfo")
+	public Map<String, String> searchUser(){
+		return oservice.searchUser((String)session.getAttribute("loginID")).get(0);
 	}
 }

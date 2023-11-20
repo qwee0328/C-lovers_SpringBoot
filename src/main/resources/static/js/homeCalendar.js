@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			googleCalendarId: "ko.south_korea.official#holiday@group.v.calendar.google.com",
 			className: "koHolidays",
 			color: "transparent"
-		}, {
+		}
+		, {
 			events: function(info, successCallback) {
 
 				let eventDatas = [];
@@ -103,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-			}
-		}],
+			}}
+		],
 
 
 		headerToolbar: { // 캘린더 header

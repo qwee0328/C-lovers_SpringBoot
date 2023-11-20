@@ -8,13 +8,12 @@
 	padding:20px;
 }
 
-.naviBar__favoriteAddress,
-.naviBar__personalAddress,
-.naviBar__sharedAddress {
+.naviBar__personalCalendar,
+.naviBar__sharedCalendar,
+.naviBar__trashCalendar {
   padding: 0px 20px;
 }
-.naviBar__applyBtns,
-.naviBar__regularEmployeeMenu {
+.naviBar__applyBtns{
   border-bottom: 1px solid #7d7d7d40;
 }
 
@@ -62,9 +61,21 @@
   background-color: #dcedd4 !important;
 }
 
-.naviConp__icon {
+.naviConp__icon, .naviConp__calColor {
   margin-right: 10px;
 }
+
+.naviConp__calColor{
+	width:15px;
+	height: 15px;
+	border:1px solid #7d7d7d;
+}
+
+.customMenu, .trashMenu {
+	display:flex;
+	align-items: center;
+}
+
 .toggleInner{
   padding-left: 45px;
 }
@@ -92,8 +103,7 @@
 	margin: 0px 20px 0px 20px;
 }
 
-
-.removeNavi, .naviConp__addTag{
+.editNavi, .naviConp__addTag{
 	font-size: 12px;
 	display: flex;
 	align-items: center;
@@ -109,19 +119,19 @@
 	position:relative;
 }
 
-.naviConp:hover .removeNavi, .naviConp:hover .naviConp__addTag{
+.naviConp:hover .editNavi, .naviConp:hover .naviConp__addTag{
 	border: 2px solid #7d7d7d70;
 }
 
-.naviConp:hover .removeNavi>i, .naviConp:hover .naviConp__addTag>i{
+.naviConp:hover .editNavi>i, .naviConp:hover .naviConp__addTag>i{
 	color: #7d7d7d70;
 }
 
-.removeNavi:hover, .naviConp__addTag:hover{
+.editNavi:hover, .naviConp__addTag:hover{
 	background-color: #7d7d7d30;
 }
 
-.removeNavi>i, .naviConp__addTag>i{
+.editNavi>i, .naviConp__addTag>i{
 	color:transparent;
 	display: flex;
 	justify-content: center;
