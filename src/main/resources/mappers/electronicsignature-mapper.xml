@@ -14,46 +14,231 @@
 			#{item}
 		</foreach>
 	</select>
-	
+
+	<select id="selectEmpJobLevelList" resultType="map">
+		select *
+		from emp_job_sec_level
+		where id in
+		<foreach item="item" collection="array" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+	</select>
+
 	<!-- // 휴가 문서 번호 구하기 -->
 	<select id="selectVcationDocmuentCount" resultType="int">
-		select substring(id, char_length(id)-3) as last_four_digits
+		select
+		substring(id, char_length(id)-3) as last_four_digits
 		from document
-		where id like '%휴가%'
-		order by cast(substring(id, -4) as unsigned) desc
+		where id like #{keyword}
+		order by cast(substring(id, -4) as unsigned)
+		desc
 		limit 1;
 	</select>
-	
+
 	<!-- // 문서 생성 -->
 	<insert id="insertDocument">
-		insert into document (id, document_type_id, save_period, security_grade, report_date, title, content)
-		values (#{id}, #{document_type_id}, #{save_period} ,#{security_grade},convert_tz(now(), '+00:00', '+09:00'), #{title}, #{content})
+		insert into document (id, document_type_id,
+		save_period, security_grade, report_date, title, content,temporary,
+		emp_id)
+		values (#{id}, #{document_type_id}, #{save_period}
+		,#{security_grade},convert_tz(now(), '+00:00', '+09:00'), #{title},
+		#{content},#{temporary}, #{emp_id})
 	</insert>
-	
+
 	<!-- // 문서 등록자 정보 생성 -->
 	<insert id="insertDrafter">
 		insert into document_drafter (document_id, emp_id)
 		values (#{document_id}, #{emp_id})
 	</insert>
-	
+
+	<insert id="insertDrafterList">
+		insert into document_drafter (document_id, emp_id) values
+		<foreach collection="list" item="drafters" separator=",">
+			(#{drafters.document_id}, #{drafters.emp_id})
+		</foreach>
+	</insert>
+
 	<!-- // 문서 결재선 등록 -->
 	<insert id="insertApprovals">
 		insert into document_approvals (document_id, emp_id, sec_level) values
 		<foreach collection="list" item="approvals" separator=",">
-			(#{approvals.document_id}, #{approvals.emp_id}, #{approvals.sec_level})
+			(#{approvals.document_id}, #{approvals.emp_id},
+			#{approvals.sec_level})
 		</foreach>
 	</insert>
-	
+
+	<!-- // 문서 파일 등록 -->
+	<insert id="insertDocumentFile">
+		insert into document_file value (0, #{document_id},
+		#{sys_name}, #{ori_name})
+	</insert>
+
 	<!-- // 휴가 신청일 정보 등록 -->
-	<insert id="insertVacationApplicationInfo" parameterType="java.util.List">
-		insert into vacation_application_info (document_id, vacation_date, rest_reson_type, vacation_reason) values
+	<insert id="insertVacationApplicationInfo"
+		parameterType="java.util.List">
+		insert into vacation_application_info (document_id, vacation_date,
+		rest_reson_type, vacation_reason) values
 		<foreach collection="list" item="vacationInfo" separator=",">
-			(#{vacationInfo.document_id}, #{vacationInfo.vacation_date}, #{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
+			(#{vacationInfo.document_id}, #{vacationInfo.vacation_date},
+			#{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
 		</foreach>
 	</insert>
+
+	<!-- // 지출 결의서 정보 등록 -->
+	<insert id="insertExpenseResolutionInfo">
+		insert into expense_resolution_info value(0,
+		#{document_id},
+		#{expense_category},#{expense_date},#{spender_id},#{summary})
+	</insert>
 	
+	<!-- // 업무 연락 정보 등록 -->
+	<insert id="insertBusinessContactInfo">
+		insert into business_contact_info value (0, #{document_id}, #{business_contents})
+	</insert>
+
+	<!-- // 직전 결재자들의 결재 결과 -->
+	<!-- 로그인한 결재자와 같은 document_id를 가지고, 로그인한 결재자보다 높은 레벨(낮은 직급)인 사람의 결재 결과를 
+		가져옴 -->
+	<select id="previousApprovalResult" resultType="map">
+		select
+		document_id, approver_status from document_list_info dli where exists
+		(select 1 from document_list_info where approver_id = #{loginID} and
+		dli.document_id = document_list_info.document_id and
+		dli.approver_level > document_list_info.approver_level)
+	</select>
+
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-		select document_id, title, drafter_name, report_date, status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and status = '대기'
+		SELECT document_id, title, drafter_name, drafter_id, approver_id,
+		report_date, approver_status
+		FROM document_list_info
+		WHERE total_status
+		= '대기'
+		AND drafter_id = #{loginID}
+		OR (approver_id = #{loginID}
+		<!-- 제외할 문서 번호가 있을 때만 실행 -->
+		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
+			AND document_id NOT IN
+			<foreach collection="ExcludedIds" item="document_id" open="("
+				close=")" separator=",">
+				#{document_id}
+			</foreach>
+		</if>
+		)
+		ORDER BY report_date desc;
+	</select>
+
+	<!-- // 진행 중인 문서 대기 리스트 출력 -->
+	<select id="progressWaitList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id,
+		report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+		AND
+		drafter_id = #{loginID}
+		OR (approver_id = #{loginID}
+		<!-- 제외할 문서 번호가 있을 때만 실행 -->
+		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
+			AND document_id NOT IN
+			<foreach collection="ExcludedIds" item="document_id" open="("
+				close=")" separator=",">
+				#{document_id}
+			</foreach>
+		</if>
+		) AND approver_status = '대기'
+		ORDER BY report_date desc;
+	</select>
+
+	<!-- // 진행 중인 문서 결과 리스트 출력 -->
+	<select id="progressCheckList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id,
+		approver_status, report_date
+		FROM document_list_info
+		WHERE total_status
+		= '대기'
+		AND drafter_id = #{loginID}
+		OR (approver_id = #{loginID}
+		<!-- 제외할 문서 번호가 있을 때만 실행 -->
+		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
+			AND document_id NOT IN
+			<foreach collection="ExcludedIds" item="document_id" open="("
+				close=")" separator=",">
+				#{document_id}
+			</foreach>
+		</if>
+		) AND approver_status = '승인'
+		ORDER BY report_date desc;
+	</select>
+
+	<!-- // 진행 중인 문서 진행 리스트 출력 -->
+	<select id="progressList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id,
+		report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+		AND
+		drafter_id = #{loginID}
+		OR (approver_id = #{loginID}
+		<!-- 제외할 문서 번호가 있을 때만 실행 -->
+		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
+			AND document_id NOT IN
+			<foreach collection="ExcludedIds" item="document_id" open="("
+				close=")" separator=",">
+				#{document_id}
+			</foreach>
+		</if>
+		) AND approver_status = '승인'
+		ORDER BY report_date desc;
+	</select>
+
+	<!-- // 문서함 전체 리스트 출력 -->
+	<select id="documentTotalList" resultType="map">
+		SELECT *
+		FROM
+		document_list_info
+		WHERE total_status != '대기'
+		AND (drafter_id =
+		#{loginID}
+		OR approver_id = #{loginID})
+	</select>
+
+	<!-- // 문서함 기안 리스트 출력 -->
+	<select id="documentDraftingList" resultType="map">
+		SELECT *
+		FROM
+		document_list_info
+		WHERE total_status = '승인'
+		AND drafter_id = #{loginID}
+	</select>
+
+	<!-- // 문서함 결재 리스트 출력 -->
+	<select id="documentApprovalList" resultType="map">
+		SELECT *
+		FROM
+		document_list_info
+		WHERE total_status = '승인'
+		AND approver_id =
+		#{loginID}
+	</select>
+
+	<!-- // 문서함 반려 리스트 출력 -->
+	<select id="documentRejectList" resultType="map">
+		SELECT *
+		FROM
+		document_list_info
+		WHERE total_status = '반려'
+		AND (drafter_id =
+		#{loginID}
+		OR approver_id = #{loginID})
+	</select>
+
+	<!-- // 임시저장 리스트 출력 -->
+	<select id="temporaryList" resultType="map">
+		SELECT *
+		FROM
+		document_list_info
+		WHERE drafter_id = #{loginID}
+		AND temporary = true
 	</select>
 </mapper>

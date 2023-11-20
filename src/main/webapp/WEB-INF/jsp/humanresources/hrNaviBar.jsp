@@ -40,7 +40,7 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-chart-simple"></i></div>
 	               <div class="naviConp__title">부서 근무 현황</div>
 	           </div>
-	           <div class="naviConp">
+	           <div class="naviConp" id="employeeInfo">
 	               <div class="naviConp__icon"><i class="fa-solid fa-sitemap"></i></div>
 	               <div class="naviConp__title">임직원 정보</div>
 	           </div>

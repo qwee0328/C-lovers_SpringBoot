@@ -97,10 +97,10 @@ public class OfficeService {
 		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
 			System.out.println("총괄 등록");
 			dao.insertTotalAdmin(id);
-		}else if(taskName.equals("인사팀")) {
+		}else if(taskName.contains("인사")) {
 			System.out.println("인사 등록");
 			dao.insertHRAdmin(id);
-		}else if(taskName.equals("재무회계팀")) {
+		}else if(taskName.contains("회계")) {
 			System.out.println("회계 등록");
 			dao.insertACAdmin(id);
 		}
@@ -136,7 +136,7 @@ public class OfficeService {
 
 	// 사용자 이름, id 검색하기
 	public List<Map<String, String>> searchUser(String keyword) {
-		return dao.searchUser(keyword);
+		return dao.searchUser("%"+keyword+"%");
 	}
 
 	// 부서별 부서명, 인원 수 불러오기
@@ -162,5 +162,30 @@ public class OfficeService {
 	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
 	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
 		return dao.selectDetpTaskEmpInfo(task_id);
+	}
+	
+	// 팀별(생산1팀,2팀..)인원수, 부서명
+	public List<Map<String, Object>> selectAllTaskNameEmpo(){
+		return dao.selectAllTaskNameEmpo();
+	}
+	
+	// 임직원 정보에서 부서 클릭하면 정보
+	public List<Map<String, Object>> selectDeptEmpo(){
+		return dao.selectDeptEmpo();
+	}
+	
+	// 부서 클릭하면 정보 
+	public List<Map<String, Object>> selectByDeptName(String dept_name){
+		return dao.selectByDeptName(dept_name);
+	}
+	
+	// 팀 클릭하면 정보
+	public List<Map<String, Object>> selectByTaskName(String task_name){
+		return dao.selectByTaskName(task_name);
+	}
+	
+	// 임직원 검색
+	public List<Map<String, Object>> searchByName(String name){
+		return dao.searchByName(name);
 	}
 }

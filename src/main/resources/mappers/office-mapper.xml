@@ -150,4 +150,32 @@
 		from mypageData
 		where dept_task_id = #{task_id};
 	</select>
+	
+<!-- 	팀별(생산1팀,2팀..)인원수, 부서명 -->
+	<select id="selectAllTaskNameEmpo" resultType="map">
+		select count(*) as count, task_name,group_concat(distinct dept_name) as dept_name, office_name
+		from company_hierarchy_view 
+		where dept_name != "미분류" group by task_name,office_name;
+	</select>
+	
+<!-- 	임직원 정보에서 부서 클릭하면 정보 -->
+	<select id="selectDeptEmpo" resultType="map">
+		select * from employee_dept_task_view;
+	</select>
+	
+<!-- 	부서 클릭하면 정보  -->
+	<select id="selectByDeptName" resultType="map">
+		select * from employee_dept_task_view where dept_name = #{dept_name};
+	</select>
+	
+<!-- 	팀 클릭하면 정보 -->
+	<select id="selectByTaskName" resultType="map">
+		select * from employee_dept_task_view where task_name = #{task_name};
+	</select>
+	
+<!-- 	임직원검색 -->
+	<select id="searchByName" resultType="map">
+		select * from employee_dept_task_view where name like #{name};
+	</select>
+	
 </mapper>

@@ -52,10 +52,17 @@ $(document).ready(function() {
 	$("#vacationAppBtn").on("click", function() {
 		location.href = "/humanResources/showVacationApp";
 	})
+
 	$("#vacationWork").on("click", function() {
 		location.href = "/humanResources";
 	})
 	$("#profileSettings").on("click", function() {
 		location.href = "/humanResources/mypage";
 	})
+	
+	
+	 // 임직원 관리 이동
+   	$("#employeeInfo").on("click",function(){
+   		location.href = "/humanResources/employeeInfo";
+   	})
 });

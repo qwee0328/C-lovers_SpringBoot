@@ -24,4 +24,5 @@ public class DocumentDTO {
 	private String content;
 	private boolean temporary;
 	private String status;
+	private String emp_id;
 }

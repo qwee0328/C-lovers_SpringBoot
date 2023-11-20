@@ -34,6 +34,14 @@ public class HumanResourcesDAO {
 	public int update(Map<String, String> param) {
 		return db.update("HumanResources.update", param);
 	}
+	
+	public int updateNoImg(Map<String, String> param) {
+		return db.update("HumanResources.updateNoImg", param);
+	}
+	
+	public int updateNoImag(Map<String, String> param) {
+		return db.update("HumanResources.updateNoImag", param);
+	}
 
 	// 사용자 지각 정보 불러오기
 	public int selectLateInfo(String id) {
@@ -105,5 +113,10 @@ public class HumanResourcesDAO {
 	// 휴가 사유 구분 불러오기
 	public List<String> selectRestReasonType() {
 		return db.selectList("HumanResources.selectRestReasonType");
+	}
+	
+	// 임직원 정보 전부 불러오기
+	public List<MemberDTO> employeeSelectAll() {
+		return db.selectList("HumanResources.employeeSelectAll");
 	}
 }
