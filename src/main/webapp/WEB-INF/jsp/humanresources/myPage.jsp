@@ -210,32 +210,34 @@
 	
 	
 	// 내 정보 관리 클릭
-    $(".profileBtn").click(function () {
+//     $(".profileBtn").click(function () {
         
-    	// 비밀번호가 사원의 이름과 같으면 변경하는 페이지로 이동시킴
-        $.ajax({
-        	url:"/humanResources/recommendChangPw",
-        	type:"POST",
-        	data : {
-        		id : $(".inputIdNum").val(),
-        		name : $(".inputNameNum").val()
-        	}
-        }).done(function(resp){
-        	console.log(resp);
-        	if(resp == "변경추천"){
-        		alert("비밀번호를 변경해주세요.");
-        		location.href="/humanResources/goChangePw";
-        	}else{
-        		$(".profileBtn").css("display", "none");
-                $(".profileBtnCancle").css("display", "inline");
-                $(".profileBtnSave").css("display", "inline");
-                $(".profileBoxClick").css("display","inline");
+//     	// 비밀번호가 사원의 이름과 같으면 변경하는 페이지로 이동시킴
+//         $.ajax({
+//         	url:"/humanResources/recommendChangPw",
+//         	type:"POST",
+//         	data : {
+//         		id : $(".inputIdNum").val(),
+//         		name : $(".inputNameNum").val()
+//         	}
+//         }).done(function(resp){
+//         	console.log(resp);
+//         	if(resp == "변경추천"){
+//         		alert("비밀번호를 변경해주세요.");
+//         		location.href="/humanResources/goChangePw";
+//         	}else{
+//         		$(".profileBtn").css("display", "none");
+//                 $(".profileBtnCancle").css("display", "inline");
+//                 $(".profileBtnSave").css("display", "inline");
+//                 $(".profileBoxClick").css("display","inline");
 
-                $(".mypageBox__profileBoxTop").find(".profileSetting").html("내 정보 관리");
-                $(".profileBoxMid").css("display", "none");
-        	}
-        })
-    });
+//                 $(".mypageBox__profileBoxTop").find(".profileSetting").html("내 정보 관리");
+//                 $(".profileBoxMid").css("display", "none");
+//         	}
+//         })
+//     });
+	
+
 
     // 취소 클릭
     $(".profileBtnCancle").click(function () {

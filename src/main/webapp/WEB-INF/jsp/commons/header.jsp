@@ -95,6 +95,7 @@
 		}).done(function(resp){
 			console.log(resp);
 			
+			
 			let img;
 			
 			let main_img = $("<img class='profileImg'/>");
@@ -116,10 +117,11 @@
 				
 			$(".profileName").html(resp.name);
 			$(".profileEmail").html(resp.email);
-						
-			
+					
 		});
 	})
+	
+	
 	
 	// 민경 추가
 	$(document).on("click",".mainHeader_profileBox",function(){

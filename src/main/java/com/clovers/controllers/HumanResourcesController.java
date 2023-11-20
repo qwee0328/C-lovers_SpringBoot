@@ -60,13 +60,19 @@ public class HumanResourcesController {
 //	비밀번호 변경안했으면 변경하게..
 	@ResponseBody
 	@RequestMapping("/recommendChangPw")
-	public String reChangePw(String id,String name) {
-		System.out.println(id+" : "+name);
-		String pw = hrservice.reChangePw(id);
+	public String reChangePw(String id,String pw) {
+		System.out.println(id+" : "+pw);
 		
-		String enPw = EncryptionUtils.getSHA512(EncryptionUtils.kR_EnKeyboardConversion(name));
+		MemberDTO list = hrservice.selectById(id);
 		
-		if(pw.equals(enPw)) {
+		// 사원의 이름을 암호화 한 값
+		String enPw = EncryptionUtils.getSHA512(EncryptionUtils.kR_EnKeyboardConversion(list.getName()));
+		System.out.println(enPw);
+		
+		// DB에 있는 비밀번호 값
+		String pwdb = hrservice.reChangePw(id);
+		
+		if(pwdb.equals(enPw)) {
 			return "변경추천";
 		}
 		return "변경완료";
