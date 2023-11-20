@@ -1,0 +1,314 @@
+@charset "UTF-8";
+
+input[type=radio], label {
+    margin: 0;
+}
+input[type=radio]{
+	margin-right: 5px;
+}
+
+.container {
+	display: flex;
+	width: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.electronicsSignatureApp {
+	width: calc(100% - 250px);
+	height: calc(100vh - 60px);
+	overflow: hidden;
+	position: relative;
+}
+
+.electronicsSignatureApp__body {
+	overflow: auto;
+	position: absolute;
+    top: 66px;
+    height: calc(100% - 66px);
+    width: 100%;
+    padding: 0 24px;
+}
+
+.electronicsSignatureApp__body::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+}
+
+.electronicsSignatureApp__body::-webkit-scrollbar-thumb {
+	background-color: #7d7d7d60;
+	border-radius: 10px;
+	border: 7px solid transparent;
+	/* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+
+.electronicsSignatureApp__body::-webkit-scrollbar-track {
+	background-color: transparent;
+	/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.draftingBtns {
+	padding: 20px 24px;
+	position: fixed;
+	background-color: white;
+	width: 100%;
+}
+
+.noneBackgroundBtn {
+	background-color: transparent;
+	border: none;
+	color: #75b47d;
+	font-size: 18px;
+	cursor: pointer;
+	height: 26px;
+	font-weight: 400;
+}
+
+.noneBackgroundBtn:not(:first-child) {
+	margin-left: 50px;
+}
+
+.basicSetting,
+.approvalLine,
+.esTitle,
+.detailDiv,
+.mainBox,
+.fileListBox {
+	min-width: 950px;
+	margin-top: 50px;
+}
+.fileListBox{
+	margin-bottom: 50px;
+}
+
+.title {
+	font-weight: 700;
+	font-size: 18px;
+	margin-bottom: 15px;
+}
+
+.table__row {
+	display: flex;
+}
+
+.table__header {
+	background-color: #f3f7f1;
+	width: 150px;
+	min-height: 50px;
+	border: 1px solid #7d7d7d40;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.table__td {
+	display: flex;
+	align-items: center;
+	border: 1px solid #7d7d7d40;
+	height: 50px;
+	padding-left: 10px;
+}
+
+.basicSetting__table .table__td {
+	width: calc((100% - 300px) / 2);
+	position: relative;
+}
+
+#preservationPeriod {
+	position: relative;
+}
+
+.tooltip {
+	display: none;
+	font-size: 13px;
+	border: 1px solid #7d7d7d40;
+	position: absolute;
+	width: 600px;
+	background-color: white;
+	padding: 10px;
+	top: 50px;
+	z-index: 2;
+}
+
+#level__tooltip {
+	right: 0px;
+}
+
+.approvalLine>.title>button {
+	margin-left: 30px;
+	display: none;
+}
+
+.approvalLine__table {
+	display: none;
+}
+
+.table__approvalLine,.table__applyLine {
+	border: 1px solid #7d7d7d40;
+	width: calc(100% - 110px);
+	min-height: 50px;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 20px;
+}
+
+.lineDiv {
+	display: flex;
+	align-items: center;
+}
+
+.lineDiv:not(:last-child) {
+	margin-bottom: 10px;
+	
+}
+.table__applyLine>.lineDiv>i.fas,
+.table__approvalLine>.lineDiv>i.fas {
+	font-size: 5px;
+	font-weight: 600;
+}
+
+.infoDiv {
+	margin-top: 10px;
+}
+
+.esTitle {
+	display: none;
+}
+
+.titleInput {
+	width: 100%;
+	padding: 5px 10px;
+}
+
+.documentType,
+.selectorType {
+	display: flex;
+	justify-content: space-between;
+	width: 150px;
+	padding: 5px 10px;
+	border: 1px solid #7d7d7d40;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.selectorType:not(:first-child) {
+	margin-left: 10px;
+}
+
+.documentType__option,
+.selector__option {
+	display: none;
+	position: absolute;
+	top: 43px;
+	left: 10px;
+	border: 1px solid #7d7d7d40;
+	border-radius: 4px;
+	width: 150px;
+	background-color: white;
+	z-index: 999;
+}
+
+.option__item {
+	padding: 5px 10px;
+}
+
+.option__item:hover {
+	background-color: #dcedd4;
+}
+
+.explanation {
+	margin-left: 15px;
+	border: 1px solid #7d7d7d40;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.explanation>i {
+	font-size: 12px;
+	color: #6c6c72;
+	cursor: pointer;
+}
+
+.mainBox {
+	display: none;
+}
+
+.table__srLine {
+	border: 1px solid #7d7d7d40;
+	width: calc(100% - 110px);
+	min-height: 50px;
+	padding: 0px 10px;
+	display: flex;
+	align-items: center;
+}
+
+.table__srLine input:not(:first-child) {
+	margin-left: 20px;
+}
+
+.dateSelectBox {
+	position: relative;
+}
+
+.dateSelectBox>.selector__option {
+	position: absolute;
+	top: 38px;
+	left: 0px;
+	z-index: 999;
+}
+
+#month>.selector__option {
+	height: 172px;
+	overflow-y: auto;
+}
+
+#month>.selector__option::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+}
+
+#month>.selector__option::-webkit-scrollbar-thumb {
+	background-color: #7d7d7d60;
+	border-radius: 10px;
+	border: 7px solid transparent;
+	/* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+
+#month>.selector__option::-webkit-scrollbar-track {
+	background-color: transparent;
+	/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+#searchUser {
+	padding: 5px 10px;
+	border: 1px solid #7d7d7d40;
+}
+
+#corporationCard {
+	display: none;
+}
+
+#summary {
+	resize: none;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #7d7d7d40;
+	border-radius: 4px;
+}
+
+.businessContact__table {
+	display: none;
+}
+
+#summernote {
+	display: none;
+}
+
+.fileListBox {
+	display: none;
+}

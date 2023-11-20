@@ -1,6 +1,7 @@
 package com.clovers.controllers;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,6 +136,14 @@ public class HumanResourcesController {
 	public int selectAbsenteeismInfo() {
 		String id = (String)session.getAttribute("loginID");
 		return hrservice.selectAbsenteeismInfo(id);
+	}
+	
+	// 사용자 근무 시간 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectWorkingDaysThisMonth")
+	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(){
+		String id = (String)session.getAttribute("loginID");
+		return hrservice.selectWorkingDaysThisMonth(id);
 	}
 	
 	// 사용자 근무 규칙 정보 불러오기

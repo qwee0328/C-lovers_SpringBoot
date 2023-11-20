@@ -1,7 +1,9 @@
 let processUserID = []; // 지금까지 처리로 체크된 User 아이디
+let applicationUserID = []; // 지금까지 신청으로 체크된 User 아이디
 $(document).ready(function() {
 	// 처리 인원 처음에 초기화
 	$(".process span").text(processUserID.length);
+
 	// 로그인 아이디 해당 정보 불러오기
 	$.ajax({
 		url: "/office/searchUserAjax",
@@ -9,10 +11,13 @@ $(document).ready(function() {
 		data: { keyword: $("#loginID").val() },
 		type: "POST"
 	}).done(function(resp) {
+		console.log("ㄱ")
 		let userInfo = $("<div>")
-			.attr("class", "userInfo")
+			.attr("class", "userInfo").attr("id", resp[0].id)
 			.html(resp[0].name + " (" + resp[0].task_name + ")");
 		$(".approvalLine__applyEmployee").append(userInfo);
+		applicationUserID.push(resp[0].id);
+		$(".application span").text(applicationUserID.length);
 	})
 
 	// 모달창 시작할 때 인원수 정보 불러오기 -> 맨 왼쪽 부서
@@ -22,6 +27,7 @@ $(document).ready(function() {
 		dataType: "json",
 		type: "POST"
 	}).done(function(resp) {
+		console.log("ㄴ")
 		$("#officeEmpCount").text("(" + resp + ")");
 	})
 
@@ -30,12 +36,13 @@ $(document).ready(function() {
 		url: "/office/selectDeptInfo",
 		type: "POST",
 	}).done(function(resp) {
+		console.log("ㄷ")
 		let managementId = "";
 		for (let i = 0; i < resp.length; i++) {
 			let deptBox = $("<div>").attr("class", "deptBox").attr("dept", resp[i].dept_name);
 			let dept = $("<div>").attr("class", "dept").attr("dept_id", resp[i].department_id);
 			let deptIcon = $("<i>")
-			if ($("#modalType").val() === "휴가신청" && resp[i].dept_name === "관리부") {
+			if (resp[i].dept_name === "관리부") {
 				dept.addClass("pagePlus").addClass("selected");
 				deptIcon.addClass("fa-solid fa-minus");
 				managementId = resp[i].department_id
@@ -55,10 +62,11 @@ $(document).ready(function() {
 			url: "/office/selectTaskInfo",
 			type: "POST",
 		}).done(function(resp) {
+			console.log("ㄹ")
 			for (let i = 0; i < resp.length; i++) {
 				let deptBox = $(".deptBox[dept=" + resp[i].dept_name + "]")
 				let dept_task = $("<div>").attr("class", "dept_task").attr("task_id", resp[i].task_id);
-				if ($("#modalType").val() === "휴가신청" && resp[i].dept_name !== "관리부") {
+				if (resp[i].dept_name !== "관리부") {
 					dept_task.css("display", "none");
 				}
 				let taskName = $("<span>").text(resp[i].task_name);
@@ -68,9 +76,8 @@ $(document).ready(function() {
 				deptBox.append(dept_task);
 			}
 			// 관리부 인원 불러오기
-			if ($("#modalType").val() === "휴가신청") {
-				selectDepartmentEmpInfo(managementId)
-			}
+			selectDepartmentEmpInfo(managementId)
+
 		});
 	});
 
@@ -185,10 +192,10 @@ $(document).ready(function() {
 	});
 
 	// 체크박스가 선택 되어있을때 추가 삭제 버튼 활성화
-	let checkedCount = $("input[type='checkbox'].empChk:checked").length;
-	if (checkedCount === 0) {
-		$(".updateBtns button").addClass("disabled");
-	}
+	//let checkedCount = $("input[type='checkbox'].empChk:checked").length;
+	//if (checkedCount === 0) {
+	//$(".updateBtns button").addClass("disabled");
+	//}
 	$(document).on("change", "input[type='checkbox'].empChk", function() {
 		let checkedCount = $("input[type='checkbox'].empChk:checked").length;
 		if (checkedCount === 0) {
@@ -211,7 +218,9 @@ $(document).ready(function() {
 			}
 		} else {
 			if ($(this).attr("id") === "applyBtn") {
+				console.log("숫자 카운트")
 				applyBtnClick(this);
+				$(".application span").text(applicationUserID.length);
 			} else {
 				processBtnClick(this);
 				$(".process span").text(processUserID.length);
@@ -234,13 +243,13 @@ $(document).ready(function() {
 	$("#cancleApplyBtn, #cnacleProcessBtn").on("click", function() {
 		if ($("#modalType").val() === "휴가신청") {
 			if ($(this).attr("id") !== "cancleApplyBtn") {
-				cnacleProcessBtnClick(this);
+				cancleProcessBtnClick(this);
 			}
 		} else {
 			if ($(this).attr("id") === "cancleApplyBtn") {
 				cancleApplyBtnClick(this);
 			} else {
-				cnacleProcessBtnClick(this);
+				cancleProcessBtnClick(this);
 			}
 		}
 	});
@@ -249,6 +258,41 @@ $(document).ready(function() {
 	// 처리자가 없으면 창 못닫도록 변경
 	$(".saveBnt").on("click", function() {
 		if (!$(this).hasClass("disabled")) {
+			if ($("#modalType").val() !== "휴가신청") {
+				let applicationEmpList = [];
+				let applicationEmpIDList = [];
+				$(".approvalLine__applyEmployee .userInfo").each(function() {
+					applicationEmpList.push($(this).html());
+					applicationEmpIDList.push($(this).attr("id"));
+				})
+				$("#applicationEmployeeList").val(applicationEmpList);
+				$("#applicationEmployeeIDList").val(applicationEmpIDList);
+
+				$.ajax({
+					url: "/electronicsignature/selectEmpJobLevel",
+					type: "POST",
+					data: { userList: applicationUserID },
+				}).done(function(resp) {
+					$(".table__applyLine").html("");
+					let approvalLineText = "";
+					let userCount = 0;
+					console.log("selectempjoblebel")
+					for (let i = resp.length - 1; i >= 0; i--) {
+						approvalLineText = approvalLineText + resp[i].name + " (" + resp[i].task_name + ")";
+						if (i !== 0) {
+							approvalLineText = approvalLineText + "&nbsp;&nbsp;&nbsp;<i class='fas fa-circle'></i>&nbsp;&nbsp;&nbsp;";
+						}
+						userCount++;
+						if (userCount % 5 === 0 || userCount === resp.length) {
+							let lineDiv = $("<div>").attr("class", "lineDiv");
+							lineDiv.html(approvalLineText);
+							$(".table__applyLine").append(lineDiv);
+							approvalLineText = "";
+						}
+					}
+				})
+			}
+
 			let processEmployeeList = [];
 			let processEmployeeIDList = [];
 			$(".approvalLine__processEmployee .userInfo").each(function() {
@@ -260,13 +304,14 @@ $(document).ready(function() {
 			$("#processEmployeeIDList").val(processEmployeeIDList);
 
 			$.ajax({
-				url: "/electronicSignature/selectEmpJobLevel",
+				url: "/electronicsignature/selectEmpJobLevel",
 				type: "POST",
-				data: { processUserID: processUserID },
+				data: { userList: processUserID },
 			}).done(function(resp) {
+				$(".table__approvalLine").html("");
 				let approvalLineText = "";
 				let userCount = 0;
-				
+				console.log("selectempjoblebel")
 				for (let i = resp.length - 1; i >= 0; i--) {
 					approvalLineText = approvalLineText + resp[i].name + " (" + resp[i].task_name + ")";
 					if (i !== 0) {
@@ -279,7 +324,7 @@ $(document).ready(function() {
 					}
 					userCount++;
 					if (userCount % 5 === 0 || userCount === resp.length) {
-						let lineDiv = $("<div>").attr("class","lineDiv");
+						let lineDiv = $("<div>").attr("class", "lineDiv");
 						lineDiv.html(approvalLineText);
 						$(".table__approvalLine").append(lineDiv);
 						approvalLineText = "";
@@ -313,25 +358,23 @@ function selectAllEmpInfo() {
 
 // 회사 내 부서별 모든 인원의 이름과 부서명 출력하기
 function selectDepartmentEmpInfo(id) {
-	if ($("#modalType").val() === "휴가신청") {
-		$.ajax({
-			url: "/office/selectDepartmentEmpInfo",
-			data: { dept_id: id },
-			type: "POST",
-		}).done(function(resp) {
-			$(".employee__List").html("");
-			for (let i = 0; i < resp.length; i++) {
-				let employee__check = $("<div>").attr("class", "employee__check");
-				let empChk = $("<input>", { type: "checkbox" }).attr("class", "empChk").attr("id", resp[i].id);
-				let label = $("<label>").attr("for", resp[i].id);
-				let nameSpan = $("<span>").text(resp[i].name);
-				let taskSpan = $("<span>").text(" (" + resp[i].task_name + ")");
-				label.append(nameSpan).append(taskSpan)
-				employee__check.append(empChk).append(label);
-				$(".employee__List").append(employee__check);
-			}
-		});
-	}
+	$.ajax({
+		url: "/office/selectDepartmentEmpInfo",
+		data: { dept_id: id },
+		type: "POST",
+	}).done(function(resp) {
+		$(".employee__List").html("");
+		for (let i = 0; i < resp.length; i++) {
+			let employee__check = $("<div>").attr("class", "employee__check");
+			let empChk = $("<input>", { type: "checkbox" }).attr("class", "empChk").attr("id", resp[i].id);
+			let label = $("<label>").attr("for", resp[i].id);
+			let nameSpan = $("<span>").text(resp[i].name);
+			let taskSpan = $("<span>").text(" (" + resp[i].task_name + ")");
+			label.append(nameSpan).append(taskSpan)
+			employee__check.append(empChk).append(label);
+			$(".employee__List").append(employee__check);
+		}
+	});
 }
 
 // 내용이 충분한지 확인
@@ -347,20 +390,28 @@ function contentCompleted() {
 
 // 추가 버튼 눌렀을 때 이벤트
 function applyBtnClick(element) {
-	$(".approvalLine__applyEmployee").html("");
-	let checkedLabels = [];
+	let checkedLabels = []; // 현재 체크된 User의 네임
+	let checkedUserID = []; // 현재 체크된 user의 아이디
+	//$(".approvalLine__applyEmployee").html("");
 	if (!$(element).hasClass("disabled")) {
 		$(".empChk:checked").each(function() {
 			checkedLabels = [];
+			checkedUserID = [];
+			if (!applicationUserID.includes($(this).attr("id"))) {
+				checkedLabels.push(
+					$(this).parent().children("label").find("span:first").text() + $(this).parent().children("label").find("span:nth-child(2)").text()
+				);
+				applicationUserID.push($(this).attr("id"));
+				console.log(applicationUserID)
+				checkedUserID.push($(this).attr("id"));
+				console.log(checkedUserID)
+			}
 			// 체크된 checkbox의 부모인 label을 선택하여 라벨의 내용을 가져오고 배열에 추가
 			console.log($(this));
-			checkedLabels.push(
-				$(this).parent().children("label").text().replace(/\s+/g, "").trim()
-			);
 
 			for (let i = 0; i < checkedLabels.length; i++) {
 				let userInfo = $("<div>")
-					.attr("class", "userInfo")
+					.attr("class", "userInfo").attr("id", checkedUserID[i])
 					.html(checkedLabels[i]);
 				$(".approvalLine__applyEmployee").append(userInfo);
 			}
@@ -377,6 +428,7 @@ function processBtnClick(element) {
 	if (!$(element).hasClass("disabled")) {
 		$(".empChk:checked").each(function() {
 			checkedLabels = [];
+			checkedUserID = [];
 			if (!processUserID.includes($(this).attr("id"))) {
 				console.log($(this));
 				checkedLabels.push(
@@ -402,27 +454,47 @@ function processBtnClick(element) {
 // 삭제 버튼 눌렀을 때 이벤트
 function cancleApplyBtnClick(element) {
 	if (!$(element).hasClass("disabled")) {
+		console.log($(element).attr("id"))
 		// 선택된 userInfo div 삭제
 		$(".approvalLine__applyEmployee .userInfo").filter(function() {
-			var currentColor = $(this).css("backgroundColor");
-			return currentColor === "rgb(243, 247, 241)" || currentColor === "#f3f7f1";
-		}).remove();
+			let currentColor = $(this).css("backgroundColor");
+			let currentId = $(this).attr("id");
+			console.log(currentColor)
+			if (currentColor === "rgb(243, 247, 241)" || currentColor === "#f3f7f1") {
+				console.log(currentId)
+				applicationUserID = applicationUserID.filter(id => id !== currentId);
+				console.log(applicationUserID)
+				$(this).remove();
+			}
+		});
 		if ($(".approvalLine__applyEmployee").html() === "") {
 			$(element).addClass("disabled")
+			applicationUserID = [];
 		}
+		$(".application span").text(applicationUserID.length);
 	}
 	contentCompleted();
 }
-function cnacleProcessBtnClick(element) {
+function cancleProcessBtnClick(element) {
 	if (!$(element).hasClass("disabled")) {
-		// 선택된 userInfo div 삭제
+		console.log($(element).attr("id"))
+
 		$(".approvalLine__processEmployee .userInfo").filter(function() {
-			var currentColor = $(this).css("backgroundColor");
-			return currentColor === "rgb(243, 247, 241)" || currentColor === "#f3f7f1";
-		}).remove();
+			let currentColor = $(this).css("backgroundColor");
+			let currentId = $(this).attr("id");
+			if (currentColor === "rgb(243, 247, 241)" || currentColor === "#f3f7f1") {
+				processUserID = processUserID.filter(id => id !== currentId);
+				$(this).remove();
+			}
+		});
+
+		// 선택된 userInfo div 삭제
+
 		if ($(".approvalLine__processEmployee").html() === "") {
-			$(element).addClass("disabled")
+			$(element).addClass("disabled");
+			processUserID = [];
 		}
+		$(".process span").text(processUserID.length);
 	}
 	contentCompleted();
 }
@@ -439,6 +511,10 @@ function userInfoCheck(element) {
 		// 신청의 삭제 버튼 누를 수 있음
 		if ($(element).parent().attr("class") === "approvalLine__applyEmployee") {
 			$("#cancleApplyBtn").removeClass("disabled");
+			applicationUserID = applicationUserID.filter(function(userID) {
+				return userID !== $(element).attr("id")
+			})
+			//$(".application span").text(applicationUserID.length);
 		} else if (
 			$(element).parent().attr("class") === "approvalLine__processEmployee"
 		) {
@@ -447,6 +523,7 @@ function userInfoCheck(element) {
 			processUserID = processUserID.filter(function(userID) {
 				return userID !== $(element).attr("id")
 			})
+			//$(".process span").text(processUserID.length);
 		}
 	} else {
 		// 삭제할 사람을 아무도 선택하지 않음

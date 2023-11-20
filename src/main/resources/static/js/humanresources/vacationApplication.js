@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				vacationTypeList.push($(this).val())
 			});
 			$.ajax({
-				url: "/electronicSignature/insertVacation",
+				url: "/electronicsignature/insertVacation",
 				dataType: "json",
 				type: "POST",
 				data: { processEmployeeIDArray: processEmployeeIDArray, vacationDateList: $("#date_selector").val().split(", "), vacationTypeList: vacationTypeList, reson: $("#vacationReason").val() },
@@ -186,6 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+// 모달창 오픈
 $(document).ready(function() {
 	$("#approvalLineBtn").on("click", function() {
 		$(".approvalLineModal").modal({
