@@ -127,27 +127,40 @@ $(document).ready(function() {
 		if ($("input[name='type']:checked").val() === "개인") {
 			$("#accountInfo").css("display", "flex");
 			$("#corporationCard").css("display", "none");
-			
-			let trimmedValue = $(".titleInput").val().slice(0,-3);
-			let newTitle = trimmedValue+" 개인";
+
+			let trimmedValue = $(".titleInput").val().slice(0, -3);
+			let newTitle = trimmedValue + " 개인";
 			$(".titleInput").val(newTitle);
-			
+			$("#searchUser").val("");
+			$("#spender .table__srLine").html("");
+			let searchUser = $("<input>").attr("type","text").attr("id","searchUser");
+			let autoComplete = $("<div>").attr("id","autoComplete");
+			$("#spender .table__srLine").append(searchUser).append(autoComplete);
+			$("#esSpender").val("");
+			$("#corporationCard .table__srLine").html("");
 		} else {
 			$("#accountInfo").css("display", "none");
 			$("#corporationCard").css("display", "flex");
-			let trimmedValue = $(".titleInput").val().slice(0,-3);
-			let newTitle = trimmedValue+" 법인";
+			let trimmedValue = $(".titleInput").val().slice(0, -3);
+			let newTitle = trimmedValue + " 법인";
 			$(".titleInput").val(newTitle);
+			$("#searchUser").val("");
+			$("#spender .table__srLine").html("");
+			let searchUser = $("<input>").attr("type","text").attr("id","searchUser");
+			let autoComplete = $("<div>").attr("id","autoComplete");
+			$("#spender .table__srLine").append(searchUser).append(autoComplete);
+			$("#esSpender").val("");
+			$("#accountInfo .table__srLine").html("");
 		}
 	});
 
-	$("#searchUser").on("input", function() {
+	$(document).on("input","#searchUser", function() {
 		if ($(this).val() !== "") {
 			$.ajax({
 				url: "/office/searchUserAjax",
 				dataType: "json",
 				data: { keyword: $(this).val() },
-				type:"POST"
+				type: "POST"
 			}).done(function(resp) {
 				console.log(resp);
 				$("#autoComplete").empty();
@@ -167,91 +180,79 @@ $(document).ready(function() {
 		let searchId = $(this).attr("userid");
 		let userTaskName = $(this).attr("userTaskName");
 		console.log(searchId)
-		$.ajax({
-			url: "/api/accounting/searchByAjax",
-			data: { keyword: searchId },
-			type:"POST"
-		}).done(function(resp) {
-			console.log(resp);
-			if (resp.length > 0) {
-				$("#autoComplete").empty();
-				$("#esSpender").val(resp[0].num);
-				$("#searchUser").css("display", "none");
-				$("#searchUser").parent().html(resp[0].name + " (" + userTaskName + ")");
-				$("#accountInfo .table__srLine").html("(" + resp[0].bank + ") " + resp[0].id)
-				$("#esSpender").val(searchId);
-			} else {
-				alert("지출자에 등록된 계좌가 없습니다. 관라자에게 등록 요청하세요.");
-				$("#autoComplete").empty();
-				$("#searchUser").val("");
-				$("#esSpender").val("");
-			}
-		})
+		// 선택된 라디오 버튼의 값 가져오기
+		let selectedValue = $('input[name=type]:checked').val();
+		if (selectedValue === "개인") {
+			$.ajax({
+				url: "/api/accounting/searchByAjax",
+				data: { keyword: searchId },
+				type: "POST"
+			}).done(function(resp) {
+				console.log(resp);
+				if (resp.length > 0) {
+					$("#autoComplete").empty();
+					$("#searchUser").css("display", "none");
+					$("#searchUser").parent().html(resp[0].name + " (" + userTaskName + ")");
+					$("#accountInfo .table__srLine").html("(" + resp[0].bank + ") " + resp[0].id)
+					$("#esSpender").val(searchId);
+				} else {
+					alert("지출자에 등록된 계좌가 없습니다. 관라자에게 등록 요청하세요.");
+					$("#autoComplete").empty();
+					$("#searchUser").val("");
+					$("#esSpender").val("");
+				}
+			});
+		} else {
+			$.ajax({
+				url: "/api/accounting/searchCardAjax",
+				data: { keyword: searchId },
+				type: "POST"
+			}).done(function(resp) {
+				if (resp.length > 0) {
+					$("#autoComplete").empty();
+					$("#esSpender").val(resp[0].num);
+					$("#searchUser").css("display", "none");
+					$("#searchUser").parent().html(resp[0].name + " (" + userTaskName + ")");
+					$("#corporationCard .table__srLine").html("(" + resp[0].bank + ") " + resp[0].id)
+					$("#esSpender").val(searchId);
+				} else {
+					alert("지출자에 등록된 법인카드가 없습니다. 관라자에게 등록 요청하세요.");
+					$("#autoComplete").empty();
+					$("#searchUser").val("");
+					$("#esSpender").val("");
+				}
+			});
+		}
+
 	})
 
-	// 기안하기
-	/*$("#vacationdraftingBtn").on("click", function() {
-		if ($("#esDocumentType").val() === "선택" || $("#esDocumentType").val() === "") {
-			alert("문서 종류를 선택하고 내용을 입력해주세요");
-			return;
-		}
-		if ($("#applicationEmployeeIDList").val() === "" || $("#processEmployeeIDList").val() === "") {
-			alert("결제선을 설정해주세요.");
-			return;
-		}
-		if ($(".titleInput").val() === "") {
-			alert("문서 제목을 입력해주세요.");
-			return;
-		}
-		if ($("#esSpender").val() === "") {
-			alert("지출자 정보를 입력해주세요");
-			return
-		}
-		if ($("#summary").val() === "") {
-			alert("총괄 적요를 입력해주세요.");
-			return;
-		}
 
-		if (($("#esDocumentType").val() !== "선택" && $("#esDocumentType").val() !== "") && ($("#applicationEmployeeIDList").val() !== "" || $("#processEmployeeIDList").val() !== "") && $(".titleInput").val() !== "" && $("#esSpender").val() !== "" && $("#summary").val() !== "") {
-			let applicationEmployeeIDList = $("#applicationEmployeeIDList").val();
-			let applicationEmployeeIDArray = applicationEmployeeIDList.split(",");
-			
-			let processEmployeeIDList = $("#processEmployeeIDList").val();
-			let processEmployeeIDArray = processEmployeeIDList.split(",");
-			
-			/*$.ajax({
-				url:"/electronicsignature/insertDocument",
-				dataType: "json",
-				type:"POST",
-				data: {documentType:$("#esDocumentType").val(), preservationPeriod:$("#esPreservationPeriod").val(), securityLevel:$("#esSecurityLevel").val(),applicationEmployeeIDArray: applicationEmployeeIDArray, processEmployeeIDArray: processEmployeeIDArray, year:$("#year .typeName").html(), month:$("#month .typeName").html(), spender:$("#esSpender").val(), summary:$("#summary").val(), fileList: $("#uploadFiles").val()},
-			}).done(function(){
-				
-			})
-		}
-	})*/
+	$("#temporaryBtn").on("click", function() {
+		$("#temporary").val("true");
+	})
 });
 // 필수 입력값들이 존재하는지
 function validateForm() {
 	if ($("#esDocumentType").val() === "선택" || $("#esDocumentType").val() === "") {
-			alert("문서 종류를 선택하고 내용을 입력해주세요");
-			return false;
-		}
-		if ($("#applicationEmployeeIDList").val() === "" || $("#processEmployeeIDList").val() === "") {
-			alert("결제선을 설정해주세요.");
-			return false;
-		}
-		if ($(".titleInput").val() === "") {
-			alert("문서 제목을 입력해주세요.");
-			return false;
-		}
-		if ($("#esSpender").val() === "") {
-			alert("지출자 정보를 입력해주세요");
-			return false;
-		}
-		if ($("#summary").val() === "") {
-			alert("총괄 적요를 입력해주세요.");
-			return false;
-		}
+		alert("문서 종류를 선택하고 내용을 입력해주세요");
+		return false;
+	}
+	if ($("#applicationEmployeeIDList").val() === "" || $("#processEmployeeIDList").val() === "") {
+		alert("결제선을 설정해주세요.");
+		return false;
+	}
+	if ($(".titleInput").val() === "") {
+		alert("문서 제목을 입력해주세요.");
+		return false;
+	}
+	if ($("#esSpender").val() === "") {
+		alert("지출자 정보를 입력해주세요");
+		return false;
+	}
+	if ($("#summary").val() === "") {
+		alert("총괄 적요를 입력해주세요.");
+		return false;
+	}
 }
 // 문서 종류에 따른 ui 구성 변경
 function formatByDocumentType() {

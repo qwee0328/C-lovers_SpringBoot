@@ -306,13 +306,13 @@ public class ElectronicSignatureController {
 
 	// 전자결재 문서 생성
 	@RequestMapping("/insertDocument")
-	public String insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList, String esDocumentType, int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle,MultipartFile[] uploadFiles) throws Exception {
+	public String insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList, String esDocumentType, int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle,boolean temporary,MultipartFile[] uploadFiles) throws Exception {
 		System.out.println("applicationEmployeeIDList"+applicationEmployeeIDList);
 		System.out.println("processEmployeeIDList"+processEmployeeIDList);
 		System.out.println("uploadFiles"+uploadFiles);
 		System.out.println("esPreservationPeriod"+esPreservationPeriod);
 		System.out.println("esSpender"+esSpender);
-		esservices.insertDocument(applicationEmployeeIDList,processEmployeeIDList,esDocumentType,esPreservationPeriod,esSecurityLevel,esSpender,documentTitle,uploadFiles);
+		esservices.insertDocument(applicationEmployeeIDList,processEmployeeIDList,esDocumentType,esPreservationPeriod,esSecurityLevel,esSpender,documentTitle,temporary,uploadFiles);
 		return "redirect:/electronicsignature"; //esservices.inserDocument(documentType,preservationPeriod,securityLevel,applicationEmployeeIDArray,processEmployeeIDArray,year,month,spender, summary,fileList);
 	}
 

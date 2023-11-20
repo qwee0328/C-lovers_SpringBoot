@@ -22,6 +22,10 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
 		return db.selectList("ElectronicSignature.selectEmpJobLevel", userList);
 	}
+	
+	public List<Map<String, Object>> selectEmpJobLevelList(String[] userList) {
+		return db.selectList("ElectronicSignature.selectEmpJobLevelList", userList);
+	}
 
 	// 휴가 문서 번호 구하기
 	public int selectDocmuentCount(String keyword) {
@@ -37,6 +41,10 @@ public class ElectronicSignatureDAO {
 	// 문서 등록자 정보 생성
 	public int insertDrafter(DocumentDrafterDTO drafter) {
 		return db.insert("ElectronicSignature.insertDrafter", drafter);
+	}
+	
+	public int insertDrafters(List<DocumentDrafterDTO> drafters) {
+		return db.insert("ElectronicSignature.insertDrafterList", drafters);
 	}
 
 	// 문서 결재선 등록

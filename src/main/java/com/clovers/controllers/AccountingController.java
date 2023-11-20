@@ -85,6 +85,11 @@ public class AccountingController {
 		List<AccountingDTO> list = acService.searchCard(keyword);
 		return ResponseEntity.ok(list);
 	}
+	@ResponseBody
+	@RequestMapping("/searchCardAjax")
+	public List<AccountingDTO> searchCardAjax(@RequestParam("keyword")String keyword){
+		return acService.searchCard(keyword);
+	}
 	// 카드 추가
 	@PostMapping("/cardInsert")
 	public ResponseEntity<String> insertCard(@RequestBody AccountingDTO dto){

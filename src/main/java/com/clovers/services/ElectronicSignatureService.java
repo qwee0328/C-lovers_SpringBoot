@@ -69,6 +69,8 @@ public class ElectronicSignatureService {
 		String title = "휴가 신청서 (" + writerName + ")";
 		document.setTitle(title);
 
+		document.setEmp_id((String) session.getAttribute("loginID"));
+
 		// 휴가 문서 등록
 		dao.insertDocument(document);
 
@@ -114,7 +116,7 @@ public class ElectronicSignatureService {
 	// 전자 결재 문서 생성
 	@Transactional
 	public int insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList, String esDocumentType,
-			int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle,
+			int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle, boolean temporary,
 			MultipartFile[] uploadFiles) {
 		DocumentDTO document = new DocumentDTO();
 
@@ -146,9 +148,34 @@ public class ElectronicSignatureService {
 		document.setSecurity_grade(esSecurityLevel);
 		document.setDocument_type_id(esDocumentType);
 		document.setTitle(documentTitle);
+		document.setTemporary(temporary);
+		document.setEmp_id((String) session.getAttribute("loginID"));
 
 		// 전자 문서 등록
 		dao.insertDocument(document);
+		
+		// 신청선 등록
+		List<DocumentDrafterDTO> drafters = new ArrayList<DocumentDrafterDTO>();
+		for(int i=0;i<applicationEmployeeIDList.length;i++) {
+			DocumentDrafterDTO drafter = new DocumentDrafterDTO();
+			drafter.setDocument_id(documentID);
+			drafter.setEmp_id(applicationEmployeeIDList[i]);
+			
+			drafters.add(drafter);
+		}
+		dao.insertDrafters(drafters);
+
+		// 결재선 등록
+		List<Map<String, Object>> approvalsLevel = dao.selectEmpJobLevelList(processEmployeeIDList);
+		List<DocumentApprovalsDTO> approvals = new ArrayList<DocumentApprovalsDTO>();
+		for (int i = 0; i < processEmployeeIDList.length; i++) {
+			DocumentApprovalsDTO approval = new DocumentApprovalsDTO();
+			approval.setDocument_id(documentID);
+			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
+			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
+			approvals.add(approval);
+		}
+		dao.insertApprovals(approvals);
 		return 0;
 	}
 

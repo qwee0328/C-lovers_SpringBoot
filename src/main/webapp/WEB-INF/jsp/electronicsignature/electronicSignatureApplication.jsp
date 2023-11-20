@@ -60,9 +60,10 @@
 			<input type="hidden" name="esPreservationPeriod" id="esPreservationPeriod">
 			<input type="hidden" name="esSecurityLevel" id="esSecurityLevel">
 			<input type="hidden" name="esSpender" id="esSpender">
+			<input type="hidden" name="temporary" value="false" id="temporary">
 			<div class="draftingBtns">
-				<button class="noneBackgroundBtn" id="vacationdraftingBtn" type="submit" formaction="/electronicsignature/insertDocument">기안하기</button>
-				<button class="noneBackgroundBtn">임시저장</button>
+				<button class="noneBackgroundBtn" type="submit" formaction="/electronicsignature/insertDocument">기안하기</button>
+				<button class="noneBackgroundBtn" type="submit" id="temporaryBtn" formaction="/electronicsignature/insertDocument">임시저장</button>
 			</div>
 			<div class="electronicsSignatureApp__body">
 				<div class="basicSetting">
