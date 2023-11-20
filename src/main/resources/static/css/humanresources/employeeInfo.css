@@ -60,7 +60,7 @@
 }
 /* 아래 내용 하이웍스 산업, 프로필 부분 */
 .chart_content{
-	    display: flex;
+	display: flex;
     border-top: 1px solid #7D7D7D40;
 }
 .chart_content{
@@ -69,6 +69,13 @@
     bottom: 0; left: 0; right: 0;
     overflow: auto;
     
+}
+.org__members{
+	border-left: 1px solid #7D7D7D40;
+	padding-top: 30px;
+	padding-left: 40px;
+	
+	
 }
 /*스크롤*/
 .chart_content::-webkit-scrollbar {
@@ -88,7 +95,7 @@
 }
 .chart_content_right{
     width: 80%;
-    border-left: 1px solid #7D7D7D40;
+/*    border-left: 1px solid #7D7D7D40;*/
 }
 
 /* 처음에 아코디언 내용 안보이게 */
@@ -102,7 +109,9 @@
     font-weight: 800; 
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #dcedd4;
+    border-bottom: 1px solid #7D7D7D40;
+/*    border-right: 1px solid #7D7D7D40;*/
+    
 }
 /* 타이틀 */
 .Title{
@@ -157,9 +166,7 @@
 
 
 /* 오른쪽 조직도 css */
-.chart_content_right{
-    padding-top: 30px; padding-left: 40px;
-}
+
 .members__Title{
     margin-bottom: 25px;
     display: flex;
