@@ -42,7 +42,38 @@
 	
 	<!-- 민경 추가부분 -->
 	<div class="header__userinfoBox">
-<!-- 		프로필 -->
+			<div class="header__userinfo">
+				<div class="header__myinfo">
+	
+					<div class="header__profileImageBox">
+						<!-- 이미지 -->
+<!-- 						<img src="/uploads/" alt="" class="header__profileImage"> -->
+					</div>
+	
+					<div class="header__profileInfoBox">
+						<div class="profileName">
+						<!-- 이름 -->
+						</div>
+	
+						<div class="profileEmail">
+							<!-- 이메일 -->
+						</div>
+					</div>
+	
+				</div>
+	
+				<div class="header__myinfoBottom">
+	
+					<div class="header__setting">
+	                    <a href="/humanResources/mypage">설정</a>
+	                </div>
+	
+					<div class="header__logoutBtnBox">
+						<button><a href="/members/logout">로그아웃</a></button>
+					</div>
+				</div>
+			</div>
+	
 	</div>
 	
 </body>
@@ -64,46 +95,27 @@
 		}).done(function(resp){
 			console.log(resp);
 			
+			let img;
+			
 			let main_img = $("<img class='profileImg'/>");
-				main_img.attr("src","/uploads/"+resp.profile_img);
+				
+			if(resp.profile_img == ""){
+				img = "/assets/profile.png";
+			}else{
+				img = "/uploads/"+resp.profile_img;
+			}
+			
+				main_img.attr("src",img);
 			$(".mainHeader_profileBox").append(main_img);
 			
 			
 			
-			
-				let header__userinfo = $("<div class='header__userinfo'>");
-					let header_myinfo = $("<div class='header__myinfo'>");
-					
-						let header__profileImageBox = $("<div class='header__profileImageBox'>");
-							let profileImg = $("<img class='header__profileImage'>");
-								profileImg.attr("src","/uploads/"+resp.profile_img);
-						header__profileImageBox.append(profileImg);
-						
-						let header__profileInfoBox = $("<div class='header__profileInfoBox'>");
-							let profileName = $("<div class='profileName'>");
-								profileName.html(resp.name);
-							let profileEmail = $("<div class='profileEmail'>");
-								profileEmail.html(resp.email);
-								
-						header__profileInfoBox.append(profileName).append(profileEmail);
-						
-					header_myinfo.append(header__profileImageBox).append(header__profileInfoBox);
-					
-					let header__myinfoBottom = $("<div class='header__myinfoBottom'>");
-						
-						let header__setting = $("<div class='header__setting'>");
-							header__setting.append("<a href='/humanResources/mypage'>설정</a>");
-							
-						let header__logoutBtnBox = $("<div class='header__logoutBtnBox'>");
-								let btn = $("<button><a href='/members/logout'>로그아웃</a></button>");
-								
-							header__logoutBtnBox.append(btn);
-							
-						header__myinfoBottom.append(header__setting).append(header__logoutBtnBox);
-						
-					header__userinfo.append(header_myinfo).append(header__myinfoBottom);
-					
-				$(".header__userinfoBox").append(header__userinfo);	
+			let profileImg = $("<img class='header__profileImage'>");
+				profileImg.attr("src",img);
+				$(".header__profileImageBox").append(profileImg);
+				
+			$(".profileName").html(resp.name);
+			$(".profileEmail").html(resp.email);
 						
 			
 		});
