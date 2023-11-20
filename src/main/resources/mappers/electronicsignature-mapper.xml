@@ -116,13 +116,6 @@
         FROM employee e
         JOIN job j ON e.job_id = j.id
         WHERE e.id = #{loginID}
-=======
-		select
-		document_id, approver_status from document_list_info dli where exists
-		(select 1 from document_list_info where approver_id = #{loginID} and
-		dli.document_id = document_list_info.document_id and
-		dli.approver_level > document_list_info.approver_level)
->>>>>>> leader/master
 	</select>
 
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
