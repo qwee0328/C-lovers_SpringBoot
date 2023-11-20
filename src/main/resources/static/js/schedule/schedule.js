@@ -290,12 +290,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			return e.dayNumberText.replace("일", "");
 		},
 		datesSet: function (info) {
-	  
 	        $.ajax({
 				url:"/schedule/selectAll",
 				async:false
 			}).done(function(resp){
-				console.log("페이지 전환 시 다시 업데이트");
 				calendar.removeAllEvents();
 				let eventDatas = [];
 	           for(let i=0; i<resp.length; i++){
