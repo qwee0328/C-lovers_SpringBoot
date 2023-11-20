@@ -1,11 +1,19 @@
 let showSelector = false;
 $(document).ready(function() {
-	// selector 커스텀 해서 만들기
+	
 
+	// 기본 정보 세팅
 	$("#esPreservationPeriod").val("5");
 	$("#esSecurityLevel").val("A등급");
-
-
+	let dateInfo = new Date();
+	let year = dateInfo.getFullYear();
+	let month = dateInfo.getMonth() + 1;
+	$("#expenseYear").val(year);
+	$("#expenseMonth").val(month);
+	$("#expense_category").val("개인");
+	
+	
+	// selector 커스텀 해서 만들기
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {
 		if (!showSelector) {
@@ -44,6 +52,9 @@ $(document).ready(function() {
 				$("#month .typeName").text() +
 				"월 지출 결의서 - 개인"
 			);
+			$("#expenseYear").val($("#year .typeName").text());
+			$("#expenseMonth").val($("#month .typeName").text());
+			console.log($("#expenseYear").val())
 		}
 		if ($(this).parent().parent().attr("id") === "preservationPeriod") {
 			if ($("#preservationPeriod .typeName").text() === "1년") {
@@ -124,6 +135,8 @@ $(document).ready(function() {
 	createMonth();
 
 	$("input[name='type']").on("change", function() {
+		$("#expense_category").val($("input[name='type']:checked").val());
+		console.log($("#expense_category").val())
 		if ($("input[name='type']:checked").val() === "개인") {
 			$("#accountInfo").css("display", "flex");
 			$("#corporationCard").css("display", "none");
@@ -133,8 +146,8 @@ $(document).ready(function() {
 			$(".titleInput").val(newTitle);
 			$("#searchUser").val("");
 			$("#spender .table__srLine").html("");
-			let searchUser = $("<input>").attr("type","text").attr("id","searchUser");
-			let autoComplete = $("<div>").attr("id","autoComplete");
+			let searchUser = $("<input>").attr("type", "text").attr("id", "searchUser");
+			let autoComplete = $("<div>").attr("id", "autoComplete");
 			$("#spender .table__srLine").append(searchUser).append(autoComplete);
 			$("#esSpender").val("");
 			$("#corporationCard .table__srLine").html("");
@@ -146,15 +159,15 @@ $(document).ready(function() {
 			$(".titleInput").val(newTitle);
 			$("#searchUser").val("");
 			$("#spender .table__srLine").html("");
-			let searchUser = $("<input>").attr("type","text").attr("id","searchUser");
-			let autoComplete = $("<div>").attr("id","autoComplete");
+			let searchUser = $("<input>").attr("type", "text").attr("id", "searchUser");
+			let autoComplete = $("<div>").attr("id", "autoComplete");
 			$("#spender .table__srLine").append(searchUser).append(autoComplete);
 			$("#esSpender").val("");
 			$("#accountInfo .table__srLine").html("");
 		}
 	});
 
-	$(document).on("input","#searchUser", function() {
+	$(document).on("input", "#searchUser", function() {
 		if ($(this).val() !== "") {
 			$.ajax({
 				url: "/office/searchUserAjax",
@@ -245,13 +258,15 @@ function validateForm() {
 		alert("문서 제목을 입력해주세요.");
 		return false;
 	}
-	if ($("#esSpender").val() === "") {
-		alert("지출자 정보를 입력해주세요");
-		return false;
-	}
-	if ($("#summary").val() === "") {
-		alert("총괄 적요를 입력해주세요.");
-		return false;
+	if ($("#documentType").html() === "지출 결의서") {
+		if ($("#esSpender").val() === "") {
+			alert("지출자 정보를 입력해주세요");
+			return false;
+		}
+		if ($("#summary").val() === "") {
+			alert("총괄 적요를 입력해주세요.");
+			return false;
+		}
 	}
 }
 // 문서 종류에 따른 ui 구성 변경

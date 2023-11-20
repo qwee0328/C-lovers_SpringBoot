@@ -68,6 +68,12 @@
 		</foreach>
 	</insert>
 
+	<!-- // 문서 파일 등록 -->
+	<insert id="insertDocumentFile">
+		insert into document_file value (0, #{document_id},
+		#{sys_name}, #{ori_name})
+	</insert>
+
 	<!-- // 휴가 신청일 정보 등록 -->
 	<insert id="insertVacationApplicationInfo"
 		parameterType="java.util.List">
@@ -77,6 +83,18 @@
 			(#{vacationInfo.document_id}, #{vacationInfo.vacation_date},
 			#{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
 		</foreach>
+	</insert>
+
+	<!-- // 지출 결의서 정보 등록 -->
+	<insert id="insertExpenseResolutionInfo">
+		insert into expense_resolution_info value(0,
+		#{document_id},
+		#{expense_category},#{expense_date},#{spender_id},#{summary})
+	</insert>
+	
+	<!-- // 업무 연락 정보 등록 -->
+	<insert id="insertBusinessContactInfo">
+		insert into business_contact_info value (0, #{document_id}, #{business_contents})
 	</insert>
 
 	<!-- // 직전 결재자들의 결재 결과 -->
@@ -117,7 +135,8 @@
 		report_date
 		FROM document_list_info
 		WHERE total_status = '대기'
-		AND drafter_id = #{loginID}
+		AND
+		drafter_id = #{loginID}
 		OR (approver_id = #{loginID}
 		<!-- 제외할 문서 번호가 있을 때만 실행 -->
 		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
@@ -158,7 +177,8 @@
 		report_date
 		FROM document_list_info
 		WHERE total_status = '대기'
-		AND drafter_id = #{loginID}
+		AND
+		drafter_id = #{loginID}
 		OR (approver_id = #{loginID}
 		<!-- 제외할 문서 번호가 있을 때만 실행 -->
 		<if test="ExcludedIds != null and ExcludedIds.size() > 0">

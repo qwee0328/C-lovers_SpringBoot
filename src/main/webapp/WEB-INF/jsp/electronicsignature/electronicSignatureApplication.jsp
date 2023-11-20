@@ -61,6 +61,9 @@
 			<input type="hidden" name="esSecurityLevel" id="esSecurityLevel">
 			<input type="hidden" name="esSpender" id="esSpender">
 			<input type="hidden" name="temporary" value="false" id="temporary">
+			<input type="hidden" name="expense_category" id="expense_category">
+			<input type="hidden" name="expenseYear" id="expenseYear">
+			<input type="hidden" name="expenseMonth" id="expenseMonth">
 			<div class="draftingBtns">
 				<button class="noneBackgroundBtn" type="submit" formaction="/electronicsignature/insertDocument">기안하기</button>
 				<button class="noneBackgroundBtn" type="submit" id="temporaryBtn" formaction="/electronicsignature/insertDocument">임시저장</button>
@@ -226,7 +229,7 @@
 						<div class="table__row">
 							<div class="table__header">총괄적요</div>
 							<div class="table__srLine">
-								<textarea name="" id="summary" rows="5"></textarea>
+								<textarea name="summary" id="summary" rows="5"></textarea>
 							</div>
 						</div>
 					</div>

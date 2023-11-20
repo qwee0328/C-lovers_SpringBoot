@@ -7,9 +7,12 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.clovers.dto.BusinessContactInfoDTO;
 import com.clovers.dto.DocumentApprovalsDTO;
 import com.clovers.dto.DocumentDTO;
 import com.clovers.dto.DocumentDrafterDTO;
+import com.clovers.dto.DocumentFileDTO;
+import com.clovers.dto.ExpenseResolutioinInfoDTO;
 import com.clovers.dto.VacationApplicationInfoDTO;
 
 @Repository
@@ -23,6 +26,7 @@ public class ElectronicSignatureDAO {
 		return db.selectList("ElectronicSignature.selectEmpJobLevel", userList);
 	}
 	
+	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	public List<Map<String, Object>> selectEmpJobLevelList(String[] userList) {
 		return db.selectList("ElectronicSignature.selectEmpJobLevelList", userList);
 	}
@@ -43,6 +47,7 @@ public class ElectronicSignatureDAO {
 		return db.insert("ElectronicSignature.insertDrafter", drafter);
 	}
 	
+	// 문서 등록자 정보 생성
 	public int insertDrafters(List<DocumentDrafterDTO> drafters) {
 		return db.insert("ElectronicSignature.insertDrafterList", drafters);
 	}
@@ -55,6 +60,21 @@ public class ElectronicSignatureDAO {
 	// 휴가 신청일 정보 등록
 	public int insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
 		return db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
+	}
+	
+	// 지출 결의서 정보 등록
+	public int insertExpenseResolutionInfo(ExpenseResolutioinInfoDTO expense) {
+		return db.insert("ElectronicSignature.insertExpenseResolutionInfo", expense);
+	}
+	
+	// 업무 연락 정보 등록
+	public int insertBusinessContactInfo(BusinessContactInfoDTO business) {
+		return db.insert("ElectronicSignature.insertBusinessContactInfo", business);
+	}
+	
+	// 문서 파일 추가
+	public int insertDocumentFile(DocumentFileDTO dto) {
+		return db.insert("ElectronicSignature.insertDocumentFile",dto);
 	}
 
 	// 직전 결재자들의 결재 결과

@@ -1,5 +1,6 @@
 package com.clovers.services;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.dao.ElectronicSignatureDAO;
 import com.clovers.dao.MemberDAO;
+import com.clovers.dto.BusinessContactInfoDTO;
 import com.clovers.dto.DocumentApprovalsDTO;
 import com.clovers.dto.DocumentDTO;
 import com.clovers.dto.DocumentDrafterDTO;
+import com.clovers.dto.DocumentFileDTO;
+import com.clovers.dto.ExpenseResolutioinInfoDTO;
 import com.clovers.dto.VacationApplicationInfoDTO;
 
 import jakarta.servlet.http.HttpSession;
@@ -117,7 +122,7 @@ public class ElectronicSignatureService {
 	@Transactional
 	public int insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList, String esDocumentType,
 			int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle, boolean temporary,
-			MultipartFile[] uploadFiles) {
+			String expense_category, String expenseYear, String expenseMonth, String summary, String content, MultipartFile[] uploadFiles) throws Exception {
 		DocumentDTO document = new DocumentDTO();
 
 		// 정보 설정
@@ -176,6 +181,49 @@ public class ElectronicSignatureService {
 			approvals.add(approval);
 		}
 		dao.insertApprovals(approvals);
+		
+		
+		// 지출 결의서 정보 등록
+		if (esDocumentType.equals("지출 결의서")) {
+			ExpenseResolutioinInfoDTO expense = new ExpenseResolutioinInfoDTO();
+			expense.setDocument_id(documentID);
+			expense.setExpense_category(expense_category);
+			System.out.println(expense_category);
+			
+			// 문자열로 localdatetime 생성
+			System.out.println(expenseYear);
+			String dateString = expenseYear+"-"+expenseMonth;
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+			Date parsedDate = dateFormat.parse(dateString);
+			Timestamp timestampDate = new Timestamp(parsedDate.getTime());
+			expense.setExpense_date(timestampDate);
+			expense.setSpender_id(esSpender);
+			expense.setSummary(summary);
+			
+			dao.insertExpenseResolutionInfo(expense);
+		}else {
+			// 업무 연락 정보 등록
+			BusinessContactInfoDTO business = new BusinessContactInfoDTO();
+			business.setDocument_id(documentID);
+			business.setBusiness_contents(content);
+			
+			dao.insertBusinessContactInfo(business);
+		}
+		
+		
+		// 파일 등록
+		if(!uploadFiles[0].getOriginalFilename().equals("")) {
+			String upload = "C:/C-lovers";
+			File uploadPath = new File(upload);
+			if(!uploadPath.exists()) {uploadPath.mkdir();}
+			
+			for(MultipartFile file:uploadFiles) {
+				String oriName = file.getOriginalFilename();
+				String sysName = UUID.randomUUID() + "_" + oriName;
+				file.transferTo(new File(uploadPath+"/"+sysName));
+				dao.insertDocumentFile(new DocumentFileDTO(0, documentID, oriName, sysName));
+			}
+		}
 		return 0;
 	}
 
