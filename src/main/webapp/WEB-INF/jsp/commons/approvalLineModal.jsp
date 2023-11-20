@@ -9,14 +9,22 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+<!-- summernote cdn -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
 <link rel="stylesheet" href="/css/commons/basicSetting.css">
-<link rel="stylesheet" href="/css/humanresources/approvalLineModal.css">
+<link rel="stylesheet" href="/css/commons/approvalLineModal.css">
 <script type="text/javascript"
-	src="/js/humanresources/approvalLineModal.js"></script>
+	src="/js/commons/approvalLineModal.js"></script>
 </head>
 <body>
 	<input type="hidden" value="${loginID }" id="loginID">
@@ -38,65 +46,10 @@
 							<div class="company pagePlus">
 								<i class="fa-solid fa-minus"></i> <span>클로버 산업</span> <span id="officeEmpCount"></span>
 							</div>
-							<!-- 
-							<div class="deptBox">
-								<div class="dept pagePlus selected">
-									<i class="fa-solid fa-minus"></i> <span>관리부</span> <span>(4)</span>
-								</div>
-								<div class="dept_task">
-									<span>인사팀</span> <span>(1)</span>
-								</div>
-								<div class="dept_task">
-									<span>구매총무팀</span> <span>(1)</span>
-								</div>
-								<div class="dept_task">
-									<span>재무회계팀</span> <span>(1)</span>
-								</div>
-							</div>
-							<div class="deptBox">
-								<div class="dept pagePlus">
-									<i class="fa-solid fa-minus"></i> <span>관리부</span> <span>(4)</span>
-								</div>
-								<div class="dept_task">
-									<span>인사팀</span> <span>(1)</span>
-								</div>
-								<div class="dept_task">
-									<span>구매총무팀</span> <span>(1)</span>
-								</div>
-								<div class="dept_task">
-									<span>재무회계팀</span> <span>(1)</span>
-								</div>
-							</div>
-							<div class="deptBox">
-								<div class="dept">
-									<i class="fa-solid fa-plus"></i> <span>관리부</span> <span>(4)</span>
-								</div>
-							</div>
-							 -->
 						</div>
 					</div>
 					<div class="employee">
 						<div class="employee__List">
-							<!-- 
-							<div class="employee__check">
-								<input type="checkbox" class="empChk" id="emp_chk"> 
-								<label for="emp_chk"> 
-									<span>최사장</span> <span>(인사팀)</span>
-								</label>
-							</div>
-							<div class="employee__check">
-								<input type="checkbox" class="empChk" id="emp_chk2"> 
-								<label for="emp_chk2"> 
-									<span>최사장</span> <span>(인사팀)</span>
-								</label>
-							</div>
-							<div class="employee__check">
-								<input type="checkbox" class="empChk" id="emp_chk3"> 
-								<label for="emp_chk3"> 
-									<span>최사장</span> <span>(인사팀)</span>
-								</label>
-							</div>
-							 -->
 						</div>
 						<div class="employee__bottom">
 							<div class="allCheck">전체</div>
@@ -108,24 +61,24 @@
 			<div class="approvalLineModal__bodyLine">
 				<div class="updateBtns">
 					<div class="updateBtns__add">
-						<button id="applyBtn">
+						<button id="applyBtn" class="disabled">
 							<i class="fa-solid fa-angle-right"></i>
 						</button>
 					</div>
 					<div class="updateBtns__cancle">
-						<button id="cancleApplyBtn">
+						<button id="cancleApplyBtn" class="disabled">
 							<i class="fa-solid fa-angle-left"></i>
 						</button>
 					</div>
 				</div>
 				<div class="updateBtns">
 					<div class="updateBtns__add">
-						<button id="processBtn">
+						<button id="processBtn" class="disabled">
 							<i class="fa-solid fa-angle-right"></i>
 						</button>
 					</div>
 					<div class="updateBtns__cancle">
-						<button id="cnacleProcessBtn">
+						<button id="cnacleProcessBtn" class="disabled">
 							<i class="fa-solid fa-angle-left"></i>
 						</button>
 					</div>
@@ -133,14 +86,14 @@
 			</div>
 			<div class="approvalLineModal__bodyLine">
 				<div class="approvalLine">
-					<div class="approvalLine__title">
-						신청<span>1</span>
+					<div class="approvalLine__title application">
+						신청<span></span>
 					</div>
 					<div class="approvalLine__applyEmployee"></div>
 				</div>
 				<div class="approvalLine">
 					<div class="approvalLine__title process">
-						처리<span>1</span>
+						처리<span></span>
 					</div>
 					<div class="approvalLine__processEmployee"></div>
 				</div>

@@ -27,4 +27,5 @@ public class AddressBookDTO {
 	private String birthType;
 	private String birth;
 	private String memo;
+	private int trash;
 }

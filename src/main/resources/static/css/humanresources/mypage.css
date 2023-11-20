@@ -137,6 +137,10 @@ body{margin:0px;}
 /* 수정버튼 누르고 나서 - 내 정보 관리 css */
 /* div{border: 1px solid black;} */
 
+input[type='text']{
+	padding-left: 2px;
+}
+
 .profileBoxClick{
     display: none;
 }

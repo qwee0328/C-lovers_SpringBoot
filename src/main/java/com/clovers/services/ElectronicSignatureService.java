@@ -1,10 +1,12 @@
 package com.clovers.services;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,47 +15,89 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.dao.ElectronicSignatureDAO;
+import com.clovers.dao.MemberDAO;
+import com.clovers.dto.DocumentApprovalsDTO;
+import com.clovers.dto.DocumentDTO;
+import com.clovers.dto.DocumentDrafterDTO;
 import com.clovers.dto.VacationApplicationInfoDTO;
-import com.clovers.dto.VacationDocumentDTO;
-import com.clovers.dto.VacationEmpApprovalsDTO;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ElectronicSignatureService {
 	// 전자결재 서비스 레이어
 	@Autowired
+	private HttpSession session;
+	
+	@Autowired
 	private ElectronicSignatureDAO dao;
+	
+	@Autowired
+	private MemberDAO mdao;
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
-	public List<Map<String, Object>> selectEmpJobLevel(List<String> processUserIDList) {
-		return dao.selectEmpJobLevel(processUserIDList);
+	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
+		return dao.selectEmpJobLevel(userList);
 	}
 
 	// 휴가 문서 생성
 	@Transactional
 	public int insertVacation(String emp_id, List<String> processEmployeeIDArray, List<String> vacationDateList,
 			List<String> vacationTypeList, String reson) throws Exception {
-		VacationDocumentDTO document = new VacationDocumentDTO();
-		document.setEmp_id(emp_id);
+		DocumentDTO document = new DocumentDTO();
+		
+		// 휴가 문서 번호 불러오기
+		int documentCount = dao.selectVcationDocmuentCount()+1;
+		String documentNumber = String.format("%04d", documentCount);
+		
+		// 오늘 날짜 구하기
+		// 현재 날짜 구하기
+        LocalDate today = LocalDate.now();
 
-		int documentID = dao.insertVacation(document);
-		System.out.println("documentid:" + documentID);
+        // 날짜를 원하는 형태로 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDate = today.format(formatter);
+        
+        // 정보 설정
+		String documentID = "CD-휴가-"+formattedDate+"-"+documentNumber;
+		document.setId(documentID);
+		document.setSave_period(3);
+		document.setSecurity_grade("B등급");
+		document.setDocument_type_id("휴가 신청서");
+		
+		String writerName = mdao.selectNameById((String)session.getAttribute("loginID"));
+		String title = "휴가 신청서 ("+writerName+")";
+		document.setTitle(title);
+		
+		// 휴가 문서 등록
+		dao.insertDocument(document);
+		
+		// 문서 등록자 등록
+		String writerId = (String)session.getAttribute("loginID");
+		DocumentDrafterDTO drafter = new DocumentDrafterDTO();
+		drafter.setDocument_id(documentID);
+		drafter.setEmp_id(emp_id);
+		
+		dao.insertDrafter(drafter);
 
 		// 휴가 결재선 등록
-		List<VacationEmpApprovalsDTO> approvals = new ArrayList<VacationEmpApprovalsDTO>();
+		List<Map<String, Object>> approvalsLevel = dao.selectEmpJobLevel(processEmployeeIDArray);
+		List<DocumentApprovalsDTO> approvals = new ArrayList<DocumentApprovalsDTO>();
 		for (int i = 0; i < processEmployeeIDArray.size(); i++) {
-			VacationEmpApprovalsDTO approval = new VacationEmpApprovalsDTO();
-			approval.setVacation_document_id(documentID);
-			approval.setEmp_approvals_id(processEmployeeIDArray.get(i));
+			DocumentApprovalsDTO approval = new DocumentApprovalsDTO();
+			approval.setDocument_id(documentID);
+			approval.setEmp_id((String)approvalsLevel.get(i).get("id"));
+			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
 			approvals.add(approval);
 		}
-		dao.insertVacationApprovals(approvals);
+		dao.insertApprovals(approvals);
 
-		// 휴가 신청일 정보 등록
+//		// 휴가 신청일 정보 등록
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		List<VacationApplicationInfoDTO> vacationInfoList = new ArrayList<VacationApplicationInfoDTO>();
 		for (int i = 0; i < vacationDateList.size(); i++) {
 			VacationApplicationInfoDTO info = new VacationApplicationInfoDTO();
-			info.setVacation_document_id(documentID);
+			info.setDocument_id(documentID);
 			Date parsedDate = dateFormat.parse(vacationDateList.get(i));
 			Timestamp timestampDate = new Timestamp(parsedDate.getTime());
 			info.setVacation_date(timestampDate);
@@ -65,5 +109,67 @@ public class ElectronicSignatureService {
 		System.out.println(reson);
 
 		return 0;
+	}
+	
+	// 직전 결재자들의 결재 결과
+	public List<Map<String, String>> previousApprovalResult(String loginID) {
+		return dao.previousApprovalResult(loginID);
+	}
+
+	// 진행 중인 문서 전체 리스트 출력
+	public List<Map<String, Object>> progressTotalList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressTotalList(userInfo);
+	}
+
+	// 진행 중인 문서 대기 리스트 출력
+	public List<Map<String, Object>> proggressWaitLlist(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressWaitList(userInfo);
+	}
+
+	// 진행 중인 문서 확인 리스트 출력
+	public List<Map<String, Object>> progressCheckList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressCheckList(userInfo);
+	}
+
+	// 진행 중인 문서 진행 리스트 출력
+	public List<Map<String, Object>> progressList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressList(userInfo);
+	}
+
+	// 문서함 전체 리스트 출력
+	public List<Map<String, Object>> documentTotalList(String loginID) {
+		return dao.documentList(loginID);
+	}
+
+	// 문서함 기안 리스트 출력
+	public List<Map<String, Object>> documentDraftingList(String loginID) {
+		return dao.documentDraftingList(loginID);
+	}
+
+	// 문서함 결재 리스트 출력
+	public List<Map<String, Object>> documentApprovalList(String loginID) {
+		return dao.documentApprovalList(loginID);
+	}
+
+	// 문서함 반려 리스트 출력
+	public List<Map<String, Object>> documentRejectionList(String loginID) {
+		return dao.documentRejectionList(loginID);
+	}
+
+	// 임시저장 리스트 출력
+	public List<Map<String, Object>> temporaryList(String loginID) {
+		return dao.temporaryList(loginID);
 	}
 }

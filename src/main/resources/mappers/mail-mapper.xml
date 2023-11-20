@@ -124,4 +124,8 @@
 	<update id="updateMail">
 		update email set receive_id = #{receive_id}, title = #{title}, content = #{content}, reference_id = #{reference_id} where id = ${id}
 	</update>
+	
+	<select id="selectContentById" resultType="String">
+		select content from email where id = #{id}
+	</select>
 </mapper>

@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<link rel="stylesheet" href="/css/commons/basicSetting.css">
 <link rel="stylesheet" href="/css/humanresources/mypage.css">
 <title>내 정보 관리</title>
 </head>

@@ -5,9 +5,10 @@
   height: calc(100vh - 60px);
 }
 .naviBar__applyBtns,
+.naviBar__favoriteAddress,
 .naviBar__personalAddress,
 .naviBar__sharedAddress {
-  padding: 20px;
+  padding: 0px 20px;
 }
 .naviBar__applyBtns,
 .naviBar__regularEmployeeMenu {
@@ -59,11 +60,30 @@
 .naviConp__icon {
   margin-right: 10px;
 }
-.toggleInner,
-.sharedInner{
+.toggleInner{
   padding-left: 45px;
 }
 
 .naviConp__titleMini{
 	font-size: 16px;	
 }
+
+
+
+.activeMenu{
+	background-color: #DCEDD4;
+}
+
+.favoriteMenuNavi, .trashMenuNavi{
+	margin: 20px 20px 0px 20px;
+	padding: 10px 15px;
+}
+
+.favoriteMenuNavi .naviConp__titleMini, .trashMenuNavi .naviConp__titleMini{
+	font-size: 17px;
+}
+
+.trashMenuNavi{
+	margin: 0px 20px 0px 20px;
+}
+

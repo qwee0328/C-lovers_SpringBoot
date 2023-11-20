@@ -7,17 +7,20 @@
 
 .naviBar {
   background-color: #f3f7f1;
-  width: 250px;
+  min-width: 250px;
   height: calc(100vh - 60px);
-  padding-top: 20px;
+}
+
+.naviBtnBox {
+	padding: 20px;
 }
 
 .naviBtn {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 0px 20px 16px;
-	height: 40px;
+	height: 46px;
+	padding: 10px 15px;
 	border-radius: 5px;
 	color: #FFFFFF;
 	background-color: #75B47D;
@@ -45,11 +48,35 @@
 	font-size: 18px;
 }
 
+/* 메뉴바 박스에만 스크롤 */
+.naviScrollBox {
+  height: calc(100% - 86px);
+  overflow-y: scroll;
+  padding: 0px 20px 20px;
+}
+
+.naviScrollBox::-webkit-scrollbar {
+  width: 7px;
+}
+.naviScrollBox::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d20;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.naviScrollBox::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
 .naviConp {
   display: flex;
+  margin-top: 5px;
   padding: 10px 15px;
   font-size: 18px;
-  margin: 0px 20px 5px 20px;
+  box-sizing: border-box;
+}
+
+.innerNavi > .naviConp {
+	padding: 10px 15px 10px 45px;
 }
 
 .naviConp:hover {
@@ -59,9 +86,4 @@
 
 .naviConp__icon {
   margin-right: 10px;
-}
-
-.naviConp__title+.naviConp__icon {
-	margin-left: 10px;
-	margin-right: 0px;
 }
