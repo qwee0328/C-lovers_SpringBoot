@@ -4,26 +4,36 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HumanResources">
 	<!-- 인사 매퍼 -->
-
-
-	<!-- <select id="selectByIdGetName" resultType="String"> -->
-	<!-- select name from employee where id = #{id} -->
-	<!-- </select> -->
+	
+	<resultMap type="HashMap" id="employeeList">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="profile_img" property="profile_img"/>
+		<result column="job_name" property="job_name"/>
+		<result column="sec_level" property="sec_level"/>
+		<result column="task_name" property="task_name"/>
+		<result column="dept_name" property="dept_name"/>
+	</resultMap>
+	
+<!-- 	<select id="selectByIdGetName" resultType="String"> -->
+<!-- 		select name from employee where id = #{id} -->
+<!-- 	</select> -->
+	
 
 	<select id="selectById" resultType="com.clovers.dto.MemberDTO">
-		select * from mypageData
-		where id = #{id};
+		select * from mypageData where id = #{id};
 	</select>
 
 	<select id="getPw" resultType="String">
-		select pw from employee where id =
-		#{id};
+		select pw from employee where id = #{id};
 	</select>
 
 	<update id="update">
-		update employee set
-		profile_img=#{profile_img},company_phone=#{company_phone},phone=#{phone},email=#{email}
-		where id=#{id}
+		update employee set profile_img=#{profile_img},company_email=#{company_email}, company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+	</update>
+	
+	<update id="updateNoImg">
+		update employee set company_email=#{company_email}, company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
 	</update>
 
 	<!-- 사용자 근무 규칙 맵 -->
@@ -142,5 +152,10 @@
 	<select id="selectRestReasonType" resultType="String">
 		select * from
 		rest_reason_type
+	</select>
+	
+	<!--  임직원 정보 전부 불러오기-->
+	<select id="employeeSelectAll" resultMap="employeeList">
+		select * from employee_view
 	</select>
 </mapper>
