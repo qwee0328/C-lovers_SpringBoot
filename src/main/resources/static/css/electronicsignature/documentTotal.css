@@ -14,6 +14,7 @@ body {
 }
 
 .container__wait {
+	padding-top: 20px;
 	flex: 1;
 }
 
@@ -59,7 +60,7 @@ body {
 
 .documentTable__header {
 	display: grid;
-	grid-template-columns: 40px 40px 170px 140px 150px 120px 120px 140px 120px;
+	grid-template-columns: 200px 250px 100px 180px 180px 120px 80px;
 	background-color: #F3F7F1;
 	border-top: 1px solid #7d7d7d40;
 	border-bottom: 1px solid #7d7d7d40;
@@ -72,7 +73,7 @@ body {
 
 .document__list {
 	display: grid;
-  	grid-template-columns: 40px 40px 170px 140px 150px 120px 120px 140px 120px;
+  	grid-template-columns: 200px 250px 100px 180px 180px 120px 80px;
 }
 
 .document__list:hover {

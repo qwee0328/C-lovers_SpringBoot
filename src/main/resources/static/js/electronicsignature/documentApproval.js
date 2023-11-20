@@ -14,25 +14,6 @@ $(document).ready(function() {
 			let listDiv = $("<div>");
 			listDiv.addClass("document__list");
 			
-			let checkboxDiv = $("<div>");
-			checkboxDiv.addClass("documentTable__checkbox");
-			
-			let favoritesDiv = $("<div>");
-			favoritesDiv.addClass("documentTable__favorites");
-			
-			let iTag = $("<i>");
-			iTag.addClass("fa-regular fa-star");
-			
-			favoritesDiv.append(iTag);
-			
-			let labelTag = $("<label>");
-			
-			let checkboxInput = $("<input>");
-			checkboxInput.attr("type", "checkbox");
-			
-			labelTag.append(checkboxInput);
-			checkboxDiv.append(labelTag);
-			
 			let idDiv = $("<div>");
 			idDiv.addClass("documentTable__documentId");
 			idDiv.html(resp[i].document_id);
@@ -61,7 +42,7 @@ $(document).ready(function() {
 			divisionDiv.addClass("documentTable__division");
 			divisionDiv.html(resp[i].division);
 			
-			listDiv.append(checkboxDiv).append(favoritesDiv).append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv).append(divisionDiv);
+			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv).append(divisionDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	})

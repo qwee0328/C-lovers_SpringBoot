@@ -14,17 +14,6 @@ $(document).ready(function() {
 			let listDiv = $("<div>");
 			listDiv.addClass("document__list");
 			
-			let checkboxDiv = $("<div>");
-			checkboxDiv.addClass("documentTable__checkbox");
-			
-			let labelTag = $("<label>");
-			
-			let checkboxInput = $("<input>");
-			checkboxInput.attr("type", "checkbox");
-			
-			labelTag.append(checkboxInput);
-			checkboxDiv.append(labelTag);
-			
 			let idDiv = $("<div>");
 			idDiv.addClass("documentTable__documentId");
 			idDiv.html(resp[i].document_id);
@@ -49,7 +38,7 @@ $(document).ready(function() {
 			statusDiv.addClass("documentTable__status");
 			statusDiv.html(resp[i].approver_status);
 			
-			listDiv.append(checkboxDiv).append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(divisionDiv).append(statusDiv);
+			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(divisionDiv).append(statusDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	})

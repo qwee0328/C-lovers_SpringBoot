@@ -8,14 +8,11 @@ $(document).ready(function() {
 	
 	// 전체 리스트 출력
 	$.ajax({
-		url: "/electronicsignature/temporary"
+		url: "/electronicsignature/temporaryList"
 	}).done(function(resp){
 		for(let i = 0; i < resp.length; i++) {
 			let listDiv = $("<div>");
 			listDiv.addClass("document__list");
-			
-			let checkboxDiv = $("<div>");
-			checkboxDiv.addClass("documentTable__checkbox");
 			
 			let titleDiv = $("<div>");
 			titleDiv.addClass("documentTable__title");
@@ -24,9 +21,8 @@ $(document).ready(function() {
 			let categoryDiv = $("<div>");
 			categoryDiv.addClass("documentTable__documentCategory");
 			categoryDiv.html(resp[i].category);
-		
 			
-			listDiv.append(checkboxDiv).append(titleDiv).append(categoryDiv);
+			listDiv.append(titleDiv).append(categoryDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	})

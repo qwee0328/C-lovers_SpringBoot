@@ -107,13 +107,6 @@
 	            <div class="naviConp__title">임시저장</div>
 	            <input type="hidden" class="naviLocation" value="temporary">
 	        </div>
-	        <div class="naviConp">
-	            <div class="naviConp__icon">
-	                <i class="fa-solid fa-gear"></i>
-	            </div>
-	            <div class="naviConp__title">설정</div>
-	            <input type="hidden" class="naviLocation" value="setting">
-	        </div>
         </div>
         
         <input type="hidden" id="currentMenu" value="${currentMenu }" />
