@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.services.ElectronicSignatureService;
 
@@ -304,27 +305,15 @@ public class ElectronicSignatureController {
 	}
 
 	// 전자결재 문서 생성
-	@ResponseBody
 	@RequestMapping("/insertDocument")
-	public int insertDocument(@RequestParam("documentType") String documentType,
-			@RequestParam("preservationPeriod") int preservationPeriod,
-			@RequestParam("securityLevel") String securityLevel,
-			@RequestParam("applicationEmployeeIDArray[]") List<String> applicationEmployeeIDArray,
-			@RequestParam("processEmployeeIDArray[]") List<String> processEmployeeIDArray,
-			@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("spender") String spender,
-			@RequestParam("summary") String summary, @RequestParam("fileList[]") List<String> fileList)
-			throws Exception {
-		System.out.println(documentType);
-		System.out.println(preservationPeriod);
-		System.out.println(securityLevel);
-		System.out.println(applicationEmployeeIDArray);
-		System.out.println(processEmployeeIDArray);
-		System.out.println(year);
-		System.out.println(month);
-		System.out.println(spender);
-		System.out.println(summary);
-		System.out.println(fileList);
-		return 0; //esservices.inserDocument(documentType,preservationPeriod,securityLevel,applicationEmployeeIDArray,processEmployeeIDArray,year,month,spender, summary,fileList);
+	public String insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList, String esDocumentType, int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle,MultipartFile[] uploadFiles) throws Exception {
+		System.out.println("applicationEmployeeIDList"+applicationEmployeeIDList);
+		System.out.println("processEmployeeIDList"+processEmployeeIDList);
+		System.out.println("uploadFiles"+uploadFiles);
+		System.out.println("esPreservationPeriod"+esPreservationPeriod);
+		System.out.println("esSpender"+esSpender);
+		esservices.insertDocument(applicationEmployeeIDList,processEmployeeIDList,esDocumentType,esPreservationPeriod,esSecurityLevel,esSpender,documentTitle,uploadFiles);
+		return "redirect:/electronicsignature"; //esservices.inserDocument(documentType,preservationPeriod,securityLevel,applicationEmployeeIDArray,processEmployeeIDArray,year,month,spender, summary,fileList);
 	}
 
 }

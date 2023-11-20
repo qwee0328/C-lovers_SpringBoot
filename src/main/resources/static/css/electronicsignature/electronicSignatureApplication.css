@@ -134,7 +134,7 @@ input[type=radio]{
 	right: 0px;
 }
 
-.approvalLine>.title>button {
+#approvalLineBtn {
 	margin-left: 30px;
 	display: none;
 }

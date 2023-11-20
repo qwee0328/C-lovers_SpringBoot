@@ -127,9 +127,17 @@ $(document).ready(function() {
 		if ($("input[name='type']:checked").val() === "개인") {
 			$("#accountInfo").css("display", "flex");
 			$("#corporationCard").css("display", "none");
+			
+			let trimmedValue = $(".titleInput").val().slice(0,-3);
+			let newTitle = trimmedValue+" 개인";
+			$(".titleInput").val(newTitle);
+			
 		} else {
 			$("#accountInfo").css("display", "none");
 			$("#corporationCard").css("display", "flex");
+			let trimmedValue = $(".titleInput").val().slice(0,-3);
+			let newTitle = trimmedValue+" 법인";
+			$(".titleInput").val(newTitle);
 		}
 	});
 
@@ -250,7 +258,7 @@ function formatByDocumentType() {
 	console.log($("#documentType").text().trim());
 	if ($("#documentType").text().trim() === "선택") {
 		$("#esDocumentType").val("");
-		$(".approvalLine .title button").css("display", "none");
+		$("#approvalLineBtn").css("display", "none");
 		$(".approvalLine__table").css("display", "none");
 		$(".approvalLine .infoDiv").css("display", "block");
 		$(".detailDiv").css("display", "block");
@@ -265,10 +273,12 @@ function formatByDocumentType() {
 		$(".spendingResolution__table").css("display", "block");
 		$(".businessContact__table").css("display", "none");
 		spendingResolutionTitle();
+		$(".titleInput").prop("readonly", true)
 	} else if ($("#documentType").text().trim() === "업무 연락") {
 		$("#esDocumentType").val("업무 연락");
 		console.log("업무연락");
 		basicForm();
+		$(".titleInput").prop("readonly", false)
 		$(".titleInput").val("");
 		$(".spendingResolution__table").css("display", "none");
 		$(".businessContact__table").css("display", "block");
@@ -277,7 +287,7 @@ function formatByDocumentType() {
 
 // 문서 종류 선택시 기본 동작
 function basicForm() {
-	$(".approvalLine .title button").css("display", "inline-block");
+	$("#approvalLineBtn").css("display", "inline-block");
 	$(".approvalLine__table").css("display", "block");
 	$(".approvalLine .infoDiv").css("display", "none");
 	$(".detailDiv").css("display", "none");

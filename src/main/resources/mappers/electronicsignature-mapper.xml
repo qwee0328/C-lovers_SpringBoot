@@ -19,7 +19,7 @@
 	<select id="selectVcationDocmuentCount" resultType="int">
 		select substring(id, char_length(id)-3) as last_four_digits
 		from document
-		where id like '%휴가%'
+		where id like #{keyword}
 		order by cast(substring(id, -4) as unsigned) desc
 		limit 1;
 	</select>

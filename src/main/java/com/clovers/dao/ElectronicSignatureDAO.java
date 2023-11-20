@@ -22,33 +22,33 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
 		return db.selectList("ElectronicSignature.selectEmpJobLevel", userList);
 	}
-	
+
 	// 휴가 문서 번호 구하기
-	public int selectVcationDocmuentCount() {
-		return db.selectOne("ElectronicSignature.selectVcationDocmuentCount");
+	public int selectDocmuentCount(String keyword) {
+		Integer result = db.selectOne("ElectronicSignature.selectVcationDocmuentCount", keyword);
+		return (result != null) ? result.intValue() : 0;
 	}
-	
+
 	// 문서 생성
 	public int insertDocument(DocumentDTO document) {
 		return db.insert("ElectronicSignature.insertDocument", document);
 	}
-	
+
 	// 문서 등록자 정보 생성
 	public int insertDrafter(DocumentDrafterDTO drafter) {
 		return db.insert("ElectronicSignature.insertDrafter", drafter);
 	}
-	
-	// 문서 결재선 등록 
+
+	// 문서 결재선 등록
 	public int insertApprovals(List<DocumentApprovalsDTO> approvals) {
 		return db.insert("ElectronicSignature.insertApprovals", approvals);
 	}
 
-
 	// 휴가 신청일 정보 등록
-	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
-		db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
+	public int insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
+		return db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
 	}
-	
+
 	// 직전 결재자들의 결재 결과
 	public List<Map<String, String>> previousApprovalResult(String loginID) {
 		return db.selectList("ElectronicSignature.previousApprovalResult", loginID);
