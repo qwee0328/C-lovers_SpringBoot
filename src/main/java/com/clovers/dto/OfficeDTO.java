@@ -21,5 +21,6 @@ public class OfficeDTO {
 	private String office_name;
 	private String office_email;
 	private List<DepartmentDTO> department; // 실제 DB에 들어가지 않는 데이터
+	private int total_officer;
 
 }

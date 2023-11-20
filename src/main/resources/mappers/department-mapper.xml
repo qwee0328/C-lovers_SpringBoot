@@ -11,15 +11,10 @@
 	</insert>
 
 	<!-- 상위 부서 정보 불러오기 -->
-	<select id="selectAllWithOutOfficeId" resultType="com.clovers.dto.DepartmentDTO">
-		select * from department where id != "D1001"
+	<select id="selectAll" resultType="com.clovers.dto.DepartmentDTO">
+		select * from department
 	</select>
 
-	<!-- 오피스 정보 불러오기 -->
-	<select id="selectOffice"
-		resultType="com.clovers.dto.DepartmentDTO">
-		select * from department where id = "D1001"
-	</select>
 
 	<!-- 상위 부서 별 종사하는 인원 수 불러오기 -->
 	<select id="selectEmpCountById" resultType="int">
@@ -62,14 +57,7 @@
 
 	<!-- 상위 부서 이름 업데이트 -->
 	<update id="update">
-		update department set dept_name = #{dept_name} where id
-		= #{id}
-	</update>
-
-	<!-- 회사 이름 정보 수정 -->
-	<update id="updateOfficeName">
-		UPDATE department SET dept_name = #{dept_name} WHERE
-		id = 'D1001'
+		update department set dept_name = #{dept_name} where id = #{id}
 	</update>
 
 	<!-- 상위 부서 정보 삭제 -->
