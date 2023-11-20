@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,11 @@ public class MemberDTO {
 	private String dept_id;
 	private String dept_name;
 	
+	// 임직원 정보에 필요한 데이터
+	private int sec_level; 
+	
+	
+	
 	public MemberDTO(String id, String name, String pw, Timestamp birth, String email, String phone,
 			Timestamp hire_date, Timestamp ent_date, String inactivate, String job_id, String dept_task_id,
 			String emp_status_id, String profile_img, String daily_work_rule_id, String company_email,
@@ -67,6 +73,8 @@ public class MemberDTO {
 		this.company_phone = company_phone;
 	}
 	
+	
+	
 //	생일 형식 바꿈
 	public String getFormatBirth() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
@@ -80,5 +88,6 @@ public class MemberDTO {
 		
 		return sdf.format(hire_date);
 	}
+
 	
 }

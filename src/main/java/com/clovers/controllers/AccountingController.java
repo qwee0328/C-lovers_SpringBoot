@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clovers.dto.AccountingDTO;
@@ -41,6 +43,13 @@ public class AccountingController {
 		List<AccountingDTO> list = acService.searchBy(keyword);
 		System.out.println(list);
 		return ResponseEntity.ok(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/searchByAjax")
+	public List<AccountingDTO> searchByAjax(@RequestParam("keyword")String keyword){
+		System.out.println(keyword);
+		return acService.searchBy(keyword);
 	}
 	// 계좌 추가
 	@PostMapping
@@ -75,6 +84,11 @@ public class AccountingController {
 		System.out.println(keyword);
 		List<AccountingDTO> list = acService.searchCard(keyword);
 		return ResponseEntity.ok(list);
+	}
+	@ResponseBody
+	@RequestMapping("/searchCardAjax")
+	public List<AccountingDTO> searchCardAjax(@RequestParam("keyword")String keyword){
+		return acService.searchCard(keyword);
 	}
 	// 카드 추가
 	@PostMapping("/cardInsert")

@@ -11,7 +11,6 @@ $(document).ready(function() {
 		data: { keyword: $("#loginID").val() },
 		type: "POST"
 	}).done(function(resp) {
-		console.log("ㄱ")
 		let userInfo = $("<div>")
 			.attr("class", "userInfo").attr("id", resp[0].id)
 			.html(resp[0].name + " (" + resp[0].task_name + ")");
@@ -27,60 +26,11 @@ $(document).ready(function() {
 		dataType: "json",
 		type: "POST"
 	}).done(function(resp) {
-		console.log("ㄴ")
 		$("#officeEmpCount").text("(" + resp + ")");
 	})
 
-	// 부서별 총 인원 수
-	$.ajax({
-		url: "/office/selectDeptInfo",
-		type: "POST",
-	}).done(function(resp) {
-		console.log("ㄷ")
-		let managementId = "";
-		for (let i = 0; i < resp.length; i++) {
-			let deptBox = $("<div>").attr("class", "deptBox").attr("dept", resp[i].dept_name);
-			let dept = $("<div>").attr("class", "dept").attr("dept_id", resp[i].department_id);
-			let deptIcon = $("<i>")
-			if (resp[i].dept_name === "관리부") {
-				dept.addClass("pagePlus").addClass("selected");
-				deptIcon.addClass("fa-solid fa-minus");
-				managementId = resp[i].department_id
-			} else {
-				deptIcon.addClass("fa-solid fa-plus");
-			}
-			let deptName = $("<span>").text(" " + resp[i].dept_name);
-			let deptCount = $("<span>").text(" (" + resp[i].count + ")");
-
-			dept.append(deptIcon).append(deptName).append(deptCount);
-			deptBox.append(dept);
-			$(".department__body").append(deptBox);
-		}
-
-		// 팀 별 총 인원수
-		$.ajax({
-			url: "/office/selectTaskInfo",
-			type: "POST",
-		}).done(function(resp) {
-			console.log("ㄹ")
-			for (let i = 0; i < resp.length; i++) {
-				let deptBox = $(".deptBox[dept=" + resp[i].dept_name + "]")
-				let dept_task = $("<div>").attr("class", "dept_task").attr("task_id", resp[i].task_id);
-				if (resp[i].dept_name !== "관리부") {
-					dept_task.css("display", "none");
-				}
-				let taskName = $("<span>").text(resp[i].task_name);
-				let taskCount = $("<span>").text(" (" + resp[i].count + ")");
-
-				dept_task.append(taskName).append(taskCount);
-				deptBox.append(dept_task);
-			}
-			// 관리부 인원 불러오기
-			selectDepartmentEmpInfo(managementId)
-
-		});
-	});
-
+	// 처음 초기 화면 세팅
+	initialSettings();
 
 	// 검색 박스 테두리 설정
 	$("#searchInput").on("blur", function() {
@@ -127,9 +77,15 @@ $(document).ready(function() {
 				$(".company.pagePlus").attr("class", "company pagePlus selected");
 				selectAllEmpInfo();
 			} else {
-				$(this).parent().parent().find(".dept.pagePlus").first().addClass("selected");
-				selectDepartmentEmpInfo($(".dept.pagePlus.selected").attr("dept_id"));
-
+				if ($(".dept_task.selected").first().length <= 0) {
+					console.log("팀명 클릭되어있음")
+					$(this).parent().parent().find(".dept.pagePlus").first().addClass("selected");
+					selectDepartmentEmpInfo($(".dept.pagePlus.selected").attr("dept_id"));
+				} else {
+					console.log("팀명 클릭되어있음2")
+					console.log($(this))
+					console.log($(".selected").parent().find(".dept"))
+				}
 			}
 		} else if ( // 부서 명 확대
 			$(this).attr("class").includes("dept") &&
@@ -276,10 +232,9 @@ $(document).ready(function() {
 					$(".table__applyLine").html("");
 					let approvalLineText = "";
 					let userCount = 0;
-					console.log("selectempjoblebel")
-					for (let i = resp.length - 1; i >= 0; i--) {
+					for (let i = 0; i < resp.length; i++) {
 						approvalLineText = approvalLineText + resp[i].name + " (" + resp[i].task_name + ")";
-						if (i !== 0) {
+						if (i !== resp.length - 1) {
 							approvalLineText = approvalLineText + "&nbsp;&nbsp;&nbsp;<i class='fas fa-circle'></i>&nbsp;&nbsp;&nbsp;";
 						}
 						userCount++;
@@ -334,7 +289,85 @@ $(document).ready(function() {
 			$.modal.close();
 		}
 	});
+
+	$(document).on("input", "#searchInput", function() {
+		if ($(this).val() !== "") {
+			$.ajax({
+				url: "/office/searchUserAjax",
+				type: "POST",
+				data: { keyword: $(this).val() }
+			}).done(function(resp) {
+				$(".department__body").empty();
+				$(".employee__List").empty();
+				for (let i = 0; i < resp.length; i++) {
+					let employee__check = $("<div>").attr("class", "employee__check");
+					let empChk = $("<input>", { type: "checkbox" }).attr("class", "empChk").attr("id", resp[i].id);
+					let label = $("<label>").attr("for", resp[i].id);
+					let nameSpan = $("<span>").text(resp[i].name);
+					let taskSpan = $("<span>").text(" (" + resp[i].task_name + ")");
+					label.append(nameSpan).append(taskSpan)
+					employee__check.append(empChk).append(label);
+					$(".employee__List").append(employee__check);
+				}
+			})
+		} else {
+			initialSettings();
+		}
+
+	})
 });
+
+// 처음 초기 화면 세팅
+function initialSettings() {
+	// 부서별 총 인원 수
+	$.ajax({
+		url: "/office/selectDeptInfo",
+		type: "POST",
+	}).done(function(resp) {
+		let managementId = "";
+		for (let i = 0; i < resp.length; i++) {
+			let deptBox = $("<div>").attr("class", "deptBox").attr("dept", resp[i].dept_name);
+			let dept = $("<div>").attr("class", "dept").attr("dept_id", resp[i].department_id);
+			let deptIcon = $("<i>")
+			if (resp[i].dept_name === "관리부") {
+				dept.addClass("pagePlus").addClass("selected");
+				deptIcon.addClass("fa-solid fa-minus");
+				managementId = resp[i].department_id
+			} else {
+				deptIcon.addClass("fa-solid fa-plus");
+			}
+			let deptName = $("<span>").text(" " + resp[i].dept_name);
+			let deptCount = $("<span>").text(" (" + resp[i].count + ")");
+
+			dept.append(deptIcon).append(deptName).append(deptCount);
+			deptBox.append(dept);
+			$(".department__body").append(deptBox);
+		}
+
+		// 팀 별 총 인원수
+		$.ajax({
+			url: "/office/selectTaskInfo",
+			type: "POST",
+		}).done(function(resp) {
+			console.log("ㄹ")
+			for (let i = 0; i < resp.length; i++) {
+				let deptBox = $(".deptBox[dept=" + resp[i].dept_name + "]")
+				let dept_task = $("<div>").attr("class", "dept_task").attr("task_id", resp[i].task_id);
+				if (resp[i].dept_name !== "관리부") {
+					dept_task.css("display", "none");
+				}
+				let taskName = $("<span>").text(resp[i].task_name);
+				let taskCount = $("<span>").text(" (" + resp[i].count + ")");
+
+				dept_task.append(taskName).append(taskCount);
+				deptBox.append(dept_task);
+			}
+			// 관리부 인원 불러오기
+			selectDepartmentEmpInfo(managementId)
+
+		});
+	});
+}
 
 // 회사내 모든 인원의 이름과 부서명 출력하기
 function selectAllEmpInfo() {

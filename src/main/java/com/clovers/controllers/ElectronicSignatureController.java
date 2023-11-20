@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.services.ElectronicSignatureService;
 
@@ -26,27 +27,27 @@ public class ElectronicSignatureController {
 
 	@Autowired
 	private ElectronicSignatureService esservices;
-	
+
 	// 로그인한 결재자의 순서인 문서 번호를 담은 리스트 반환
 	public List<String> ExcludedIds(String loginID) {
 		// 직전 결재자들의 결재 결과
 		List<Map<String, String>> approvalStatus = esservices.previousApprovalResult(loginID);
-		
+
 		// 결재 리스트에서 제외될 문서 번호를 담은 배열
 		List<String> ExcludedIds = new ArrayList<>();
-		
+
 		for (Map<String, String> status : approvalStatus) {
 			String documentId = status.get("document_id");
-            String approverStatus = status.get("approver_status");
-			
+			String approverStatus = status.get("approver_status");
+
 			// 직전 결재자들의 결재 결과가 승인이 아니고, 문서 번호 배열에 포함되지 않았을 경우 문서 번호 저장
-            if(!"승인".equals(approverStatus) && !ExcludedIds.contains(documentId)) {
-            	ExcludedIds.add(documentId);
-            }
+			if (!"승인".equals(approverStatus) && !ExcludedIds.contains(documentId)) {
+				ExcludedIds.add(documentId);
+			}
 		}
 		return ExcludedIds;
 	}
-	
+
 	// 기안 또는 결재 구분
 	public void setDivision(String loginID, List<Map<String, Object>> list) {
 		for(Map<String, Object> item : list) {
@@ -131,7 +132,7 @@ public class ElectronicSignatureController {
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progressWait";
 	}
-	
+
 	// 진행 중인 문서 대기 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressWaitList")
@@ -143,7 +144,7 @@ public class ElectronicSignatureController {
 		setDivision(loginID, list);
 		return list;
 	}
-	
+
 	// 확인으로 이동
 	@RequestMapping("/progressCheck")
 	public String progressCheck() {
@@ -152,7 +153,7 @@ public class ElectronicSignatureController {
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progressCheck";
 	}
-	
+
 	// 진행 중인 문서 확인 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressCheckList")
@@ -173,7 +174,7 @@ public class ElectronicSignatureController {
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progress";
 	}
-	
+
 	// 진행 중인 문서 진행 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressList")
@@ -190,11 +191,11 @@ public class ElectronicSignatureController {
 	@RequestMapping("/documentTotal")
 	public String documentTotal() {
 		String currentMenu = "문서전체";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/documentTotal";
 	}
-		
+
 	// 문서함 전체 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentTotalList")
@@ -205,16 +206,16 @@ public class ElectronicSignatureController {
 		setDivision(loginID, list);
 		return list;
 	}
-	
+
 	// 문서함 기안으로 이동
 	@RequestMapping("/documentDrafting")
 	public String documentDrafting() {
 		String currentMenu = "기안";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/documentDrafting";
 	}
-	
+
 	// 문서함 기안 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentDraftingList")
@@ -224,16 +225,16 @@ public class ElectronicSignatureController {
 
 		return list;
 	}
-	
+
 	// 문서함 결재로 이동
 	@RequestMapping("/documentApproval")
 	public String documentApproval() {
 		String currentMenu = "결재";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/documentApproval";
 	}
-	
+
 	// 문서함 결재 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentApprovalList")
@@ -243,16 +244,16 @@ public class ElectronicSignatureController {
 
 		return list;
 	}
-	
+
 	// 문서함 반려로 이동
 	@RequestMapping("/documentRejection")
 	public String documentRejection() {
 		String currentMenu = "반려";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/documentRejection";
 	}
-	
+
 	// 문서함 반려 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentRejectionList")
@@ -262,16 +263,16 @@ public class ElectronicSignatureController {
 
 		return list;
 	}
-	
+
 	// 임시저장으로 이동
 	@RequestMapping("/temporary")
 	public String temporary() {
 		String currentMenu = "임시저장";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/temporary";
 	}
-	
+
 	// 임시저장 리스트 출력
 	@ResponseBody
 	@RequestMapping("/temporaryList")
@@ -311,8 +312,7 @@ public class ElectronicSignatureController {
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	@ResponseBody
 	@RequestMapping("/selectEmpJobLevel")
-	public List<Map<String, Object>> selectEmpJobLevel(
-			@RequestParam("userList[]") List<String> userList) {
+	public List<Map<String, Object>> selectEmpJobLevel(@RequestParam("userList[]") List<String> userList) {
 		// List<String> userList = requestBody.get("userIdList");
 		System.out.println(userList);
 		// return null;
@@ -328,6 +328,23 @@ public class ElectronicSignatureController {
 			throws Exception {
 		String emp_id = (String) session.getAttribute("loginID");
 		return esservices.insertVacation(emp_id, processEmployeeIDArray, vacationDateList, vacationTypeList, reson);
+	}
+
+	// 전자결재 문서 생성
+	@RequestMapping("/insertDocument")
+	public String insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList,
+			String esDocumentType, int esPreservationPeriod, String esSecurityLevel, String esSpender,
+			String documentTitle, boolean temporary, String expense_category, String expenseYear, String expenseMonth,
+			String summary, String content, MultipartFile[] uploadFiles) throws Exception {
+		System.out.println("applicationEmployeeIDList" + applicationEmployeeIDList);
+		System.out.println("processEmployeeIDList" + processEmployeeIDList);
+		System.out.println("uploadFiles" + uploadFiles);
+		System.out.println("esPreservationPeriod" + esPreservationPeriod);
+		System.out.println("esSpender" + esSpender);
+		esservices.insertDocument(applicationEmployeeIDList, processEmployeeIDList, esDocumentType,
+				esPreservationPeriod, esSecurityLevel, esSpender, documentTitle, temporary, expense_category,
+				expenseYear, expenseMonth, summary, content, uploadFiles);
+		return "redirect:/electronicsignature";
 	}
 
 }
