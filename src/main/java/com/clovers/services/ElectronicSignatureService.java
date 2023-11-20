@@ -35,8 +35,8 @@ public class ElectronicSignatureService {
 	private MemberDAO mdao;
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
-	public List<Map<String, Object>> selectEmpJobLevel(List<String> processUserIDList) {
-		return dao.selectEmpJobLevel(processUserIDList);
+	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
+		return dao.selectEmpJobLevel(userList);
 	}
 
 	// 휴가 문서 생성
@@ -108,5 +108,10 @@ public class ElectronicSignatureService {
 		System.out.println(reson);
 
 		return 0;
+	}
+
+	// 진행 중인 문서 전체 리스트 출력
+	public List<Map<String, Object>> progressTotalList(String loginID) {
+		return dao.progressTotalList(loginID);
 	}
 }

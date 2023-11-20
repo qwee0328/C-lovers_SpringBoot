@@ -51,4 +51,9 @@
 			(#{vacationInfo.document_id}, #{vacationInfo.vacation_date}, #{vacationInfo.rest_reson_type},#{vacationInfo.vacation_reason})
 		</foreach>
 	</insert>
+	
+	<!-- // 진행 중인 문서 전체 리스트 출력 -->
+	<select id="progressTotalList" resultType="map">
+		select document_id, title, drafter_name, report_date, status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and status = '대기'
+	</select>
 </mapper>

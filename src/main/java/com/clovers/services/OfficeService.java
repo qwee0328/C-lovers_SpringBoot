@@ -88,6 +88,24 @@ public class OfficeService {
 
 		// 사내 이메일은 id랑 똑같이 저장
 		dto.setCompany_email(dto.getId());
+		
+		// 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록
+		String jobName = dao.selectJobName(dto.getJob_id());
+		String taskName = dao.selectDeptTaskName(dto.getDept_task_id());
+		dto.setJob_name(jobName);
+		dto.setTask_name(taskName);
+		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			System.out.println("총괄 등록");
+			dao.insertTotalAdmin(id);
+		}else if(taskName.equals("인사팀")) {
+			System.out.println("인사 등록");
+			dao.insertHRAdmin(id);
+		}else if(taskName.equals("재무회계팀")) {
+			System.out.println("회계 등록");
+			dao.insertACAdmin(id);
+		}
+		
+		System.out.println(dto);
 
 		return dao.insertUser(dto);
 	}

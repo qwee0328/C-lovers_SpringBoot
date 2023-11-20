@@ -21,6 +21,16 @@
 		select * from job;
 	</select>
 	
+	<!-- // 부서 명 검색하기 -->
+	<select id="selectDeptTaskName" resultType="String">
+		select task_name from dept_task where id=#{task_id};
+	</select>
+	
+	<!-- // 직급 명 검색하기 -->
+	<select id="selectJobName" resultType="String">
+		select job_name from job where id=#{job_id};
+	</select>
+	
 	<!-- // 실제 db에 저장된 실 사용자 수 불러오기 -->
 	<select id="selectRealEmpCount" resultType="int">
 		select count(*) from employee;
@@ -54,6 +64,20 @@
 		select count(*) from employee where company_phone=#{companyPhone};
 	</select>
 
+	<!-- // 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록 -->
+	<insert id="insertTotalAdmin">
+		insert into admin (emp_id, authority_category_id) values (#{id}, "총괄");
+	</insert>
+	
+	<!-- // 인사팀 관리자 등록 -->
+	<insert id="insertHRAdmin">
+		insert into admin (emp_id, authority_category_id) values (#{id}, "인사");
+	</insert>
+	
+	<!-- // 재후뫼계 관리자 등록 -->
+	<insert id="insertACAdmin">
+		insert into admin (emp_id, authority_category_id) values (#{id}, "회계");
+	</insert>
 
 	<!-- // 사용자 등록하기 -->
 	<insert id="insertUser">

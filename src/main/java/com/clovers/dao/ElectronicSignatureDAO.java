@@ -19,8 +19,8 @@ public class ElectronicSignatureDAO {
 	private SqlSession db;
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
-	public List<Map<String, Object>> selectEmpJobLevel(List<String> processUserIDList) {
-		return db.selectList("ElectronicSignature.selectEmpJobLevel", processUserIDList);
+	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
+		return db.selectList("ElectronicSignature.selectEmpJobLevel", userList);
 	}
 	
 	// 휴가 문서 번호 구하기
@@ -42,20 +42,15 @@ public class ElectronicSignatureDAO {
 	public int insertApprovals(List<DocumentApprovalsDTO> approvals) {
 		return db.insert("ElectronicSignature.insertApprovals", approvals);
 	}
-	
-//	// 휴가 문서 생성
-//	public int insertVacation(DocumentDTO document) {
-//		db.insert("ElectronicSignature.insertVacation", document);
-//		return document.getId();
-//	}
-//
-//	// 휴가 결재선 등록
-//	public void insertVacationApprovals(List<VacationEmpApprovalsDTO> approvalsList) {
-//		db.insert("ElectronicSignature.insertVacationApprovals", approvalsList);
-//	}
+
 
 	// 휴가 신청일 정보 등록
 	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
 		db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
+	}
+
+	// 진행 중인 문서 전체 리스트 출력
+	public List<Map<String, Object>> progressTotalList(String loginID) {
+		return db.selectList("ElectronicSignature.progressTotalList", loginID);
 	}
 }

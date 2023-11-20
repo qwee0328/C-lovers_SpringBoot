@@ -1,5 +1,7 @@
 package com.clovers.dao;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,31 @@ public class HumanResourcesDAO {
 
 	public int update(Map<String, String> param) {
 		return db.update("HumanResources.update", param);
+	}
+
+	// 사용자 지각 정보 불러오기
+	public int selectLateInfo(String id) {
+		return db.selectOne("HumanResources.selectLateInfo", id);
+	}
+
+	//사용자 조기퇴근 정보 불러오기
+	public int selectEarlyLeaveInfo(String id) {
+		return db.selectOne("HumanResources.selectEarlyLeaveInfo", id);
+	}
+
+	// 사용자 퇴근 미체크 정보 불러오기
+	public int selectNotCheckedLeaveInfo(String id) {
+		return db.selectOne("HumanResources.selectNotCheckedLeaveInfo", id);
+	}
+	
+	// 이번달 공휴일 정보 불러오기
+	public List<Map<String, Date>> selectHoliDays(){
+		return db.selectList("HumanResources.selectHoliDays");
+	}
+	
+	// 이번달 근무일 정보 불러오기
+	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(String id){
+		return db.selectList("HumanResources.selectWorkingDaysThisMonth",id);
 	}
 
 	// 사용자 근무 규칙 정보 불러오기

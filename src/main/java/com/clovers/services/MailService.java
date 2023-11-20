@@ -1,12 +1,18 @@
 package com.clovers.services;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,10 +146,11 @@ public class MailService {
 	}
 	
 	@Transactional
-	public int perDeleteMail(int id) {
+	public int perDeleteMail(int id) throws Exception {
 		String upload = "C:/mailUploads";
 		List<EmailFileDTO> fileList = dao.selectAllFileById(id);
 		
+		// 파일 삭제
         for(EmailFileDTO file : fileList) {
         	System.out.println(file.getSys_name());
            File filepath = new File(upload + "/" + file.getSys_name());
@@ -151,7 +158,18 @@ public class MailService {
            
            dao.deleteFiles(file.getSys_name());
         }
-
+        
+        // 이미지 삭제
+        String content = dao.selectContentById(id);
+        String pattern = "<img src=\"(.*?)\">"; // 이미지 태그 안의 src 뽑아냄
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(content);
+        
+        while (m.find()) {
+        	String getUrl = m.group(1);
+        	Path path = FileSystems.getDefault().getPath("/Users" + getUrl);
+        	Files.deleteIfExists(path);
+        }
 		return dao.perDeleteMail(id);
 	}
 	

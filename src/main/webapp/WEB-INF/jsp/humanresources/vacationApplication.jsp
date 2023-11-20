@@ -31,7 +31,7 @@
 	<input type="hidden" id="processEmployeeList">
 	<input type="hidden" id="processEmployeeIDList">
 	<%@ include file="../commons/header.jsp"%>
-	<div class="container">
+	<div class="container" style="margin: 0; padding: 0; width: 100%;">
 		<%@ include file="../humanresources/hrNaviBar.jsp"%>
 		<div class="vacationApp">
 			<div class="draftingBtn">
@@ -103,7 +103,7 @@
 
 		</div>
 		<!-- 결제선 설정 모달창 -->
-		<%@ include file="../humanresources/approvalLineModal.jsp"%>
+		<%@ include file="../commons/approvalLineModal.jsp"%>
 	</div>
 </body>
 </html>

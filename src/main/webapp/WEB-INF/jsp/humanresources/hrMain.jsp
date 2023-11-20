@@ -30,19 +30,19 @@
                         <div class="conf_detail">
                             <div>
                                 <div class="detail__title">지각</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userLateCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">조기퇴근</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userEarlyLeaceCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">퇴근 미체크</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userNotCheckedLeaveCount"></div>
                             </div>
                             <div>
                                 <div class="detail__title">결근</div>
-                                <div class="detail_conf">1회</div>
+                                <div class="detail_conf" id="userAbsenteeismCount"></div>
                             </div>
                         </div>
                     </div>
@@ -70,15 +70,15 @@
                         <div class="conf_detail">
                             <div>
                                 <div class="detail__title">근무일수</div>
-                                <div class="detail_conf">2일</div>
+                                <div class="detail_conf" id="workingDyas"></div>
                             </div>
                             <div>
                                 <div class="detail__title">총 근무시간</div>
-                                <div class="detail_conf">7시간 18분</div>
+                                <div class="detail_conf" id="totalWorkingTime">7시간 18분</div>
                             </div>
                             <div>
                                 <div class="detail__title">보정 평균</div>
-                                <div class="detail_conf">7시간 18분</div>
+                                <div class="detail_conf" id="calibratedAverage">7시간 18분</div>
                             </div>
                         </div>
                     </div>

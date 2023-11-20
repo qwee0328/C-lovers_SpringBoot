@@ -28,6 +28,16 @@ public class OfficeDAO {
 		return db.selectList("Office.selectPositionAll");
 	}
 
+	// 부서 명 검색하기
+	public String selectDeptTaskName(String task_id) {
+		return db.selectOne("Office.selectDeptTaskName", task_id);
+	}
+
+	// 직급 명 검색하기
+	public String selectJobName(String job_id) {
+		return db.selectOne("Office.selectJobName", job_id);
+	}
+
 	// 실제 db에 저장된 실 사용자 수 불러오기
 	public int selectRealEmpCount() {
 		return db.selectOne("Office.selectRealEmpCount");
@@ -51,6 +61,21 @@ public class OfficeDAO {
 	// 사내 전화번호 사용중인번호인지 체크
 	public int usingCompanyPhoneCheck(String companyPhone) {
 		return db.selectOne("Office.usingCompanyPhoneCheck", companyPhone);
+	}
+
+	// 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록
+	public int insertTotalAdmin(String id) {
+		return db.insert("Office.insertTotalAdmin", id);
+	}
+
+	// 인사팀 관리자 등록
+	public int insertHRAdmin(String id) {
+		return db.insert("Office.insertHRAdmin", id);
+	}
+
+	// 재후뫼계 관리자 등록
+	public int insertACAdmin(String id) {
+		return db.insert("Office.insertACAdmin", id);
 	}
 
 	// 사용자 등록하기
@@ -103,9 +128,9 @@ public class OfficeDAO {
 	public List<Map<String, Object>> selectAllEmpInfo() {
 		return db.selectList("Office.selectAllEmpInfo");
 	}
-	
+
 	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
-	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
-		return db.selectList("Office.selectDetpTaskEmpInfo",task_id);
+	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id) {
+		return db.selectList("Office.selectDetpTaskEmpInfo", task_id);
 	}
 }
