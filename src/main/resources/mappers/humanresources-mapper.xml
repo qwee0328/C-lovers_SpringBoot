@@ -28,7 +28,11 @@
 	</select>
 	
 	<update id="update">
-		update employee set profile_img=#{profile_img},company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+		update employee set profile_img=#{profile_img},company_email=#{company_email}, company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+	</update>
+	
+	<update id="updateNoImg">
+		update employee set company_email=#{company_email}, company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
 	</update>
 
 	<!-- 사용자 근무 규칙 맵 -->

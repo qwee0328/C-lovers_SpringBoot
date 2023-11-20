@@ -32,6 +32,14 @@ public class HumanResourcesDAO {
 	public int update(Map<String, String> param) {
 		return db.update("HumanResources.update", param);
 	}
+	
+	public int updateNoImg(Map<String, String> param) {
+		return db.update("HumanResources.updateNoImg", param);
+	}
+	
+	public int updateNoImag(Map<String, String> param) {
+		return db.update("HumanResources.updateNoImag", param);
+	}
 
 	// 사용자 근무 규칙 정보 불러오기
 	public Map<String, Object> selectEmployeeWorkRule(String id) {

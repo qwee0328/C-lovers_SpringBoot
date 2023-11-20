@@ -86,7 +86,14 @@
 	display: flex;
 }
 .header__profileImageBox,.header__profileImage{
+	display: flex;
+	align-items: center;
 	width: 75px;
+}
+.header__profileImage{
+	width: 75px;
+    height: 75px;
+    border-radius: 50%;
 }
 .profileName{
 	margin: 10px 0;

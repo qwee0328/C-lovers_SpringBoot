@@ -93,14 +93,14 @@
 		$.ajax({
 			url:"/humanResources/headerProfile"
 		}).done(function(resp){
-			console.log(resp);
+			console.log(resp.profile_img);
 			
 			
 			let img;
 			
 			let main_img = $("<img class='profileImg'/>");
 				
-			if(resp.profile_img == ""){
+			if(resp.profile_img == "" || resp.profile_img == null){
 				img = "/assets/profile.png";
 			}else{
 				img = "/uploads/"+resp.profile_img;
