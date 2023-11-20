@@ -135,7 +135,7 @@
 		update calendar set trash = #{trash}, trash_date = now() where id = #{id};
 	</update>
 	
-	<!-- 캘린더 업데이트용 정보 불러가기 (개인 주소록) -->
+	<!-- 캘린더 업데이트용 정보 불러가기 -->
 	<select id="selectCaledarInfoByCalendarId" resultMap="calenadarUpdateInfo">
 		select id, color, name, GROUP_CONCAT(emp_id ORDER BY id) AS emp_ids, GROUP_CONCAT(emp_name ORDER BY id) AS emp_names, GROUP_CONCAT(task_name ORDER BY id) AS task_names
 		from calendarUpdateInfo
