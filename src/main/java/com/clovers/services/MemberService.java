@@ -6,15 +6,15 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.dao.MemberDAO;
+import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class MemberService {
-
 	@Autowired
 	private MemberDAO mdao;
 
@@ -48,4 +48,23 @@ public class MemberService {
 		return mdao.getAuthorityCategory(id);
 	}
 
+	// 모든 사용자의 id랑 입사일 불러오기
+	public List<MemberDTO> selectUserList() {
+		return mdao.selectUserList();
+	}
+
+	// 사용자의 연차 기록이 있는지 불러오기
+	public AnnaulRestDTO selectAnnaulRestById(String id) {
+		return mdao.selectAnnaulRestById(id);
+	}
+	
+	// 사용자 연차 기록 업데이트
+	public void updateAutomaticAnnualRest(AnnaulRestDTO user) {
+		mdao.updateAutomaticAnnualRest(user);
+	}
+
+	// 사용자의 연차 자동 등록
+	public void insertAutomaticAnnaulRest(AnnaulRestDTO user) {
+		mdao.insertAutomaticAnnaulRest(user);
+	}
 }

@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 
 @Repository
@@ -40,4 +41,24 @@ public class MemberDAO {
 		return db.selectList("member.getAuthorityCategory", id);
 	}
 
+	// 모든 사용자의 id랑 입사일 불러오기
+	public List<MemberDTO> selectUserList() {
+		return db.selectList("member.selectUserList");
+	}
+
+	// 사용자의 연차 기록이 있는지 불러오기
+	public AnnaulRestDTO selectAnnaulRestById(String id) {
+		AnnaulRestDTO result = db.selectOne("member.selectAnnaulRestById", id);
+		return (result != null) ? result : new AnnaulRestDTO();
+	}
+	
+	// 사용자 연차 기록 업데이트
+	public void updateAutomaticAnnualRest(AnnaulRestDTO user) {
+		db.update("member.updateAutomaticAnnualRest", user);
+	}
+
+	// 사용자의 연차 자동 등록
+	public void insertAutomaticAnnaulRest(AnnaulRestDTO user) {
+		db.insert("member.insertAutomaticAnnaulRest", user);
+	}
 }
