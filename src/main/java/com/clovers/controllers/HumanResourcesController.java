@@ -61,13 +61,19 @@ public class HumanResourcesController {
 //	비밀번호 변경안했으면 변경하게..
 	@ResponseBody
 	@RequestMapping("/recommendChangPw")
-	public String reChangePw(String id,String name) {
-		System.out.println(id+" : "+name);
-		String pw = hrservice.reChangePw(id);
+	public String reChangePw(String id,String pw) {
+		System.out.println(id+" : "+pw);
 		
-		String enPw = EncryptionUtils.getSHA512(EncryptionUtils.kR_EnKeyboardConversion(name));
+		MemberDTO list = hrservice.selectById(id);
 		
-		if(pw.equals(enPw)) {
+		// 사원의 이름을 암호화 한 값
+		String enPw = EncryptionUtils.getSHA512(EncryptionUtils.kR_EnKeyboardConversion(list.getName()));
+		System.out.println(enPw);
+		
+		// DB에 있는 비밀번호 값
+		String pwdb = hrservice.reChangePw(id);
+		
+		if(pwdb.equals(enPw)) {
 			return "변경추천";
 		}
 		return "변경완료";
@@ -82,26 +88,30 @@ public class HumanResourcesController {
 	
 //	프로필 이미지,사내전화,휴대전화,개인이메일 정보 업데이트
 	@RequestMapping("/update")
-	public String update(MultipartFile profile_img,String company_phone,String phone,String email) throws Exception {
+	public String update(MultipartFile profile_img,String company_email,String company_phone,String phone,String email) throws Exception {
 		
 		String id = (String)session.getAttribute("loginID");
 		
-		System.out.println(profile_img);
-		
-		String path = "C:/C-lovers";
-		
-		File uploadPath = new File(path);
-		
-		if(!uploadPath.exists()) {
-			uploadPath.mkdir();
+		// 사진 등록 
+		if(!(profile_img.getOriginalFilename().equals(""))) {
+			String path = "C:/C-lovers";
+			
+			File uploadPath = new File(path);
+			
+			if(!uploadPath.exists()) {
+				uploadPath.mkdir();
+			}
+			
+			String oriName = profile_img.getOriginalFilename();
+			String sysName = UUID.randomUUID()+"_"+oriName;
+			
+			profile_img.transferTo(new File(uploadPath+"/"+sysName));
+			
+			hrservice.update(id,sysName,company_email,company_phone,phone,email);
+		}else {
+			// 사진 안바꾸거나 기본이미지인 경우
+			hrservice.updateNoImg(id, company_email, company_phone, phone, email);
 		}
-		
-		String oriName = profile_img.getOriginalFilename();
-		String sysName = UUID.randomUUID()+"_"+oriName;
-		
-		profile_img.transferTo(new File(uploadPath+"/"+sysName));
-		
-		hrservice.update(id,sysName,company_phone,phone,email);
 		
 		return "redirect:/humanResources/mypage";
 	}
@@ -207,10 +217,28 @@ public class HumanResourcesController {
 		return "humanresources/vacationApplication";
 	}
 	
+	
 	// 휴가 사유 구분 불러오기
 	@ResponseBody
 	@RequestMapping("/selectRestReasonType")
 	public List<String> selectRestReasonType() {
 		return hrservice.selectRestReasonType();
+	}
+	
+	// 임직원 관리 페이지 이동 
+	@RequestMapping("/employeeInfo")
+	public String employeeInfo() {
+		return "humanresources/employeeInfo";
+	}
+	
+//	// view로 헤더에 필요한 정보 가져오기
+	@ResponseBody
+	@RequestMapping("/headerProfile")
+	public MemberDTO selectProfile() {
+		
+		String id = (String)session.getAttribute("loginID");
+		MemberDTO profile = hrservice.selectById(id);
+		
+		return profile;
 	}
 }

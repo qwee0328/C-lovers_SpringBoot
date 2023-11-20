@@ -147,4 +147,40 @@ public class OfficeController {
 	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
 		return oservice.selectDetpTaskEmpInfo(task_id);
 	}
+	
+	// 팀별(생산1팀,2팀..)인원수, 부서명
+	@ResponseBody
+	@RequestMapping("/selectAllTaskNameEmpo")
+	public List<Map<String, Object>> selectAllTaskNameEmpo(){
+		return oservice.selectAllTaskNameEmpo();
+	}
+	
+	// 임직원 정보에서 부서 클릭하면 정보
+	@ResponseBody
+	@RequestMapping("/selectDeptEmpo")
+	public List<Map<String, Object>> selectDeptEmpo(){
+		return oservice.selectDeptEmpo();
+	}
+	
+	// 부서 클릭하면 정보 
+	@ResponseBody
+	@RequestMapping("/selectByDeptName")
+	public List<Map<String, Object>> selectByDeptName(String dept_name){
+		return oservice.selectByDeptName(dept_name);
+	}
+	
+	// 팀 클릭하면 정보
+	@ResponseBody
+	@RequestMapping("/selectByTaskName")
+	public List<Map<String, Object>> selectByTaskName(String task_name){
+		return oservice.selectByTaskName(task_name);
+	}
+	
+	// 임직원 검색
+	@ResponseBody
+	@RequestMapping("/searchByName")
+	public List<Map<String, Object>> searchByName(String name){
+		System.out.println(name);
+		return oservice.searchByName(name);
+	}
 }

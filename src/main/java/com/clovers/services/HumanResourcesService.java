@@ -44,17 +44,30 @@ public class HumanResourcesService {
 	public String reChangePw(String id) {
 		return dao.reChangePw(id);
 	}
-
-	public int update(String id, String profile_img, String company_phone, String phone, String email) {
-
+	
+	public int update(String id,String profile_img,String company_email ,String company_phone,String phone,String email) {
+	
 		Map<String, String> param = new HashMap<>();
 		param.put("id", id);
 		param.put("profile_img", profile_img);
+		param.put("company_email", company_email);
 		param.put("company_phone", company_phone);
 		param.put("phone", phone);
 		param.put("email", email);
 
 		return dao.update(param);
+	}
+	// 사진 안바꾸거나 기본이미지인 경우
+	public int updateNoImg(String id,String company_email ,String company_phone,String phone,String email) {
+		
+		Map<String,String> param = new HashMap<>();
+		param.put("id", id);
+		param.put("company_email", company_email);
+		param.put("company_phone", company_phone);
+		param.put("phone", phone);
+		param.put("email", email);
+		
+		return dao.updateNoImg(param);
 	}
 
 	// 사용자 지각 정보 불러오기
@@ -205,4 +218,10 @@ public class HumanResourcesService {
 	public List<String> selectRestReasonType() {
 		return dao.selectRestReasonType();
 	}
+	
+	// 임직원 정보 전부 불러오기
+	public List<MemberDTO> employeeSelectAll() {
+		return dao.employeeSelectAll();
+	}
+	
 }

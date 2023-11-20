@@ -36,36 +36,56 @@
 			<div>
 				<i class="fa-regular fa-bell"></i>
 			</div>
-			<div>
-				<img src="/assets/profile.png" alt="" class="profileImg"/>
+			<div class="mainHeader_profileBox">
+<!-- 				<img src="/assets/profile.png" alt="" class="profileImg"/> -->
 			</div>
 		</div>
 	</div>
 	
 	<!-- 민경 추가부분 -->
 	<div class="header__userinfoBox">
-		<div class="header__userinfo">
-			<div class="header__myinfo">
-				<div class="header__profileImageBox">
-					<img src="/assets/profile.png" alt="" class="header__profileImage">
-				</div>
-				<div class="header__profileInfoBox">
-					<div class="profileName">
-						이사원
+			<div class="header__userinfo">
+				<div class="header__myinfo">
+	
+					<div class="header__profileImageBox">
+						<!-- 이미지 -->
+<!-- 						<img src="/uploads/" alt="" class="header__profileImage"> -->
 					</div>
-					<div class="profileEmail">
-						lee@clovers.com
+	
+					<div class="header__profileInfoBox">
+						<div class="profileName">
+						<!-- 이름 -->
+						</div>
+	
+						<div class="profileEmail">
+							<!-- 이메일 -->
+						</div>
+					</div>
+	
+				</div>
+	
+				<div class="header__myinfoBottom">
+	
+					<div class="header__setting">
+	                    <a href="/humanResources/mypage">설정</a>
+	                </div>
+	
+					<div class="header__logoutBtnBox">
+						<button><a href="/members/logout">로그아웃</a></button>
 					</div>
 				</div>
 			</div>
-			<div class="header__myinfoBottom">
-				<div class="header__setting"><a href="/humanResources/mypage">설정</a></div>
-				<div class="header__logoutBtnBox">
-					<button><a href="/members/logout">로그아웃</a></button>
-				</div>
-			</div>
-		</div>
 	</div>
 </body>
 
+<script>
+	// 로고 클릭시 홈으로 이동
+	$(document).on("click", ".headerLeft__logo", function() {
+		location.href = "/";
+	})
+	
+	$(".dropNavi__icon").on("click", function() {
+		
+	})
+</script>
 </html>

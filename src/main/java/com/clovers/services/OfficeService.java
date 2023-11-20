@@ -163,4 +163,29 @@ public class OfficeService {
 	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
 		return dao.selectDetpTaskEmpInfo(task_id);
 	}
+	
+	// 팀별(생산1팀,2팀..)인원수, 부서명
+	public List<Map<String, Object>> selectAllTaskNameEmpo(){
+		return dao.selectAllTaskNameEmpo();
+	}
+	
+	// 임직원 정보에서 부서 클릭하면 정보
+	public List<Map<String, Object>> selectDeptEmpo(){
+		return dao.selectDeptEmpo();
+	}
+	
+	// 부서 클릭하면 정보 
+	public List<Map<String, Object>> selectByDeptName(String dept_name){
+		return dao.selectByDeptName(dept_name);
+	}
+	
+	// 팀 클릭하면 정보
+	public List<Map<String, Object>> selectByTaskName(String task_name){
+		return dao.selectByTaskName(task_name);
+	}
+	
+	// 임직원 검색
+	public List<Map<String, Object>> searchByName(String name){
+		return dao.searchByName(name);
+	}
 }
