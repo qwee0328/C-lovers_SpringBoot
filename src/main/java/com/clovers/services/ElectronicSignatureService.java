@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,9 +110,66 @@ public class ElectronicSignatureService {
 
 		return 0;
 	}
+	
+	// 직전 결재자들의 결재 결과
+	public List<Map<String, String>> previousApprovalResult(String loginID) {
+		return dao.previousApprovalResult(loginID);
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
-	public List<Map<String, Object>> progressTotalList(String loginID) {
-		return dao.progressTotalList(loginID);
+	public List<Map<String, Object>> progressTotalList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressTotalList(userInfo);
+	}
+
+	// 진행 중인 문서 대기 리스트 출력
+	public List<Map<String, Object>> proggressWaitLlist(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressWaitList(userInfo);
+	}
+
+	// 진행 중인 문서 확인 리스트 출력
+	public List<Map<String, Object>> progressCheckList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressCheckList(userInfo);
+	}
+
+	// 진행 중인 문서 진행 리스트 출력
+	public List<Map<String, Object>> progressList(String loginID, List<String> ExcludedIds) {
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("loginID", loginID);
+		userInfo.put("ExcludedIds", ExcludedIds);
+		return dao.progressList(userInfo);
+	}
+
+	// 문서함 전체 리스트 출력
+	public List<Map<String, Object>> documentTotalList(String loginID) {
+		return dao.documentList(loginID);
+	}
+
+	// 문서함 기안 리스트 출력
+	public List<Map<String, Object>> documentDraftingList(String loginID) {
+		return dao.documentDraftingList(loginID);
+	}
+
+	// 문서함 결재 리스트 출력
+	public List<Map<String, Object>> documentApprovalList(String loginID) {
+		return dao.documentApprovalList(loginID);
+	}
+
+	// 문서함 반려 리스트 출력
+	public List<Map<String, Object>> documentRejectionList(String loginID) {
+		return dao.documentRejectionList(loginID);
+	}
+
+	// 임시저장 리스트 출력
+	public List<Map<String, Object>> temporaryList(String loginID) {
+		return dao.temporaryList(loginID);
 	}
 }

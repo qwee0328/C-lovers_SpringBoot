@@ -6,9 +6,9 @@ $(document).ready(function() {
 		$(".approvalForm__dropMenu").toggle();
 	});
 	
-	// 대기 리스트 출력
+	// 전체 리스트 출력
 	$.ajax({
-		url: "/electronicsignature/progressCheckList"
+		url: "/electronicsignature/documentRejectionList"
 	}).done(function(resp){
 		for(let i = 0; i < resp.length; i++) {
 			let listDiv = $("<div>");
@@ -30,15 +30,19 @@ $(document).ready(function() {
 			draftDateDiv.addClass("documentTable__draftDate");
 			draftDateDiv.html(resp[i].report_date);
 			
+			let dueDateDiv = $("<div>");
+			dueDateDiv.addClass("documentTable__dueDate");
+			dueDateDiv.html("");
+			
+			let categoryDiv = $("<div>");
+			categoryDiv.addClass("documentTable__documentCategory");
+			categoryDiv.html(resp[i].category);
+			
 			let divisionDiv = $("<div>");
 			divisionDiv.addClass("documentTable__division");
 			divisionDiv.html(resp[i].division);
 			
-			let statusDiv = $("<div>");
-			statusDiv.addClass("documentTable__approver__status");
-			statusDiv.html(resp[i].approver_status);
-			
-			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(divisionDiv).append(statusDiv);
+			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv).append(divisionDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	})

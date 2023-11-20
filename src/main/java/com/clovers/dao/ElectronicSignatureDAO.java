@@ -48,9 +48,54 @@ public class ElectronicSignatureDAO {
 	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
 		db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
 	}
+	
+	// 직전 결재자들의 결재 결과
+	public List<Map<String, String>> previousApprovalResult(String loginID) {
+		return db.selectList("ElectronicSignature.previousApprovalResult", loginID);
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
-	public List<Map<String, Object>> progressTotalList(String loginID) {
-		return db.selectList("ElectronicSignature.progressTotalList", loginID);
+	public List<Map<String, Object>> progressTotalList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressTotalList", userInfo);
+	}
+
+	// 진행 중인 문서 대기 리스트 출력
+	public List<Map<String, Object>> progressWaitList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressWaitList", userInfo);
+	}
+
+	// 진행 중인 문서 확인 리스트 출력
+	public List<Map<String, Object>> progressCheckList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressCheckList", userInfo);
+	}
+
+	// 진행 중인 문서 진행 리스트 출력
+	public List<Map<String, Object>> progressList(Map<String, Object> userInfo) {
+		return db.selectList("ElectronicSignature.progressList", userInfo);
+	}
+
+	// 문서함 전체 리스트 출력
+	public List<Map<String, Object>> documentList(String loginID) {
+		return db.selectList("ElectronicSignature.documentTotalList", loginID);
+	}
+
+	// 문서함 기안 리스트 출력
+	public List<Map<String, Object>> documentDraftingList(String loginID) {
+		return db.selectList("ElectronicSignature.documentDraftingList", loginID);
+	}
+
+	// 문서함 결재 리스트 출력
+	public List<Map<String, Object>> documentApprovalList(String loginID) {
+		return db.selectList("ElectronicSignature.documentApprovalList", loginID);
+	}
+
+	// 문서함 반려 리스트 출력
+	public List<Map<String, Object>> documentRejectionList(String loginID) {
+		return db.selectList("ElectronicSignature.documentRejectList", loginID);
+	}
+
+	// 임시저장 리스트 출력
+	public List<Map<String, Object>> temporaryList(String loginID) {
+		return db.selectList("ElectronicSignature.temporaryList", loginID);
 	}
 }

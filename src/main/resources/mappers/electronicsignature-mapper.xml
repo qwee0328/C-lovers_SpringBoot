@@ -52,8 +52,123 @@
 		</foreach>
 	</insert>
 	
+	<!-- // 직전 결재자들의 결재 결과 -->
+	<!-- 로그인한 결재자와 같은 document_id를 가지고, 로그인한 결재자보다 높은 레벨(낮은 직급)인 사람의 결재 결과를 가져옴 -->
+	<select id="previousApprovalResult" resultType="map">
+		select document_id, approver_status from document_list_info dli where exists (select 1 from document_list_info where approver_id = #{loginID} and dli.document_id = document_list_info.document_id and dli.approver_level > document_list_info.approver_level)
+	</select>
+	
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-		select document_id, title, drafter_name, report_date, status from document_list_info where (approver_id = #{loginID} or drafter_id = #{loginID}) and status = '대기'
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, report_date, approver_status
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   )
+		   ORDER BY report_date desc;
+	</select>
+	
+	<!-- // 진행 중인 문서 대기 리스트 출력 -->
+	<select id="progressWaitList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   ) AND approver_status = '대기'
+		   ORDER BY report_date desc;
+	</select>
+	
+	<!-- // 진행 중인 문서 결과 리스트 출력 -->
+	<select id="progressCheckList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, approver_status, report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   ) AND approver_status = '승인'
+		   ORDER BY report_date desc;
+	</select>
+	
+	<!-- // 진행 중인 문서 진행 리스트 출력 -->
+	<select id="progressList" resultType="map">
+		SELECT document_id, title, drafter_name, drafter_id, approver_id, report_date
+		FROM document_list_info
+		WHERE total_status = '대기'
+			AND drafter_id = #{loginID}
+		   OR (approver_id = #{loginID}
+		   <!-- 제외할 문서 번호가 있을 때만 실행 -->
+		   <if test="ExcludedIds != null and ExcludedIds.size() > 0">
+               AND document_id NOT IN
+               <foreach collection="ExcludedIds" item="document_id" open="(" close=")" separator=",">
+                   #{document_id}
+               </foreach>
+           </if>
+		   ) AND approver_status = '승인'
+		   ORDER BY report_date desc;
+	</select>
+	
+	<!-- // 문서함 전체 리스트 출력 -->
+	<select id="documentTotalList" resultType="map">
+		SELECT *
+		FROM document_list_info
+		WHERE total_status != '대기'
+		AND (drafter_id = #{loginID}
+		OR approver_id = #{loginID})
+	</select>
+	
+	<!-- // 문서함 기안 리스트 출력 -->
+	<select id="documentDraftingList" resultType="map">
+		SELECT *
+		FROM document_list_info
+		WHERE total_status = '승인'
+		AND drafter_id = #{loginID}
+	</select>
+	
+	<!-- // 문서함 결재 리스트 출력 -->
+	<select id="documentApprovalList" resultType="map">
+		SELECT *
+		FROM document_list_info
+		WHERE total_status = '승인'
+		AND approver_id = #{loginID}
+	</select>
+	
+	<!-- // 문서함 반려 리스트 출력 -->
+	<select id="documentRejectList" resultType="map">
+		SELECT *
+		FROM document_list_info
+		WHERE total_status = '반려'
+		AND (drafter_id = #{loginID}
+		OR approver_id = #{loginID})
+	</select>
+	
+	<!-- // 임시저장 리스트 출력 -->
+	<select id="temporaryList" resultType="map">
+		SELECT *
+		FROM document_list_info
+		WHERE drafter_id = #{loginID}
+		AND temporary = true
 	</select>
 </mapper>

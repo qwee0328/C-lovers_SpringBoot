@@ -60,7 +60,7 @@ body {
 
 .documentTable__header {
 	display: grid;
-	grid-template-columns: 250px 300px 140px 230px 100px;
+	grid-template-columns: 800px 100px;
 	background-color: #F3F7F1;
 	border-top: 1px solid #7d7d7d40;
 	border-bottom: 1px solid #7d7d7d40;
@@ -68,13 +68,12 @@ body {
 
 .documentTable__header > div {
 	padding: 9px 10px 9px 15px;
-	white-space: nowrap;
 	
 }
 
 .document__list {
 	display: grid;
-  	grid-template-columns: 250px 300px 140px 230px 100px;
+  	grid-template-columns: 800px 100px;
 }
 
 .document__list:hover {
@@ -84,6 +83,7 @@ body {
 
 .document__list > div {
 	padding: 12px 10px 12px 15px;
+	white-space: nowrap;
 }
 
 .documentTable__title {
