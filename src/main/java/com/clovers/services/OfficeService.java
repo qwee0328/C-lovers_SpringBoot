@@ -97,10 +97,10 @@ public class OfficeService {
 		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
 			System.out.println("총괄 등록");
 			dao.insertTotalAdmin(id);
-		}else if(taskName.equals("인사팀")) {
+		}else if(taskName.contains("인사")) {
 			System.out.println("인사 등록");
 			dao.insertHRAdmin(id);
-		}else if(taskName.equals("재무회계팀")) {
+		}else if(taskName.contains("회계")) {
 			System.out.println("회계 등록");
 			dao.insertACAdmin(id);
 		}

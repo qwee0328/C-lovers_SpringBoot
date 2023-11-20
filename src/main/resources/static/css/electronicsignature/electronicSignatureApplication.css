@@ -156,12 +156,9 @@ input[type=radio]{
 .lineDiv {
 	display: flex;
 	align-items: center;
+	margin: 10px 0;
 }
 
-.lineDiv:not(:last-child) {
-	margin-bottom: 10px;
-	
-}
 .table__applyLine>.lineDiv>i.fas,
 .table__approvalLine>.lineDiv>i.fas {
 	font-size: 5px;
@@ -248,7 +245,7 @@ input[type=radio]{
 }
 
 .table__srLine input:not(:first-child) {
-	margin-left: 20px;
+	margin: 0 5px 0 20px;
 }
 
 .dateSelectBox {

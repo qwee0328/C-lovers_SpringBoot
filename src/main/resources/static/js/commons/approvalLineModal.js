@@ -276,10 +276,9 @@ $(document).ready(function() {
 					$(".table__applyLine").html("");
 					let approvalLineText = "";
 					let userCount = 0;
-					console.log("selectempjoblebel")
-					for (let i = resp.length - 1; i >= 0; i--) {
+					for (let i = 0; i <resp.length; i++) {
 						approvalLineText = approvalLineText + resp[i].name + " (" + resp[i].task_name + ")";
-						if (i !== 0) {
+						if (i !== resp.length-1) {
 							approvalLineText = approvalLineText + "&nbsp;&nbsp;&nbsp;<i class='fas fa-circle'></i>&nbsp;&nbsp;&nbsp;";
 						}
 						userCount++;

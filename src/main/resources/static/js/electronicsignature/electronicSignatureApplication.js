@@ -1,6 +1,11 @@
 let showSelector = false;
 $(document).ready(function() {
 	// selector 커스텀 해서 만들기
+	
+	$("#esPreservationPeriod").val("5");
+	$("#esSecurityLevel").val("A등급");
+	
+	
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {
 		if (!showSelector) {
@@ -39,6 +44,22 @@ $(document).ready(function() {
 				$("#month .typeName").text() +
 				"월 지출 결의서 - 개인"
 			);
+		}
+		if($(this).parent().parent().attr("id")==="preservationPeriod"){
+			if($("#preservationPeriod .typeName").text()==="1년"){
+				$("#esPreservationPeriod").val("1");
+			}else if($("#preservationPeriod .typeName").text()==="3년"){
+				$("#esPreservationPeriod").val("3");
+			}else if($("#preservationPeriod .typeName").text()==="5년"){
+				$("#esPreservationPeriod").val("5");
+			}else if($("#preservationPeriod .typeName").text()==="10년"){
+				$("#esPreservationPeriod").val("10");
+			}else{
+				$("#esPreservationPeriod").val("999");
+			}
+		}
+		if($(this).parent().parent().attr("id")==="securityLevel"){
+			$("#esSecurityLevel").val($("#securityLevel .typeName").text());
 		}
 	});
 
@@ -84,18 +105,17 @@ $(document).ready(function() {
 
 	// 보존연한 및 보안등급 툴팁 이벤트
 	$("#period, #level").on("mouseover", function() {
-		console.log("1");
-		if ($(this).attr("id") === "period") {
-			$("#period__tooltip").css("display", "block");
+		if ($(this).attr("id")==="period") {
+			$("#period__tooltip").css("display", "block").css("opacity", "1");
 		} else {
-			$("#level__tooltip").css("display", "block");
+			$("#level__tooltip").css("display", "block").css("opacity", "1");
 		}
 	});
 	$("#period, #level").on("mouseout", function() {
-		if ($(this).attr("id") === "period") {
-			$("#period__tooltip").css("display", "none");
+		if ($(this).attr("id")==="period") {
+			$("#period__tooltip").css("display", "none").css("opacity", "0");
 		} else {
-			$("#level__tooltip").css("display", "none");
+			$("#level__tooltip").css("display", "none").css("opacity", "0");
 		}
 	});
 
@@ -104,7 +124,6 @@ $(document).ready(function() {
 	createMonth();
 
 	$("input[name='type']").on("change", function() {
-		console.log("check");
 		if ($("input[name='type']:checked").val() === "개인") {
 			$("#accountInfo").css("display", "flex");
 			$("#corporationCard").css("display", "none");
@@ -113,15 +132,39 @@ $(document).ready(function() {
 			$("#corporationCard").css("display", "flex");
 		}
 	});
+	
+	$("#searchUser").on("change",function(){
+		$.ajax({
+			url: "/office/searchUserAjax",
+				dataType: "json",
+				data: { keyword: $(this).val() }
+		}).done(function(resp){
+			console.log(resp)
+		})
+	})
 
-
+	// 기안하기
+	$("#vacationdraftingBtn").on("click", function(){
+		if($("#esDocumentType").val()==="선택"||$("#esDocumentType").val()===""){
+			alert("문서 종류를 선택하고 내용을 입력해주세요");
+			return;
+		}
+		if($("#applicationEmployeeIDList").val()===""||$("#processEmployeeIDList").val()===""){
+			alert("결제선을 설정해주세요.");
+			return;
+		}
+		if($(".titleInput").val()===""){
+			alert("문서 제목을 입력해주세요.");
+			return;
+		}
+	})
 });
 
 // 문서 종류에 따른 ui 구성 변경
 function formatByDocumentType() {
 	console.log($("#documentType").text().trim());
 	if ($("#documentType").text().trim() === "선택") {
-		console.log("선택");
+		$("#esDocumentType").val("");
 		$(".approvalLine .title button").css("display", "none");
 		$(".approvalLine__table").css("display", "none");
 		$(".approvalLine .infoDiv").css("display", "block");
@@ -129,14 +172,16 @@ function formatByDocumentType() {
 		$(".esTitle").css("display", "none");
 		$(".mainBox").css("display", "none");
 		$(".fileListBox").css("display", "none");
-	} else if ($("#documentType").text().trim() === "지출결의서") {
+	} else if ($("#documentType").text().trim() === "지출 결의서") {
+		$("#esDocumentType").val("지출 결의서");
 		console.log("지출결의");
 		basicForm();
 
 		$(".spendingResolution__table").css("display", "block");
 		$(".businessContact__table").css("display", "none");
 		spendingResolutionTitle();
-	} else if ($("#documentType").text().trim() === "업무연락") {
+	} else if ($("#documentType").text().trim() === "업무 연락") {
+		$("#esDocumentType").val("업무 연락");
 		console.log("업무연락");
 		basicForm();
 		$(".titleInput").val("");
