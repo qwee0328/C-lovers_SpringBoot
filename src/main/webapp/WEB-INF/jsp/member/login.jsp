@@ -75,7 +75,26 @@
 					if(resp == false){
 						$(".loginFail").html("로그인에 실패했습니다.");
 					}else{
-						location.href="/"
+						console.log("login잘됨");
+						console.log($("#id").val());
+						console.log($("#pw").val());
+						// 비밀번호가 사원의 이름과 같으면 변경하는 페이지로 이동시킴
+				        $.ajax({
+				        	url:"/humanResources/recommendChangPw",
+				        	type:"POST",
+				        	data : {
+				        		id : $("#id").val(),
+				        		pw : $("#pw").val()
+				        	}
+				        }).done(function(resp){
+				        	console.log(resp);
+				        	if(resp == "변경추천"){
+				        		alert("비밀번호를 변경해주세요.");
+				        		location.href="/humanResources/goChangePw";
+				        	}else{
+				        		location.href="/"
+				        	}
+				        })
 					}
 				});
 			};
@@ -103,11 +122,31 @@
 					pw:$("#pw").val()
 				}
 			}).done(function(resp){
-				console.log(resp);
 				if(resp == false){
 					$(".loginFail").html("로그인에 실패했습니다.");
 				}else{
-					location.href="/"
+					console.log("login잘됨");
+					console.log($("#id").val());
+					console.log($("#pw").val());
+					// 비밀번호가 사원의 이름과 같으면 변경하는 페이지로 이동시킴
+			        $.ajax({
+			        	url:"/humanResources/recommendChangPw",
+			        	type:"POST",
+			        	data : {
+			        		id : $("#id").val(),
+			        		pw : $("#pw").val()
+			        	}
+			        }).done(function(resp){
+			        	console.log(resp);
+			        	if(resp == "변경추천"){
+			        		alert("비밀번호를 변경해주세요.");
+			        		location.href="/humanResources/goChangePw";
+			        	}else{
+			        		location.href="/"
+			        	}
+			        })
+					
+					
 				}
 			});
 			
