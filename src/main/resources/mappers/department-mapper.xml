@@ -29,7 +29,7 @@
 	
 	<!-- 상위 부서 별 종사하는 인원 수 불러오기 -->
 	<select id="selectEmpCount" resultType="int">
-		select count(*)from employee 
+		select count(*) from employee 
 	</select>
 
 	<!-- 아이디를 기반으로 상위 부서 정보를 반환 -->
