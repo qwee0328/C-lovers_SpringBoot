@@ -62,40 +62,52 @@ public class ElectronicSignatureController {
 	// 품의서 또는 휴가 신청서 구분
 	public void setCategory(List<Map<String, Object>> list) {
 		for(Map<String, Object> item : list) {
-			// document_id에 '품의'가 포함되어 있으면 품의서
-	        if (item.get("document_id").toString().contains("품의")) {
-	            item.put("category", "품의서");
+			// document_id에 '지출'이 포함되어 있으면 지출 결의서
+	        if (item.get("document_id").toString().contains("지출")) {
+	            item.put("category", "지출 결의서");
 	        }
 	        // document_id에 '휴가'가 포함되어 있으면 휴가 신청서
-	        if (item.get("document_id").toString().contains("휴가")) {
+	        else if (item.get("document_id").toString().contains("휴가")) {
 	            item.put("category", "휴가 신청서");
+	        }
+	        else if (item.get("document_id").toString().contains("업무")) {
+	        	item.put("category", "업무연락");
 	        }
 		}
 	}
-	
+
 	// 메인 화면으로 이동
 	@RequestMapping("")
 	public String main() {
 		String title = "전자결재";
 		String currentMenu = "대기";
-		
+
 		session.setAttribute("title", title);
 		session.setAttribute("currentMenu", currentMenu);
-		
+
 		return "/electronicsignature/progressWait";
 	}
-	
+
+	// 전자 결제 작성 페이지로 이동
+	@RequestMapping("/electronicSignatureWrite")
+	public String electronicSignatureWrite() {
+		String currentMenu = "";
+
+		session.setAttribute("currentMenu", currentMenu);
+		return "/electronicsignature/electronicSignatureApplication";
+	}
+
 	// 진행 중인 문서 전체로 이동
 	@RequestMapping("/progressTotal")
 	public String progressTotal() {
 		String currentMenu = "진행전체";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progressTotal";
 	}
-	
+
 	// 진행 중인 문서 전체 리스트 출력
-	@ResponseBody 
+	@ResponseBody
 	@RequestMapping("/progressTotalList")
 	public List<Map<String, Object>> progressTotalList() {
 		String loginID = (String) session.getAttribute("loginID");
@@ -108,12 +120,12 @@ public class ElectronicSignatureController {
 
 		return list;
 	}
-	
+
 	// 대기로 이동
 	@RequestMapping("/progressWait")
 	public String progressWait() {
 		String currentMenu = "대기";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progressWait";
 	}
@@ -134,7 +146,7 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressCheck")
 	public String progressCheck() {
 		String currentMenu = "확인";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progressCheck";
 	}
@@ -150,12 +162,12 @@ public class ElectronicSignatureController {
 		setDivision(loginID, list);
 		return list;
 	}
-	
+
 	// 진행으로 이동
 	@RequestMapping("/progress")
 	public String progress() {
 		String currentMenu = "진행";
-		
+
 		session.setAttribute("currentMenu", currentMenu);
 		return "/electronicsignature/progress";
 	}
@@ -171,7 +183,7 @@ public class ElectronicSignatureController {
 		setDivision(loginID, list);
 		return list;
 	}
-	
+
 	// 문서함 전체로 이동
 	@RequestMapping("/documentTotal")
 	public String documentTotal() {
@@ -275,11 +287,11 @@ public class ElectronicSignatureController {
 	@ResponseBody
 	@RequestMapping("/selectEmpJobLevel")
 	public List<Map<String, Object>> selectEmpJobLevel(
-			@RequestParam("processUserID[]") List<String> processUserIDList) {
+			@RequestParam("userList[]") List<String> userList) {
 		// List<String> userList = requestBody.get("userIdList");
-		System.out.println(processUserIDList);
+		System.out.println(userList);
 		// return null;
-		return esservices.selectEmpJobLevel(processUserIDList);
+		return esservices.selectEmpJobLevel(userList);
 	}
 
 	// 휴가 문서 생성
@@ -287,9 +299,10 @@ public class ElectronicSignatureController {
 	@RequestMapping("/insertVacation")
 	public int insertVacation(@RequestParam("processEmployeeIDArray[]") List<String> processEmployeeIDArray,
 			@RequestParam("vacationDateList[]") List<String> vacationDateList,
-			@RequestParam("vacationTypeList[]") List<String> vacationTypeList,
-			@RequestParam("reson") String reson) throws Exception {
+			@RequestParam("vacationTypeList[]") List<String> vacationTypeList, @RequestParam("reson") String reson)
+			throws Exception {
 		String emp_id = (String) session.getAttribute("loginID");
 		return esservices.insertVacation(emp_id, processEmployeeIDArray, vacationDateList, vacationTypeList, reson);
 	}
+
 }

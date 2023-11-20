@@ -16,7 +16,7 @@
 <body>
 	 <div class="naviBar">
         <div class="naviBtnBox">
-        	<div class="naviBtn">
+        	<div class="naviBtn" id="electronicSignatureWriteBtn">
 	            <i class="fa-solid fa-plus naviBtn__icon"></i>
 	            <div class="naviBtn__text">작성하기</div>
 	            <input type="hidden" id="location" value="write">
