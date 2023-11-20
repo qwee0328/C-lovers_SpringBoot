@@ -1293,9 +1293,10 @@ $(document).on("click",".calendarInsertModal__update",function(){
 	})
 });	
 	
-// 캘린더 삭제 (휴지통)
+// 캘린더 삭제 
 $(document).on("click",".calendarInsertModal__delete",function(){
-	if($(this).attr("data-trash")=="1"){ // 양구 삭제
+	// 영구 삭제
+	if($(this).attr("data-trash")=="1"){ 
 		$.ajax({
 			url:"/schedule/deleteCalendar",
 			data:{id: $(this).attr("data-id")},
@@ -1304,7 +1305,9 @@ $(document).on("click",".calendarInsertModal__delete",function(){
 			getNavi();
 			$.modal.close();
 		});
-	}else{ // 휴지통
+		
+	// 휴지통
+	}else{
 		$.ajax({
 			url:"/schedule/trashCalendar",
 			data:{id: $(this).attr("data-id"), trash:1},
