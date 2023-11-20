@@ -20,7 +20,7 @@ $(document).ready(function() {
 			
 			let categoryDiv = $("<div>");
 			categoryDiv.addClass("documentTable__documentCategory");
-			categoryDiv.html(resp[i].category);
+			categoryDiv.html(resp[i].document_type_id);
 			
 			listDiv.append(titleDiv).append(categoryDiv);
 			$(".documentTable__body").append(listDiv);

@@ -1,11 +1,13 @@
 package com.clovers.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,33 +49,36 @@ public class ElectronicSignatureController {
 	
 	// 기안 또는 결재 구분
 	public void setDivision(String loginID, List<Map<String, Object>> list) {
-		for (Map<String, Object> item : list) {
+		for(Map<String, Object> item : list) {
 	        // approver_id와 loginID가 같으면 "결재"
-	        if (item.get("approver_id").equals(loginID)) {
+	        if (item.get("approver").equals(loginID)) {
 	            item.put("division", "결재");
 	        }
 	        // drafter_id와 loginID가 같으면 "기안"
-	        if (item.get("drafter_id").equals(loginID)) {
+	        if (item.get("drafter").equals(loginID)) {
 	            item.put("division", "기안");
 	        }
 	    }
 	}
 	
-	// 품의서 또는 휴가 신청서 구분
-	public void setCategory(List<Map<String, Object>> list) {
-		for(Map<String, Object> item : list) {
-			// document_id에 '지출'이 포함되어 있으면 지출 결의서
-	        if (item.get("document_id").toString().contains("지출")) {
-	            item.put("category", "지출 결의서");
-	        }
-	        // document_id에 '휴가'가 포함되어 있으면 휴가 신청서
-	        else if (item.get("document_id").toString().contains("휴가")) {
-	            item.put("category", "휴가 신청서");
-	        }
-	        else if (item.get("document_id").toString().contains("업무")) {
-	        	item.put("category", "업무연락");
-	        }
+	// 로그인한 사용자의 직급 가져옴
+	public List<String> getSecurityGrade(String loginID) {
+		int jobRank = esservices.getJobRank(loginID);
+		System.out.println("직급: " + jobRank);
+		
+		List<String> secGrade = new ArrayList<>();
+		// 5등급 이상(부장)은 A등급 관람 가능
+		if(jobRank <= 5) {
+			secGrade.addAll(Arrays.asList("A등급", "B등급", "C등급"));
+		// 7등급 이상(과장)은 B등급 관람 가능
+		} else if(jobRank <= 7) {
+			secGrade.addAll(Arrays.asList("B등급", "C등급"));
+		// C등급 관람 가능
+		} else if(jobRank > 7) {
+			secGrade.add("C등급");
 		}
+		
+		return secGrade;
 	}
 
 	// 메인 화면으로 이동
@@ -111,13 +116,10 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressTotalList")
 	public List<Map<String, Object>> progressTotalList() {
 		String loginID = (String) session.getAttribute("loginID");
-		
-		// 결재 리스트에서 제외할 문서 번호
-		List<String> ExcludedIds = ExcludedIds(loginID);
-		
-		List<Map<String, Object>> list = esservices.progressTotalList(loginID, ExcludedIds);
-		setDivision(loginID, list);
+		List<String> secGrade = getSecurityGrade(loginID);
 
+		List<Map<String, Object>> list = esservices.progressTotalList(loginID, secGrade);
+		setDivision(loginID, list);
 		return list;
 	}
 
@@ -135,9 +137,9 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressWaitList")
 	public List<Map<String, Object>> progressWaitList() {
 		String loginID = (String) session.getAttribute("loginID");
-		List<String> ExcludedIds = ExcludedIds(loginID);
+		List<String> secGrade = getSecurityGrade(loginID);
 		
-		List<Map<String, Object>> list = esservices.proggressWaitLlist(loginID, ExcludedIds);
+		List<Map<String, Object>> list = esservices.proggressWaitLlist(loginID, secGrade);
 		setDivision(loginID, list);
 		return list;
 	}
@@ -156,9 +158,9 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressCheckList")
 	public List<Map<String, Object>> progressCheckList() {
 		String loginID = (String) session.getAttribute("loginID");
-		List<String> ExcludedIds = ExcludedIds(loginID);
+		List<String> secGrade = getSecurityGrade(loginID);
 		
-		List<Map<String, Object>> list = esservices.progressCheckList(loginID, ExcludedIds);
+		List<Map<String, Object>> list = esservices.progressCheckList(loginID, secGrade);
 		setDivision(loginID, list);
 		return list;
 	}
@@ -177,9 +179,9 @@ public class ElectronicSignatureController {
 	@RequestMapping("/progressList")
 	public List<Map<String, Object>> progressList() {
 		String loginID = (String) session.getAttribute("loginID");
-		List<String> ExcludedIds = ExcludedIds(loginID);
+		List<String> secGrade = getSecurityGrade(loginID);
 		
-		List<Map<String, Object>> list = esservices.progressList(loginID, ExcludedIds);
+		List<Map<String, Object>> list = esservices.progressList(loginID, secGrade);
 		setDivision(loginID, list);
 		return list;
 	}
@@ -199,8 +201,8 @@ public class ElectronicSignatureController {
 	public List<Map<String, Object>> documentTotalList() {
 		String loginID = (String) session.getAttribute("loginID");
 		List<Map<String, Object>> list = esservices.documentTotalList(loginID);
+		
 		setDivision(loginID, list);
-		setCategory(list);
 		return list;
 	}
 	
@@ -219,7 +221,7 @@ public class ElectronicSignatureController {
 	public List<Map<String, Object>> documentDraftingList() {
 		String loginID = (String) session.getAttribute("loginID");
 		List<Map<String, Object>> list = esservices.documentDraftingList(loginID);
-		setCategory(list);
+
 		return list;
 	}
 	
@@ -238,7 +240,6 @@ public class ElectronicSignatureController {
 	public List<Map<String, Object>> documentApprovalList() {
 		String loginID = (String) session.getAttribute("loginID");
 		List<Map<String, Object>> list = esservices.documentApprovalList(loginID);
-		setCategory(list);
 
 		return list;
 	}
@@ -258,7 +259,6 @@ public class ElectronicSignatureController {
 	public List<Map<String, Object>> documentRejectionList() {
 		String loginID = (String) session.getAttribute("loginID");
 		List<Map<String, Object>> list = esservices.documentRejectionList(loginID);
-		setCategory(list);
 
 		return list;
 	}
@@ -278,9 +278,34 @@ public class ElectronicSignatureController {
 	public List<Map<String, Object>> temporaryList() {
 		String loginID = (String) session.getAttribute("loginID");
 		List<Map<String, Object>> list = esservices.temporaryList(loginID);
-		setCategory(list);
 
 		return list;
+	}
+	
+	// 문서 번호에 따른 정보 가져온 후 결재 양식으로 이동
+	@RequestMapping("/viewApprovalForm")
+	public String approvalForm(@RequestParam("document_id") String document_id, Model model) {
+		List<Map<String, Object>> documentInfo = esservices.selectAllByDocumentId(document_id);
+		
+		// 기안자의 부서 가져오기
+		String drafter_dept_name = esservices.getDeptNameByDrafterId((String) documentInfo.get(0).get("drafter_id"));
+		for(Map<String, Object> item : documentInfo) {
+			item.put("drafter_dept_name", drafter_dept_name);
+		}
+		
+		// 기안자의 직급 가져오기
+		List<String> drafter_rank = esservices.getRankByDrafterId((String) documentInfo.get(0).get("drafter_id"));
+		for(Map<String, Object> item : documentInfo) {
+			item.put("drafter_rank", drafter_rank.get(0));
+		}
+		
+		// 결재자의 이름 및 직급 가져오기
+		List<Map<String, String>> approver_rank = esservices.getApproverRankByDocunetId((String) documentInfo.get(0).get("document_id"));		
+		
+		model.addAttribute("documentInfo", documentInfo);
+		model.addAttribute("approver_rank", approver_rank);
+		
+		return "/electronicsignature/viewApprovalForm";
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

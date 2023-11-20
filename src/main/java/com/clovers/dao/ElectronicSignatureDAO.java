@@ -48,10 +48,15 @@ public class ElectronicSignatureDAO {
 	public void insertVacationApplicationInfo(List<VacationApplicationInfoDTO> vacationInfoList) {
 		db.insert("ElectronicSignature.insertVacationApplicationInfo", vacationInfoList);
 	}
-	
+
 	// 직전 결재자들의 결재 결과
 	public List<Map<String, String>> previousApprovalResult(String loginID) {
 		return db.selectList("ElectronicSignature.previousApprovalResult", loginID);
+	}
+	
+	// 로그인한 사용자의 직급 가져옴
+	public int getJobRank(String loginID) {
+		return db.selectOne("ElectronicSignature.getJobRank", loginID);
 	}
 
 	// 진행 중인 문서 전체 리스트 출력
@@ -97,5 +102,25 @@ public class ElectronicSignatureDAO {
 	// 임시저장 리스트 출력
 	public List<Map<String, Object>> temporaryList(String loginID) {
 		return db.selectList("ElectronicSignature.temporaryList", loginID);
+	}
+
+	// 문서 번호에 따른 결재 정보 출력
+	public List<Map<String, Object>> selectAllByDocumentId(String document_id) {
+		return db.selectList("ElectronicSignature.selectAllByDocumentId", document_id);
+	}
+
+	// 기안자의 부서 가져오기
+	public String getDeptNameByDrafterId(String drafter_id) {
+		return db.selectOne("ElectronicSignature.getDeptNameByDrafterId", drafter_id);
+	}
+
+	// 사용자의 직급 가져오기
+	public List<String> getRankByDrafterId(String drafter_id) {
+		return db.selectList("ElectronicSignature.getRankByUserId", drafter_id);
+	}
+
+	// 결재자의 이름 및 직급 가져오기
+	public List<Map<String, String>> getApproverRankByDocunetId(String document_id) {
+		return db.selectList("ElectronicSignature.getApproverRankByDocunetId", document_id);
 	}
 }

@@ -24,7 +24,7 @@ $(document).ready(function() {
 			
 			let drafterDiv = $("<div>");
 			drafterDiv.addClass("documentTable__drafter");
-			drafterDiv.html(resp[i].drafter_name);
+			drafterDiv.html(resp[i].drafter);
 			
 			let draftDateDiv = $("<div>");
 			draftDateDiv.addClass("documentTable__draftDate");
@@ -36,10 +36,15 @@ $(document).ready(function() {
 			
 			let statusDiv = $("<div>");
 			statusDiv.addClass("documentTable__status");
-			statusDiv.html(resp[i].approver_status);
+			statusDiv.html(resp[i].status);
 			
 			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(divisionDiv).append(statusDiv);
 			$(".documentTable__body").append(listDiv);
 		}
+	})
+	
+	$(document).on("click", ".document__list", function() {
+		let document_id = $(this).children(".documentTable__documentId").html();
+		location.href = "/electronicsignature/viewApprovalForm?document_id=" + document_id;
 	})
 })
