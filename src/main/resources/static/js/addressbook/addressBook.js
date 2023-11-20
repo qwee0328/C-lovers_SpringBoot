@@ -272,11 +272,12 @@ function settingData(){
 	}
 	
 	if($(".modalBody__email").val() != ""){ // 이메일 정규식
-		// 둘 중 하나. 진짜 이메일 형식 or 2023DT02020 형식에 맞게
+		// 둘 중 하나. 진짜 이메일 형식 or 영문+숫자 조합
 		let emailRegex = /^[a-zA-Z0-9]+@[a-z]+\.[a-z]+(\.*[a-z])*$/; // 이메일 형식 ex. test@clovers.com or test@clovers.co.kr
-		let empIdRegex = /^[0-9]{4}DT[0-9]{2}[0-9]{3}$/; // 사번 형식 ex. 2023DT02020 
+		//let empIdRegex = /^[0-9]{4}DT[0-9]{2}[0-9]{3}$/; // 사번 형식 ex. 2023DT02020 
+		let emailRegex2 = /^[a-zA-Z0-9]+$/; // 사번 형식 ex. 2023DT02020 
 		let val = $(".modalBody__email").val();
-		if(!emailRegex.test(val) && !empIdRegex.test(val)){
+		if(!emailRegex.test(val) && !emailRegex2.test(val)){
 			Swal.fire({
 				icon: "error",
 				text: "이메일 형식에 맞게 입력해주세요."
