@@ -148,7 +148,15 @@ $(document).ready(function () {
 				
 				 let memberBox = $("<div class='member__unitBox'>");
 					let memberPhoto = $("<div class='memberPhoto'>");
-						let img = $("<img src=/uploads/"+resp[i].profile_img+" alt=''>");
+					
+						let isImg;
+						if(resp[i].profile_img == "" || resp[i].profile_img == null){
+								isImg = "/assets/profile.png";
+						}else{
+							isImg = "/uploads/"+resp[i].profile_img;
+						}
+					
+						let img = $("<img src="+isImg+" alt=''>");
 					memberPhoto.append(img);
 					
 					let memberText = $("<div class='memberText'>");
@@ -203,7 +211,15 @@ $(document).ready(function () {
 				
 				 let memberBox = $("<div class='member__unitBox'>");
 					let memberPhoto = $("<div class='memberPhoto'>");
-						let img = $("<img src=/uploads/"+resp[i].profile_img+" alt=''>");
+					
+						let isImg;
+						if(resp[i].profile_img == "" || resp[i].profile_img == null){
+								isImg = "/assets/profile.png";
+						}else{
+							isImg = "/uploads/"+resp[i].profile_img;
+						}
+						
+						let img = $("<img src="+isImg+" alt=''>");
 					memberPhoto.append(img);
 					
 					let memberText = $("<div class='memberText'>");
@@ -263,7 +279,15 @@ $(document).ready(function () {
 				
 				 let memberBox = $("<div class='member__unitBox'>");
 					let memberPhoto = $("<div class='memberPhoto'>");
-						let img = $("<img src=/uploads/"+resp[i].profile_img+" alt=''>");
+					
+						let isImg;
+						if(resp[i].profile_img == "" || resp[i].profile_img == null){
+								isImg = "/assets/profile.png";
+						}else{
+							isImg = "/uploads/"+resp[i].profile_img;
+						}
+					
+						let img = $("<img src="+isImg+" alt=''>");
 					memberPhoto.append(img);
 					
 					let memberText = $("<div class='memberText'>");
@@ -321,7 +345,15 @@ $(document).ready(function () {
 				
 				 let memberBox = $("<div class='member__unitBox'>");
 					let memberPhoto = $("<div class='memberPhoto'>");
-						let img = $("<img src=/uploads/"+resp[i].profile_img+" alt=''>");
+					
+						let isImg;
+						if(resp[i].profile_img == "" || resp[i].profile_img == null){
+								isImg = "/assets/profile.png";
+						}else{
+							isImg = "/uploads/"+resp[i].profile_img;
+						}
+					
+						let img = $("<img src="+isImg+" alt=''>");
 					memberPhoto.append(img);
 					
 					let memberText = $("<div class='memberText'>");
