@@ -8,7 +8,7 @@ $(document).ready(function() {
 		
 	})
 	
-	// 데이터 부르기
+	// 프로필카드 데이터 부르기
 	$(document).ready(function(){
 		$.ajax({
 			url:"/humanResources/headerProfile"
@@ -41,17 +41,33 @@ $(document).ready(function() {
 		});
 	})
 	
+	// 프로필 카드 클릭시
+//	$(document).on("click",".mainHeader_profileBox",function(){
+//		if($(".header__userinfoBox").hasClass("active")){
+//			$(".header__userinfoBox").removeClass("active");
+//			
+//		}else{
+//			$(".header__userinfoBox").addClass("active");
+//		}
+//	});
 	
 	
-	// 민경 추가
-	$(document).on("click",".mainHeader_profileBox",function(){
-		if($(".header__userinfoBox").hasClass("active")){
+	// 프로필 카드 바깥영역 클릭시
+	$(document).on("click", function(e) {
+		console.log(e.target);
+		
+		if($(e.target).parents().is(".mainHeader_profileBox") || $(e.target).hasClass("mainHeader_profileBox") ){
+			if($(".header__userinfoBox").hasClass("active")){
+				$(".header__userinfoBox").removeClass("active");
+				
+			}else{
+				$(".header__userinfoBox").addClass("active");
+			}
+		}else if(!$(e.target).parents().is(".header__userinfoBox") && !$(e.target).hasClass("header__userinfoBox")){
 			$(".header__userinfoBox").removeClass("active");
-			
-		}else{
-			$(".header__userinfoBox").addClass("active");
 		}
-	});
+	})
+	
 	
 	// 채팅으로 이동
 	$("#goChat").on("click",function(){
