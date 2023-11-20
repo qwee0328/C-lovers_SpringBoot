@@ -1,11 +1,11 @@
 let showSelector = false;
 $(document).ready(function() {
 	// selector 커스텀 해서 만들기
-	
+
 	$("#esPreservationPeriod").val("5");
 	$("#esSecurityLevel").val("A등급");
-	
-	
+
+
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {
 		if (!showSelector) {
@@ -45,20 +45,20 @@ $(document).ready(function() {
 				"월 지출 결의서 - 개인"
 			);
 		}
-		if($(this).parent().parent().attr("id")==="preservationPeriod"){
-			if($("#preservationPeriod .typeName").text()==="1년"){
+		if ($(this).parent().parent().attr("id") === "preservationPeriod") {
+			if ($("#preservationPeriod .typeName").text() === "1년") {
 				$("#esPreservationPeriod").val("1");
-			}else if($("#preservationPeriod .typeName").text()==="3년"){
+			} else if ($("#preservationPeriod .typeName").text() === "3년") {
 				$("#esPreservationPeriod").val("3");
-			}else if($("#preservationPeriod .typeName").text()==="5년"){
+			} else if ($("#preservationPeriod .typeName").text() === "5년") {
 				$("#esPreservationPeriod").val("5");
-			}else if($("#preservationPeriod .typeName").text()==="10년"){
+			} else if ($("#preservationPeriod .typeName").text() === "10년") {
 				$("#esPreservationPeriod").val("10");
-			}else{
+			} else {
 				$("#esPreservationPeriod").val("999");
 			}
 		}
-		if($(this).parent().parent().attr("id")==="securityLevel"){
+		if ($(this).parent().parent().attr("id") === "securityLevel") {
 			$("#esSecurityLevel").val($("#securityLevel .typeName").text());
 		}
 	});
@@ -105,14 +105,14 @@ $(document).ready(function() {
 
 	// 보존연한 및 보안등급 툴팁 이벤트
 	$("#period, #level").on("mouseover", function() {
-		if ($(this).attr("id")==="period") {
+		if ($(this).attr("id") === "period") {
 			$("#period__tooltip").css("display", "block").css("opacity", "1");
 		} else {
 			$("#level__tooltip").css("display", "block").css("opacity", "1");
 		}
 	});
 	$("#period, #level").on("mouseout", function() {
-		if ($(this).attr("id")==="period") {
+		if ($(this).attr("id") === "period") {
 			$("#period__tooltip").css("display", "none").css("opacity", "0");
 		} else {
 			$("#level__tooltip").css("display", "none").css("opacity", "0");
@@ -132,34 +132,119 @@ $(document).ready(function() {
 			$("#corporationCard").css("display", "flex");
 		}
 	});
-	
-	$("#searchUser").on("change",function(){
-		$.ajax({
-			url: "/office/searchUserAjax",
+
+	$("#searchUser").on("input", function() {
+		if ($(this).val() !== "") {
+			$.ajax({
+				url: "/office/searchUserAjax",
 				dataType: "json",
-				data: { keyword: $(this).val() }
-		}).done(function(resp){
-			console.log(resp)
+				data: { keyword: $(this).val() },
+				type:"POST"
+			}).done(function(resp) {
+				console.log(resp);
+				$("#autoComplete").empty();
+				if (resp.length > 0) {
+					for (let i = 0; i < resp.length; i++) {
+						let userList = $("<div>").addClass("userList__autoComplete").attr("userID", resp[i].id).attr("userTaskName", resp[i].task_name);
+						let userName = $("<div>").addClass("autoComplete__info").html(resp[i].name + " (" + resp[i].task_name + ")");
+						userList.append(userName);
+						$("#autoComplete").append(userList);
+					}
+				}
+			});
+		}
+	})
+
+	$(document).on("click", ".userList__autoComplete", function() {
+		let searchId = $(this).attr("userid");
+		let userTaskName = $(this).attr("userTaskName");
+		console.log(searchId)
+		$.ajax({
+			url: "/api/accounting/searchByAjax",
+			data: { keyword: searchId },
+			type:"POST"
+		}).done(function(resp) {
+			console.log(resp);
+			if (resp.length > 0) {
+				$("#autoComplete").empty();
+				$("#esSpender").val(resp[0].num);
+				$("#searchUser").css("display", "none");
+				$("#searchUser").parent().html(resp[0].name + " (" + userTaskName + ")");
+				$("#accountInfo .table__srLine").html("(" + resp[0].bank + ") " + resp[0].id)
+				$("#esSpender").val(searchId);
+			} else {
+				alert("지출자에 등록된 계좌가 없습니다. 관라자에게 등록 요청하세요.");
+				$("#autoComplete").empty();
+				$("#searchUser").val("");
+				$("#esSpender").val("");
+			}
 		})
 	})
 
 	// 기안하기
-	$("#vacationdraftingBtn").on("click", function(){
-		if($("#esDocumentType").val()==="선택"||$("#esDocumentType").val()===""){
+	/*$("#vacationdraftingBtn").on("click", function() {
+		if ($("#esDocumentType").val() === "선택" || $("#esDocumentType").val() === "") {
 			alert("문서 종류를 선택하고 내용을 입력해주세요");
 			return;
 		}
-		if($("#applicationEmployeeIDList").val()===""||$("#processEmployeeIDList").val()===""){
+		if ($("#applicationEmployeeIDList").val() === "" || $("#processEmployeeIDList").val() === "") {
 			alert("결제선을 설정해주세요.");
 			return;
 		}
-		if($(".titleInput").val()===""){
+		if ($(".titleInput").val() === "") {
 			alert("문서 제목을 입력해주세요.");
 			return;
 		}
-	})
-});
+		if ($("#esSpender").val() === "") {
+			alert("지출자 정보를 입력해주세요");
+			return
+		}
+		if ($("#summary").val() === "") {
+			alert("총괄 적요를 입력해주세요.");
+			return;
+		}
 
+		if (($("#esDocumentType").val() !== "선택" && $("#esDocumentType").val() !== "") && ($("#applicationEmployeeIDList").val() !== "" || $("#processEmployeeIDList").val() !== "") && $(".titleInput").val() !== "" && $("#esSpender").val() !== "" && $("#summary").val() !== "") {
+			let applicationEmployeeIDList = $("#applicationEmployeeIDList").val();
+			let applicationEmployeeIDArray = applicationEmployeeIDList.split(",");
+			
+			let processEmployeeIDList = $("#processEmployeeIDList").val();
+			let processEmployeeIDArray = processEmployeeIDList.split(",");
+			
+			/*$.ajax({
+				url:"/electronicsignature/insertDocument",
+				dataType: "json",
+				type:"POST",
+				data: {documentType:$("#esDocumentType").val(), preservationPeriod:$("#esPreservationPeriod").val(), securityLevel:$("#esSecurityLevel").val(),applicationEmployeeIDArray: applicationEmployeeIDArray, processEmployeeIDArray: processEmployeeIDArray, year:$("#year .typeName").html(), month:$("#month .typeName").html(), spender:$("#esSpender").val(), summary:$("#summary").val(), fileList: $("#uploadFiles").val()},
+			}).done(function(){
+				
+			})
+		}
+	})*/
+});
+// 필수 입력값들이 존재하는지
+function validateForm() {
+	if ($("#esDocumentType").val() === "선택" || $("#esDocumentType").val() === "") {
+			alert("문서 종류를 선택하고 내용을 입력해주세요");
+			return false;
+		}
+		if ($("#applicationEmployeeIDList").val() === "" || $("#processEmployeeIDList").val() === "") {
+			alert("결제선을 설정해주세요.");
+			return false;
+		}
+		if ($(".titleInput").val() === "") {
+			alert("문서 제목을 입력해주세요.");
+			return false;
+		}
+		if ($("#esSpender").val() === "") {
+			alert("지출자 정보를 입력해주세요");
+			return false;
+		}
+		if ($("#summary").val() === "") {
+			alert("총괄 적요를 입력해주세요.");
+			return false;
+		}
+}
 // 문서 종류에 따른 ui 구성 변경
 function formatByDocumentType() {
 	console.log($("#documentType").text().trim());

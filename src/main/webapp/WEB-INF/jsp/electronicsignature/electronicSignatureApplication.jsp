@@ -52,6 +52,7 @@
 	<input type="hidden" id="esDocumentType">
 	<input type="hidden" id="esPreservationPeriod">
 	<input type="hidden" id="esSecurityLevel">
+	<input type="hidden" id="esSpender">
 	<%@ include file="../commons/header.jsp"%>
 	<div class="container" style="margin: 0; padding: 0; width: 100%;">
 		<%@ include
@@ -205,10 +206,11 @@
 								<div>&nbsp;&nbsp;&nbsp;월</div>
 							</div>
 						</div>
-						<div class="table__row">
+						<div class="table__row" id="spender">
 							<div class="table__header">지출자</div>
 							<div class="table__srLine">
 								<input type="text" id="searchUser">
+								<div id="autoComplete"></div>
 							</div>
 						</div>
 						<div class="table__row" id="accountInfo">
@@ -234,7 +236,7 @@
 				<div class="fileListBox">
 					<div class="title">파일첨부</div>
 					<div class="inputLine__fileList">
-						<input type="file" name="uploadFiles" multiple />
+						<input type="file" name="uploadFiles" id="uploadFiles" multiple />
 					</div>
 				</div>
 			</div>

@@ -6,44 +6,46 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.dao.MemberDAO;
 import com.clovers.dto.MemberDTO;
 
 @Service
 public class MemberService {
-	
+
 	@Autowired
 	private MemberDAO mdao;
-	
+
 	public boolean login(String id, String pw) {
-		
+
 		Map<String, String> param = new HashMap<>();
-		param.put("id",id);
-		param.put("pw", pw);
-		
-		System.out.println("test"+id);
-		return mdao.login(param);
-	}
-	
-	public int updatePW(String id, String pw) {
-		Map<String,String> param = new HashMap<>();
 		param.put("id", id);
 		param.put("pw", pw);
-		
+
+		System.out.println("test" + id);
+		return mdao.login(param);
+	}
+
+	public int updatePW(String id, String pw) {
+		Map<String, String> param = new HashMap<>();
+		param.put("id", id);
+		param.put("pw", pw);
+
 		return mdao.updatePW(param);
 	}
-	
-	public Map<String,String> selectUserInfo(String loginID){
+
+	public Map<String, String> selectUserInfo(String loginID) {
 		return mdao.selectUserInfo(loginID);
 	}
-	
+
 	public String selectNameById(String id) {
 		return mdao.selectNameById(id);
 	}
-	
+
 	public List<String> getAuthorityCategory(String id) {
 		return mdao.getAuthorityCategory(id);
 	}
-	
+
 }

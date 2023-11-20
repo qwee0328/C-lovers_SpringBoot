@@ -127,9 +127,15 @@ $(document).ready(function() {
 				$(".company.pagePlus").attr("class", "company pagePlus selected");
 				selectAllEmpInfo();
 			} else {
-				$(this).parent().parent().find(".dept.pagePlus").first().addClass("selected");
-				selectDepartmentEmpInfo($(".dept.pagePlus.selected").attr("dept_id"));
-
+				if ($(".dept_task.selected").first().length <= 0) {
+					console.log("팀명 클릭되어있음")
+					$(this).parent().parent().find(".dept.pagePlus").first().addClass("selected");
+					selectDepartmentEmpInfo($(".dept.pagePlus.selected").attr("dept_id"));
+				} else{
+					console.log("팀명 클릭되어있음2")
+					console.log($(this))
+					console.log($(".selected").parent().find(".dept"))
+				}
 			}
 		} else if ( // 부서 명 확대
 			$(this).attr("class").includes("dept") &&
@@ -276,9 +282,9 @@ $(document).ready(function() {
 					$(".table__applyLine").html("");
 					let approvalLineText = "";
 					let userCount = 0;
-					for (let i = 0; i <resp.length; i++) {
+					for (let i = 0; i < resp.length; i++) {
 						approvalLineText = approvalLineText + resp[i].name + " (" + resp[i].task_name + ")";
-						if (i !== resp.length-1) {
+						if (i !== resp.length - 1) {
 							approvalLineText = approvalLineText + "&nbsp;&nbsp;&nbsp;<i class='fas fa-circle'></i>&nbsp;&nbsp;&nbsp;";
 						}
 						userCount++;

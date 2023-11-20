@@ -97,8 +97,7 @@ public class OfficeController {
 	
 	// 사용자 이름, id 검색하기
 	@GetMapping("/searchUser")
-	@RequestMapping("/searchUserAjax")
-	public ResponseEntity<List<Map<String, String>>> searchUser(String keyword){
+	public ResponseEntity<List<Map<String, String>>> searchUser(@RequestParam("keyword")String keyword){
 		System.out.println(keyword);
 		System.out.println("durl");
 		List<Map<String, String>> list = oservice.searchUser(keyword);
@@ -106,6 +105,12 @@ public class OfficeController {
 			System.out.println(d.toString());
 		}
 		return ResponseEntity.ok(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/searchUserAjax")
+	public List<Map<String, String>> searchUserAjax(@RequestParam("keyword") String keyword){
+		return oservice.searchUser(keyword);
 	}
 	
 	// 부서별 부서명, 인원 수 불러오기
