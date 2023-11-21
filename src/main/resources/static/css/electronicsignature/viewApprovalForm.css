@@ -96,19 +96,23 @@ hr {
 }
 
 .vacation__table,
-.expense__table {
+.expense__table,
+.business__table {
 	margin-bottom: 100px;
 }
 
 .vacation__table th,
 .vacation__table td,
 .expense__table th,
-.expense__table td {
+.expense__table td,
+.business__table th,
+.business__table td {
 	height: 40px;
 }
 
 .vacation__table td,
-.expense__table td {
+.expense__table td,
+.business__table td {
 	padding: 10px 20px;
 }
 

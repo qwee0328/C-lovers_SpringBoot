@@ -181,4 +181,9 @@ public class ElectronicSignatureDAO {
 	public Map<String, String> getCorporateAccount(String spender_id) {
 		return db.selectOne("ElectronicSignature.getCorporateAccount", spender_id);
 	}
+
+	// 업무 연락 정보 출력
+	public Map<String, String> getBusinessInfo(String document_id) {
+		return db.selectOne("ElectronicSignature.getBusinessInfo", document_id);
+	}
 }

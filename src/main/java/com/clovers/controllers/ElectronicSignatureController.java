@@ -335,6 +335,15 @@ public class ElectronicSignatureController {
 		
 		return expense_info;
 	}
+	
+	// 업무 연락 정보 출력
+	@ResponseBody
+	@RequestMapping("/getBusinessInfo")
+	public Map<String, String> getBusinessInfo(String document_id) {
+		Map<String, String> business = esservices.getBusinessInfo(document_id);
+		business.put("content", removeHtmlTags(business.get("content")));
+		return business;
+	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	@ResponseBody
@@ -373,5 +382,12 @@ public class ElectronicSignatureController {
 				expenseYear, expenseMonth, summary, content, uploadFiles);
 		return "redirect:/electronicsignature";
 	}
+	
+	// html 태그 제거
+	public static String removeHtmlTags(String input) {
+        // HTML 태그를 제거하는 정규식
+        String regex = "<[^>]*>";
+        return input.replaceAll(regex, "");
+    }
 
 }

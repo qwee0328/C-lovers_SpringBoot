@@ -329,4 +329,17 @@
 		FROM corp_card
 		WHERE emp_id = #{spender_id}
 	</select>
+	
+	<!-- 업무 연락 정보 출력 -->
+	<select id="getBusinessInfo" resultType="map">
+		SELECT 
+		    d.title,
+		    bci.business_contents AS content
+		FROM 
+		    document d
+		JOIN 
+		    business_contact_info bci ON d.id = bci.document_id
+		WHERE 
+		    d.id = #{document_id};
+	</select>
 </mapper>

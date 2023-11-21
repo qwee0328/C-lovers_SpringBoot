@@ -32,13 +32,14 @@ $(document).ready(function() {
 			$("#account_info").text(resp.account_name + " / " + resp.account_id);
 			$("#executive_summary").text(resp.summary);
 		})
-	// 업무연락
-	} else if($("#document_type").t() == '휴가 신청서') {
+	// 업무 연락
+	} else if($("#document_type").text() == '업무 연락') {
 		$.ajax({
-			url : "/electronicsignature/getVacationInfo",
+			url : "/electronicsignature/getBusinessInfo",
 			data : { document_id : document_id }
 		}).done(function(resp){
-			
+			$("#business_title").text(resp.title);
+			$("#business_content").text(resp.content);
 		})
 	}
 })

@@ -204,9 +204,23 @@
 						</tbody>
 					</table>
 				</c:when>
-				<c:when test="${documentInfo.get(0).document_type_id == '업무연락'}">
-					<div>업무 연락</div>
-					
+				<c:when test="${documentInfo.get(0).document_type_id == '업무 연락'}">
+					<table class="business__table">
+						<colgroup>
+							<col style="width: 160px;">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>제목</th>
+								<td id="business_title"></td>
+							</tr>
+							<tr>
+								<th>내용</th>
+								<td id="business_content"></td>
+							</tr>
+						</tbody>
+					</table>
 				</c:when>
 			</c:choose>
 		</div>
