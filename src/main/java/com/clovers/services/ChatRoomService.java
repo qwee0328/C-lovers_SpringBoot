@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clovers.dao.ChatRoomDAO;
+import com.clovers.dto.ChatMessageDTO;
 import com.clovers.dto.ChatRoomDTO;
 
 @Service
@@ -12,11 +13,21 @@ public class ChatRoomService {
 	@Autowired
 	private ChatRoomDAO crdao;
 	
-	public String createChatRoom() {
-		return crdao.createChatRoom();
+	public String createPersonalChat() {
+		return crdao.createPersonalChat();
 	}
 	
-	public int updateChatRoomState(ChatRoomDTO cdto) {
+	public String createGroupChat() {
+		return crdao.createGroupChat();
+	}
+	
+	public int updateChatRoomStateToGroup(ChatRoomDTO cdto) {
+		cdto.setState(ChatRoomDTO.ChatRoomStates.ACTIVEGROUP);
+		return crdao.updateChatRoomState(cdto);
+	}
+	
+	public int updateChatRoomStateToInactive(ChatRoomDTO cdto) {
+		cdto.setState(ChatRoomDTO.ChatRoomStates.INACTIVE);
 		return crdao.updateChatRoomState(cdto);
 	}
 	

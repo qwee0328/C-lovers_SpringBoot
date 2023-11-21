@@ -15,4 +15,6 @@ public class DeptTaskDTO {
 	private String id;
 	private String task_name;
 	private String dept_id;
+	
+	private int dept_task_officer;// DB에 들어가지 않는 데이터
 }

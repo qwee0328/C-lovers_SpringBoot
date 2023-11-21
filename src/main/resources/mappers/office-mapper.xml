@@ -9,6 +9,8 @@
 		resultType="com.clovers.dto.OfficeDTO">
 		select * from office;
 	</select>
+	
+
 	<!-- // 부서 명 불러오기 -->
 	<select id="selectDeptTaskAll"
 		resultType="com.clovers.dto.DeptTaskDTO">
@@ -109,8 +111,7 @@
 
 	<!-- 오피스 이름 수정하기 -->
 	<update id="updateOfficeName">
-		update office set office_name = #{office_name} where
-		id =#{id};
+		update office set office_name = #{office_name} where id = "OFC1001";
 	</update>
 	<!-- // 사용자 직위 수정하기 -->
 	<update id="updateUserJob">
