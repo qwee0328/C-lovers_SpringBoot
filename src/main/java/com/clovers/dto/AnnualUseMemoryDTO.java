@@ -2,6 +2,8 @@ package com.clovers.dto;
 
 import java.sql.Timestamp;
 
+import com.clovers.dto.AdminDTO.AuthorityCategories;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +12,13 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class VacationApplicationInfoDTO {
+public class AnnualUseMemoryDTO {
 	private int id;
-	private String document_id;
-	private Timestamp vacation_date;
-	private String rest_reason_type;
-	private String vacation_reason;
+	private String emp_id;
+	private String rest_reason_type_id;
+	private String reason;
+	private Timestamp annual_date; 
 }

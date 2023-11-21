@@ -19,8 +19,9 @@ import lombok.ToString;
 @ToString
 public class ChatRoomDTO {
 	public enum ChatRoomStates{
-		ACTIVATE,
-		INACTVATE;
+		ACTIVEPERSONAL,
+		ACTIVEGROUP,
+		INACTIVE;
 	};
 	
 	private String id;				// 채팅방 아이디
@@ -28,7 +29,7 @@ public class ChatRoomDTO {
 	private Set<WebSocketSession> sessions = new HashSet<>();
 	
 	
-	public static ChatRoomDTO create( ChatRoomStates state) {
+	public static ChatRoomDTO create(ChatRoomStates state) {
         ChatRoomDTO room = new ChatRoomDTO();
         room.id = UUID.randomUUID().toString();
         room.state = state;

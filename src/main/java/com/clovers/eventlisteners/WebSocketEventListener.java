@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import com.clovers.dto.ChatMessageDTO;
 import com.clovers.services.ChatMessageService;
+import com.clovers.services.MemberService;
 
 
 @Component
@@ -24,11 +24,13 @@ public class WebSocketEventListener {
     
     @Autowired
     private ChatMessageService cmService;
+    
+    @Autowired
+    private MemberService mService;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         logger.info("Received a new web socket connection");
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         
 
     }
@@ -37,17 +39,16 @@ public class WebSocketEventListener {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         
-        // 세션에서 Stomp Header로 부터 가져오는 객체(바꿔야됨)
-        String username = (String) headerAccessor.getSessionAttributes().get("username"); 
-        if(username != null) {
-            logger.info(username + "님이 채팅방을 나갔습니다.");
-
-            ChatMessageDTO chatMessage = new ChatMessageDTO();
-            chatMessage.setState(ChatMessageDTO.ChatMessageStates.EXIT);
-            chatMessage.setContent(username);
-
-            messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getChat_room_id(), chatMessage);
-        }
+        
+        String userid = (String) headerAccessor.getSessionAttributes().get("loginID"); 
+        String username = mService.selectNameById(userid);
+        // 구독 정보 추출
+        String sessionId = headerAccessor.getSessionId();
+        // 로그 출력 또는 필요한 처리 수행
+        System.out.println("New subscription: sessionId=" + sessionId + ", loginedID : " + userid );
+        
+        
+        
     }
     
     

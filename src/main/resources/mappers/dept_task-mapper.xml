@@ -5,8 +5,7 @@
 <mapper namespace="DeptTask">
 	<!-- // 부서 불러오기 -->
 	<select id="selectAll" resultType="com.clovers.dto.DeptTaskDTO">
-		select * from dept_task where
-		id != "DT01"
+		select * from dept_task
 	</select>
 
 	<!-- // 부서 마다 종사하는 인원 수 불러오기 -->

@@ -32,13 +32,9 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-calendar"></i></div>
 	               <div class="naviConp__title">휴가/근무</div>
 	           </div>
-	           <div class="naviConp toggleInner">
+	           <div class="naviConp toggleInner" id="workStatus">
 	               <div class="naviConp__icon"><i class="fa-solid fa-desktop"></i></div>
 	               <div class="naviConp__title">근무 현황</div>
-	           </div>
-	           <div class="naviConp toggleInner">
-	               <div class="naviConp__icon"><i class="fa-solid fa-chart-simple"></i></div>
-	               <div class="naviConp__title">부서 근무 현황</div>
 	           </div>
 	           <div class="naviConp" id="employeeInfo">
 	               <div class="naviConp__icon"><i class="fa-solid fa-sitemap"></i></div>
@@ -50,6 +46,7 @@
 	           </div>
 	        </div>
 	        <div class="naviBar__managerMenu">
+	        <!-- 
 	           <div class="naviConp shiftToggle" toggleView="true">
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">근무 관리</div>
@@ -66,6 +63,7 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-building"></i></div>
 	               <div class="naviConp__title">전사 근무관리</div>
 	           </div>
+	            -->
 	           <div class="naviConp org_ExeToggle" toggleView="true">
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">조직/임원 관리</div>

@@ -91,8 +91,8 @@ public class ScheduleDAO {
 	}
 	
 	// 캘린더 권한 수정 (삭제 -> 추가는 calendarAuthInsert 이용)
-	public int deleteCalendarAuto(int calendar_id) {
-		return db.delete("Schedule.deleteCalendarAuto",calendar_id);
+	public int deleteCalendarAuth(int calendar_id) {
+		return db.delete("Schedule.deleteCalendarAuth",calendar_id);
 	}
 	
 	// 캘린더 휴지통 or 복원
@@ -104,4 +104,10 @@ public class ScheduleDAO {
 	public int deleteCalendar(int id) {
 		return db.delete("Schedule.deleteCalendar",id);
 	} 
+	
+	// 캘린더 휴지통에서 30일 후 삭제
+//	public void autoDeleteInTrash() {
+//		db.delete("Schedule.autoDeleteInTrash");
+//	}
+
 }
