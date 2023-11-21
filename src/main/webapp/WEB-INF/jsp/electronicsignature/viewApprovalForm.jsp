@@ -31,15 +31,15 @@
 				<tbody>
 					<tr>
 						<th scope="row">문서 종류</th>
-						<td>${documentInfo.get(0).document_type_id }</td>
+						<td id="document_type">${documentInfo.get(0).document_type_id }</td>
 						<th scope="row">문서 번호</th>
-						<td>${documentInfo.get(0).document_id }</td>
+						<td id="document_id">${documentInfo.get(0).id }</td>
 					</tr>
 					<tr>
 						<th scope="row">기안 부서</th>
-						<td>${documentInfo.get(0).drafter_dept_name }</td>
+						<td>${draftersInfo.get(0).task_name }</td>
 						<th scope="row">기안자</th>
-						<td>${documentInfo.get(0).drafter_name }</td>
+						<td>${documentInfo.get(0).emp_id }</td>
 					</tr>
 					<tr>
 						<th scope="row">보존 연한</th>
@@ -77,10 +77,14 @@
 								</colgroup>
 								<tbody>
 									<tr>
-										<td class="team__name">${documentInfo.get(0).drafter_rank }</td>
-										<td class="team__name"></td>
-										<td class="team__name"></td>
-										<td class="team__name"></td>
+										<!-- 기안자가 존재하는 만큼만 출력하고 나머지는 빈 값 출력 -->
+										<c:forEach var="item" items="${draftersInfo}" varStatus="loop">
+										    <td class="team__name">${item.job_name}</td>
+										</c:forEach>
+										
+										<c:forEach begin="${draftersInfo.size() + 1}" end="4">
+										    <td class="team__name"></td>
+										</c:forEach>
 									</tr>
 									<tr>
 										<td class="stamp"></td>
@@ -89,10 +93,14 @@
 										<td class="stamp"></td>
 									</tr>
 									<tr>
-										<td class="name">${documentInfo.get(0).drafter_name }</td>
-										<td class="name"></td>
-										<td class="name"></td>
-										<td class="name"></td>
+										<!-- 기안자가 존재하는 만큼만 출력하고 나머지는 빈 값 출력 -->
+										<c:forEach var="item" items="${draftersInfo}" varStatus="loop">
+										    <td class="name">${item.name}</td>
+										</c:forEach>
+										
+										<c:forEach begin="${draftersInfo.size() + 1}" end="4">
+										    <td class="name"></td>
+										</c:forEach>
 									</tr>
 								</tbody>
 							</table>
@@ -111,11 +119,11 @@
 								<tbody>
 									<tr>
 										<!-- 결재자가 존재하는 만큼만 출력하고 나머지는 빈 값 출력 -->
-										<c:forEach var="item" items="${approver_rank}" varStatus="loop">
+										<c:forEach var="item" items="${approversInfo}" varStatus="loop">
 										    <td class="team__name">${item.job_name}</td>
 										</c:forEach>
 										
-										<c:forEach begin="${approver_rank.size() + 1}" end="4">
+										<c:forEach begin="${approversInfo.size() + 1}" end="4">
 										    <td class="team__name"></td>
 										</c:forEach>
 									</tr>
@@ -126,11 +134,11 @@
 										<td class="stamp"></td>
 									</tr>
 									<tr>
-										<c:forEach var="item" items="${approver_rank}" varStatus="loop">
+										<c:forEach var="item" items="${approversInfo}" varStatus="loop">
 										    <td class="name">${item.name}</td>
 										</c:forEach>
 										
-										<c:forEach begin="${approver_rank.size() + 1}" end="4">
+										<c:forEach begin="${approversInfo.size() + 1}" end="4">
 										    <td class="name"></td>
 										</c:forEach>
 									</tr>
@@ -140,6 +148,21 @@
 					</tr>
 				</tbody>
 			</table>
+			<hr>
+			<c:choose>
+				<c:when test="${documentInfo.get(0).document_type_id == '휴가 신청서'}">
+					<div class="vacation__title">${documentInfo.get(0).title}</div>
+					<table>
+						<colgroup></colgroup>
+					</table>
+				</c:when>
+				<c:when test="${documentInfo.get(0).document_type_id == '지출 결의서'}">
+					<div>지출 결의서</div>
+				</c:when>
+				<c:when test="${documentInfo.get(0).document_type_id == '업무연락'}">
+					<div>업무 연락</div>
+				</c:when>
+			</c:choose>
 		</div>
 	</div>
 </body>

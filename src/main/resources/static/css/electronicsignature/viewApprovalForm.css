@@ -30,7 +30,7 @@ body {
 
 table {
 	margin: auto;
-	width: 90%;
+	width: 1070px;
 	border-collapse: collapse;
 	border: 1px solid #7d7d7d40;
 	font-size: 14px;
@@ -85,4 +85,15 @@ td {
 
 .stamp {
 	height: 80px;
+}
+
+hr {
+	margin: 60px auto;
+	width: 60%;
+	border: 1px solid #7d7d7d40;
+}
+
+.vacation__title {
+	margin-left: 60px;
+	font-size: 22px;
 }

@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -294,9 +295,9 @@ public class ElectronicSignatureController {
 		// 결재자들의 이름과 직급, 부서 가져오기
 		List<Map<String, String>> approversInfo = esservices.getApproversByDocumentId(document_id);		
 		
-		System.out.println("drafters: " + draftersInfo);
-		System.out.println("approvers: " + approversInfo);
-		//model.addAttribute("documentInfo", documentInfo);
+		model.addAttribute("documentInfo", documentInfo);
+		model.addAttribute("draftersInfo", draftersInfo);
+		model.addAttribute("approversInfo", approversInfo);
 		
 		return "/electronicsignature/viewApprovalForm";
 	}
