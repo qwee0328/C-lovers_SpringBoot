@@ -71,11 +71,14 @@ function getNavi(){
 			
 		}
 		
-		if($(".naviBar__personalCalendar").find(".toggleMenu").attr("toggleView") == "false"){
+		if($(".naviBar__sharedCalendar").find(".toggleMenu").attr("toggleView") == "false"){
 			$(".naviBar__sharedCalendar .toggleInner").css("display","none");
 		}
 		if($(".naviBar__personalCalendar").find(".toggleMenu").attr("toggleView") == "false"){
 			$(".naviBar__personalCalendar .toggleInner").css("display","none");
+		}
+		if($(".naviBar__trashCalendar").find(".toggleMenu").attr("toggleView") == "false"){
+			$(".naviBar__trashCalendar .toggleInner").css("display","none");
 		}
 	});
 }
