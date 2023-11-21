@@ -59,7 +59,6 @@
 	
 	<!-- 접속한 유저가 확인 가능한 캘린더 이벤트 전부 가져오기 (home 화면 일정 캘린더에서 사용) -->
 	<select id="selectAll" resultMap="scheduleInfo">
-		<!-- select * from scheduleAll; -->
 		select * 
 		from scheduleAll
 		where calendar_id in (select calendar_id from calendar_authority where emp_id = #{emp_id}) and trash = 0;
@@ -155,8 +154,13 @@
 		update calendar set name = #{name}, color=#{color} where id = #{id};
 	</update>
 	<!-- 캘린더 권한 수정 // 삭제 후 상단에 위치한 calendarAuthInsert 실행-->
-	<delete id="deleteCalendarAuto">
+	<delete id="deleteCalendarAuth">
 		delete from calendar_authority where calendar_id = #{calendar_id};
 	</delete>
+	
+	
+<!-- 	<delete id="autoDeleteInTrash">
+		delete from address_book where id in (select id from (select * from address_book where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
+	</delete> -->
 	
 </mapper>
