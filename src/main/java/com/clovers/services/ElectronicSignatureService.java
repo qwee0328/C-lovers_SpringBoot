@@ -108,7 +108,7 @@ public class ElectronicSignatureService {
 			Date parsedDate = dateFormat.parse(vacationDateList.get(i));
 			Timestamp timestampDate = new Timestamp(parsedDate.getTime());
 			info.setVacation_date(timestampDate);
-			info.setRest_reson_type(vacationTypeList.get(i));
+			info.setRest_reason_type(vacationTypeList.get(i));
 			info.setVacation_reason(reson);
 			vacationInfoList.add(info);
 		}

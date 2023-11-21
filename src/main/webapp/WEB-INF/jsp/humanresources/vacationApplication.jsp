@@ -45,7 +45,7 @@
 							<div class="table__header">문서 종류</div>
 							<div class="table__td">휴가 신청서</div>
 							<div class="table__header">작성자</div>
-							<div class="table__td">하이웍스 대표이사</div>
+							<div class="table__td" id="documentWriter"></div>
 						</div>
 						<div class="table__row">
 							<div class="table__header">보존 연한</div>

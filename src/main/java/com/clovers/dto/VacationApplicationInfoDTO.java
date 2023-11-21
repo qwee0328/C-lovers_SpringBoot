@@ -17,6 +17,6 @@ public class VacationApplicationInfoDTO {
 	private int id;
 	private String document_id;
 	private Timestamp vacation_date;
-	private String rest_reson_type;
+	private String rest_reason_type;
 	private String vacation_reason;
 }

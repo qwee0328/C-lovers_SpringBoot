@@ -17,8 +17,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.dao.HumanResourcesDAO;
+import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.dto.WorkConditionDTO;
 
@@ -44,9 +48,10 @@ public class HumanResourcesService {
 	public String reChangePw(String id) {
 		return dao.reChangePw(id);
 	}
-	
-	public int update(String id,String profile_img,String company_email ,String company_phone,String phone,String email) {
-	
+
+	public int update(String id, String profile_img, String company_email, String company_phone, String phone,
+			String email) {
+
 		Map<String, String> param = new HashMap<>();
 		param.put("id", id);
 		param.put("profile_img", profile_img);
@@ -57,16 +62,17 @@ public class HumanResourcesService {
 
 		return dao.update(param);
 	}
+
 	// 사진 안바꾸거나 기본이미지인 경우
-	public int updateNoImg(String id,String company_email ,String company_phone,String phone,String email) {
-		
-		Map<String,String> param = new HashMap<>();
+	public int updateNoImg(String id, String company_email, String company_phone, String phone, String email) {
+
+		Map<String, String> param = new HashMap<>();
 		param.put("id", id);
 		param.put("company_email", company_email);
 		param.put("company_phone", company_phone);
 		param.put("phone", phone);
 		param.put("email", email);
-		
+
 		return dao.updateNoImg(param);
 	}
 
@@ -84,65 +90,65 @@ public class HumanResourcesService {
 	public int selectNotCheckedLeaveInfo(String id) {
 		return dao.selectNotCheckedLeaveInfo(id);
 	}
-	
+
 	// 사용자 결근 정보 불러오기
 	public int selectAbsenteeismInfo(String id) {
 		// 평일 근무일 계산하기
 		List<LocalDate> weekdays = getWeekDaysForCurrentMonth();
-        
+
 		// 이번달 공휴일 정보 불러오기
-        List<Map<String, Date>> holidays = dao.selectHoliDays();
-        
-        // 평일 중 공휴일인날을 근무 일수에서 제거하기
-        for (int i =0; i<weekdays.size();i++) {
-            LocalDate date = weekdays.get(i);
-            for(Map<String, Date> holiday:holidays) {
-            	LocalDate holidayDate = holiday.get("holiday_date").toLocalDate();
-            	if(date.isEqual(holidayDate)) {
-            		// 해당하는 날짜가 공휴일이면 제거
-            		weekdays.remove(i);
-            		i--;
-            	}
-            }
-        }
-        
-        // 이번달 근무일 정보 불러오기
-        List<Map<String, Timestamp>> workingDays = dao.selectWorkingDaysThisMonth(id);
-        System.out.println(workingDays);
-        
-        // 평일 중 근무를 한 날은 제거
-        for(int i =0;i<weekdays.size();i++) {
-        	LocalDate date = weekdays.get(i);
-        	for(Map<String, Timestamp> workingDay : workingDays) {
-        		LocalDate workingDate = workingDay.get("work_date").toLocalDateTime().toLocalDate();
-        		if(date.isEqual(workingDate)) {
-        			weekdays.remove(i);
-        			i--;
-        		}
-        	}
-        }
+		List<Map<String, Date>> holidays = dao.selectHoliDays();
+
+		// 평일 중 공휴일인날을 근무 일수에서 제거하기
+		for (int i = 0; i < weekdays.size(); i++) {
+			LocalDate date = weekdays.get(i);
+			for (Map<String, Date> holiday : holidays) {
+				LocalDate holidayDate = holiday.get("holiday_date").toLocalDate();
+				if (date.isEqual(holidayDate)) {
+					// 해당하는 날짜가 공휴일이면 제거
+					weekdays.remove(i);
+					i--;
+				}
+			}
+		}
+
+		// 이번달 근무일 정보 불러오기
+		List<Map<String, Timestamp>> workingDays = dao.selectWorkingDaysThisMonth(id);
+		System.out.println(workingDays);
+
+		// 평일 중 근무를 한 날은 제거
+		for (int i = 0; i < weekdays.size(); i++) {
+			LocalDate date = weekdays.get(i);
+			for (Map<String, Timestamp> workingDay : workingDays) {
+				LocalDate workingDate = workingDay.get("work_date").toLocalDateTime().toLocalDate();
+				if (date.isEqual(workingDate)) {
+					weekdays.remove(i);
+					i--;
+				}
+			}
+		}
 		return weekdays.size();
 	}
-	
+
 	// 평일 근무일 계산하기
-	public List<LocalDate> getWeekDaysForCurrentMonth(){
+	public List<LocalDate> getWeekDaysForCurrentMonth() {
 		List<LocalDate> weekdays = new ArrayList<>();
 		LocalDate today = LocalDate.now();
 		LocalDate firstDayOfMonth = today.withDayOfMonth(1);
 		LocalDate lastDayOfMonth = today;
-		
+
 		LocalDate currentDate = firstDayOfMonth;
-		while(!currentDate.isAfter(lastDayOfMonth)) {
-			if(currentDate.getDayOfWeek()!=DayOfWeek.SATURDAY && currentDate.getDayOfWeek()!=DayOfWeek.SUNDAY) {
+		while (!currentDate.isAfter(lastDayOfMonth)) {
+			if (currentDate.getDayOfWeek() != DayOfWeek.SATURDAY && currentDate.getDayOfWeek() != DayOfWeek.SUNDAY) {
 				weekdays.add(currentDate);
 			}
 			currentDate = currentDate.plusDays(1);
 		}
 		return weekdays;
 	}
-	
+
 	// 사용자 근무 시간 정보 불러오기
-	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(String id){
+	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(String id) {
 		return dao.selectWorkingDaysThisMonth(id);
 	}
 
@@ -218,10 +224,58 @@ public class HumanResourcesService {
 	public List<String> selectRestReasonType() {
 		return dao.selectRestReasonType();
 	}
-	
+
+	// 해당 년도 휴가 총 개수 불러오기
+	public Map<String, Object> selectYearTotalAnnaul(String year) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("id", (String) session.getAttribute("loginID"));
+		data.put("year", year);
+		return dao.selectYearTotalAnnaul(data);
+	}
+
+	// 해당 년도 휴가 사용 개수 불러오기
+	public int selectUsedAnnaul(@RequestParam("year") String year) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("id", (String) session.getAttribute("loginID"));
+		data.put("year", year);
+		return dao.selectUsedAnnaul(data);
+	}
+
+	// 해당 년도 휴가 생성 상세 정보 불러오기
+	public List<AnnaulRestDTO> selectYearDetailAnnaul(String year) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("id", (String) session.getAttribute("loginID"));
+		data.put("year", year);
+		return dao.selectYearDetailAnnaul(data);
+	}
+
+	// 사용자의 휴가 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetails() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetails(id);
+	}
+
+	// 사용자의 최근 1년치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForYear() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetailsForYear(id);
+	}
+
+	// 사용자의 최근 1달치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetailsForMonth(id);
+	}
+
+	// 사용자의 최근 1주일치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetailsForWeek(id);
+	}
+
 	// 임직원 정보 전부 불러오기
 	public List<MemberDTO> employeeSelectAll() {
 		return dao.employeeSelectAll();
 	}
-	
+
 }

@@ -60,7 +60,10 @@ $(document).ready(function() {
 		location.href = "/humanResources/mypage";
 	})
 	
-	
+	// 근무 현황 이동
+	$("#workStatus").on("click",function(){
+		location.href = "/humanResources/workStatus";
+	})
 	 // 임직원 관리 이동
    	$("#employeeInfo").on("click",function(){
    		location.href = "/humanResources/employeeInfo";
