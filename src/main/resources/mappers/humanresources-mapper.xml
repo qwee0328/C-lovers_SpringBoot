@@ -185,6 +185,39 @@
 		year(annual_date)=#{year} group by emp_id;
 	</select>
 
+	<!-- // 사용자의 휴가 신청 상세 내역 확인하기 -->
+	<select id="selectAnnaulAppDetails" resultType="map">
+		select * from
+		vacation_application_details where emp_id=#{id} order by id desc;
+	</select>
+
+	<!-- // 사용자의 최근 1년치 신청 상세 내역 확인하기 -->
+	<select id="selectAnnaulAppDetailsForYear" resultType="map">
+		select *
+		from vacation_application_details
+		where report_date >= curdate() -
+		interval 365 day and emp_id=#{id}
+		order by id desc;
+	</select>
+
+	<!-- // 사용자의 최근 1달치 신청 상세 내역 확인하기 -->
+	<select id="selectAnnaulAppDetailsForMonth" resultType="map">
+		select *
+		from vacation_application_details
+		where report_date >= curdate() -
+		interval 30 day and emp_id=#{id}
+		order by id desc;
+	</select>
+	
+	<!-- // 사용자의 최근 1주일치 신청 상세 내역 확인하기 -->
+	<select id="selectAnnaulAppDetailsForWeek" resultType="map">
+		select *
+		from vacation_application_details
+		where report_date >= curdate() -
+		interval 7 day and emp_id=#{id}
+		order by id desc;
+	</select>
+
 	<!-- 임직원 정보 전부 불러오기 -->
 	<select id="employeeSelectAll" resultMap="employeeList">
 		select * from

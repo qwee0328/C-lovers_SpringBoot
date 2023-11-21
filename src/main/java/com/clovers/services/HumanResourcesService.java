@@ -233,6 +233,14 @@ public class HumanResourcesService {
 		return dao.selectYearTotalAnnaul(data);
 	}
 
+	// 해당 년도 휴가 사용 개수 불러오기
+	public int selectUsedAnnaul(@RequestParam("year") String year) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("id", (String) session.getAttribute("loginID"));
+		data.put("year", year);
+		return dao.selectUsedAnnaul(data);
+	}
+
 	// 해당 년도 휴가 생성 상세 정보 불러오기
 	public List<AnnaulRestDTO> selectYearDetailAnnaul(String year) {
 		Map<String, Object> data = new HashMap<>();
@@ -241,12 +249,28 @@ public class HumanResourcesService {
 		return dao.selectYearDetailAnnaul(data);
 	}
 
-	// 해당 년도 휴가 사용 개수 불러오기
-	public int selectUsedAnnaul(@RequestParam("year") String year) {
-		Map<String, Object> data = new HashMap<>();
-		data.put("id", (String) session.getAttribute("loginID"));
-		data.put("year", year);
-		return dao.selectUsedAnnaul(data);
+	// 사용자의 휴가 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetails() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetails(id);
+	}
+
+	// 사용자의 최근 1년치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForYear() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetailsForYear(id);
+	}
+
+	// 사용자의 최근 1달치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetailsForMonth(id);
+	}
+
+	// 사용자의 최근 1주일치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek() {
+		String id = (String) session.getAttribute("loginID");
+		return dao.selectAnnaulAppDetailsForWeek(id);
 	}
 
 	// 임직원 정보 전부 불러오기
