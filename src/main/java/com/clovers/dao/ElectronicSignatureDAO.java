@@ -136,19 +136,24 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, Object>> selectAllByDocumentId(String document_id) {
 		return db.selectList("ElectronicSignature.selectAllByDocumentId", document_id);
 	}
-
-	// 기안자의 부서 가져오기
-	public String getDeptNameByDrafterId(String drafter_id) {
-		return db.selectOne("ElectronicSignature.getDeptNameByDrafterId", drafter_id);
+	
+	// 기안자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, Object>> getDraftersByDocumentId(String document_id) {
+		return db.selectList("ElectronicSignature.getDraftersByDocumentId", document_id);
 	}
 
-	// 사용자의 직급 가져오기
-	public List<String> getRankByDrafterId(String drafter_id) {
-		return db.selectList("ElectronicSignature.getRankByUserId", drafter_id);
+	// 결재자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, String>> getApproversByDocumentId(String document_id) {
+		return db.selectList("ElectronicSignature.getApproversByDocumentId", document_id);
 	}
 
-	// 결재자의 이름 및 직급 가져오기
-	public List<Map<String, String>> getApproverRankByDocunetId(String document_id) {
-		return db.selectList("ElectronicSignature.getApproverRankByDocunetId", document_id);
+	// 로그인한 사용자가 기안자인지
+	public boolean isDrafterByDocumentId(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.isDrafterByDocumentId", param);
+	}
+
+	// 로그인한 사용자가 결재자인지
+	public boolean isApproverByDocumentId(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.isApproverByDocumentId", param);
 	}
 }

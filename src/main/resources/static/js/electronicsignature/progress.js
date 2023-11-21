@@ -24,7 +24,7 @@ $(document).ready(function() {
 			
 			let drafterDiv = $("<div>");
 			drafterDiv.addClass("documentTable__drafter");
-			drafterDiv.html(resp[i].drafter);
+			drafterDiv.html(resp[i].drafter_name);
 			
 			let draftDateDiv = $("<div>");
 			draftDateDiv.addClass("documentTable__draftDate");

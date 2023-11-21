@@ -17,9 +17,9 @@
 	
 	<div class="container">
 		<%@ include file="../electronicsignature/electronicsignatureNaviBar.jsp" %>
-		
+
 		<div class="container__approvalForm">	
-			<div class="approvalForm__formTitle">휴가 신청서</div>
+			<div class="approvalForm__formTitle">${documentInfo.get(0).document_type_id }</div>
 			
 			<table class="approvalForm__documentInfoTable">
 				<colgroup>

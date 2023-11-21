@@ -51,21 +51,20 @@ public class ElectronicSignatureController {
 	// 기안 또는 결재 구분
 	public void setDivision(String loginID, List<Map<String, Object>> list) {
 		for(Map<String, Object> item : list) {
-	        // approver_id와 loginID가 같으면 "결재"
-	        if (item.get("approver").equals(loginID)) {
-	            item.put("division", "결재");
-	        }
-	        // drafter_id와 loginID가 같으면 "기안"
-	        if (item.get("drafter").equals(loginID)) {
-	            item.put("division", "기안");
-	        }
+			boolean isDrafter = esservices.isDrafterByDocumentId((String)item.get("document_id"), loginID);
+			boolean isApprover = esservices.isApproverByDocumentId((String)item.get("document_id"), loginID);
+			
+			if(isDrafter) {
+				item.put("division", "기안");
+			} else if(isApprover) {
+				item.put("division", "결재");
+			}
 	    }
 	}
 	
 	// 로그인한 사용자의 직급 가져옴
 	public List<String> getSecurityGrade(String loginID) {
 		int jobRank = esservices.getJobRank(loginID);
-		System.out.println("직급: " + jobRank);
 		
 		List<String> secGrade = new ArrayList<>();
 		// 5등급 이상(부장)은 A등급 관람 가능
@@ -121,6 +120,7 @@ public class ElectronicSignatureController {
 
 		List<Map<String, Object>> list = esservices.progressTotalList(loginID, secGrade);
 		setDivision(loginID, list);
+		
 		return list;
 	}
 
@@ -288,23 +288,15 @@ public class ElectronicSignatureController {
 	public String approvalForm(@RequestParam("document_id") String document_id, Model model) {
 		List<Map<String, Object>> documentInfo = esservices.selectAllByDocumentId(document_id);
 		
-		// 기안자의 부서 가져오기
-		String drafter_dept_name = esservices.getDeptNameByDrafterId((String) documentInfo.get(0).get("drafter_id"));
-		for(Map<String, Object> item : documentInfo) {
-			item.put("drafter_dept_name", drafter_dept_name);
-		}
+		// 기안자들의 이름과 직급, 부서 불러오기
+		List<Map<String, Object>> draftersInfo = esservices.getDraftersByDocumentId(document_id);
 		
-		// 기안자의 직급 가져오기
-		List<String> drafter_rank = esservices.getRankByDrafterId((String) documentInfo.get(0).get("drafter_id"));
-		for(Map<String, Object> item : documentInfo) {
-			item.put("drafter_rank", drafter_rank.get(0));
-		}
+		// 결재자들의 이름과 직급, 부서 가져오기
+		List<Map<String, String>> approversInfo = esservices.getApproversByDocumentId(document_id);		
 		
-		// 결재자의 이름 및 직급 가져오기
-		List<Map<String, String>> approver_rank = esservices.getApproverRankByDocunetId((String) documentInfo.get(0).get("document_id"));		
-		
-		model.addAttribute("documentInfo", documentInfo);
-		model.addAttribute("approver_rank", approver_rank);
+		System.out.println("drafters: " + draftersInfo);
+		System.out.println("approvers: " + approversInfo);
+		//model.addAttribute("documentInfo", documentInfo);
 		
 		return "/electronicsignature/viewApprovalForm";
 	}

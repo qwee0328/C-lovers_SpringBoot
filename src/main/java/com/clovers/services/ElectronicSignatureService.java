@@ -298,19 +298,30 @@ public class ElectronicSignatureService {
 	public List<Map<String, Object>> selectAllByDocumentId(String document_id) {
 		return dao.selectAllByDocumentId(document_id);
 	}
-
-	// 기안자의 부서 가져오기
-	public String getDeptNameByDrafterId(String drafter_id) {
-		return dao.getDeptNameByDrafterId(drafter_id);
+	
+	// 기안자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, Object>> getDraftersByDocumentId(String document_id) {
+		return dao.getDraftersByDocumentId(document_id);
 	}
 
-	// 기안자의 직급 가져오기
-	public List<String> getRankByDrafterId(String drafter_id) {
-		return dao.getRankByDrafterId(drafter_id);
+	// 결재자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, String>> getApproversByDocumentId(String document_id) {
+		return dao.getApproversByDocumentId(document_id);
+	}
+	
+	// 로그인한 사용자가 기안자인지
+	public boolean isDrafterByDocumentId(String document_id, String loginID) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", document_id);
+		param.put("loginID", loginID);
+		return dao.isDrafterByDocumentId(param);
 	}
 
-	// 결재자의 이름 및 직급 가져오기
-	public List<Map<String, String>> getApproverRankByDocunetId(String document_id) {
-		return dao.getApproverRankByDocunetId(document_id);
+	// 로그인한 사용자가 결재자인지
+	public boolean isApproverByDocumentId(String document_id, String loginID) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", document_id);
+		param.put("loginID", loginID);
+		return dao.isApproverByDocumentId(param);
 	}
 }
