@@ -486,6 +486,23 @@ document.addEventListener('DOMContentLoaded', function() {
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
 			return false;
 		}
+		
+		if($(".insertSchedule__title").val()==""){
+			Swal.fire({
+				icon: "error",
+				text: "일정 제목을 입력해주세요."
+			});
+			return;
+		}
+		
+		if($(".insertSchedule__startDate").val()==""){
+			Swal.fire({
+				icon: "error",
+				text: "시작 일자를 입력해주세요."
+			});
+			return;
+		}		
+		
 		let events = generateEvent();
 		calendar.addEventSource(events);
 
@@ -1284,51 +1301,69 @@ $(document).on("click",".selectIcon__cancel",function(){
 
 // 캘린더 추가
 $(document).on("click",".calendarInsertModal__save",function(){
-	let empIds = $(".empSelectList__empList").children().map((i,e)=>{
-		return $(e).attr("data-emp_id");
-	}).toArray();
 	
-	let data ={
-		name: $(".calendarInsertName").val(),
-		color: $(".colorInput").val(),
-		empIds : empIds,
-		is_share : $(".calendarInsertModalTite").text().includes("공유 캘린더")?1:0
+	if($(".calendarInsertName").val() == ""){
+		Swal.fire({
+			icon: "error",
+			text: "캘린더 이름을 입력하세요."
+		});
+		return;
+	}else{
+		let empIds = $(".empSelectList__empList").children().map((i,e)=>{
+			return $(e).attr("data-emp_id");
+		}).toArray();
+		
+		let data ={
+			name: $(".calendarInsertName").val(),
+			color: $(".colorInput").val(),
+			empIds : empIds,
+			is_share : $(".calendarInsertModalTite").text().includes("공유 캘린더")?1:0
+		}
+	
+		$.ajax({
+			url:"/schedule/calendarInsert",
+			data:data,
+			type:"post"
+		}).done(function(){
+			getNavi();
+			$.modal.close();
+		})
 	}
-
-	$.ajax({
-		url:"/schedule/calendarInsert",
-		data:data,
-		type:"post"
-	}).done(function(){
-		getNavi();
-		$.modal.close();
-	})
 });
 
 
 
 // 캘린더 수정
 $(document).on("click",".calendarInsertModal__update",function(){
-	let empIds = $(".empSelectList__empList").children().map((i,e)=>{
-		return $(e).attr("data-emp_id");
-	}).toArray();
 	
-	let data ={
-		id : parseInt($(this).attr("data-id")),
-		name: $(".calendarInsertName").val(),
-		color: $(".colorInput").val(),
-		empIds : empIds,
-		is_share : $(".calendarModal__title").html()=="공유 캘린더"?1:0
+	if($(".calendarInsertName").val() == ""){
+		Swal.fire({
+			icon: "error",
+			text: "캘린더 이름을 입력하세요."
+		});
+		return;
+	}else{
+		let empIds = $(".empSelectList__empList").children().map((i,e)=>{
+			return $(e).attr("data-emp_id");
+		}).toArray();
+		
+		let data ={
+			id : parseInt($(this).attr("data-id")),
+			name: $(".calendarInsertName").val(),
+			color: $(".colorInput").val(),
+			empIds : empIds,
+			is_share : $(".calendarModal__title").html()=="공유 캘린더"?1:0
+		}
+	
+		$.ajax({
+			url:"/schedule/calendarUpdate",
+			data:data,
+			type:"post"
+		}).done(function(){
+			getNavi();
+			$.modal.close();
+		})
 	}
-
-	$.ajax({
-		url:"/schedule/calendarUpdate",
-		data:data,
-		type:"post"
-	}).done(function(){
-		getNavi();
-		$.modal.close();
-	})
 });	
 	
 // 캘린더 삭제 
