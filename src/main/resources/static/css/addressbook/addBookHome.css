@@ -174,7 +174,7 @@ input[type='checkbox'] {
 
 
 
-.removeNavi, .naviConp__addTag{
+/*.removeNavi, .naviConp__addTag{
 	font-size: 12px;
 	display: flex;
 	align-items: center;
@@ -214,7 +214,7 @@ input[type='checkbox'] {
  	text-overflow: ellipsis;
  	white-space: nowrap;
 }
-  
+  */
   
 
 .swal2-confirm{

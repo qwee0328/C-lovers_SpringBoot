@@ -103,11 +103,13 @@
 			</div>
 		</div>
 		<div class="calendarModal__buttons align-center">
-			<button class="calendarModal__cancel">취소</button>
-			<div class="buttons__margin"></div>
+			
 			<button class="calendarModal__save">저장</button>
 			<div class="buttons__margin"></div>
-			<button class="calendarModal__updateSave">변경</button>
+			<button class="calendarModal__updateSave">수정</button>
+			<div class="buttons__margin"></div>
+			<button class="calendarModal__cancel">취소</button>
+			
 		</div>
 	</div>
 

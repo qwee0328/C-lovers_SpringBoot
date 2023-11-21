@@ -249,6 +249,11 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 }
 
 
+// 주소 입력 모달창 - 전화번호 - 숫자만 입력 가능, 하이픈 자동 생성 (010-1111-1111 or 041-111-111 형식)
+$(document).on("input",".modalBody__number",function(){ 
+	$(this).val($(this).val().replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`).replace(/^(\d{2,3})(\d{3,4})(\d{4})(\d{1,})$/, `$1-$2-$3`));
+});
+
 
 // 주소 UPDATE OR INSERT 시 데이터 셋팅
 function settingData(){
@@ -256,31 +261,66 @@ function settingData(){
 	for (let i = 0; i < $(".selectedTag").length; i++) { // 선택한 태그 값 불러오기
 		selectedTagArray.push(parseInt($($(".selectedTag")[i]).find(".selectedTag__delete").attr("selectid")));
 	}
+	
+	if($(".modalBody__name").val() == ""){ // 이름 필수 입력
+		Swal.fire({
+			icon: "error",
+			text: "이름을 입력해주세요."
+		});
+		$(".modalBody__name").focus();
+		return ;
+	}
+	
+	if($(".modalBody__email").val() != ""){ // 이메일 정규식
+		// 둘 중 하나. 진짜 이메일 형식 or 영문+숫자 조합
+		let emailRegex = /^[a-zA-Z0-9]+@[a-z]+\.[a-z]+(\.*[a-z])*$/; // 이메일 형식 ex. test@clovers.com or test@clovers.co.kr
+		//let empIdRegex = /^[0-9]{4}DT[0-9]{2}[0-9]{3}$/; // 사번 형식 ex. 2023DT02020 
+		let emailRegex2 = /^[a-zA-Z0-9]+$/; // 사번 형식 ex. 2023DT02020 
+		let val = $(".modalBody__email").val();
+		if(!emailRegex.test(val) && !emailRegex2.test(val)){
+			Swal.fire({
+				icon: "error",
+				text: "이메일 형식에 맞게 입력해주세요."
+			});
+			$(".modalBody__email").focus();
+			return ;
+		}
+		
+	}
+	
+	if($(".modalBody__number").val()!=""){ // 전화번호 정규식		
+		let regex = /^.{11,13}$/; // 10~11자 사이만 입력가능
+		console.log(regex.test($(".modalBody__number").val()));
+		if(!regex.test($(".modalBody__number").val())){
+			Swal.fire({
+				icon: "error",
+				text: "전화번호는 9 ~ 11자로 입력해주세요."
+			});
+			$(".modalBody__number").focus();
+			return ;
+		}
+	}
+	
 
 	let data = {
 		name: $(".modalBody__name").val(),
-			is_share: $(".activeType").text() == "공유 주소록" ? 1 : 0,
-			email: $(".modalBody__email").val(),
-			numberType: $(".modalBody__numberType option:selected").val(),
-			number: $(".modalBody__number").val(),
-			company_name: $(".modalBody__company_name").val(),
-			dept_name: $(".modalBody__dept_name").val(),
-			job_name: $(".modalBody__job_name").val(),
-			addressType: $(".modalBody__addressType option:selected").val(),
-			address: $(".modalBody__address").val(),
-			birthType: $(".modalBody__birthType option:selected").val(),
-			birth: $(".modalBody__birth").val(),
-			memo: $(".modalBody__memo").text(),
-			selectedTagArray: selectedTagArray
+		is_share: $(".activeType").text() == "공유 주소록" ? 1 : 0,
+		email: $(".modalBody__email").val(),
+		numberType: $(".modalBody__numberType option:selected").val(),
+		number: $(".modalBody__number").val(),
+		company_name: $(".modalBody__company_name").val(),
+		dept_name: $(".modalBody__dept_name").val(),
+		job_name: $(".modalBody__job_name").val(),
+		addressType: $(".modalBody__addressType option:selected").val(),
+		address: $(".modalBody__address").val(),
+		birthType: $(".modalBody__birthType option:selected").val(),
+		birth: $(".modalBody__birth").val(),
+		memo: $(".modalBody__memo").text(),
+		selectedTagArray: selectedTagArray
 	}
 	
 	return data;
 }
-
-
-
-
-
 
 $(document).ready(function() {
 	reloadTags(function(){ // 존재하는 태그 출력
@@ -299,17 +339,24 @@ $(document).ready(function() {
 	});
 
 	$(document).on("click","#addressBookInsert", function() { // 주소록 저장
-		$.ajax({
-			url: "/addressbook/insert",
-			data: settingData(),
-			type: "post"
-
-		}).done(function(resp) {
-			if (resp >= 1) {
-				$.modal.close();
-				indexSelect($(".activeMenu"));	
-			}
-		});
+	// 유효성 검사
+	
+		let data = settingData();
+		console.log(data);
+		if(data != null){
+			$.ajax({
+				url: "/addressbook/insert",
+				data: data,
+				type: "post"
+	
+			}).done(function(resp) {
+				if (resp >= 1) {
+					$.modal.close();
+					indexSelect($(".activeMenu"));	
+				}
+			});
+		}
+		
 	});
 
 	$("#addressBookTagInsert").on("click", function() { // 태그 저장
@@ -323,7 +370,6 @@ $(document).ready(function() {
 			async: "false"
 		}).done(function(resp) { // 현재 선택한 태그 이름 가져와서 선택해주어야함
 			if (resp > 0) {
-				reloadTags(function(){indexSelect($("div[data-id='" + $("#abCurrentMenu").val() + "']"));});
 				$.modal.close();
 				$(".modalBody__tag").append($("<option>").val(resp).text($(".modalBody__tagName").val()));
 			}
