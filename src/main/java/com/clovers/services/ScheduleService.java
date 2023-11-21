@@ -95,7 +95,7 @@ public class ScheduleService {
 		param.put("name", name);
 		param.put("color",color);
 		dao.updateCalendar(param);
-		dao.deleteCalendarAuto(id);
+		dao.deleteCalendarAuth(id);
 		
 		Map<String,Object> param2 = new HashMap<>();
 		param2.put("calendar_id",id);
