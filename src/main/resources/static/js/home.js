@@ -9,20 +9,29 @@ $(document).ready(function() {
 		if ($(this).siblings().html() == "메일") {
 			location.href = "/mail";
 		}
+		
+		if ($(this).siblings().html() == "일정") {
+			location.href = "/schedule";
+		}
+		
+		if ($(this).siblings().html() == "주소록") {
+			location.href = "/addressbook";
+		}
+		
 		if ($(this).siblings().html() == "인사") {
 			location.href = "/humanResources";
 		}
 
-		if ($(this).siblings().html() == "일정") {
-			location.href = "/schedule";
-		}
-
-		if ($(this).siblings().html() == "주소록") {
-			location.href = "/addressbook";
-		}
-
 		if ($(this).siblings().html() == "전자결재") {
 			location.href = "/electronicsignature";
+		}
+		
+		if ($(this).siblings().html() == "오피스 관리") {
+			location.href = "/admin/office";
+		}
+		
+		if ($(this).siblings().html() == "회계지원") {
+			location.href = "/admin/accounting";
 		}
 	})
 
