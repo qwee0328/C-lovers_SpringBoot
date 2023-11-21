@@ -197,7 +197,7 @@
 	padding: 5px;
 }
 
-#accountingController,#officeController{
+#accountingController__small,#officeController__small{
 	display: none;
 }
 

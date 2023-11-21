@@ -92,6 +92,10 @@ $(document).ready(function() {
 			location.href = "/electronicsignature";
 		}
 		
+		if($(this).find(".inner__title").html() == "회계지원"){
+			
+		}
+		
 		if($(this).find(".inner__title").html() == "게시판"){
 			
 		}
@@ -102,6 +106,10 @@ $(document).ready(function() {
 		
 		if($(this).find(".inner__title").html() == "인사"){
 			location.href = "/humanResources";
+		}
+		
+		if($(this).find(".inner__title").html() == "오피스 관리"){
+			
 		}
 		
 		
@@ -120,12 +128,12 @@ $(document).ready(function() {
 				console.log(resp[i]);
 			// 회계 권한
 			if (resp[i] == "회계" || resp[i] == "총괄") {
-				$("#accountingController").css("display", "flex");
+				$("#accountingController__small").css("display", "flex");
 			}
 
 			// 총괄 권한
 			if (resp[i] == "총괄") {
-				$("#officeController").css("display", "flex");
+				$("#officeController__small").css("display", "flex");
 			}
 		}
 		})
