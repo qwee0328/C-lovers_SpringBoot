@@ -798,7 +798,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				$(".calendarInsertModal").attr("style","max-width:900px !important;");
 				$(".privateCalendarEl1").attr("style","width:15%");
 				$(".privateCalendarEl2").attr("style","width:40%")
-				$(".shareCalendarEl1").css("display","block");
+				$(".shareCalendarEl1").css("display","flex");
 				$(".shareCalendarEl2").css("display","flex");
 			}
 
@@ -856,7 +856,7 @@ $(document).ready(function() {
 			$(".calendarInsertModal").attr("style","max-width:900px !important;");
 			$(".privateCalendarEl1").attr("style","width:15%");
 			$(".privateCalendarEl2").attr("style","width:40%")
-			$(".shareCalendarEl1").css("display","block");
+			$(".shareCalendarEl1").css("display","flex");
 			$(".shareCalendarEl2").css("display","flex");
 		}
 		$(".calendarInsertModal").modal({
@@ -979,6 +979,7 @@ function calendarModalInit(){
 	$(".calendarInsertName").removeAttr("disabled");
 	$(".deleteWhenUpdate").css("display","flex")
 	reloadEmpList();
+	loadUserInfo();
 }
 
 /* update용 데이터 setting */
@@ -998,6 +999,7 @@ function calendarModalUpdateInit(id, is_share){
 		$(".empAllList__empList *").remove();
 		$(".empSelectList__empList *").remove();
 		reloadEmpList();
+		loadUserInfo();
 		
 		$(".calendarInsertModal__update").attr("data-id",resp.id);
 		$(".calendarModal__buttons>.calendarInsertModal__delete").css("display","block").attr("data-id",resp.id);
@@ -1019,8 +1021,9 @@ function calendarModalUpdateInit(id, is_share){
 	});
 }
 
-// department & team 전체 목록 불러오기 & 로그인한 사용자는 기본적으로 권한 추가
-function reloadEmpList(){
+
+// 로그인한 사용자는 기본적으로 권한 추가
+function loadUserInfo(){
 	// 로그인 아이디 해당 정보 불러오기
 	$.ajax({
 		url: "/office/getMyInfo",
@@ -1033,7 +1036,10 @@ function reloadEmpList(){
 		let taskName = $("<span>").text("("+resp.task_name+")");
 		$(".empSelectList__empList").append(userId.append(name).append(taskName))
 	})
-	
+}
+
+// department & team 전체 목록 불러오기 & 
+function reloadEmpList(){
 	$(document).ready(function(){
 		// 회사 총 인원 수
 		$.ajax({
@@ -1365,3 +1371,27 @@ $(document).on("click",".calendarInsertModal__restore",function(){
 
 
 
+// 공유 캘린더 공유 대상 검색
+$(document).on("input", ".empSearchKeyword", function() {
+	if ($(this).val() !== "") {
+		$.ajax({
+			url: "/office/searchUserAjax",
+			type: "POST",
+			data: { keyword: $(this).val() }
+		}).done(function(resp) {
+			$(".deptList__companyName").css("display","none");
+			$(".deptList__cover *").remove();
+			$(".empAllList__empList *").remove();
+			for(let i=0; i<resp.length; i++){
+				let empList__emp = $("<div>").attr("class","empList__emp").attr("data-emp_id",resp[i].id);
+				let name = $("<span>").text(resp[i].name);
+				let taskName = $("<span>").text("("+resp[i].task_name+")");
+				$(".empAllList__empList").append(empList__emp.append(name).append(taskName))
+			}
+		})
+	} else {
+		$(".deptList__companyName").css("display","block");
+		reloadEmpList();
+	}
+
+})

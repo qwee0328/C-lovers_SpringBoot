@@ -30,7 +30,7 @@
 					<input type="color" class="colorInput">
 				</div>
 			</div>
-			<div class="calendarModal__bodyLine shareCalendarEl shareCalendarEl1">
+		<!-- 	<div class="calendarModal__bodyLine shareCalendarEl shareCalendarEl1">
 				<div class="calendarModal__bodyTitle w-15">공유 대상</div>
 				<div class="calendarModal__bodyContentShare d-flex">
 					<div class="calendarModal__bodyTitle w-15 d-flex">
@@ -42,9 +42,15 @@
 					</div>
 
 					<div class="calendarModal__bodyContent w-60">
-						<input type="text" class="empSearchKeyword">
+						<input type="text" class="empSearchKeyword" placeHolder="이름 / ID 검색">
 					</div>
 					<button class="bodyContentShare__searchBtn">검색</button>
+				</div>
+			</div> -->
+			<div class="calendarModal__bodyLine d-flex shareCalendarEl shareCalendarEl1">
+				<div class="calendarModal__bodyTitle w-15">공유 대상</div>
+				<div class="calendarModal__bodyContent w-60">
+					<input type="text" class="empSearchKeyword" placeHolder="이름 / ID 검색">
 				</div>
 			</div>
 
