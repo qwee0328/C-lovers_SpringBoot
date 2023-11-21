@@ -5,42 +5,76 @@
 <mapper namespace="Accounting">
 
 	<!-- 회계지원 매퍼 -->
+	
+	<!-- 직원 계좌  -->
+	<!-- 계좌 리스트 전부 불러오기 -->
 	<select id="selectAll" resultType="com.clovers.dto.AccountingDTO">
 		select * from employeeAccountList order by num desc
 	</select>
 	
+	<!-- 이름, 사번으로 검색 -->
 	<select id="searchBy" resultType="com.clovers.dto.AccountingDTO">
 		select * from employeeAccountList where emp_id like #{keyword} or name like #{keyword} order by num desc
 	</select>	
 	
+	<!-- 계좌 추가 전에 유효한 사번인지 아닌지 확인 -->
+	<select id="isEmployee" resultType="Integer">
+		select count(*) from employee where id = #{emp_id}
+	</select>
+	
+	<!-- 계좌 추가 전에 이미 계좌가 등록된 사번인지 아닌지 확인 -->
+	<select id="isEmpId" resultType="Integer">
+		select count(*) from employeeAccountList where emp_id = #{emp_id}
+	</select>
+	
+	<!-- 계좌 추가 -->
 	<insert id="insert">
 		insert into emp_account values(0,#{id},#{emp_id},#{bank},default)
 	</insert>
 	
+	<!-- id로 삭제 -->
 	<delete id="deleteById">
 		delete from emp_account where id=#{value};
 	</delete>
 	
+	<!-- 계좌 수정 -->
 	<update id="update">
 		update emp_account set id=#{id}, emp_id=#{emp_id}, bank=#{bank}, reg_date=default where num=#{num}
 	</update>
 	
-	<!--  -->
+	<!-- 법인 카드 -->
+	
+	<!-- 카드 리스트 전부 부르기 -->
 	<select id="selectCardAll" resultType="com.clovers.dto.AccountingDTO">
 		select * from corp_card_view order by num desc
 	</select>
 	
+	<!-- 검색 -->
 	<select id="searchCard" resultType="com.clovers.dto.AccountingDTO">
 		select * from corp_card_view where emp_id like #{keyword} or name like #{keyword} order by num desc
 	</select>
 	
+	<!-- 카드번호 중복 확인 -->
+	<select id="isAlreadyCardNum" resultType="Integer">
+		select count(*) from corp_card_view where id=#{cardNum}
+	</select>
+	
+	<!-- 계좌 추가 전에 이미 카드가 등록된 사번인지 아닌지 확인 -->
+	<select id="isEmpCardId" resultType="Integer">
+		select count(*) from corp_card_view where emp_id= #{emp_id}
+	</select>
+	
+	<!-- 카드 추가 -->
 	<insert id="insertCard">
 		insert into corp_card values(0,#{id},#{emp_id},#{bank},default)
 	</insert>
 	
+	<!-- 카드 삭제 -->
 	<delete id="deleteCard">
 		delete from corp_card where id=#{id}
 	</delete>
+	
+	<!-- 카드 수정 -->
 	<update id="updateCard">
 		update corp_card set id=#{id}, emp_id=#{emp_id}, bank=#{bank}, reg_date=default where num=#{num}
 	</update>
