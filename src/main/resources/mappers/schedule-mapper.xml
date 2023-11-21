@@ -132,7 +132,14 @@
 	
 	<!-- 캘린더 휴지통 / 복구 -->
 	<update id="trashCalendar">
-		update calendar set trash = #{trash}, trash_date = now() where id = #{id};
+		update calendar set trash = #{trash}, trash_date = 
+		<if test="trash == 0">
+			null
+		</if>
+		<if test="trash == 1">
+			now()
+		</if>
+		 where id = #{id};
 	</update>
 	
 	<!-- 캘린더 업데이트용 정보 불러가기 -->
