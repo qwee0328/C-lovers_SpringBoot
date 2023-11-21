@@ -19,7 +19,7 @@
 			<div class="headerLeft__logo">C-lovers</div>
 			<c:choose>
 				<c:when test="${title != '오피스 홈' }">
-					<div class="headerLeft__dropNav">
+					<div class="headerLeft__dropNav dropNav_hover" >
 						${title }
 						<i class="fa-solid fa-caret-down dropNavi__icon"></i>
 					</div>
@@ -28,6 +28,74 @@
 					<div class="headerLeft__dropNav">${title }</div>
 				</c:otherwise>
 			</c:choose>
+			
+			<!-- 민경 -->
+			<div class="headerLeft__dropNavBox">
+				<div class="dropNavBox">
+					<div class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-regular fa-envelope"></i>
+						</div>
+						<c:choose>
+							<c:when test="${title = '메일' }">
+								<div class="inner__title" style="background-color: #DCEDD4;">메일</div>
+							</c:when>
+							<c:otherwise>
+								<div class="inner__title">${title }</div>
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<div class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-regular fa-calendar"></i>
+						</div>
+						<div class="inner__title">일정</div>
+					</div>
+					<div class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-regular fa-file-lines"></i>
+						</div>
+						<div class="inner__title">전자결재</div>
+					</div>
+					
+					<div id="accountingController" class="dropNavBox__inner ">
+						<div class="inner__icon">
+							<i class="fa-solid fa-credit-card"></i>
+						</div>
+						<div class="inner__title">회계지원</div>
+					</div>
+					
+				</div>
+				<div class="dropNavBox">
+					<div class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-regular fa-clipboard"></i>
+						</div>
+						<div class="inner__title">게시판</div>
+					</div>
+					<div class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-regular fa-address-book"></i>
+						</div>
+						<div class="inner__title">주소록</div>
+					</div>
+					<div class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-solid fa-sitemap"></i>
+						</div>
+						<div class="inner__title">인사</div>
+					</div>
+					<div id="officeController" class="dropNavBox__inner">
+						<div class="inner__icon">
+							<i class="fa-solid fa-gear"></i>
+						</div>
+						<div class="inner__title">오피스 관리</div>
+					</div>
+				</div>
+			</div>
+
+
+
 		</div>
 		<div class="headerRight">
 			<div id="goChat">
@@ -87,5 +155,10 @@
 	$(".dropNavi__icon").on("click", function() {
 		
 	})
+	
+	// 로고옆에 클릭시
+	$(".headerLeft__dropNav").on("click",function(){
+		
+	});
 </script>
 </html>
