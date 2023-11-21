@@ -39,7 +39,7 @@
 						<th scope="row">기안 부서</th>
 						<td>${draftersInfo.get(0).task_name }</td>
 						<th scope="row">기안자</th>
-						<td>${documentInfo.get(0).emp_id }</td>
+						<td id="drafter">${documentInfo.get(0).emp_id }</td>
 					</tr>
 					<tr>
 						<th scope="row">보존 연한</th>
@@ -152,8 +152,29 @@
 			<c:choose>
 				<c:when test="${documentInfo.get(0).document_type_id == '휴가 신청서'}">
 					<div class="vacation__title">${documentInfo.get(0).title}</div>
-					<table>
-						<colgroup></colgroup>
+					<table class="vacation__table">
+						<colgroup>
+							<col style="width: 160px;">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>사용자</th>
+								<td>${mainDrafter.drafter_name }</td>
+							</tr>
+							<tr>
+								<th>부서</th>
+								<td>${mainDrafter.task_name }</td>
+							</tr>
+							<tr>
+								<th>휴가 신청</th>
+								<td id="vacation_date"></td>
+							</tr>
+							<tr>
+								<th>사유</th>
+								<td id="vacation_reason"></td>
+							</tr>
+						</tbody>
 					</table>
 				</c:when>
 				<c:when test="${documentInfo.get(0).document_type_id == '지출 결의서'}">

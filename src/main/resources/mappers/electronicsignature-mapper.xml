@@ -279,4 +279,27 @@
 		WHERE id = #{document_id}
 			AND emp_id = #{loginID}
 	</select>
+	
+	<!-- 휴가 신청서 정보 출력 -->
+	<select id="getVacationInfo" resultType="map">
+		SELECT *
+		FROM vacation_application_info
+		WHERE document_id = #{document_id}
+		ORDER BY vacation_date asc;
+	</select>
+	
+	<!-- // 대표 기안자의 부서 불러오기 -->
+	<select id="getMainDrafterDept" resultType="map">
+		SELECT 
+			e.name AS drafter_name,
+		    dt.task_name
+		FROM 
+		    document d
+		JOIN 
+		    employee e ON d.emp_id = e.id
+		JOIN 
+		    dept_task dt ON e.dept_task_id = dt.id
+		WHERE 
+		    d.id = #{document_id};
+	</select>
 </mapper>

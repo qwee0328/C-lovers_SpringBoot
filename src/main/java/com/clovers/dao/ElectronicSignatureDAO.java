@@ -156,4 +156,14 @@ public class ElectronicSignatureDAO {
 	public boolean isApproverByDocumentId(Map<String, String> param) {
 		return db.selectOne("ElectronicSignature.isApproverByDocumentId", param);
 	}
+
+	// 휴가 신청서 정보 출력
+	public List<Map<String, Object>> getVacationInfo(String document_id) {
+		return db.selectList("ElectronicSignature.getVacationInfo", document_id);
+	}
+
+	// 대표 기안자의 부서 가져오기
+	public Map<String, String> getMainDrafterDept(String document_id) {
+		return db.selectOne("ElectronicSignature.getMainDrafterDept", document_id);
+	}
 }

@@ -289,17 +289,28 @@ public class ElectronicSignatureController {
 	public String approvalForm(@RequestParam("document_id") String document_id, Model model) {
 		List<Map<String, Object>> documentInfo = esservices.selectAllByDocumentId(document_id);
 		
+		// 대표 기안자의 부서 불러오기
+		Map<String, String> mainDrafter = esservices.getMainDrafterDept(document_id);
+		
 		// 기안자들의 이름과 직급, 부서 불러오기
 		List<Map<String, Object>> draftersInfo = esservices.getDraftersByDocumentId(document_id);
 		
 		// 결재자들의 이름과 직급, 부서 가져오기
 		List<Map<String, String>> approversInfo = esservices.getApproversByDocumentId(document_id);		
 		
+		model.addAttribute("mainDrafter", mainDrafter);
 		model.addAttribute("documentInfo", documentInfo);
 		model.addAttribute("draftersInfo", draftersInfo);
 		model.addAttribute("approversInfo", approversInfo);
 		
 		return "/electronicsignature/viewApprovalForm";
+	}
+	
+	// 휴가 신청서 정보 출력
+	@ResponseBody
+	@RequestMapping("/getVacationInfo")
+	public List<Map<String, Object>> getVacationInfo(String document_id) {
+		return esservices.getVacationInfo(document_id);
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

@@ -324,4 +324,14 @@ public class ElectronicSignatureService {
 		param.put("loginID", loginID);
 		return dao.isApproverByDocumentId(param);
 	}
+
+	// 휴가 신청서 정보 출력
+	public List<Map<String, Object>> getVacationInfo(String document_id) {
+		return dao.getVacationInfo(document_id);
+	}
+
+	// 대표 기안자의 부서 불러오기
+	public Map<String, String> getMainDrafterDept(String document_id) {
+		return dao.getMainDrafterDept(document_id);
+	}
 }
