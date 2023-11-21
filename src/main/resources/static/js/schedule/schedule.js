@@ -1,4 +1,4 @@
-let eventsLoaded = false;
+let eventsLoaded = 0;
 function modalInitail(type,datas) {
 	$(".modalName").text("일정 추가");
 	$(".insertSchedule__title").val("");
@@ -35,7 +35,7 @@ function modalInitail(type,datas) {
 	});
 }
 
-// 초기 네비 목록 불러오기
+// 네비 목록 불러오기
 function getNavi(){
 	$.ajax({
 		url:"/schedule/selectCalendarByEmpId",
@@ -71,11 +71,14 @@ function getNavi(){
 			
 		}
 		
-		if($(".naviBar__personalCalendar").find(".toggleMenu").attr("toggleView") == "false"){
+		if($(".naviBar__sharedCalendar").find(".toggleMenu").attr("toggleView") == "false"){
 			$(".naviBar__sharedCalendar .toggleInner").css("display","none");
 		}
 		if($(".naviBar__personalCalendar").find(".toggleMenu").attr("toggleView") == "false"){
 			$(".naviBar__personalCalendar .toggleInner").css("display","none");
+		}
+		if($(".naviBar__trashCalendar").find(".toggleMenu").attr("toggleView") == "false"){
+			$(".naviBar__trashCalendar .toggleInner").css("display","none");
 		}
 	});
 }
@@ -265,7 +268,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			return e.dayNumberText.replace("일", "");
 		},
 		datesSet: function () {
-		    reloadEvent();
+			if(!eventsLoaded){
+				eventsLoaded = 1;
+				reloadEvent(eventsLoaded);
+			}else{
+				reloadEvent();
+			}
+		  
 	    }
 	});
 
@@ -494,8 +503,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			type:"post",
 			async:false
 		}).done(function(resp){
-			console.log(resp);
-			
 			modalInitail("modify",calendar.getEventById($("#eventId").val()));
 
 			let startDate, startTime, endDate, endTime;
@@ -504,10 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			endDate = resp.end_date.slice(0,10);
 			endTime = resp.end_date.slice(11,16);
 
-	
-			console.log($(".calendarModal__calNameList").val(resp.calendar_id));
 			$(".calendarModal__calNameList").val(resp.calendar_id).prop("selected",true);
-			console.log($(".calendarModal__calNameList option:selected").val());
 
 			$(".insertSchedule__content").html(resp.content);
 			$(".insertSchedule__title").val(resp.title);
@@ -687,8 +691,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	calendar.render();
 	
-	function reloadEvent(){ // 캘린더 선택 시 이벤트 다시 로드
+	function reloadEvent(init){ // 캘린더 선택 시 이벤트 다시 로드
 		calendar.removeAllEvents();
+		
+		
+		if(init ==1){ // 누른 캘린더 기억하도록 (로그아웃 시 초기화)
+			let arrString = $("#calIds").val();
+			let arr = arrString.replace(/\[|\]/g, '').split(',');
+			arr.map((e,i)=>{
+				$(".customMenu[data-id='"+parseInt(e)+"']").addClass("selectNavi");
+				let color = $(".customMenu[data-id='"+parseInt(e)+"']").find(".naviConp__calColor");
+				color.css("background-color",color.attr("data-color"));
+			})
+		}
+		
+		
+		
 		if($(".selectNavi").length>=1){
 			let calIds = $(".selectNavi").map((i,e)=>{
 				return parseInt($(e).attr("data-id"));
@@ -696,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 			$.ajax({
 				url:"/schedule/selectByCalendarIdSchedule",
-				data:{calIds:calIds},
+				data:{calIds:calIds, init:init},
 				type:"post",
 				async:false
 			}).done(function(resp){
@@ -759,7 +777,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	// 캘린더 수정 모달
 	$(document).on("click",".customMenu .editNavi, .trashMenu .editNavi",function(e){
-		console.log($(this));
 		e.stopPropagation(); // 수정 버튼 누르면 캘린더 활성화 이벤트 중지
 		$(".calendarInsertModal__save").addClass("calendarInsertModal__update").removeClass("calendarInsertModal__save").text("수정");
 		calendarModalUpdateInit($(this).attr("data-id"),$(this).parent().parent().find(".naviConp__addTag").attr("data-isshare"));
@@ -781,7 +798,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				$(".calendarInsertModal").attr("style","max-width:900px !important;");
 				$(".privateCalendarEl1").attr("style","width:15%");
 				$(".privateCalendarEl2").attr("style","width:40%")
-				$(".shareCalendarEl1").css("display","block");
+				$(".shareCalendarEl1").css("display","flex");
 				$(".shareCalendarEl2").css("display","flex");
 			}
 
@@ -839,7 +856,7 @@ $(document).ready(function() {
 			$(".calendarInsertModal").attr("style","max-width:900px !important;");
 			$(".privateCalendarEl1").attr("style","width:15%");
 			$(".privateCalendarEl2").attr("style","width:40%")
-			$(".shareCalendarEl1").css("display","block");
+			$(".shareCalendarEl1").css("display","flex");
 			$(".shareCalendarEl2").css("display","flex");
 		}
 		$(".calendarInsertModal").modal({
@@ -962,6 +979,7 @@ function calendarModalInit(){
 	$(".calendarInsertName").removeAttr("disabled");
 	$(".deleteWhenUpdate").css("display","flex")
 	reloadEmpList();
+	loadUserInfo();
 }
 
 /* update용 데이터 setting */
@@ -981,6 +999,7 @@ function calendarModalUpdateInit(id, is_share){
 		$(".empAllList__empList *").remove();
 		$(".empSelectList__empList *").remove();
 		reloadEmpList();
+		loadUserInfo();
 		
 		$(".calendarInsertModal__update").attr("data-id",resp.id);
 		$(".calendarModal__buttons>.calendarInsertModal__delete").css("display","block").attr("data-id",resp.id);
@@ -991,6 +1010,7 @@ function calendarModalUpdateInit(id, is_share){
 			let emp_names = resp.emp_names.split(",");
 			let task_names = resp.task_names.split(",");
 			for(let i=0; i<emp_ids.length; i++){
+				if(emp_ids[i]==resp.loginID) continue;
 				let empList__emp = $("<div>").attr("class","empSelectList__emp").attr("data-emp_id",emp_ids[i]);
 				let name = $("<span>").text(emp_names[i]);
 				let taskName = $("<span>").text("("+task_names[i]+")");
@@ -1001,8 +1021,9 @@ function calendarModalUpdateInit(id, is_share){
 	});
 }
 
-// department & team 전체 목록 불러오기 & 로그인한 사용자는 기본적으로 권한 추가
-function reloadEmpList(){
+
+// 로그인한 사용자는 기본적으로 권한 추가
+function loadUserInfo(){
 	// 로그인 아이디 해당 정보 불러오기
 	$.ajax({
 		url: "/office/getMyInfo",
@@ -1015,7 +1036,10 @@ function reloadEmpList(){
 		let taskName = $("<span>").text("("+resp.task_name+")");
 		$(".empSelectList__empList").append(userId.append(name).append(taskName))
 	})
-	
+}
+
+// department & team 전체 목록 불러오기 & 
+function reloadEmpList(){
 	$(document).ready(function(){
 		// 회사 총 인원 수
 		$.ajax({
@@ -1230,8 +1254,22 @@ $(document).on("click",".empAllList__cancelAll",function(){
 $(document).on("click",".selectIcon__select",function(){
 	let selectEmps = $(".selectEmp").clone();
 	selectEmps.addClass("empSelectList__emp").removeClass("empList__emp");
-	$(".empSelectList__empList").append(selectEmps);
-	$(".empSelectList__cnt").text(parseInt($(".empSelectList__cnt").text())+selectEmps.length);
+	
+	let existingEmpsSet = new Set($(".empSelectList__empList .empSelectList__emp, .myEmpInfo").map(function () {
+	    return $(this).attr("data-emp_id");
+	}));
+	
+	selectEmps.each(function () {
+	    let currentEmpText = $(this).attr("data-emp_id");
+	
+	    // Set에 이미 추가된 직원인지 확인
+	    if (!existingEmpsSet.has(currentEmpText)) {
+	        $(".empSelectList__empList").append($(this));
+	        existingEmpsSet.add(currentEmpText);
+	    }
+	});
+
+	$(".empSelectList__cnt").text(existingEmpsSet.size);
 	$(".selectEmp").removeClass("selectEmp");
 });
 
@@ -1333,3 +1371,27 @@ $(document).on("click",".calendarInsertModal__restore",function(){
 
 
 
+// 공유 캘린더 공유 대상 검색
+$(document).on("input", ".empSearchKeyword", function() {
+	if ($(this).val() !== "") {
+		$.ajax({
+			url: "/office/searchUserAjax",
+			type: "POST",
+			data: { keyword: $(this).val() }
+		}).done(function(resp) {
+			$(".deptList__companyName").css("display","none");
+			$(".deptList__cover *").remove();
+			$(".empAllList__empList *").remove();
+			for(let i=0; i<resp.length; i++){
+				let empList__emp = $("<div>").attr("class","empList__emp").attr("data-emp_id",resp[i].id);
+				let name = $("<span>").text(resp[i].name);
+				let taskName = $("<span>").text("("+resp[i].task_name+")");
+				$(".empAllList__empList").append(empList__emp.append(name).append(taskName))
+			}
+		})
+	} else {
+		$(".deptList__companyName").css("display","block");
+		reloadEmpList();
+	}
+
+})

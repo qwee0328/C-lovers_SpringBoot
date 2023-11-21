@@ -12,11 +12,15 @@ import org.springframework.stereotype.Component;
 import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.services.MemberService;
+import com.clovers.services.ScheduleService;
 
 @Component
 public class AutoScheduler {
 	@Autowired
 	private MemberService mservice;
+	
+	@Autowired
+	private ScheduleService sservice;
 	
 	@Scheduled(cron="0 30 8 1 1 ?")
 	//@Scheduled(cron="0/30 0/1 * * * ?")
@@ -83,4 +87,9 @@ public class AutoScheduler {
 			//}
 		}
 	}
+	
+	
+	
+	
+	
 }
