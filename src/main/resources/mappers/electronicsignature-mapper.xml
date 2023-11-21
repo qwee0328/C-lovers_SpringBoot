@@ -40,10 +40,10 @@
 	<insert id="insertDocument">
 		insert into document (id, document_type_id,
 		save_period, security_grade, report_date, title, content,temporary,
-		emp_id)
+		status, emp_id)
 		values (#{id}, #{document_type_id}, #{save_period}
 		,#{security_grade},convert_tz(now(), '+00:00', '+09:00'), #{title},
-		#{content},#{temporary}, #{emp_id})
+		#{content},#{temporary}, #{status}, #{emp_id})
 	</insert>
 
 	<!-- // 문서 등록자 정보 생성 -->
@@ -61,9 +61,9 @@
 
 	<!-- // 문서 결재선 등록 -->
 	<insert id="insertApprovals">
-		insert into document_approvals (document_id, emp_id, sec_level) values
+		insert into document_approvals (document_id, emp_id, approval, sec_level) values
 		<foreach collection="list" item="approvals" separator=",">
-			(#{approvals.document_id}, #{approvals.emp_id},
+			(#{approvals.document_id}, #{approvals.emp_id}, #{approvals.approval},
 			#{approvals.sec_level})
 		</foreach>
 	</insert>
@@ -72,6 +72,14 @@
 	<insert id="insertDocumentFile">
 		insert into document_file value (0, #{document_id},
 		#{sys_name}, #{ori_name})
+	</insert>
+	
+	<!-- // 휴가 사용기록 등록 -->
+	<insert id="insertVacationUseMemoryInfo" parameterType="java.util.List">
+		insert into annual_use_memory (emp_id, rest_reason_type_id, reason, annual_date) values
+		<foreach collection="list" item="memoryInfo" separator=",">
+			(#{memoryInfo.emp_id}, #{memoryInfo.rest_reason_type_id}, #{memoryInfo.reason}, #{memoryInfo.annual_date})
+		</foreach>
 	</insert>
 
 	<!-- // 휴가 신청일 정보 등록 -->

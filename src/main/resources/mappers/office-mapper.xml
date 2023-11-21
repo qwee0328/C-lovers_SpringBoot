@@ -20,27 +20,32 @@
 		resultType="com.clovers.dto.JobDTO">
 		select * from job;
 	</select>
-	
+
 	<!-- // 부서 명 검색하기 -->
 	<select id="selectDeptTaskName" resultType="String">
-		select task_name from dept_task where id=#{task_id};
+		select task_name from
+		dept_task where id=#{task_id};
 	</select>
-	
+
 	<!-- // 직급 명 검색하기 -->
 	<select id="selectJobName" resultType="String">
-		select job_name from job where id=#{job_id};
+		select job_name from job
+		where id=#{job_id};
 	</select>
-	
+
 	<!-- // 실제 db에 저장된 실 사용자 수 불러오기 -->
 	<select id="selectRealEmpCount" resultType="int">
-		select count(*) from employee;
+		select count(*) from
+		employee;
 	</select>
 
 	<!-- // 사번 입력할때 사용할 사용자 수 불러오기 -> 삭제된 사용자까지 합쳐서 숫자 셈 -->
 	<select id="selectEmpCount" resultType="int">
-		select substring(id, char_length(id)-2) as last_three_digits
+		select substring(id,
+		char_length(id)-2) as last_three_digits
 		from employee
-		order by cast(substring(id, -3) as unsigned) desc
+		order by
+		cast(substring(id, -3) as unsigned) desc
 		limit 1;
 	</select>
 
@@ -54,36 +59,42 @@
 
 	<!-- 사용자 리스트 불러오기 -->
 	<select id="selectUserList" resultMap="userList">
-		select name, id, job_name, task_name 
-		from mypageData 
+		select name, id, job_name,
+		task_name
+		from mypageData
 		order by cast(right(id,3)as unsigned) desc;
 	</select>
-	
+
 	<!-- // 사내 전화번호 사용중인지 체크 -->
 	<select id="usingCompanyPhoneCheck" resultType="Integer">
-		select count(*) from employee where company_phone=#{companyPhone};
+		select count(*)
+		from employee where company_phone=#{companyPhone};
 	</select>
 
 	<!-- // 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록 -->
 	<insert id="insertTotalAdmin">
-		insert into admin (emp_id, authority_category_id) values (#{id}, "총괄");
+		insert into admin (emp_id, authority_category_id)
+		values (#{id}, "총괄");
 	</insert>
-	
+
 	<!-- // 인사팀 관리자 등록 -->
 	<insert id="insertHRAdmin">
-		insert into admin (emp_id, authority_category_id) values (#{id}, "인사");
+		insert into admin (emp_id, authority_category_id)
+		values (#{id}, "인사");
 	</insert>
-	
+
 	<!-- // 재후뫼계 관리자 등록 -->
 	<insert id="insertACAdmin">
-		insert into admin (emp_id, authority_category_id) values (#{id}, "회계");
+		insert into admin (emp_id, authority_category_id)
+		values (#{id}, "회계");
 	</insert>
 
 	<!-- // 사용자 등록하기 -->
 	<insert id="insertUser">
 		insert into employee values (#{id},#{name}, #{pw},
 		#{birth}, #{email}, #{phone}, #{hire_date}, null, true, #{job_id},
-		#{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email}, #{company_phone});
+		#{dept_task_id},"재직", #{profile_img}, "정상1", #{company_email},
+		#{company_phone});
 	</insert>
 
 	<!-- // 사용자 삭제하기 -->
@@ -96,9 +107,10 @@
 	</delete>
 
 
-	<!-- 	오피스 이름 수정하기 -->
+	<!-- 오피스 이름 수정하기 -->
 	<update id="updateOfficeName">
-		update office set office_name = #{office_name} where id =#{id};
+		update office set office_name = #{office_name} where
+		id =#{id};
 	</update>
 	<!-- // 사용자 직위 수정하기 -->
 	<update id="updateUserJob">
@@ -113,67 +125,85 @@
 
 	<!-- // 사용자 이름, id 검색하기 -->
 	<select id="searchUser" resultMap="userList">
-		select name, id, job_name, task_name 
-		from mypageData 
-		where id like #{keyword} or name like #{keyword} 
+		select name, id, job_name,
+		task_name
+		from mypageData
+		where id like #{keyword} or name like #{keyword}
 		order by cast(right(id,3)as unsigned) desc;
 	</select>
-	
+
 	<!-- // 부서별 부서명, 인원 수 불러오기 -->
 	<select id="selectDeptInfo" resultType="map">
-		select count(*) as count, dept_name, group_concat(distinct department_id) as department_id from company_hierarchy_view where dept_name != "미분류" group by dept_name;
+		select count(*) as count,
+		dept_name, group_concat(distinct department_id) as department_id from
+		company_hierarchy_view where dept_name != "미분류" group by dept_name;
 	</select>
-	
+
 	<!-- // 부서별 팀별 인원 수 불러오기 -->
 	<select id="selectTaskInfo" resultType="map">
-		select * from dept_task_employee_count;
+		select * from
+		dept_task_employee_count;
 	</select>
-	
+
 	<!-- // 관리부 인원 정보 불러오기 -->
 	<select id="selectDepartmentEmpInfo" resultType="map">
-		select name, id, task_name
+		select name, id,
+		task_name
 		from mypageData
 		where dept_id = #{dept_id};
 	</select>
-	
+
 	<!-- // 모든 부서별 정보 불러오기 - 이름, 부서명, id -->
 	<select id="selectAllEmpInfo" resultType="map">
-		select name, id, task_name
+		select name, id,
+		task_name
 		from mypageData;
 	</select>
-	
+
 	<!-- // 팀별 인원 정보 불러오기 - 이름, 부서명, id -->
 	<select id="selectDetpTaskEmpInfo" resultType="map">
-		select name, id, task_name
+		select name, id,
+		task_name
 		from mypageData
 		where dept_task_id = #{task_id};
 	</select>
-	
-<!-- 	팀별(생산1팀,2팀..)인원수, 부서명 -->
+
+	<!-- 팀별(생산1팀,2팀..)인원수, 부서명 -->
 	<select id="selectAllTaskNameEmpo" resultType="map">
-		select count(*) as count, task_name,group_concat(distinct dept_name) as dept_name, office_name
-		from company_hierarchy_view 
+		select count(*) as
+		count, task_name,group_concat(distinct dept_name) as dept_name,
+		office_name
+		from company_hierarchy_view
 		where dept_name != "미분류" group by task_name,office_name;
 	</select>
-	
-<!-- 	임직원 정보에서 부서 클릭하면 정보 -->
+
+	<!-- 임직원 정보에서 부서 클릭하면 정보 -->
 	<select id="selectDeptEmpo" resultType="map">
-		select * from employee_dept_task_view;
+		select * from
+		employee_dept_task_view;
 	</select>
-	
-<!-- 	부서 클릭하면 정보  -->
+
+	<!-- 부서 클릭하면 정보 -->
 	<select id="selectByDeptName" resultType="map">
-		select * from employee_dept_task_view where dept_name = #{dept_name};
+		select * from
+		employee_dept_task_view where dept_name = #{dept_name};
 	</select>
-	
-<!-- 	팀 클릭하면 정보 -->
+
+	<!-- 팀 클릭하면 정보 -->
 	<select id="selectByTaskName" resultType="map">
-		select * from employee_dept_task_view where task_name = #{task_name};
+		select * from
+		employee_dept_task_view where task_name = #{task_name};
 	</select>
-	
-<!-- 	임직원검색 -->
+
+	<!-- 임직원검색 -->
 	<select id="searchByName" resultType="map">
-		select * from employee_dept_task_view where name like #{name};
+		select * from
+		employee_dept_task_view where name like #{name};
 	</select>
 	
+	<!-- // 사용자의 jobID 가져오기 -->
+	<select id="searchByJobID" resultType="String">
+		select job_id from employee where id = #{id};
+	</select>
+
 </mapper>
