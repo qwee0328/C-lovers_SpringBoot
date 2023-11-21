@@ -107,6 +107,13 @@ $(document).ready(function () {
 			}
 		}
 	});
+	
+	// 로그인한 사용자의 이메일을 보낸 사람으로 세팅
+	$.ajax({
+		url : "/mail/getUserEmail"
+	}).done(function(resp) {
+		$("#send_id").val(resp);
+	})
 });
 
 // 선택한 날짜가 현재 날짜보다 이후인지

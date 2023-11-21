@@ -87,49 +87,109 @@ public class ElectronicSignatureDAO {
 	public List<Map<String, String>> previousApprovalResult(String loginID) {
 		return db.selectList("ElectronicSignature.previousApprovalResult", loginID);
 	}
+	
+	// 로그인한 사용자의 직급 가져옴
+	public int getJobRank(String loginID) {
+		return db.selectOne("ElectronicSignature.getJobRank", loginID);
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
-	public List<Map<String, Object>> progressTotalList(Map<String, Object> userInfo) {
-		return db.selectList("ElectronicSignature.progressTotalList", userInfo);
+	public List<Map<String, Object>> progressTotalList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.progressTotalList", param);
 	}
 
 	// 진행 중인 문서 대기 리스트 출력
-	public List<Map<String, Object>> progressWaitList(Map<String, Object> userInfo) {
-		return db.selectList("ElectronicSignature.progressWaitList", userInfo);
+	public List<Map<String, Object>> progressWaitList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.progressWaitList", param);
 	}
 
 	// 진행 중인 문서 확인 리스트 출력
-	public List<Map<String, Object>> progressCheckList(Map<String, Object> userInfo) {
-		return db.selectList("ElectronicSignature.progressCheckList", userInfo);
+	public List<Map<String, Object>> progressCheckList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.progressCheckList", param);
 	}
 
 	// 진행 중인 문서 진행 리스트 출력
-	public List<Map<String, Object>> progressList(Map<String, Object> userInfo) {
-		return db.selectList("ElectronicSignature.progressList", userInfo);
+	public List<Map<String, Object>> progressList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.progressList", param);
 	}
 
 	// 문서함 전체 리스트 출력
-	public List<Map<String, Object>> documentList(String loginID) {
-		return db.selectList("ElectronicSignature.documentTotalList", loginID);
+	public List<Map<String, Object>> documentList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.documentTotalList", param);
 	}
 
 	// 문서함 기안 리스트 출력
-	public List<Map<String, Object>> documentDraftingList(String loginID) {
-		return db.selectList("ElectronicSignature.documentDraftingList", loginID);
+	public List<Map<String, Object>> documentDraftingList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.documentDraftingList", param);
 	}
 
 	// 문서함 결재 리스트 출력
-	public List<Map<String, Object>> documentApprovalList(String loginID) {
-		return db.selectList("ElectronicSignature.documentApprovalList", loginID);
+	public List<Map<String, Object>> documentApprovalList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.documentApprovalList", param);
 	}
 
 	// 문서함 반려 리스트 출력
-	public List<Map<String, Object>> documentRejectionList(String loginID) {
-		return db.selectList("ElectronicSignature.documentRejectList", loginID);
+	public List<Map<String, Object>> documentRejectionList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.documentRejectList", param);
 	}
 
 	// 임시저장 리스트 출력
-	public List<Map<String, Object>> temporaryList(String loginID) {
-		return db.selectList("ElectronicSignature.temporaryList", loginID);
+	public List<Map<String, Object>> temporaryList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.temporaryList", param);
+	}
+
+	// 문서 번호에 따른 결재 정보 출력
+	public List<Map<String, Object>> selectAllByDocumentId(String document_id) {
+		return db.selectList("ElectronicSignature.selectAllByDocumentId", document_id);
+	}
+	
+	// 기안자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, Object>> getDraftersByDocumentId(String document_id) {
+		return db.selectList("ElectronicSignature.getDraftersByDocumentId", document_id);
+	}
+
+	// 결재자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, String>> getApproversByDocumentId(String document_id) {
+		return db.selectList("ElectronicSignature.getApproversByDocumentId", document_id);
+	}
+
+	// 로그인한 사용자가 기안자인지
+	public boolean isDrafterByDocumentId(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.isDrafterByDocumentId", param);
+	}
+
+	// 로그인한 사용자가 결재자인지
+	public boolean isApproverByDocumentId(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.isApproverByDocumentId", param);
+	}
+
+	// 휴가 신청서 정보 출력
+	public List<Map<String, Object>> getVacationInfo(String document_id) {
+		return db.selectList("ElectronicSignature.getVacationInfo", document_id);
+	}
+
+	// 대표 기안자의 부서 가져오기
+	public Map<String, String> getMainDrafterDept(String document_id) {
+		return db.selectOne("ElectronicSignature.getMainDrafterDept", document_id);
+	}
+
+	// 지출 결의서 정보 출력
+	public Map<String, Object> getExpenceInfo(String document_id) {
+		return db.selectOne("ElectronicSignature.getExpenceInfo", document_id);
+	}
+
+	// 개인 계좌 불러오기
+	public Map<String, String> getPersonalAccount(String spender_id) {
+		return db.selectOne("ElectronicSignature.getPersonalAccount", spender_id);
+	}
+
+	// 법인 계좌 불러오기
+	public Map<String, String> getCorporateAccount(String spender_id) {
+		return db.selectOne("ElectronicSignature.getCorporateAccount", spender_id);
+	}
+
+	// 업무 연락 정보 출력
+	public Map<String, String> getBusinessInfo(String document_id) {
+		return db.selectOne("ElectronicSignature.getBusinessInfo", document_id);
 	}
 }
