@@ -158,7 +158,7 @@ public class MemberController {
 		System.out.println(id+" : "+pw);
 		
 		mservice.updatePW(id,pwEnc);
-		return "redirect:/humanResources/mypage";
+		return "redirect:/";
 	}
 	
 // 관리자 접근 권한 불러오기

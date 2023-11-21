@@ -132,48 +132,59 @@ $(document).ready(function () {
 			url:"/office/selectDeptEmpo"
 		}).done(function(resp){
 //			console.log(resp);
-			
-			$(".members__Title").remove();
-			$(".member__unitBox").remove();
-			
-			let members__Title = $("<div class='members__Title'>");
-				let h4__Title = $("<h4>");
-					h4__Title.append(resp[0].office_name);
-				members__Title.append(h4__Title);
-				
-			let members__profile = $("<div class='members__profile'>");
-			
-			
+
+			let dept = new Set(); //set으로 안겹치게 부서명
+		
 			for(let i=0;i<resp.length;i++){
-				
-				 let memberBox = $("<div class='member__unitBox'>");
-					let memberPhoto = $("<div class='memberPhoto'>");
-					
-						let isImg;
-						if(resp[i].profile_img == "" || resp[i].profile_img == null){
-								isImg = "/assets/profile.png";
-						}else{
-							isImg = "/uploads/"+resp[i].profile_img;
-						}
-					
-						let img = $("<img src="+isImg+" alt=''>");
-					memberPhoto.append(img);
-					
-					let memberText = $("<div class='memberText'>");
-						let memberName = $("<div class='member__name'>");
-							memberName.html(resp[i].name);
-						let memberdepart = $("<div class='member__depart'>");
-							memberdepart.html(resp[i].dept_name);
-						let membergrade = $("<div class='member__grade'>")
-							membergrade.html(resp[i].job_name);
-					memberText.append(memberName).append(memberdepart).append(membergrade);
-				memberBox.append(memberPhoto).append(memberText);
-				
-				members__profile.append(memberBox);
-				
-			}	
+				dept.add(resp[i].dept_name);
+			}
 			
-			$(".org__members").append(members__Title).append(members__profile);
+			let deptArr = Array.from(dept); // set을 배열로
+			console.log(deptArr);
+			
+			for(let i=0;i<deptArr.length;i++){
+				$(".members__Title").remove();
+				$(".member__unitBox").remove();
+				
+				let members__Title = $("<div class='members__Title'>");
+					let h4__Title = $("<h4>");
+						h4__Title.append(resp[0].office_name);
+					members__Title.append(h4__Title);
+					
+				let members__profile = $("<div class='members__profile'>");
+				
+				
+				for(let i=0;i<resp.length;i++){
+					
+					 let memberBox = $("<div class='member__unitBox'>");
+						let memberPhoto = $("<div class='memberPhoto'>");
+						
+							let isImg;
+							if(resp[i].profile_img == "" || resp[i].profile_img == null){
+									isImg = "/assets/profile.png";
+							}else{
+								isImg = "/uploads/"+resp[i].profile_img;
+							}
+						
+							let img = $("<img src="+isImg+" alt=''>");
+						memberPhoto.append(img);
+						
+						let memberText = $("<div class='memberText'>");
+							let memberName = $("<div class='member__name'>");
+								memberName.html(resp[i].name);
+							let memberdepart = $("<div class='member__depart'>");
+								memberdepart.html(resp[i].dept_name);
+							let membergrade = $("<div class='member__grade'>")
+								membergrade.html(resp[i].job_name);
+						memberText.append(memberName).append(memberdepart).append(membergrade);
+					memberBox.append(memberPhoto).append(memberText);
+					
+					members__profile.append(memberBox);
+					
+				}	
+				
+				$(".org__members").append(members__Title).append(members__profile);
+			}
 			
 		})
 	}
@@ -301,7 +312,6 @@ $(document).ready(function () {
 				memberBox.append(memberPhoto).append(memberText);
 				
 				members__profile.append(memberBox);
-				
 			}	
 			
 			$(".org__members").append(members__Title).append(members__profile);
@@ -349,9 +359,9 @@ $(document).ready(function () {
 						let isImg;
 						if(resp[i].profile_img == "" || resp[i].profile_img == null){
 								isImg = "/assets/profile.png";
-						}else{
-							isImg = "/uploads/"+resp[i].profile_img;
-						}
+							}else{
+								isImg = "/uploads/"+resp[i].profile_img;
+							}
 					
 						let img = $("<img src="+isImg+" alt=''>");
 					memberPhoto.append(img);
