@@ -95,14 +95,14 @@ public class OfficeService {
 		dto.setJob_name(jobName);
 		dto.setTask_name(taskName);
 		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
-			System.out.println("총괄 등록");
 			dao.insertTotalAdmin(id);
-		}else if(taskName.contains("인사")) {
-			System.out.println("인사 등록");
-			dao.insertHRAdmin(id);
-		}else if(taskName.contains("회계")) {
-			System.out.println("회계 등록");
-			dao.insertACAdmin(id);
+		}else {
+			if(taskName.contains("인사")) {
+				dao.insertHRAdmin(id);
+			}
+			if(taskName.contains("회계")) {
+				dao.insertACAdmin(id);
+			}
 		}
 		
 		System.out.println(dto);

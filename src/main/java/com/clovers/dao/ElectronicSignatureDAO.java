@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.clovers.dto.AnnualUseMemoryDTO;
 import com.clovers.dto.BusinessContactInfoDTO;
 import com.clovers.dto.DocumentApprovalsDTO;
 import com.clovers.dto.DocumentDTO;
@@ -55,6 +56,11 @@ public class ElectronicSignatureDAO {
 	// 문서 결재선 등록
 	public int insertApprovals(List<DocumentApprovalsDTO> approvals) {
 		return db.insert("ElectronicSignature.insertApprovals", approvals);
+	}
+	
+	// 휴가 사용기록 등록
+	public int insertVacationUseMemoryInfo(List<AnnualUseMemoryDTO> vacationUseMemoryList) {
+		return db.insert("ElectronicSignature.insertVacationUseMemoryInfo", vacationUseMemoryList);
 	}
 
 	// 휴가 신청일 정보 등록

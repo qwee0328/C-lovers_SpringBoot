@@ -14,8 +14,19 @@
 		<result column="state" property="state" />
 	</resultMap>
 
+	<resultMap id="chatMessageResultMap" type="HashMap">
+		<result column="id" property="id" />
+		<result column="chat_room_id" property="chat_room_id" />
+		<result column="emp_id" property="emp_id" />
+		<result column="content" property="content" />
+		<result column="write_date" property="write_date" />
+		<result column="emp_name" property="emp_name" />
+		<result column="msg_start_id" property="msg_start_id" />
+		<result column="msg_end_id" property="msg_end_id" />
+	</resultMap>
+
 	<!-- 채팅 기록하기 -->
-	<insert id="recordChat">
+	<insert id="recordChat" useGeneratedKeys="true" keyProperty="id">
 		insert into chat_message values
 		(#{id},#{chat_room_id},#{emp_id},#{content},#{write_date},#{state})
 	</insert>
@@ -26,17 +37,26 @@
 		select * from chat_message where chat_room_id =
 		#{chat_room_id}
 	</select>
-	
+
 	<select id="selectMessageListByChatRoomId"
 		resultMap="chatMessageMap">
 		select * from chat_message_view where chat_room_id =
 		#{chat_room_id}
 	</select>
-	
+
+	<select id="selectChatMessagesListByChatRoomNEmpId" resultMap="chatMessageResultMap">
+		SELECT *
+		FROM chat_room_view
+		WHERE chat_room_id = #{chat_room_id}
+		AND id >
+		(SELECT msg_start_id FROM chat_group WHERE emp_id = #{emp_id} AND
+		chat_room_id = #{chat_room_id})
+	</select>
+
 	<!-- 최신 메시지의 아이디 불러내기 -->
-	<select id="selectLatestChatMsgIdForInvite"
-		resultType="int">
-		SELECT id FROM
+	<select id="selectLatestChatMsgIdForInvite" resultType="int">
+		SELECT id
+		FROM
 		chat_message
 		ORDER BY id DESC LIMIT 1 FOR UPDATE
 	</select>

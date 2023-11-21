@@ -226,7 +226,7 @@ ul.tabs li.current {
 	border-bottom: 1px solid #7d7d7d40;
 }
 
-.detailes__body {
+.body__line {
 	display: grid;
 	grid-template-columns: 1fr 1.5fr 2fr 1.5fr 3fr 1.5fr 1.5fr;
 	border-bottom: 1px solid #7d7d7d40;
@@ -236,6 +236,10 @@ ul.tabs li.current {
 .body__td {
 	padding: 10px;
 	text-align: center;
+}
+
+.summaryInfo__conf button{
+	cursor: pointer;
 }
 
 .header__td:not(:last-child),

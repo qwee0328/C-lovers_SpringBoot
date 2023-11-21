@@ -1,6 +1,9 @@
 package com.clovers.commons;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
@@ -11,10 +14,42 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EncryptionUtils {
 	
+	
 	private static final String ALGORITHM = "AES/CBC/PKCS5Padding";  // AES/CBC 방식 암호화방식
     private static final byte[] KEY = "clover2ndproject".getBytes(); // 16 bytes for AES/CBC
     private static final byte[] IV = "1234567890123456".getBytes();  // 16 bytes for AES/CBC
+	// AES 암호화 알고리즘 -> 평문 -> Base64 변환
+    public static String encryptAES(String plainText) throws Exception {
+        SecretKeySpec secretKey = new SecretKeySpec(KEY, "AES");
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, new javax.crypto.spec.IvParameterSpec(IV));
+        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
     
+    // AES 복호화 알고리즘 -> Base64 -> 평문 변환
+    public static String decryptAES(String encryptedText) throws Exception {
+        SecretKeySpec secretKey = new SecretKeySpec(KEY, "AES");
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new javax.crypto.spec.IvParameterSpec(IV));
+        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
+        return new String(decryptedBytes);
+    }
+    
+    // Diffie–Hellman key exchange 방식.
+    public static KeyPair generateKeyPair() {
+        KeyPairGenerator keyPairGenerator = null;
+		try {
+			keyPairGenerator = KeyPairGenerator.getInstance("DH");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        keyPairGenerator.initialize(2048);
+        return keyPairGenerator.generateKeyPair();
+    }
+    
+	
     /* **********************************************
 	 * 자음 모음 분리
 	 * 바보 -> ㅂㅏㅂㅗ
@@ -128,21 +163,5 @@ public class EncryptionUtils {
 		}
 	}
 	
-	// AES 암호화 알고리즘 -> 평문 -> Base64 변환
-    public static String encryptAES(String plainText) throws Exception {
-        SecretKeySpec secretKey = new SecretKeySpec(KEY, "AES");
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, new javax.crypto.spec.IvParameterSpec(IV));
-        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedBytes);
-    }
-    
-    // AES 복호화 알고리즘 -> Base64 -> 평문 변환
-    public static String decryptAES(String encryptedText) throws Exception {
-        SecretKeySpec secretKey = new SecretKeySpec(KEY, "AES");
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, new javax.crypto.spec.IvParameterSpec(IV));
-        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
-        return new String(decryptedBytes);
-    }
+
 }

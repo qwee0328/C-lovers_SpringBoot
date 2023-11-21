@@ -38,11 +38,6 @@ public class DepartmentService {
         return ddao.selectByDeptName(dept_name);
     }
 
-    // 조회: 회사(Office)의 부서 정보를 조회
-    public DepartmentDTO selectOffice() {
-        return ddao.selectOffice();
-    }
-
     // 조회: 회사를 제외한 모든 부서의 정보를 리스트로 조회
     public List<DepartmentDTO> selectAllWithOutOfficeId() {
         return ddao.selectAllWithOutOfficeId();
@@ -85,4 +80,9 @@ public class DepartmentService {
         int numericPart = Integer.parseInt(lastId.substring(1)) + 1;
         return prefix + String.format("%04d", numericPart);
     }
+
+
+	public List<DepartmentDTO> selectAll() {
+		return ddao.selectAll();
+	}
 }

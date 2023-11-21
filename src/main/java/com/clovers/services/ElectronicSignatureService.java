@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.dao.ElectronicSignatureDAO;
 import com.clovers.dao.MemberDAO;
+import com.clovers.dao.OfficeDAO;
+import com.clovers.dto.AnnualUseMemoryDTO;
 import com.clovers.dto.BusinessContactInfoDTO;
 import com.clovers.dto.DocumentApprovalsDTO;
 import com.clovers.dto.DocumentDTO;
@@ -40,6 +42,9 @@ public class ElectronicSignatureService {
 
 	@Autowired
 	private MemberDAO mdao;
+	
+	@Autowired
+	private OfficeDAO odao;
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
@@ -70,17 +75,24 @@ public class ElectronicSignatureService {
 		document.setSecurity_grade("B등급");
 		document.setDocument_type_id("휴가 신청서");
 
-		String writerName = mdao.selectNameById((String) session.getAttribute("loginID"));
+		String writerName = mdao.selectNameById(emp_id);
 		String title = "휴가 신청서 (" + writerName + ")";
 		document.setTitle(title);
 
-		document.setEmp_id((String) session.getAttribute("loginID"));
+		document.setEmp_id(emp_id);
+		
+		String jobID = odao.searchByJobID(emp_id);
+		String jobName = odao.selectJobName(jobID);
+		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			document.setStatus("승인");
+		}else {
+			document.setStatus("대기");
+		}
 
 		// 휴가 문서 등록
 		dao.insertDocument(document);
 
 		// 문서 등록자 등록
-		String writerId = (String) session.getAttribute("loginID");
 		DocumentDrafterDTO drafter = new DocumentDrafterDTO();
 		drafter.setDocument_id(documentID);
 		drafter.setEmp_id(emp_id);
@@ -95,6 +107,11 @@ public class ElectronicSignatureService {
 			approval.setDocument_id(documentID);
 			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
 			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
+			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+				approval.setApproval("승인");
+			}else {
+				approval.setApproval("대기");
+			}
 			approvals.add(approval);
 		}
 		dao.insertApprovals(approvals);
@@ -102,18 +119,34 @@ public class ElectronicSignatureService {
 //		// 휴가 신청일 정보 등록
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		List<VacationApplicationInfoDTO> vacationInfoList = new ArrayList<VacationApplicationInfoDTO>();
+		List<AnnualUseMemoryDTO> vacationUseMemoryList = new ArrayList<AnnualUseMemoryDTO>();
 		for (int i = 0; i < vacationDateList.size(); i++) {
 			VacationApplicationInfoDTO info = new VacationApplicationInfoDTO();
 			info.setDocument_id(documentID);
 			Date parsedDate = dateFormat.parse(vacationDateList.get(i));
 			Timestamp timestampDate = new Timestamp(parsedDate.getTime());
 			info.setVacation_date(timestampDate);
-			info.setRest_reson_type(vacationTypeList.get(i));
+			info.setRest_reason_type(vacationTypeList.get(i));
 			info.setVacation_reason(reson);
 			vacationInfoList.add(info);
+			
+			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+				// 연차 사용 기록에 등록
+				AnnualUseMemoryDTO memory = new AnnualUseMemoryDTO();
+				memory.setEmp_id(emp_id);
+				memory.setRest_reason_type_id(vacationTypeList.get(i));
+				memory.setReason(reson);
+				memory.setAnnual_date(timestampDate);
+				vacationUseMemoryList.add(memory);
+			}
 		}
 		// dao.insertVacationApplicationInfo(vacationInfoList);
 		// System.out.println(reson);
+		
+		// 휴가 사용기록 등록
+		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			dao.insertVacationUseMemoryInfo(vacationUseMemoryList);
+		}
 
 		return dao.insertVacationApplicationInfo(vacationInfoList);
 	}
@@ -154,6 +187,7 @@ public class ElectronicSignatureService {
 		document.setDocument_type_id(esDocumentType);
 		document.setTitle(documentTitle);
 		document.setTemporary(temporary);
+		document.setStatus("대기");
 		document.setEmp_id((String) session.getAttribute("loginID"));
 
 		// 전자 문서 등록
@@ -178,6 +212,7 @@ public class ElectronicSignatureService {
 			approval.setDocument_id(documentID);
 			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
 			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
+			approval.setApproval("대기");
 			approvals.add(approval);
 		}
 		dao.insertApprovals(approvals);
