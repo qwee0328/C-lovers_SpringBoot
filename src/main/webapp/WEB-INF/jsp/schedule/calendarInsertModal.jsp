@@ -16,21 +16,21 @@
 </head>
 <body>
 	<div class="calendarInsertModal">
-		<div class="calendarModal__title">공유 캘린더</div>
+		<div class="calendarModal__title calendarInsertModalTite">공유 캘린더</div>
 		<div class="calendarModal__body">
 			<div class="calendarModal__bodyLine d-flex">
-				<div class="calendarModal__bodyTitle w-15">캘린더 이름</div>
-				<div class="calendarModal__bodyContent w-60">
-					<input type="text">
+				<div class="calendarModal__bodyTitle w-15 privateCalendarEl1">캘린더 이름</div>
+				<div class="calendarModal__bodyContent w-60 privateCalendarEl2">
+					<input type="text" class="calendarInsertName">
 				</div>
 			</div>
-			<div class="calendarModal__bodyLine d-flex">
-				<div class="calendarModal__bodyTitle w-15">색깔</div>
-				<div class="calendarModal__bodyContent w-60">
+			<div class="calendarModal__bodyLine d-flex deleteWhenUpdate">
+				<div class="calendarModal__bodyTitle w-15 privateCalendarEl1">색깔</div>
+				<div class="calendarModal__bodyContent w-60 privateCalendarEl2">
 					<input type="color" class="colorInput">
 				</div>
 			</div>
-			<div class="calendarModal__bodyLine">
+		<!-- 	<div class="calendarModal__bodyLine shareCalendarEl shareCalendarEl1">
 				<div class="calendarModal__bodyTitle w-15">공유 대상</div>
 				<div class="calendarModal__bodyContentShare d-flex">
 					<div class="calendarModal__bodyTitle w-15 d-flex">
@@ -42,40 +42,36 @@
 					</div>
 
 					<div class="calendarModal__bodyContent w-60">
-						<input type="text">
+						<input type="text" class="empSearchKeyword" placeHolder="이름 / ID 검색">
 					</div>
 					<button class="bodyContentShare__searchBtn">검색</button>
+				</div>
+			</div> -->
+			<div class="calendarModal__bodyLine d-flex shareCalendarEl shareCalendarEl1">
+				<div class="calendarModal__bodyTitle w-15">공유 대상</div>
+				<div class="calendarModal__bodyContent w-60">
+					<input type="text" class="empSearchKeyword" placeHolder="이름 / ID 검색">
 				</div>
 			</div>
 
 
-			<div class="calendarModal__bodyBottom d-flex">
+			<div class="calendarModal__bodyBottom shareCalendarEl shareCalendarEl2 d-flex">
 				<div class="calendarModal__deptList">
-					클로버 산업
+					<div class="deptList__title">클로버 산업</div>
 					<div class="calendarModal__dept">
-						<div class="dept__deptName">관리부</div>
-						<div class="dept__team">
-							<div class="team__teamName">인사팀</div>
-							<div class="team__teamName">구매총무팀</div>
-							<div class="team__teamName">재무회계팀</div>
+						<div class="deptList__companyName selectToggle">
+							<i class="fa-solid fa-minus"></i> <span>클로버 산업</span> <span id="officeEmpCount"></span>
 						</div>
-						<div class="dept__deptName">생산부</div>
-						<div class="dept__team">
-							<div class="team__teamName">생산1팀</div>
-							<div class="team__teamName">생산2팀</div>
-							<div class="team__teamName">품질관리팀</div>
-						</div>
+						<div class="deptList__cover"></div>
+						
 					</div>
 
 				</div>
 				<div class="calendarModal__empAllList">
-					<div class="empAllList__empList">
-						<div class="empList__emp">강과장 &lt;영업2팀&gt;</div>
-						<div class="empList__emp">김이사 &lt;생산1팀&gt;</div>
-					</div>
+					<div class="empAllList__empList"></div>
 					<div class="empAllList__bottomBtn">
-						<button class="empAllList__selectAll">전체선택</button>
-						<button class="empAllList__cancelAll">선택취소</button>
+						<button class="empAllList__selectAll">전체</button>
+						<button class="empAllList__cancelAll">선택안함</button>
 					</div>
 				</div>
 				<div class="calendarModal__selectIcon align-center">
@@ -91,21 +87,20 @@
 				</div>
 				<div class="calendarModal__empSelectList">
 					<div class="empSelectList__title d-flex">
-						조회/등록 권한
-						<div class="empSelectList__cnt">&nbsp;2</div>
+						조회/등록 권한&nbsp;
+						<div class="empSelectList__cnt">1</div>
 					</div>
-					<div class="empSelectList__empList">
-						<div class="empSelectList__emp">강과장</div>
-						<div class="empSelectList__emp">대표이사</div>
-					</div>
+					<div class="empSelectList__empList"></div>
 				</div>
 
 			</div>
 		</div>
 		<div class="calendarModal__buttons align-center">
-			<button class="calendarModal__cancel">취소</button>
+			<button class="calendarInsertModal__delete">삭제</button>
+			<button class="calendarInsertModal__save">저장</button>
+			<button class="calendarInsertModal__restore">복원</button>
 			<div class="buttons__margin"></div>
-			<button class="calendarModal__save">저장</button>
+			<button class="calendarModal__cancel">취소</button>
 		</div>
 	</div>
 </body>

@@ -2,6 +2,7 @@ package com.clovers.dao;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.dto.WorkConditionDTO;
 
@@ -34,11 +36,11 @@ public class HumanResourcesDAO {
 	public int update(Map<String, String> param) {
 		return db.update("HumanResources.update", param);
 	}
-	
+
 	public int updateNoImg(Map<String, String> param) {
 		return db.update("HumanResources.updateNoImg", param);
 	}
-	
+
 	public int updateNoImag(Map<String, String> param) {
 		return db.update("HumanResources.updateNoImag", param);
 	}
@@ -48,7 +50,7 @@ public class HumanResourcesDAO {
 		return db.selectOne("HumanResources.selectLateInfo", id);
 	}
 
-	//사용자 조기퇴근 정보 불러오기
+	// 사용자 조기퇴근 정보 불러오기
 	public int selectEarlyLeaveInfo(String id) {
 		return db.selectOne("HumanResources.selectEarlyLeaveInfo", id);
 	}
@@ -57,15 +59,15 @@ public class HumanResourcesDAO {
 	public int selectNotCheckedLeaveInfo(String id) {
 		return db.selectOne("HumanResources.selectNotCheckedLeaveInfo", id);
 	}
-	
+
 	// 이번달 공휴일 정보 불러오기
-	public List<Map<String, Date>> selectHoliDays(){
+	public List<Map<String, Date>> selectHoliDays() {
 		return db.selectList("HumanResources.selectHoliDays");
 	}
-	
+
 	// 이번달 근무일 정보 불러오기
-	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(String id){
-		return db.selectList("HumanResources.selectWorkingDaysThisMonth",id);
+	public List<Map<String, Timestamp>> selectWorkingDaysThisMonth(String id) {
+		return db.selectList("HumanResources.selectWorkingDaysThisMonth", id);
 	}
 
 	// 사용자 근무 규칙 정보 불러오기
@@ -80,7 +82,6 @@ public class HumanResourcesDAO {
 
 	// 출근 기록 남기기
 	public int insertAttendingWork(Map<String, Object> user) {
-		System.out.println(user.toString() + "test");
 		return db.insert("HumanResources.insertAttendingWork", user);
 	}
 
@@ -114,7 +115,25 @@ public class HumanResourcesDAO {
 	public List<String> selectRestReasonType() {
 		return db.selectList("HumanResources.selectRestReasonType");
 	}
+
+	// 해당 년도 휴가 총 개수 불러오기
+	public Map<String, Object> selectYearTotalAnnaul(Map<String, Object> data) {
+		Map<String, Object> result = db.selectOne("HumanResources.selectYearTotalAnnaul", data);
+		return (result!=null)?result:(new HashMap<>());
+	}
 	
+	// 해당 년도 휴가 사용 개수 불러오기
+	public int selectUsedAnnaul(Map<String, Object> data) {
+		Integer result = db.selectOne("HumanResources.selectUsedAnnaul",data);
+		System.out.println(result);
+		return (result!=null)?result.intValue():0;
+	}
+
+	// 해당 년도 휴가 생성 상세 정보 불러오기
+	public List<AnnaulRestDTO> selectYearDetailAnnaul(Map<String, Object> data){
+		return db.selectList("HumanResources.selectYearDetailAnnaul",data);
+	}
+
 	// 임직원 정보 전부 불러오기
 	public List<MemberDTO> employeeSelectAll() {
 		return db.selectList("HumanResources.employeeSelectAll");

@@ -30,9 +30,20 @@
 	
 	<resultMap type="HashMap" id="calendarInfo">
 		<result property="id" column="id"/>
-		<result property="emp_id" column="emp_id"/>
+		<!-- <result property="emp_id" column="emp_id"/> -->
 		<result property="color" column="color"/>
 		<result property="name" column="name"/>
+		<result property="is_share" column="is_share"/>
+		<result property="trash" column="trash"/>
+	</resultMap>
+	
+	<resultMap type="HashMap" id="calenadarUpdateInfo">
+		<result property="id" column="id"/>
+		<result property="color" column="color"/>
+		<result property="name" column="name"/>
+		<result property="emp_ids" column="emp_ids"/>
+		<result property="emp_names" column="emp_names"/>
+		<result property="emp_tasks" column="emp_tasks"/>
 	</resultMap>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -46,10 +57,14 @@
 		insert into schedule_recurring values(null, #{during}, #{frequency_whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{startTime}, #{endTime}, #{selectWeeks});
 	</insert>
 	
+	<!-- 접속한 유저가 확인 가능한 캘린더 이벤트 전부 가져오기 (home 화면 일정 캘린더에서 사용) -->
 	<select id="selectAll" resultMap="scheduleInfo">
-		select * from scheduleAll;
+		select * 
+		from scheduleAll
+		where calendar_id in (select calendar_id from calendar_authority where emp_id = #{emp_id}) and trash = 0;
 	</select>
 	
+	<!-- schedule 상세 정보 -->
 	<select id="selectById" resultMap="scheduleInfo">
 		select * from scheduleAll where id=#{id};
 	</select>
@@ -58,8 +73,8 @@
 		select recurring_id from schedule where id=#{id};
 	</select>
 	
-	<select id="calendarByEmpId" resultMap="calendarInfo">
-		select * from calendarAll where emp_id=#{emp_id};
+	<select id="selectCalendarByEmpId" resultMap="calendarInfo">
+		select id, color, name, is_share,trash from calendar_all where emp_id=#{emp_id};
 	</select>
 	
 	<update id="scheduleUpdate">
@@ -74,4 +89,78 @@
 	<delete id="deleteReccuring">
 		delete from schedule_recurring where id=#{id};
 	</delete>
+	
+	
+	<!-- 캘린더 추가 -->
+	<insert id="calendarInsert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into calendar value (null,#{color}, #{name}, #{is_share},0, null);
+	</insert>
+	
+	<!-- 캘린더 권한 추가 -->
+	<insert id="calendarAuthInsert">
+		insert into calendar_authority value
+		<foreach collection="empIds" item="emp_id" separator=",">
+			(#{calendar_id}, #{emp_id})
+		</foreach>
+	</insert>
+	
+
+	
+	<!-- 캘린더 업데이트를 위해 캘린더 정보 불러오기 -->
+	<!-- <select id="selectByEmpIdCalendarForUpdate" resultMap="calenadarUpdateInfo">
+		select id, color, name, GROUP_CONCAT(emp_id ORDER BY calendar_id) AS emp_ids
+		from calendar_all 
+		where id in (select calendar_id from calendar_authority where emp_id=#{emp_id})
+		group by c.id;
+	</select> -->
+	
+	<!-- 활성화된 캘린더 값만 가져오기 -->
+	<select id="selectByCalendarIdSchedule" resultMap="scheduleInfo" parameterType="java.util.List">
+		select * 
+		from scheduleAll
+		where calendar_id in 
+		<foreach collection="list" item="calendar_id" open="(" separator="," close=");">
+			#{calendar_id}
+		</foreach>
+	</select>
+	
+	<!-- 캘린더 삭제 -> 캘린더 권한, 이벤트는 추후에 외래키 설정으로 연쇄삭제 -->
+	<delete id="deleteCalendar">
+		delete from calendar where id = #{id}; 
+	</delete>
+	
+	<!-- 캘린더 휴지통 / 복구 -->
+	<update id="trashCalendar">
+		update calendar set trash = #{trash}, trash_date = 
+		<if test="trash == 0">
+			null
+		</if>
+		<if test="trash == 1">
+			now()
+		</if>
+		 where id = #{id};
+	</update>
+	
+	<!-- 캘린더 업데이트용 정보 불러가기 -->
+	<select id="selectCaledarInfoByCalendarId" resultMap="calenadarUpdateInfo">
+		select id, color, name, GROUP_CONCAT(emp_id ORDER BY id) AS emp_ids, GROUP_CONCAT(emp_name ORDER BY id) AS emp_names, GROUP_CONCAT(task_name ORDER BY id) AS task_names
+		from calendarUpdateInfo
+		where id in (select calendar_id from calendar_authority where emp_id =#{emp_id}) and id = #{id} and emp_id <!-- not like #{emp_id} -->
+		group by id;
+	</select>
+	
+	<!-- 캘린더 수정 -->
+	<update id="updateCalendar">
+		update calendar set name = #{name}, color=#{color} where id = #{id};
+	</update>
+	<!-- 캘린더 권한 수정 // 삭제 후 상단에 위치한 calendarAuthInsert 실행-->
+	<delete id="deleteCalendarAuth">
+		delete from calendar_authority where calendar_id = #{calendar_id};
+	</delete>
+	
+	
+<!-- 	<delete id="autoDeleteInTrash">
+		delete from address_book where id in (select id from (select * from address_book where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
+	</delete> -->
+	
 </mapper>

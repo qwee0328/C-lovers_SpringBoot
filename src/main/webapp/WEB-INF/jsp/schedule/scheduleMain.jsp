@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>제목</title>
+<title>${title}</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.js'></script>
@@ -28,7 +28,6 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<link rel="stylesheet" href="/css/commons/naviBar.css">
 <link rel="stylesheet" href="/css/schedule/scheduleModal.css">
 <link rel="stylesheet" href="/css/schedule/scheduleMain.css">
 <link rel="stylesheet" href="/css/schedule/scheduleCalendar.css">
@@ -37,32 +36,12 @@
 </head>
 
 <body>
+`	<input type="hidden" id="calIds" value="${calIds}">
 	<%@ include file="../commons/header.jsp"%>
 
 	<div class="container d-flex">
-		<div class="naviBar">
-			<c:if test="${naviBtn != '' }">
-				<div class="naviBtn">
-					<i class="fa-solid fa-plus naviBtn__icon"></i>
-					<div class="naviBtn__text">${naviBtn }</div>
-					<input type="hidden" id="location" value="${naviBtnLocation }" />
-				</div>
-			</c:if>
-			<c:forEach var="i" begin="0" end="${naviMenuLength - 1 }">
-				<div class="naviConp">
-					<div class="naviConp__icon">
-						<i class="fa-solid ${naviIcon[0] }"></i>
-					</div>
-					<div class="naviConp__title">${naviMenu[i] }</div>
-					<div class="naviConp__icon">
-						<i class="fa-solid ${naviIcon[1] }"></i>
-					</div>
-				</div>
-			</c:forEach>
-			<input type="hidden" id="currentMenu" value="${currentMenu }" />
-		</div>
-
-
+		<%@ include file="../schedule/schNaviBar.jsp"%>
+	
 		<div class="calenderBody">
 			<div id="calendar"></div>
 		</div>

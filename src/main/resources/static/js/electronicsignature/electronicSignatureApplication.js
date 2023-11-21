@@ -12,6 +12,12 @@ $(document).ready(function() {
 	$("#expenseMonth").val(month);
 	$("#expense_category").val("개인");
 	
+	// user 이름 불러오기
+	$.ajax({
+		url:"/humanResources/headerProfile"
+	}).done(function(resp){
+		$("#documentWriter").html("C-lovers "+resp.name);
+	});
 	
 	// selector 커스텀 해서 만들기
 	let showSelector = false;
