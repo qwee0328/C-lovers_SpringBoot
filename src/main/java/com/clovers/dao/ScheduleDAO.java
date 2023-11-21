@@ -1,7 +1,9 @@
 package com.clovers.dao;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,8 @@ public class ScheduleDAO {
 	}
 	
 	
-	public List<HashMap<String,Object>> selectAll(){
-		return db.selectList("Schedule.selectAll");
+	public List<HashMap<String,Object>> selectAll(String emp_id){
+		return db.selectList("Schedule.selectAll",emp_id);
 	}
 	
 	public HashMap<String,Object> selectById(int id){
@@ -48,8 +50,8 @@ public class ScheduleDAO {
 		return db.selectOne("Schedule.selectRecurringIdById",id);
 	}
 	
-	public List<HashMap<String, Object>> calendarByEmpId(String emp_id){
-		return db.selectList("Schedule.calendarByEmpId",emp_id);
+	public List<HashMap<String, Object>> selectCalendarByEmpId(String emp_id){
+		return db.selectList("Schedule.selectCalendarByEmpId",emp_id);
 	}
 	
 	public int scheduleUpdate(ScheduleDTO dto) {
@@ -59,4 +61,47 @@ public class ScheduleDAO {
 	public int recurringScheduleUpdate(ScheduleRecurringDTO dto) {
 		return db.update("Schedule.recurringScheduleUpdate",dto);
 	}
+	
+	// 캘린더 추가
+	public int calendarInsert(Map<String,Object> param) {
+		db.insert("Schedule.calendarInsert",param);
+		return ((BigInteger) param.get("id")).intValue();
+	}
+	
+	// 캘린더 권한
+	public int calendarAuthInsert(Map<String,Object> param) {
+		return db.insert("Schedule.calendarAuthInsert",param);
+	}
+	
+	// 선택한 캘린더에 포함된 일정 불러오기
+	public List<HashMap<String,Object>> selectByCalendarIdSchedule(List<Integer> list){
+		return db.selectList("Schedule.selectByCalendarIdSchedule",list);
+	}
+	
+	
+	// 캘린더 정보 불러오기 (수정용)
+	public Map<String,Object> selectCaledarInfoByCalendarId(Map<String,Object> param){
+		return db.selectOne("Schedule.selectCaledarInfoByCalendarId",param);
+	}
+	
+	
+	// 캘린더 정보 수정
+	public int updateCalendar(Map<String, Object> param) {
+		return db.update("Schedule.updateCalendar",param);
+	}
+	
+	// 캘린더 권한 수정 (삭제 -> 추가는 calendarAuthInsert 이용)
+	public int deleteCalendarAuto(int calendar_id) {
+		return db.delete("Schedule.deleteCalendarAuto",calendar_id);
+	}
+	
+	// 캘린더 휴지통 or 복원
+	public int trashCalendar(Map<String, Integer> param) {
+		return db.update("Schedule.trashCalendar",param);
+	}
+	
+	// 캘린더 영구삭제
+	public int deleteCalendar(int id) {
+		return db.delete("Schedule.deleteCalendar",id);
+	} 
 }

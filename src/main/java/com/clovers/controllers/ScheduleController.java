@@ -3,11 +3,13 @@ package com.clovers.controllers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.dto.ScheduleDTO;
@@ -29,26 +31,18 @@ public class ScheduleController {
 	// 메인 화면 (받은 메일함)
 	@RequestMapping("")
 	public String main() {
-
-		String title = "일정";
-		String naviBtn = "일정 추가";
-		String naviBtnLocation = "send";
-		String[] naviIcon = { "fa-chevron-up", "fa-plus" };
-		String[] naviMenu = { "내 캘린더", "공유 캘린더" };
-		int naviMenuLength = naviMenu.length;
-		String currentMenu = "내 캘린더";
-
+		String title="일정";
+		if(session.getAttribute("currentMenu") == null) { // 주소록 페이지 첫 접속 시 주소록 개인 전체 선택
+			session.setAttribute("currentMenu", "0");
+		}
+	
 		session.setAttribute("title", title);
-		session.setAttribute("naviBtn", naviBtn);
-		session.setAttribute("naviBtnLocation", naviBtnLocation);
-		session.setAttribute("naviIcon", naviIcon);
-		session.setAttribute("naviMenu", naviMenu);
-		session.setAttribute("naviMenuLength", naviMenuLength);
-		session.setAttribute("currentMenu", currentMenu);
 
 		return "/schedule/scheduleMain";
 	}
 
+	
+	// 얼정 추가
 	@ResponseBody
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ScheduleDTO insert(ScheduleDTO dto) { // 일정 추가
@@ -56,6 +50,8 @@ public class ScheduleController {
 		sService.insert(dto);
 		return dto;
 	}
+	
+	// 반복 일정 추가
 	@ResponseBody
 	@RequestMapping(value = "/insertReccuring", method = RequestMethod.POST)
 	public ScheduleDTO insertRuccuring(ScheduleRecurringDTO	srdto, ScheduleDTO sdto) { // 반복일정 정보 추가
@@ -64,6 +60,7 @@ public class ScheduleController {
 		return sService.insert(sdto);
 	}
 	
+	// 일정 삭제
 	// 병행제어 필요
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -78,24 +75,24 @@ public class ScheduleController {
 		}
 	}
 	
+	// 일정 불러오기
 	@ResponseBody
 	@RequestMapping(value="/selectAll")
 	public List<HashMap<String,Object>> selectAll(){ // 일정 전체 불러오기 (캘린더에 표시하기 위함)
-		return sService.selectAll();
+		return sService.selectAll((String)session.getAttribute("logintID"));
 	}
 	
+	
+	// 일정 세부정보 불러오기
 	@ResponseBody
 	@RequestMapping(value="/selectById")
 	public HashMap<String,Object> selectById(int id){ // 특정 일정의 세부정보 불러오기
 		return sService.selectById(id);
 	}
 	
-	@ResponseBody
-	@RequestMapping(value="/calendarByEmpId")
-	public List<HashMap<String, Object>> calendarByEmpId(){ // 로그인한 유저의 캘린더 정보 불러오기
-		return sService.calendarByEmpId((String)session.getAttribute("loginID"));
-	}
+
 	
+	// 일정 변경
 	@ResponseBody
 	@RequestMapping(value="/scheduleUpdate",  method = RequestMethod.POST)
 	public void scheduleUpdate(ScheduleDTO dto){ // 일정 변경 (일반 이벤트)
@@ -105,10 +102,9 @@ public class ScheduleController {
 	}
 
 	
-
+	// 반복 일정 변경
 	 @ResponseBody
-	 @RequestMapping(value="/recurringScheduleUpdate", method =
-	 RequestMethod.POST) public void recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ // 일정 변경 (반복 이벤트)
+	 @RequestMapping(value="/recurringScheduleUpdate", method = RequestMethod.POST) public void recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ // 일정 변경 (반복 이벤트)
 		 if(sdto.getRecurring_id()==0) { // 반복 이벤트가 없었다가 생긴 경우
 			 sdto.setRecurring_id(sService.insertReccuring(srdto)); // 새로운 반복 이벤트 정보 저장
 			 sService.scheduleUpdate(sdto); // 일정 변경
@@ -119,5 +115,67 @@ public class ScheduleController {
 		 }
 		
 	 }
-	 
+ 
+	// 캘린더 정보 불러오기
+	@ResponseBody
+	@RequestMapping(value="/selectCalendarByEmpId")
+	public List<HashMap<String, Object>> selectCalendarByEmpId(){ // 로그인한 유저의 캘린더 정보 불러오기
+		return sService.selectCalendarByEmpId((String)session.getAttribute("loginID"));
+	}
+	
+	
+	// 캘린더 추가
+	@ResponseBody
+	@RequestMapping(value="/calendarInsert")
+	public int calendarInsert(String name, String color, int is_share, @RequestParam(value="empIds[]", required=false)List<String> empIds){
+//		if(empIds == null || empIds.isEmpty()) { // 권한이 비어있으면 개인 캘린더
+//			empIds = new ArrayList<>();
+//			empIds.add((String)session.getAttribute("loginID")); // 로그인한 사용자(등록한 사람)에 대하여 권한 추가
+//			return sService.calendarInsert(name, color, empIds);
+//		} // 개인 캘린더에 처음부터 자기자신 권한 배열에 추가해서 넘어옴.
+		return sService.calendarInsert(name, color, is_share, empIds);
+	}
+	
+	
+	
+	// 선택한 캘린더에 포함된 일정 불러오기
+	@ResponseBody
+	@RequestMapping(value="/selectByCalendarIdSchedule")
+	public List<HashMap<String,Object>> selectByCalendarIdSchedule(@RequestParam(value="calIds[]", required=false)List<Integer> calIds){
+		if(calIds == null || calIds.isEmpty())
+			return null;
+		return sService.selectByCalendarIdSchedule(calIds);
+	}
+	
+	
+	// 캘린더 정보 불러오기 (수정용)
+	@ResponseBody
+	@RequestMapping(value="/selectCaledarInfoByCalendarId")
+	public Map<String,Object> selectCaledarInfoByCalendarId(int id){
+		return sService.selectCaledarInfoByCalendarId(id,(String) session.getAttribute("loginID"));
+	}
+	
+	
+	
+	// 캘린더 정보 수정하기
+	@ResponseBody
+	@RequestMapping(value="/calendarUpdate")
+	public int calendarUpdate(int id, String name, String color, @RequestParam(value="empIds[]", required=false)List<String> empIds) {
+		return sService.calendarUpdate(id, name, color, empIds);
+	}
+	
+	
+	// 캘린더 휴지통 or 복원
+	@ResponseBody
+	@RequestMapping(value="/trashCalendar")
+	public int trashCalendar(int id, int trash) {
+		return sService.trashCalendar(id,trash);
+	}
+	
+	// 캘린더 영구삭제
+	@ResponseBody
+	@RequestMapping(value="/deleteCalendar")
+	public int deleteCalendar(int id) {
+		return sService.deleteCalendar(id);
+	} 
 }

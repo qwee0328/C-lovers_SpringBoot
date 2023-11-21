@@ -1,0 +1,173 @@
+@charset "UTF-8";
+
+:root {
+	--fc-border-color: none;
+	--fc-today-bg-color: transparent;
+	--fc-highlight-color: #75B47D30;
+	--fc-event-text-color: #FFFFFF;
+	--fc-event-bg-color: #75B47D;
+    --fc-event-border-color: #75B47D;
+}
+
+.homeCalendar{
+	padding:10px 30px;
+}
+
+.fc .fc-toolbar-chunk{
+	display:flex;
+}
+
+.fc .fc-toolbar-title{
+	font-size:20px;	
+	font-weight: 500;
+	padding-left: 10px;
+	color:#323B3D;
+}
+
+.fc .fc-button-primary{
+	background-color: transparent;
+	color:#6C6C72;
+	font-weight: 500;
+	border:0;
+}
+
+.fc .fc-button-primary:hover{
+	background-color: transparent;
+	color:#6C6C7250;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus, .fc .fc-button-primary:not(:disabled):active:focus, .fc .fc-button-primary:focus {
+	background-color: transparent;
+	box-shadow:none;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active{
+	background-color: transparent;
+	border:0;
+	color:#6C6C72;
+	box-shadow:none;
+}
+
+.fc-direction-ltr .fc-toolbar > * > :not(:first-child){
+	padding:0;
+}
+
+.fc-daygrid-day-top{
+	justify-content: center;
+}
+
+.fc-event-title-container{
+	text-align: center;
+}
+
+.fc-day-today .fc-daygrid-day-top{
+	background-color:transparent;
+} 
+
+.fc-day-today .fc-daygrid-day-top a{
+	background-color: #75B47D;
+	color:#FFFFFF !important;
+	width: 32px;
+	border-radius: 50px;
+	text-align: center;
+}
+
+
+.fc-daygrid-bg-harness{
+	left: 32px !important; 
+}
+.fc .fc-highlight{
+	background-color: transparent;
+}
+.fc-daygrid-bg-harness{
+	background-color: #75B47D50;
+	color:#FFFFFF !important;
+	width: 32px !important;
+	border-radius: 50px;
+	text-align: center;
+	height: 32px;	 
+}
+
+
+/*.koHolidays *{
+	color:red;
+	font-weight: 500;
+	cursor: default;
+	background-color: red !important;
+}*/
+
+.fc .fc-daygrid-day-frame{
+	cursor:pointer;
+}
+
+.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat .fc-daygrid-day-number {
+	color: #3E78E7 !important;
+}
+
+.fc-day-sun .fc-col-header-cell-cushion,
+.fc-day-sun .fc-daygrid-day-number {
+	color: #FF3C3C !important;
+}
+
+.fc-daygrid-day-events{
+	display: flex;
+	justify-content: center;
+}
+.fc-daygrid-event-harness{
+	display: flex;
+	justify-content: center;
+}
+
+.hasEvent, .fc-daygrid-more-link{
+	background-color: #20412E !important;
+	width: 10px !important;
+	height: 10px !important;
+	border-radius: 50px !important;
+}
+
+.hasEvent .fc-event-title {
+	color: transparent !important;
+}
+
+.fc-more-popover{
+	display:none !important;
+}
+
+#calendarList{
+	height: 300px;
+}
+
+
+.fc-scroller::-webkit-scrollbar {
+	width:5px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+	background-color: #7d7d7d50;
+	border-radius: 10px;
+}
+
+.fc-scroller::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+
+/*공휴일은 빨간 글씨로 표시*/
+div.fc-daygrid-day-frame:has(a.koHolidays) .fc-daygrid-day-number{ 
+	color:red !important;
+}
+
+.fc .fc-addEventButton-button {
+	width: 30px;
+	height: 30px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50px;
+	transition-duration: 0.2s;
+}
+.fc .fc-addEventButton-button:hover {
+	background-color: #6C6C7250;
+	color:#FFFFFF;
+}

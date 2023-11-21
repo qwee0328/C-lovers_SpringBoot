@@ -48,7 +48,7 @@
 						</select> <span class="numberType__arrow"><i
 							class="fa-solid fa-chevron-down"></i></span>
 					</div>
-					<input type="text" class="modalBody__input modalBody__number">
+					<input type="text" maxlength="13" class="modalBody__input modalBody__number">
 				</div>
 			</div>
 			<div class="modalBody__line d-flex">

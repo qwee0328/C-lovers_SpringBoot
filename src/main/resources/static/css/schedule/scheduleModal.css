@@ -11,8 +11,26 @@
     margin-top: 30px;
     cursor: pointer;
 }
-.calendarModal__buttons>.calendarModal__save, .calendarModal__buttons>.calendarModal__update, .calendarModal__buttons>.calendarModal__updateSave{
+.calendarModal__buttons>.calendarModal__save, .calendarModal__buttons>.calendarModal__update, .calendarModal__buttons>.calendarModal__updateSave, .calendarModal__buttons>.calendarInsertModal__save, .calendarModal__buttons>.calendarInsertModal__update{
     background-color: #75B47D;
+    color:#FFFFFF;
+}
+
+.calendarModal__buttons>.calendarInsertModal__restore{
+	background-color: #75B47D;
+    color:#FFFFFF;
+    display: none;
+}
+
+.calendarModal__buttons>.calendarInsertModal__delete{
+	background-color: #6C6C72;
+    color:#FFFFFF;
+    display: none;
+    margin-right:10px;
+}
+
+.calendarModal__buttons>.calendarModal__delete{
+	background-color: #6C6C72;
     color:#FFFFFF;
 }
 
@@ -171,8 +189,12 @@ input[type="checkbox"]{
 
 
 /* calendarInsertModal */
+.calendarInsertModal.modal{max-width: 900px !important;}
 .calendarInsertModal{width: 900px; padding:25px 30px; display: none;}
 
+.calendarInsertModal .calendarModal__buttons>button{
+	margin-top:10px;
+}
 .calendarModal__bodyContentShare>.calendarModal__bodyTitle{
     font-size: 13px;
 }
@@ -228,29 +250,87 @@ input[type="radio"]{
 
 .calendarModal__deptList{
     width: 200px;
-    color:#20412E;
-    font-weight: 800;
-    font-size: 16px;
-    padding:10px;
+    font-size:14px;
+    
     margin-right: 10px;
     border:1px solid #7d7d7d20;
-    min-height: 400px;
+    height: 385px;
+}
+.deptList__title{
+	padding:5px 10px;
+	background-color: #f3f7f1;
+	border:1px solid #7d7d7d20;
 }
 
-.calendarModal__dept{
-    padding-left: 20px; 
+.dept__deptName {
+	padding-left: 16px;
+	margin-top: 7px;
 }
 
-.dept__deptName{
-    font-size: 14px;
-    color:#20412E;
+.dept__deptName>*, .team__teamName>*, .empList__emp>*{
+	margin-right:5px;
+}
+
+.dept__team {
+	padding-left: 34px;
+	margin-top: 7px;
 }
 
 .team__teamName{
-    font-size: 14px;
-    color:#20412E;
-    font-weight: 500;
+	margin-top: 7px;
 }
+
+
+.calendarModal__dept{
+	padding:5px 10px;
+}
+
+
+.currentSelectToggle>span{
+	color:#75b47d;
+}
+
+.selectTeam>span{
+	color:#75b47d;
+}
+
+.selectEmp>span{
+	color: #75b47d;
+}
+
+.deselectEmp>span{
+	color: #75b47d;
+}
+
+.calendarModal__dept{
+	max-height: 367px;
+	overflow-y: auto;
+}
+
+.empAllList__empList{
+	max-height: 358px;
+	overflow-y: auto;
+}
+
+.empSelectList__empList{
+	max-height: 360px;
+	overflow-y: auto;
+}
+
+.empAllList__empList::-webkit-scrollbar, .calendarModal__dept::-webkit-scrollbar, .empSelectList__empList::-webkit-scrollbar {
+    width: 5px;
+    
+}
+.empAllList__empList::-webkit-scrollbar-thumb, calendarModal__dept::-webkit-scrollbar-thumb, empSelectList__empList::-webkit-scrollbar-thumb{
+    background-color: #7d7d7d20;
+    border-radius: 10px; 
+
+    border: 7px solid transparent /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.empAllList__empList::-webkit-scrollbar-track, calendarModal__dept::-webkit-scrollbar-track, empSelectList__empList::-webkit-scrollbar-track{
+    background-color: transparent/* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
 
 
 .calendarModal__empAllList{
@@ -259,13 +339,14 @@ input[type="radio"]{
     margin-right: 10px;
     color:#6C6C72;
     border:1px solid #7d7d7d20;
-    min-height: 400px;
+    height: 385px;
 }
 
-.empList__emp{
+.empList__emp>*, .empSelectList__emp>*, .myEmpInfo>*{
     color:#6C6C72;
     font-size: 14px;
 }
+
 
 .empAllList__empList{
     height: 90%;
@@ -277,14 +358,21 @@ input[type="radio"]{
     background-color: #7D7D7D10;
     display: flex;
     align-items: center;
+    padding:10px 0;
+    border-top: 1px solid #7d7d7d20;
 }
 .empAllList__bottomBtn>button{
     background-color: transparent;
     border:0;
     color:#75B47D;
-    margin:10px;
+    padding:0 10px;
     cursor: pointer;
 }
+.empAllList__bottomBtn>button:first-child{
+    border-right: 1px solid #7d7d7d20;
+}
+
+
 
 
 
@@ -330,5 +418,4 @@ input[type="radio"]{
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:focus{
     box-shadow: 0 0 0 3px #20412E15 !important;
-
 }
