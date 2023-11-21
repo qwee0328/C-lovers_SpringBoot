@@ -4,36 +4,43 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HumanResources">
 	<!-- 인사 매퍼 -->
-	
+
 	<resultMap type="HashMap" id="employeeList">
-		<id column="id" property="id"/>
-		<result column="name" property="name"/>
-		<result column="profile_img" property="profile_img"/>
-		<result column="job_name" property="job_name"/>
-		<result column="sec_level" property="sec_level"/>
-		<result column="task_name" property="task_name"/>
-		<result column="dept_name" property="dept_name"/>
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="profile_img" property="profile_img" />
+		<result column="job_name" property="job_name" />
+		<result column="sec_level" property="sec_level" />
+		<result column="task_name" property="task_name" />
+		<result column="dept_name" property="dept_name" />
 	</resultMap>
-	
-<!-- 	<select id="selectByIdGetName" resultType="String"> -->
-<!-- 		select name from employee where id = #{id} -->
-<!-- 	</select> -->
-	
+
+	<!-- <select id="selectByIdGetName" resultType="String"> -->
+	<!-- select name from employee where id = #{id} -->
+	<!-- </select> -->
+
 
 	<select id="selectById" resultType="com.clovers.dto.MemberDTO">
-		select * from mypageData where id = #{id};
+		select * from mypageData
+		where id = #{id};
 	</select>
 
 	<select id="getPw" resultType="String">
-		select pw from employee where id = #{id};
+		select pw from employee where id =
+		#{id};
 	</select>
 
 	<update id="update">
-		update employee set profile_img=#{profile_img},company_email=#{company_email}, company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+		update employee set
+		profile_img=#{profile_img},company_email=#{company_email},
+		company_phone=#{company_phone},phone=#{phone},email=#{email} where
+		id=#{id}
 	</update>
-	
+
 	<update id="updateNoImg">
-		update employee set company_email=#{company_email}, company_phone=#{company_phone},phone=#{phone},email=#{email} where id=#{id}
+		update employee set company_email=#{company_email},
+		company_phone=#{company_phone},phone=#{phone},email=#{email} where
+		id=#{id}
 	</update>
 
 	<!-- 사용자 근무 규칙 맵 -->
@@ -77,13 +84,16 @@
 	<!-- // 이번달 공휴일 정보 불러오기 -->
 	<select id="selectHoliDays" resultType="map">
 		select holiday_date
-		from holidays
-		where year(holiday_date) = year(curdate()) and month(holiday_date) = month(curdate());
+		from
+		holidays
+		where year(holiday_date) = year(curdate()) and
+		month(holiday_date) = month(curdate());
 	</select>
-	
+
 	<!-- // 이번달 근무일 정보 불러오기 -->
 	<select id="selectWorkingDaysThisMonth" resultType="map">
-		select * from attend_status where emp_id=#{id};
+		select * from
+		attend_status where emp_id=#{id};
 	</select>
 
 	<!-- // 사용자 근무 규칙 정보 불러오기 -->
@@ -153,9 +163,31 @@
 		select * from
 		rest_reason_type
 	</select>
-	
-	<!--  임직원 정보 전부 불러오기-->
+
+	<!-- // 해당 년도 휴가 총 개수 불러오기 -->
+	<select id="selectYearTotalAnnaul" resultType="map">
+		select emp_id,
+		sum(rest_cnt) as total_rest_cnt from annaul_rest where emp_id = #{id}
+		and year(reg_date)=#{year} group by emp_id;
+	</select>
+
+	<!-- // 해당 년도 휴가 생성 상세 정보 불러오기 -->
+	<select id="selectYearDetailAnnaul"
+		resultType="com.clovers.dto.AnnaulRestDTO">
+		select * from annaul_rest where emp_id = #{id} and
+		year(reg_date)=#{year};
+	</select>
+
+	<!-- // 해당 년도 휴가 사용 개수 불러오기 -->
+	<select id="selectUsedAnnaul" resultType="Integer">
+		select count(*) as
+		count from annual_use_memory where emp_id like #{id} and
+		year(annual_date)=#{year} group by emp_id;
+	</select>
+
+	<!-- 임직원 정보 전부 불러오기 -->
 	<select id="employeeSelectAll" resultMap="employeeList">
-		select * from employee_view
+		select * from
+		employee_view
 	</select>
 </mapper>

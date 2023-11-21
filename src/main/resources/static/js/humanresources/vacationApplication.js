@@ -6,11 +6,20 @@ document.addEventListener("DOMContentLoaded", function() {
 	$.ajax({
 		url: "/humanResources/selectRestReasonType",
 		dataType: "json",
+		type: "POST",
 	}).done(function(resp) {
 		for (let i = 0; i < resp.length; i++) {
 			rest_reason_type.push(resp[i]);
 		}
 	})
+	
+	// user 이름 불러오기
+	$.ajax({
+		url:"/humanResources/headerProfile",
+		type: "POST",
+	}).done(function(resp){
+		$("#documentWriter").html("C-lovers "+resp.name);
+	});
 
 	// input의 value가 변경될 때 선택한 날짜가 옆에 나오도록 설정
 	$("#date_selector").on("change", function() {

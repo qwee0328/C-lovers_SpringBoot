@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.commons.EncryptionUtils;
+import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.dto.WorkConditionDTO;
 import com.clovers.services.HumanResourcesService;
@@ -217,7 +218,6 @@ public class HumanResourcesController {
 		return "humanresources/vacationApplication";
 	}
 	
-	
 	// 휴가 사유 구분 불러오기
 	@ResponseBody
 	@RequestMapping("/selectRestReasonType")
@@ -225,9 +225,32 @@ public class HumanResourcesController {
 		return hrservice.selectRestReasonType();
 	}
 	
+	// 해당 년도 휴가 총 개수 불러오기
+	@ResponseBody
+	@RequestMapping("/selectYearTotalAnnaul")
+	public Map<String, Object> selectYearTotalAnnaul(@RequestParam("year") String year){
+		return hrservice.selectYearTotalAnnaul(year);
+	}
+	
+	// 해당 년도 휴가 생성 상세 정보 불러오기
+	@ResponseBody
+	@RequestMapping("/selectYearDetailAnnaul")
+	public List<AnnaulRestDTO> selectYearDetailAnnaul(@RequestParam("year") String year){
+		return hrservice.selectYearDetailAnnaul(year);
+	}
+	
+	// 해당 년도 휴가 사용 개수 불러오기
+	@ResponseBody
+	@RequestMapping("/selectUsedAnnaul")
+	public int selectUsedAnnaul(@RequestParam("year") String year){
+		return hrservice.selectUsedAnnaul(year);
+	}
+	
 	// 임직원 관리 페이지 이동 
 	@RequestMapping("/employeeInfo")
 	public String employeeInfo() {
+		String currentMenu = "임직원 정보";
+		session.setAttribute("currentMenu", currentMenu);
 		return "humanresources/employeeInfo";
 	}
 	
@@ -240,5 +263,13 @@ public class HumanResourcesController {
 		MemberDTO profile = hrservice.selectById(id);
 		
 		return profile;
+	}
+	
+	// 근무 현황 이동
+	@RequestMapping("/workStatus")
+	public String workStatus() {
+		String currentMenu = "근무 현황";
+		session.setAttribute("currentMenu", currentMenu);
+		return "humanresources/workStatus";
 	}
 }

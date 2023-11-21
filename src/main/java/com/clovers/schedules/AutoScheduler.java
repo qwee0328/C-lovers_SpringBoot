@@ -14,23 +14,23 @@ import com.clovers.dto.MemberDTO;
 import com.clovers.services.MemberService;
 
 @Component
-public class AnnaulScheduler {
+public class AutoScheduler {
 	@Autowired
 	private MemberService mservice;
 	
 	@Scheduled(cron="0 30 8 1 1 ?")
-	//@Scheduled(cron="0 0/1 * 1/1 * ?")
+	//@Scheduled(cron="0/30 0/1 * * * ?")
 	public void AnnaulScheduler() {
 		List<MemberDTO> list = mservice.selectUserList();
-		System.out.println(list);
-		System.out.println("test");
-		
+
 		// 현재 시간 가져오기
         LocalDateTime currentDateTime = LocalDateTime.now();
 		for(int i=0;i<list.size();i++) {
-			// 기존에 연차 기록이 있는지 불러옴
-			AnnaulRestDTO user = mservice.selectAnnaulRestById(list.get(i).getId());
-			
+			// 회원들의 연차 기록을 불러오기 위함
+			// AnnaulRestDTO user = mservice.selectAnnaulRestById(list.get(i).getId());
+			 AnnaulRestDTO user = new AnnaulRestDTO();
+			 user.setEmp_id(list.get(i).getId());
+			 
 			Timestamp hireDate = list.get(i).getHire_date();
 			// Timestamp값을 LocalDateTime으로 변환
 			LocalDateTime hireDateDateTime = hireDate.toLocalDateTime();
@@ -68,19 +68,19 @@ public class AnnaulScheduler {
 			}
 			
 			// 기록이 없다면 새로운 기록 삽입
-			if(user.getEmp_id()==null) {
-				user.setEmp_id(list.get(i).getId());
+//			if(user.getEmp_id()==null) {
+//				user.setEmp_id(list.get(i).getId());
 				user.setRest_type_id("연차");
 				user.setRest_cnt(thisYearAnnual);
 				mservice.insertAutomaticAnnaulRest(user);
-			}else { // 기록이 있다면 기존 연차기록에서 업데이트
-				// 연차 합산
-				int existingAnnual = user.getRest_cnt();
-				user.setRest_cnt(existingAnnual+thisYearAnnual);
+//			}else { // 기록이 있다면 기존 연차기록에서 업데이트
+//				// 연차 합산
+				//int existingAnnual = user.getRest_cnt();
+				//user.setRest_cnt(existingAnnual+thisYearAnnual);
 				
-				System.out.println("연차 업데이트 해야함");
-				mservice.updateAutomaticAnnualRest(user);
-			}
+				//System.out.println("연차 업데이트 해야함");
+//				mservice.insertAutomaticAnnaulRest(user);
+			//}
 		}
 	}
 }
