@@ -106,8 +106,8 @@ public class ScheduleDAO {
 	} 
 	
 	// 캘린더 휴지통에서 30일 후 삭제
-	public void autoDeleteInTrash() {
-		db.delete("Schedule.autoDeleteInTrash");
-	}
+//	public void autoDeleteInTrash() {
+//		db.delete("Schedule.autoDeleteInTrash");
+//	}
 
 }
