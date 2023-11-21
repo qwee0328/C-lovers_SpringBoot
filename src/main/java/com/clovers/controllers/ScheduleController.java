@@ -64,10 +64,9 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public int delete(int id) { // 일정 삭제
-		
 		int rid = sService.selectRecurringIdById(id);
 		if(rid!=0) { // 반복 이벤트이면
-			sService.deleteReccuring(rid); // 반복일정 정보 삭제 후
+			sService.deleteRecurring(rid); // 반복일정 정보 삭제 후
 			return sService.delete(id); // 일정 삭제
 		}else { // 반복 이벤트가 아니면
 			return sService.delete(id); // 일정 삭제
@@ -95,8 +94,12 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/scheduleUpdate",  method = RequestMethod.POST)
 	public void scheduleUpdate(ScheduleDTO dto){ // 일정 변경 (일반 이벤트)
-		if(dto.getRecurring_id()!=0)
-			sService.deleteReccuring(dto.getRecurring_id()); // 반복이벤트가 존재했다가 사라진 일정이므로 반복 일정 정보 삭제
+		System.out.println();
+		if(dto.getRecurring_id()!=0) {
+			sService.deleteRecurring(dto.getRecurring_id()); // 반복이벤트가 존재했다가 사라진 일정이므로 반복 일정 정보 삭제
+			//dto에서 recurring_id 값 0으로 변경 -> DB 외래키 지정하면 해결됨.
+		}
+			
 		sService.scheduleUpdate(dto); // 일정 변경
 	}
 

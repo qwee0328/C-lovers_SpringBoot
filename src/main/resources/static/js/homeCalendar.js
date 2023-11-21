@@ -250,6 +250,23 @@ document.addEventListener('DOMContentLoaded', function() {
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
 			return false;
 		}
+		
+		if($(".insertSchedule__title").val()==""){
+			Swal.fire({
+				icon: "error",
+				text: "일정 제목을 입력해주세요."
+			});
+			return;
+		}
+		
+		if($(".insertSchedule__startDate").val()==""){
+			Swal.fire({
+				icon: "error",
+				text: "시작 일자를 입력해주세요."
+			});
+			return;
+		}		
+		
 		let events = generateEvent();
 		calendar.addEventSource(events);
 

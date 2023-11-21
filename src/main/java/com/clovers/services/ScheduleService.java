@@ -31,9 +31,12 @@ public class ScheduleService {
 		return dao.delete(id);
 	}
 	
-	public int deleteReccuring(int id) {
-		return dao.deleteReccuring(id);
+	// 반복 일정 정보가 테이블에서 삭제될 때, 참조중인 내용들 삭제
+	public int deleteRecurring(int id) {
+		dao.deleteRecurring(id);
+		return dao.deleteRecurringId(id);
 	}
+	
 	
 	public List<HashMap<String,Object>> selectAll(String emp_id){
 		return dao.selectAll(emp_id);

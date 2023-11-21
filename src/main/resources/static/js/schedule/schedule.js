@@ -208,6 +208,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 		},
 		eventClick: function(e) { // 일정 클릭 시 일정 상세보기
+			console.log(e);
+			
 			$(".fc-popover").css("display", "none"); // 일정 더보기 팝업찹 가리기
 
 			if (!$(e.el).hasClass("koHolidays")) {
@@ -382,7 +384,14 @@ document.addEventListener('DOMContentLoaded', function() {
 					ed.groupId = resp.recurring_id;
 				});
 
-				events.push(ed);
+				
+				let selectCal = $(".selectNavi").map((i,e)=>{
+					return parseInt($(e).attr("data-id"));
+				}).toArray();	
+				if(selectCal.includes(parseInt(eventData.calNameVal))){
+					events.push(ed);
+				}
+				
 				
 
 			} else { // 1일 이상 이벤트 일 때
@@ -432,50 +441,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		return events;
 	}
-
-	// 반복 이벤트 생성
-	/*let setEvents = (events, dbEvents, endDate, eventData, currentDate, during, frequency__whenOption, term) => {
-		let ed = { ...eventData };
-
-		ed.start = currentDate.toISOString().slice(0, 16); // 일정 시작 일자
-		let currentEndDate = new Date(currentDate);
-		currentEndDate.setDate(currentDate.getDate() + during);
-		currentEndDate.setHours(endDate.getHours(), endDate.getMinutes());
-		ed.end = currentEndDate.toISOString().slice(0, 16); // 일정 종료 일자
-		
-		let dbMap = new Map();
-		dbMap.set("calendar_id", parseInt(ed.calNameVal));
-		dbMap.set("title", ed.title);
-		dbMap.set("content", ed.content);
-		dbMap.set("start_date",ed.start);
-		dbMap.set("end_date",ed.end);
-		dbMap.set("reg_date",ed.reg_date);
-		dbMap.set("all_day",ed.allDay);
-		dbEvents.push(Object.fromEntries(dbMap));
-		
-		dbEvents.push({
-			calendar_id : parseInt(ed.calNameVal),
-		    title : ed.title,
-		    content : ed.content,
-		  	start_date : ed.start,
-		    end_date : ed.end,
-		    reg_date : ed.reg_date,
-		    all_day : ed.all_day
-		})
-		
-		events.push(ed);
-
-		if (frequency__whenOption == "daily") { // daily
-			currentDate.setDate(currentDate.getDate() + term);
-		} else if (frequency__whenOption == "weekly") {
-			currentDate.setDate(currentDate.getDate() + term * 7);
-		} else if (frequency__whenOption == "monthly") {
-			currentDate.setMonth(currentDate.getMonth() + term);
-		} else if (frequency__whenOption == "yearly") {
-			currentDate.setFullYear(currentDate.getFullYear() + term);
-		}
-	}*/
-	///////////////////////////////////////////////////////////////
 
 	$(".calendarModal__save").on("click", function() { // 일정 등록 모달 저장 누를 시 일정 등록
 		if ($(".insertSchedule__startDate").val() > $(".insertSchedule__endDate").val()) {
@@ -568,7 +533,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 
-	$(".calendarModal__updateSave").on("click", function() { // 일정 수정 내용 저장
+
+
+
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// 일정 수정 내용 저장
+	$(".calendarModal__updateSave").on("click", function() { 
 		// 날짜 데이터에 시간 데이터 추가
 		let startDate = new Date($(".insertSchedule__startDate").val());
 		startDate.setHours((parseInt($(".insertSchedule__startTime").val().slice(0, 2)) + 9), $(".insertSchedule__startTime").val().slice(3, 5)); // +9 하는 이유는 한국 시간으로 변경하기 위함.
@@ -590,8 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				endDate = endDate.toISOString().slice(0, 11)+"00:00";
 			}
 		}
-		
-		
+
 		
 		sche.setProp('title', $(".insertSchedule__title").val());
 		sche.setDates(startDate, endDate, $(".insertSchedule__allDay").is(":checked"));
@@ -668,7 +638,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					  	start_date : startDateTime,
 					    end_date : endDate,
 					    all_day : $(".insertSchedule__allDay").is(":checked"),
-					    recurring_id : sche.groupId
+					    recurring_id : sche.groupId===""?0:parseInt(sche.groupId,10)
 					}
 				}).done(function(resp){
 					console.log("반복 변경 성공~~~");
@@ -689,7 +659,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					start_date : startDate,
 					end_date : endDate,
 					all_day : $(".insertSchedule__allDay").is(":checked"),
-					recurring_id : sche.groupId
+					recurring_id : sche.groupId===""?0:parseInt(sche.groupId,10)
 				}
 			}).done(function(){
 				console.log("업데이트 성공!");
@@ -752,7 +722,9 @@ document.addEventListener('DOMContentLoaded', function() {
 						eventData.repeat =true;
 						let endKey = resp[i].endKey;
 						let frequency_whenOption = resp[i].frequency_whenOption == "weekDay" ? "weekly" : resp[i].frequency_whenOption;
-						let chkWeekDayList = resp[i].selectWeeks.split(",");
+						
+						
+						let chkWeekDayList = resp[i].selectWeeks && resp[i].selectWeeks !== "" ? resp[i].selectWeeks.split(",") : [];
 						if(chkWeekDayList.length>=1)
 							chkWeekDayList = chkWeekDayList.map((e)=>{ return parseInt(e); });
 							// resp[i].frequency_whenOption == "weekDay" ? [0, 1, 2, 3, 4] :

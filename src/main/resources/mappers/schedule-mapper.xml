@@ -86,9 +86,14 @@
 		update schedule_recurring set during = #{during}, frequency_whenOption=#{frequency_whenOption}, endKey=#{endKey}, endValue=#{endValue}, intervalCnt=#{intervalCnt}, startTime=#{startTime}, endTime=#{endTime}, selectWeeks=#{selectWeeks}  where id = #{id};
 	</update>
 	
-	<delete id="deleteReccuring">
+	<!-- 반복 이벤트 -> 일반 이벤트로 변경 시, 반복 이벤트 정보 삭제 후, -->
+	<delete id="deleteRecurring">
 		delete from schedule_recurring where id=#{id};
 	</delete>
+	<!-- 반복 이벤트 -> 일반 이벤트로 변경 시, 각 이벤트에서 참조 중인 반복 이벤트 정보 제거 -->
+	<update id="deleteRecurringId">
+		update schedule set recurring_id = 0 where recurring_id = #{recurring_id};
+	</update>
 	
 	
 	<!-- 캘린더 추가 -->
