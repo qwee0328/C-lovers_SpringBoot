@@ -555,12 +555,8 @@ document.addEventListener('DOMContentLoaded', function() {
 					$('.range__count').val(parseInt(resp.endValue)).trigger("keydown");
 				}else{
 					$(".range__endDate").val(resp.endValue).trigger("change");
-				}				
-			
+				}						
 			}
-		
-				
-			
 		});
 		
 		$(".calendarModal__save").css("display", "none");
@@ -570,13 +566,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		$(".scheduleInsertModal").modal({
 			showClose: false
 		});
-		
-
 	});
 
 	$(".calendarModal__updateSave").on("click", function() { // 일정 수정 내용 저장
-	
-	
 		// 날짜 데이터에 시간 데이터 추가
 		let startDate = new Date($(".insertSchedule__startDate").val());
 		startDate.setHours((parseInt($(".insertSchedule__startTime").val().slice(0, 2)) + 9), $(".insertSchedule__startTime").val().slice(3, 5)); // +9 하는 이유는 한국 시간으로 변경하기 위함.
