@@ -1,6 +1,5 @@
 package com.clovers.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +16,10 @@ public class AddressBookDAO {
 	@Autowired
 	private SqlSession db;
 	
-	
-	
 	// 주소 관련
 	public int insert(AddressBookDTO dto) { 
+		System.out.println("추가");
+		System.out.println(dto);
 		return db.insert("AddressBook.insert",dto); 
 	}
 	public List<Map<String,Object>> select(Map<String,Object> param) {

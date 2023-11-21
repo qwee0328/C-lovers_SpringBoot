@@ -13,9 +13,6 @@ $(document).ready(function() {
 		$.ajax({
 			url:"/humanResources/headerProfile"
 		}).done(function(resp){
-			console.log(resp.profile_img);
-			
-			
 			let img;
 			
 			let main_img = $("<img class='profileImg'/>");
@@ -54,8 +51,6 @@ $(document).ready(function() {
 	
 	// 프로필 카드 바깥영역 클릭시
 	$(document).on("click", function(e) {
-		console.log(e.target);
-		
 		if($(e.target).parents().is(".mainHeader_profileBox") || $(e.target).hasClass("mainHeader_profileBox") ){
 			if($(".header__userinfoBox").hasClass("active")){
 				$(".header__userinfoBox").removeClass("active");

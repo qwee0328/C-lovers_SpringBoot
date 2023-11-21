@@ -181,7 +181,7 @@ public class ScheduleController {
 	public int trashCalendar(int id, int trash) {
 		if(session.getAttribute("calIds") != null) {
 			List<Integer> calIds = (List<Integer>) session.getAttribute("calIds");
-			calIds.remove(id);
+			if(calIds.contains(id)) calIds.remove(calIds.indexOf(id));
 		}
 		return sService.trashCalendar(id,trash);
 	}

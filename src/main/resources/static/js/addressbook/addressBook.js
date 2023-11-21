@@ -177,8 +177,6 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 		value = authorityOrTagId;
 	}
 
-
-	console.log(`${key} : ${value} : ${tagId} : ${keyword}`);
 	$.ajax({
 		url: "/addressbook/select",
 		data: {
@@ -188,7 +186,7 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 			keyword: keyword
 		},
 		type: "post"
-	}).done(function(resp) {
+	}).done(function(resp) {		
 		$(".addListHeader__chkBox").prop("checked", false);
 		$(".addListHeader__default").css("display","flex");
 		$(".addListHeader__select").attr("style","display: none !important");
@@ -340,9 +338,7 @@ $(document).ready(function() {
 
 	$(document).on("click","#addressBookInsert", function() { // 주소록 저장
 	// 유효성 검사
-	
 		let data = settingData();
-		console.log(data);
 		if(data != null){
 			$.ajax({
 				url: "/addressbook/insert",
@@ -352,7 +348,7 @@ $(document).ready(function() {
 			}).done(function(resp) {
 				if (resp >= 1) {
 					$.modal.close();
-					indexSelect($(".activeMenu"));	
+					indexSelect($(".activeMenu"));
 				}
 			});
 		}
@@ -370,7 +366,11 @@ $(document).ready(function() {
 			async: "false"
 		}).done(function(resp) { // 현재 선택한 태그 이름 가져와서 선택해주어야함
 			if (resp > 0) {
+				console.log("흐음");
 				$.modal.close();
+				reloadTags(function(){
+					indexSelect($("div[data-id='" + $("#abCurrentMenu").val() + "']"));	
+				});
 				$(".modalBody__tag").append($("<option>").val(resp).text($(".modalBody__tagName").val()));
 			}
 		});
@@ -388,6 +388,8 @@ $(document).on("click", ".toggleInner", function() {
 });
 
 function indexSelect(target){
+	console.log("재로드");
+	
 	$(".activeMenu").removeClass("activeMenu");
 	
 	if($(target).length == 0){ // 만약 메뉴가 삭제되었다면 개인 전체 선택
