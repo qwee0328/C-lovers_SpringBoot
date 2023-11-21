@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>제목</title>
+<title>${title}</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script
 	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.js'></script>
