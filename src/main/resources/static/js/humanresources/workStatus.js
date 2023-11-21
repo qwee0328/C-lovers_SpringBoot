@@ -37,9 +37,97 @@ $(document).ready(function() {
 
 	// 해당 연도 총 휴가일 불러오기
 	yearTotalAnnaul();
+	// 사용자의 휴가 신청 상세 내역 확인하기
+	annaulDetails();
 
-
+	$("#detailAll").on("click", function() {
+		annaulDetails();
+	})
+	
+	$("#detailYear").on("click",function(){
+		annaulForYearDetails();
+	})
+	
+	$("#detailMonth").on("click",function(){
+		annaulForMonthDetails();
+	})
+	
+	$("#detailWeek").on("click",function(){
+		annaulForWeekDetails();
+	})
 });
+
+// 사용자의 휴가 신청 상세 내역 확인하기
+function annaulDetails() {
+	$.ajax({
+		url: "/humanResources/selectAnnaulAppDetails",
+		type: "POST",
+	}).done(function(resp) {
+		detailsPrint(resp);
+	})
+}
+
+// 사용자의 최근 1주일치 신청 상세 내역 확인하기
+function annaulForWeekDetails(){
+	$.ajax({
+		url: "/humanResources/selectAnnaulAppDetailsForWeek",
+		type: "POST",
+	}).done(function(resp) {
+		detailsPrint(resp);
+	})
+}
+
+// 사용자의 최근 1달치 신청 상세 내역 확인하기
+function annaulForMonthDetails(){
+	$.ajax({
+		url: "/humanResources/selectAnnaulAppDetailsForMonth",
+		type: "POST",
+	}).done(function(resp) {
+		detailsPrint(resp);
+	})
+}
+
+// 사용자의 최근 1년치 신청 상세 내역 확인하기
+function annaulForYearDetails(){
+	$.ajax({
+		url: "/humanResources/selectAnnaulAppDetailsForYear",
+		type: "POST",
+	}).done(function(resp) {
+		detailsPrint(resp);
+	})
+}
+
+// 신청 상세내역 출력하는 함수
+function detailsPrint(resp) {
+	$(".detailes__body").empty();
+	for (let i = 0; i < resp.length; i++) {
+		let bodyLine = $("<div>").attr("class", "body__line");
+		let num = $("<div>").html(i + 1).addClass("body__td");
+		let writer = $("<div>").html(resp[i].name).addClass("body__td");
+		let type = $("<div>").html(resp[i].rest_reason_type).addClass("body__td");
+
+		// 일수 계산
+		let start = resp[i].start_date;
+		let end = resp[i].end_date;
+		let startDate = new Date(start);
+		let endDate = new Date(end);
+
+		let timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+		let dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+		let days = $("<div>").html(dayDiff + 1 + "일").addClass("body__td");
+		let period = $("<div>").addClass("body__td");
+		if (resp[i].start_date === resp[i].end_date) {
+			period.html(resp[i].start_date.split(" ")[0]);
+		} else {
+			period.html(resp[i].start_date.split(" ")[0] + " ~ " + resp[i].end_date.split(" ")[0]);
+		}
+		let status = $("<div>").html(resp[i].status).addClass("body__td");
+		let detail = $("<div>").html("상세").attr("id", resp[i].id).addClass("body__td");
+		bodyLine.append(num).append(writer).append(type).append(days).append(period).append(status).append(detail);
+		$(".detailes__body").append(bodyLine);
+	}
+}
 
 // 해당 년도 총 휴가일 불러오기
 function yearTotalAnnaul() {
@@ -79,7 +167,7 @@ function yearDetailAnnual() {
 		$(".table__body").empty();
 		let usedCount = $("#usedCountHidden").val();
 		let restCount = $("#usedCountHidden").val();
-		console.log("use"+usedCount);
+		console.log("use" + usedCount);
 		if (resp.length > 0) {
 			for (let i = 0; i < resp.length; i++) {
 				let printCount = 0;
@@ -87,14 +175,14 @@ function yearDetailAnnual() {
 				let bodyConf_date = $("<div>").attr("class", "body__conf").html(resp[i].reg_date.split(" ")[0]);
 				let bodyConf_line = $("<div>").attr("class", "body__conf");
 				let lineDiv_left = $("<div>").html(resp[i].rest_cnt);
-				if(resp[i].rest_cnt<restCount){
-					restCount = usedCount-resp[i].rest_cnt;
-				}else{
-					printCount = resp[i].rest_cnt-restCount;
+				if (resp[i].rest_cnt < restCount) {
+					restCount = usedCount - resp[i].rest_cnt;
+				} else {
+					printCount = resp[i].rest_cnt - restCount;
 				}
-				console.log("use"+usedCount);
-				console.log("rest"+restCount)
-				console.log("print"+printCount)
+				console.log("use" + usedCount);
+				console.log("rest" + restCount)
+				console.log("print" + printCount)
 				let lineDiv_right = $("<div>").html(printCount);
 				let bodyConf_type = $("<div>").attr("class", "body__conf").html((resp[i].rest_type_id === "연차") ? "정기휴가" : resp[i].rest_type_id);
 				let bodyConf_etc = $("<div>").attr("class", "body__conf").attr("id", "detailNote").html(resp[i].rest_type_id + " (" + resp[i].rest_cnt + "일 x 8시간 = " + resp[i].rest_cnt * 8 + "시간)");

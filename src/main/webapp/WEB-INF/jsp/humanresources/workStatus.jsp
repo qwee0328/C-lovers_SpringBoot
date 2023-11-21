@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>근무 현황</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -85,16 +85,16 @@
 						<div class="summaryInfo__title">휴가 신청 내역</div>
 						<div class="summaryInfo__conf">
 							<div>
-								<button>전체</button>
+								<button id="detailAll">전체</button>
 							</div>
 							<div>
-								<button>1년</button>
+								<button id="detailYear">1년</button>
 							</div>
 							<div>
-								<button>한달</button>
+								<button id="detailMonth">한달</button>
 							</div>
 							<div>
-								<button>1주일</button>
+								<button id="detailWeek">1주일</button>
 							</div>
 						</div>
 					</div>
@@ -109,13 +109,15 @@
 							<div class="header__td">상세</div>
 						</div>
 						<div class="detailes__body">
-							<div class="body__td">1</div>
-							<div class="body__td">대표이사</div>
-							<div class="body__td">연차</div>
-							<div class="body__td">1일</div>
-							<div class="body__td">기간</div>
-							<div class="body__td">결재완료</div>
-							<div class="body__td">상세</div>
+							<div class="body__line">
+								<div class="body__td">1</div>
+								<div class="body__td">대표이사</div>
+								<div class="body__td">연차</div>
+								<div class="body__td">1일</div>
+								<div class="body__td periodTd">기간</div>
+								<div class="body__td">결재완료</div>
+								<div class="body__td">상세</div>
+							</div>
 						</div>
 					</div>
 				</div>

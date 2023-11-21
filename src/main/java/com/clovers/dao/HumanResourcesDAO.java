@@ -119,19 +119,39 @@ public class HumanResourcesDAO {
 	// 해당 년도 휴가 총 개수 불러오기
 	public Map<String, Object> selectYearTotalAnnaul(Map<String, Object> data) {
 		Map<String, Object> result = db.selectOne("HumanResources.selectYearTotalAnnaul", data);
-		return (result!=null)?result:(new HashMap<>());
+		return (result != null) ? result : (new HashMap<>());
 	}
-	
+
 	// 해당 년도 휴가 사용 개수 불러오기
 	public int selectUsedAnnaul(Map<String, Object> data) {
-		Integer result = db.selectOne("HumanResources.selectUsedAnnaul",data);
+		Integer result = db.selectOne("HumanResources.selectUsedAnnaul", data);
 		System.out.println(result);
-		return (result!=null)?result.intValue():0;
+		return (result != null) ? result.intValue() : 0;
 	}
 
 	// 해당 년도 휴가 생성 상세 정보 불러오기
-	public List<AnnaulRestDTO> selectYearDetailAnnaul(Map<String, Object> data){
-		return db.selectList("HumanResources.selectYearDetailAnnaul",data);
+	public List<AnnaulRestDTO> selectYearDetailAnnaul(Map<String, Object> data) {
+		return db.selectList("HumanResources.selectYearDetailAnnaul", data);
+	}
+
+	// 사용자의 휴가 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetails(String id) {
+		return db.selectList("HumanResources.selectAnnaulAppDetails", id);
+	}
+
+	// 사용자의 최근 1년치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForYear(String id) {
+		return db.selectList("HumanResources.selectAnnaulAppDetailsForYear", id);
+	}
+
+	// 사용자의 최근 1달치 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth(String id) {
+		return db.selectList("HumanResources.selectAnnaulAppDetailsForMonth", id);
+	}
+
+	// 사용자의 최근 1주일 신청 상세 내역 확인하기
+	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek(String id) {
+		return db.selectList("HumanResources.selectAnnaulAppDetailsForWeek", id);
 	}
 
 	// 임직원 정보 전부 불러오기
