@@ -27,7 +27,7 @@
 			<div id="workStatus" class="tab-content current">tab content1</div>
 			<div id="vacationDetails" class="tab-content">
 				<input type="hidden" id="totalCountHidden">
-				<input type="hidden" id="">
+				<input type="hidden" id="usedCountHidden">
 				<div class="settings">
 					<div class="settings__left">
 						<div class="arrow" id="leftArrow">
@@ -88,7 +88,10 @@
 								<button>전체</button>
 							</div>
 							<div>
-								<button>1달</button>
+								<button>1년</button>
+							</div>
+							<div>
+								<button>한달</button>
 							</div>
 							<div>
 								<button>1주일</button>
