@@ -238,60 +238,88 @@ public class ElectronicSignatureService {
 	}
 
 	// 진행 중인 문서 전체 리스트 출력
-	public List<Map<String, Object>> progressTotalList(String loginID, List<String> keyword) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("keyword", keyword);
-		return dao.progressTotalList(userInfo);
+	public List<Map<String, Object>> progressTotalList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressTotalList(param);
 	}
 
 	// 진행 중인 문서 대기 리스트 출력
-	public List<Map<String, Object>> proggressWaitLlist(String loginID, List<String> keyword) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("keyword", keyword);
-		return dao.progressWaitList(userInfo);
+	public List<Map<String, Object>> progressWaitList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressWaitList(param);
 	}
 
 	// 진행 중인 문서 확인 리스트 출력
-	public List<Map<String, Object>> progressCheckList(String loginID, List<String> keyword) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("keyword", keyword);
-		return dao.progressCheckList(userInfo);
+	public List<Map<String, Object>> progressCheckList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressCheckList(param);
 	}
 
 	// 진행 중인 문서 진행 리스트 출력
-	public List<Map<String, Object>> progressList(String loginID, List<String> keyword) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("keyword", keyword);
-		return dao.progressList(userInfo);
+	public List<Map<String, Object>> progressList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressList(param);
 	}
 
 	// 문서함 전체 리스트 출력
-	public List<Map<String, Object>> documentTotalList(String loginID) {
-		return dao.documentList(loginID);
+	public List<Map<String, Object>> documentTotalList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentList(param);
 	}
 
 	// 문서함 기안 리스트 출력
-	public List<Map<String, Object>> documentDraftingList(String loginID) {
-		return dao.documentDraftingList(loginID);
+	public List<Map<String, Object>> documentDraftingList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentDraftingList(param);
 	}
 
 	// 문서함 결재 리스트 출력
-	public List<Map<String, Object>> documentApprovalList(String loginID) {
-		return dao.documentApprovalList(loginID);
+	public List<Map<String, Object>> documentApprovalList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentApprovalList(param);
 	}
 
 	// 문서함 반려 리스트 출력
-	public List<Map<String, Object>> documentRejectionList(String loginID) {
-		return dao.documentRejectionList(loginID);
+	public List<Map<String, Object>> documentRejectionList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentRejectionList(param);
 	}
 
 	// 임시저장 리스트 출력
-	public List<Map<String, Object>> temporaryList(String loginID) {
-		return dao.temporaryList(loginID);
+	public List<Map<String, Object>> temporaryList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.temporaryList(param);
 	}
 
 	// 문서 번호에 따른 결재 정보 출력

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.clovers.constants.Constants;
 import com.clovers.services.ElectronicSignatureService;
 
 import jakarta.servlet.http.HttpSession;
@@ -115,14 +116,22 @@ public class ElectronicSignatureController {
 	// 진행 중인 문서 전체 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressTotalList")
-	public List<Map<String, Object>> progressTotalList() {
+	public Map<String, Object> progressTotalList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
 		List<String> secGrade = getSecurityGrade(loginID);
 
-		List<Map<String, Object>> list = esservices.progressTotalList(loginID, secGrade);
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.progressTotalList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		setDivision(loginID, list);
 		
-		return list;
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.progressTotalList(loginID, secGrade, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		
+		return param;
 	}
 
 	// 대기로 이동
@@ -137,13 +146,21 @@ public class ElectronicSignatureController {
 	// 진행 중인 문서 대기 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressWaitList")
-	public List<Map<String, Object>> progressWaitList() {
+	public Map<String, Object> progressWaitList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
 		List<String> secGrade = getSecurityGrade(loginID);
 		
-		List<Map<String, Object>> list = esservices.proggressWaitLlist(loginID, secGrade);
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.progressWaitList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		setDivision(loginID, list);
-		return list;
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.progressWaitList(loginID, secGrade, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 확인으로 이동
@@ -158,13 +175,21 @@ public class ElectronicSignatureController {
 	// 진행 중인 문서 확인 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressCheckList")
-	public List<Map<String, Object>> progressCheckList() {
+	public Map<String, Object> progressCheckList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
 		List<String> secGrade = getSecurityGrade(loginID);
 		
-		List<Map<String, Object>> list = esservices.progressCheckList(loginID, secGrade);
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.progressCheckList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		setDivision(loginID, list);
-		return list;
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.progressCheckList(loginID, secGrade, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 진행으로 이동
@@ -179,13 +204,21 @@ public class ElectronicSignatureController {
 	// 진행 중인 문서 진행 리스트 출력
 	@ResponseBody
 	@RequestMapping("/progressList")
-	public List<Map<String, Object>> progressList() {
+	public Map<String, Object> progressList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
 		List<String> secGrade = getSecurityGrade(loginID);
 		
-		List<Map<String, Object>> list = esservices.progressList(loginID, secGrade);
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.progressList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		setDivision(loginID, list);
-		return list;
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.progressList(loginID, secGrade, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 문서함 전체로 이동
@@ -200,12 +233,20 @@ public class ElectronicSignatureController {
 	// 문서함 전체 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentTotalList")
-	public List<Map<String, Object>> documentTotalList() {
+	public Map<String, Object> documentTotalList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.documentTotalList(loginID);
 		
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.documentTotalList(loginID, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		setDivision(loginID, list);
-		return list;
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.documentTotalList(loginID, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 문서함 기안으로 이동
@@ -220,11 +261,19 @@ public class ElectronicSignatureController {
 	// 문서함 기안 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentDraftingList")
-	public List<Map<String, Object>> documentDraftingList() {
+	public Map<String, Object> documentDraftingList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.documentDraftingList(loginID);
+		
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.documentDraftingList(loginID, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 
-		return list;
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.documentDraftingList(loginID, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 문서함 결재로 이동
@@ -239,11 +288,19 @@ public class ElectronicSignatureController {
 	// 문서함 결재 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentApprovalList")
-	public List<Map<String, Object>> documentApprovalList() {
+	public Map<String, Object> documentApprovalList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.documentApprovalList(loginID);
+		
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.documentApprovalList(loginID, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 
-		return list;
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.documentApprovalList(loginID, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 문서함 반려로 이동
@@ -258,11 +315,19 @@ public class ElectronicSignatureController {
 	// 문서함 반려 리스트 출력
 	@ResponseBody
 	@RequestMapping("/documentRejectionList")
-	public List<Map<String, Object>> documentRejectionList() {
+	public Map<String, Object> documentRejectionList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.documentRejectionList(loginID);
+		
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.documentRejectionList(loginID, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 
-		return list;
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.documentRejectionList(loginID, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 임시저장으로 이동
@@ -277,11 +342,19 @@ public class ElectronicSignatureController {
 	// 임시저장 리스트 출력
 	@ResponseBody
 	@RequestMapping("/temporaryList")
-	public List<Map<String, Object>> temporaryList() {
+	public Map<String, Object> temporaryList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
-		List<Map<String, Object>> list = esservices.temporaryList(loginID);
+		
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		List<Map<String, Object>> list = esservices.temporaryList(loginID, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 
-		return list;
+		Map<String, Object> param = new HashMap<>();
+		param.put("list", list);
+		param.put("recordTotalCount", esservices.temporaryList(loginID, 0, 0).size());
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 	
 	// 문서 번호에 따른 정보 가져온 후 결재 양식으로 이동
