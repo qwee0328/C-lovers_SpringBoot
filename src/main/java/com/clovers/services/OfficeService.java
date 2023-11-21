@@ -136,7 +136,7 @@ public class OfficeService {
 
 	// 사용자 이름, id 검색하기
 	public List<Map<String, String>> searchUser(String keyword) {
-		return dao.searchUser(keyword);
+		return dao.searchUser("%"+keyword+"%");
 	}
 
 	// 부서별 부서명, 인원 수 불러오기

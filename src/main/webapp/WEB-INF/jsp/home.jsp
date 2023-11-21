@@ -13,6 +13,30 @@
 <!-- css, js -->
 <link rel="stylesheet" href="/css/home.css">
 <script src="/js/home.js"></script>
+
+<link rel="stylesheet" href="/css/homeCalendar.css">
+<script src="/js/homeCalendar.js"></script>
+
+<link rel="stylesheet" href="/css/schedule/scheduleModal.css">
+<link rel="stylesheet" href="/css/schedule/scheduleMain.css">
+
+<script
+	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.9/index.global.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.9/index.global.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.9/index.global.min.js'></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
 </head>
 <body>
 	<%@ include file="./commons/header.jsp"%>
@@ -170,10 +194,14 @@
 				<div class="schedule">
 					<div class="mainContents__title">일정</div>
 					<div class="mainContents__contentBox">
-						<div class="contentBox__calendar"></div>
+						<div class="contentBox__calendar">
+							<div id="homeCalendar"></div>
+						</div>
 						<hr></hr>
 						<div class="contentBox__scheduleList">
-							<c:forEach var="test" begin="1" end="3" step="1">
+							<div id="calendarList"></div>
+						
+							<%-- <c:forEach var="test" begin="1" end="3" step="1">
 								<div class="scheduleList__scheduleItem">
 									<div class="scheduleItem__date">
 										<div class="date__dayNum">${test }</div>
@@ -185,7 +213,7 @@
 										<div class="plan__time">${test }</div>
 									</div>
 								</div>
-							</c:forEach>
+							</c:forEach> --%>
 						</div>
 					</div>
 				</div>
@@ -193,5 +221,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- 일정 추가 모달창 -->
+	<%@ include file="../jsp/schedule/scheduleInsertModal.jsp"%>
 </body>
 </html>

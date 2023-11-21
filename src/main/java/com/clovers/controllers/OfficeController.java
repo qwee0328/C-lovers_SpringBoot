@@ -19,6 +19,8 @@ import com.clovers.dto.JobDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.services.OfficeService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RestController
 @RequestMapping("/office")
@@ -26,6 +28,9 @@ public class OfficeController {
 	// 오피스 관리 컨트롤러
 	@Autowired
 	private OfficeService oservice;
+	
+	@Autowired
+	private HttpSession session;
 	
 	// 부서 명 불러오기
 	@GetMapping("/detpTask")
@@ -97,8 +102,7 @@ public class OfficeController {
 	
 	// 사용자 이름, id 검색하기
 	@GetMapping("/searchUser")
-	@RequestMapping("/searchUserAjax")
-	public ResponseEntity<List<Map<String, String>>> searchUser(String keyword){
+	public ResponseEntity<List<Map<String, String>>> searchUser(@RequestParam("keyword")String keyword){
 		System.out.println(keyword);
 		System.out.println("durl");
 		List<Map<String, String>> list = oservice.searchUser(keyword);
@@ -106,6 +110,12 @@ public class OfficeController {
 			System.out.println(d.toString());
 		}
 		return ResponseEntity.ok(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/searchUserAjax")
+	public List<Map<String, String>> searchUserAjax(@RequestParam("keyword") String keyword){
+		return oservice.searchUser(keyword);
 	}
 	
 	// 부서별 부서명, 인원 수 불러오기
@@ -143,6 +153,7 @@ public class OfficeController {
 		return oservice.selectDetpTaskEmpInfo(task_id);
 	}
 	
+
 	// 팀별(생산1팀,2팀..)인원수, 부서명
 	@ResponseBody
 	@RequestMapping("/selectAllTaskNameEmpo")
@@ -177,5 +188,17 @@ public class OfficeController {
 	public List<Map<String, Object>> searchByName(String name){
 		System.out.println(name);
 		return oservice.searchByName(name);
+	}
+	
+	
+
+	
+	
+	
+	
+	// 내 정보 불러오기 - 이름, 부서명, id, session 정보 이용 (일정 메뉴 - 공유 캘린더 insert modal에서 사용)
+	@RequestMapping("/getMyInfo")
+	public Map<String, String> searchUser(){
+		return oservice.searchUser((String)session.getAttribute("loginID")).get(0);
 	}
 }

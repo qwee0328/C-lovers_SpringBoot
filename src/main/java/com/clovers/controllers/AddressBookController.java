@@ -29,7 +29,7 @@ public class AddressBookController {
 	
 	// 주소록 메인 홈
 	@RequestMapping("")
-	public String main(Model model, HttpServletRequest request) { // index 데이터
+	public String main() { // index 데이터
 		String title="주소록";
 		if(session.getAttribute("currentMenu") == null) { // 주소록 페이지 첫 접속 시 주소록 개인 전체 선택
 			session.setAttribute("currentMenu", "0");

@@ -178,5 +178,6 @@ public class MemberController {
 		
 		return mservice.getAuthorityCategory(id);
 	}
+	
 }
 

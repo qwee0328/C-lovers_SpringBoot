@@ -34,7 +34,7 @@
 			<div class="search__prefix">
 				<i class="fa-solid fa-magnifying-glass"></i>
 			</div>
-			<input id="searchInput" type="search" placeholder="이름 / 조직 검색">
+			<input id="searchInput" type="search" placeholder="이름 / ID 검색">
 		</div>
 		<div class="approvalLineModal__body">
 

@@ -1,11 +1,19 @@
 let showSelector = false;
 $(document).ready(function() {
-	// selector 커스텀 해서 만들기
 	
+
+	// 기본 정보 세팅
 	$("#esPreservationPeriod").val("5");
 	$("#esSecurityLevel").val("A등급");
+	let dateInfo = new Date();
+	let year = dateInfo.getFullYear();
+	let month = dateInfo.getMonth() + 1;
+	$("#expenseYear").val(year);
+	$("#expenseMonth").val(month);
+	$("#expense_category").val("개인");
 	
 	
+	// selector 커스텀 해서 만들기
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {
 		if (!showSelector) {
@@ -44,21 +52,24 @@ $(document).ready(function() {
 				$("#month .typeName").text() +
 				"월 지출 결의서 - 개인"
 			);
+			$("#expenseYear").val($("#year .typeName").text());
+			$("#expenseMonth").val($("#month .typeName").text());
+			console.log($("#expenseYear").val())
 		}
-		if($(this).parent().parent().attr("id")==="preservationPeriod"){
-			if($("#preservationPeriod .typeName").text()==="1년"){
+		if ($(this).parent().parent().attr("id") === "preservationPeriod") {
+			if ($("#preservationPeriod .typeName").text() === "1년") {
 				$("#esPreservationPeriod").val("1");
-			}else if($("#preservationPeriod .typeName").text()==="3년"){
+			} else if ($("#preservationPeriod .typeName").text() === "3년") {
 				$("#esPreservationPeriod").val("3");
-			}else if($("#preservationPeriod .typeName").text()==="5년"){
+			} else if ($("#preservationPeriod .typeName").text() === "5년") {
 				$("#esPreservationPeriod").val("5");
-			}else if($("#preservationPeriod .typeName").text()==="10년"){
+			} else if ($("#preservationPeriod .typeName").text() === "10년") {
 				$("#esPreservationPeriod").val("10");
-			}else{
+			} else {
 				$("#esPreservationPeriod").val("999");
 			}
 		}
-		if($(this).parent().parent().attr("id")==="securityLevel"){
+		if ($(this).parent().parent().attr("id") === "securityLevel") {
 			$("#esSecurityLevel").val($("#securityLevel .typeName").text());
 		}
 	});
@@ -105,14 +116,14 @@ $(document).ready(function() {
 
 	// 보존연한 및 보안등급 툴팁 이벤트
 	$("#period, #level").on("mouseover", function() {
-		if ($(this).attr("id")==="period") {
+		if ($(this).attr("id") === "period") {
 			$("#period__tooltip").css("display", "block").css("opacity", "1");
 		} else {
 			$("#level__tooltip").css("display", "block").css("opacity", "1");
 		}
 	});
 	$("#period, #level").on("mouseout", function() {
-		if ($(this).attr("id")==="period") {
+		if ($(this).attr("id") === "period") {
 			$("#period__tooltip").css("display", "none").css("opacity", "0");
 		} else {
 			$("#level__tooltip").css("display", "none").css("opacity", "0");
@@ -124,48 +135,146 @@ $(document).ready(function() {
 	createMonth();
 
 	$("input[name='type']").on("change", function() {
+		$("#expense_category").val($("input[name='type']:checked").val());
+		console.log($("#expense_category").val())
 		if ($("input[name='type']:checked").val() === "개인") {
 			$("#accountInfo").css("display", "flex");
 			$("#corporationCard").css("display", "none");
+
+			let trimmedValue = $(".titleInput").val().slice(0, -3);
+			let newTitle = trimmedValue + " 개인";
+			$(".titleInput").val(newTitle);
+			$("#searchUser").val("");
+			$("#spender .table__srLine").html("");
+			let searchUser = $("<input>").attr("type", "text").attr("id", "searchUser");
+			let autoComplete = $("<div>").attr("id", "autoComplete");
+			$("#spender .table__srLine").append(searchUser).append(autoComplete);
+			$("#esSpender").val("");
+			$("#corporationCard .table__srLine").html("");
 		} else {
 			$("#accountInfo").css("display", "none");
 			$("#corporationCard").css("display", "flex");
+			let trimmedValue = $(".titleInput").val().slice(0, -3);
+			let newTitle = trimmedValue + " 법인";
+			$(".titleInput").val(newTitle);
+			$("#searchUser").val("");
+			$("#spender .table__srLine").html("");
+			let searchUser = $("<input>").attr("type", "text").attr("id", "searchUser");
+			let autoComplete = $("<div>").attr("id", "autoComplete");
+			$("#spender .table__srLine").append(searchUser).append(autoComplete);
+			$("#esSpender").val("");
+			$("#accountInfo .table__srLine").html("");
 		}
 	});
-	
-	$("#searchUser").on("change",function(){
-		$.ajax({
-			url: "/office/searchUserAjax",
+
+	$(document).on("input", "#searchUser", function() {
+		if ($(this).val() !== "") {
+			$.ajax({
+				url: "/office/searchUserAjax",
 				dataType: "json",
-				data: { keyword: $(this).val() }
-		}).done(function(resp){
-			console.log(resp)
-		})
+				data: { keyword: $(this).val() },
+				type: "POST"
+			}).done(function(resp) {
+				console.log(resp);
+				$("#autoComplete").empty();
+				if (resp.length > 0) {
+					for (let i = 0; i < resp.length; i++) {
+						let userList = $("<div>").addClass("userList__autoComplete").attr("userID", resp[i].id).attr("userTaskName", resp[i].task_name);
+						let userName = $("<div>").addClass("autoComplete__info").html(resp[i].name + " (" + resp[i].task_name + ")");
+						userList.append(userName);
+						$("#autoComplete").append(userList);
+					}
+				}
+			});
+		}
 	})
 
-	// 기안하기
-	$("#vacationdraftingBtn").on("click", function(){
-		if($("#esDocumentType").val()==="선택"||$("#esDocumentType").val()===""){
-			alert("문서 종류를 선택하고 내용을 입력해주세요");
-			return;
+	$(document).on("click", ".userList__autoComplete", function() {
+		let searchId = $(this).attr("userid");
+		let userTaskName = $(this).attr("userTaskName");
+		console.log(searchId)
+		// 선택된 라디오 버튼의 값 가져오기
+		let selectedValue = $('input[name=type]:checked').val();
+		if (selectedValue === "개인") {
+			$.ajax({
+				url: "/api/accounting/searchByAjax",
+				data: { keyword: searchId },
+				type: "POST"
+			}).done(function(resp) {
+				console.log(resp);
+				if (resp.length > 0) {
+					$("#autoComplete").empty();
+					$("#searchUser").css("display", "none");
+					$("#searchUser").parent().html(resp[0].name + " (" + userTaskName + ")");
+					$("#accountInfo .table__srLine").html("(" + resp[0].bank + ") " + resp[0].id)
+					$("#esSpender").val(searchId);
+				} else {
+					alert("지출자에 등록된 계좌가 없습니다. 관라자에게 등록 요청하세요.");
+					$("#autoComplete").empty();
+					$("#searchUser").val("");
+					$("#esSpender").val("");
+				}
+			});
+		} else {
+			$.ajax({
+				url: "/api/accounting/searchCardAjax",
+				data: { keyword: searchId },
+				type: "POST"
+			}).done(function(resp) {
+				if (resp.length > 0) {
+					$("#autoComplete").empty();
+					$("#esSpender").val(resp[0].num);
+					$("#searchUser").css("display", "none");
+					$("#searchUser").parent().html(resp[0].name + " (" + userTaskName + ")");
+					$("#corporationCard .table__srLine").html("(" + resp[0].bank + ") " + resp[0].id)
+					$("#esSpender").val(searchId);
+				} else {
+					alert("지출자에 등록된 법인카드가 없습니다. 관라자에게 등록 요청하세요.");
+					$("#autoComplete").empty();
+					$("#searchUser").val("");
+					$("#esSpender").val("");
+				}
+			});
 		}
-		if($("#applicationEmployeeIDList").val()===""||$("#processEmployeeIDList").val()===""){
-			alert("결제선을 설정해주세요.");
-			return;
-		}
-		if($(".titleInput").val()===""){
-			alert("문서 제목을 입력해주세요.");
-			return;
-		}
+
+	})
+
+
+	$("#temporaryBtn").on("click", function() {
+		$("#temporary").val("true");
 	})
 });
-
+// 필수 입력값들이 존재하는지
+function validateForm() {
+	if ($("#esDocumentType").val() === "선택" || $("#esDocumentType").val() === "") {
+		alert("문서 종류를 선택하고 내용을 입력해주세요");
+		return false;
+	}
+	if ($("#applicationEmployeeIDList").val() === "" || $("#processEmployeeIDList").val() === "") {
+		alert("결제선을 설정해주세요.");
+		return false;
+	}
+	if ($(".titleInput").val() === "") {
+		alert("문서 제목을 입력해주세요.");
+		return false;
+	}
+	if ($("#documentType").html() === "지출 결의서") {
+		if ($("#esSpender").val() === "") {
+			alert("지출자 정보를 입력해주세요");
+			return false;
+		}
+		if ($("#summary").val() === "") {
+			alert("총괄 적요를 입력해주세요.");
+			return false;
+		}
+	}
+}
 // 문서 종류에 따른 ui 구성 변경
 function formatByDocumentType() {
 	console.log($("#documentType").text().trim());
 	if ($("#documentType").text().trim() === "선택") {
 		$("#esDocumentType").val("");
-		$(".approvalLine .title button").css("display", "none");
+		$("#approvalLineBtn").css("display", "none");
 		$(".approvalLine__table").css("display", "none");
 		$(".approvalLine .infoDiv").css("display", "block");
 		$(".detailDiv").css("display", "block");
@@ -180,10 +289,12 @@ function formatByDocumentType() {
 		$(".spendingResolution__table").css("display", "block");
 		$(".businessContact__table").css("display", "none");
 		spendingResolutionTitle();
+		$(".titleInput").prop("readonly", true)
 	} else if ($("#documentType").text().trim() === "업무 연락") {
 		$("#esDocumentType").val("업무 연락");
 		console.log("업무연락");
 		basicForm();
+		$(".titleInput").prop("readonly", false)
 		$(".titleInput").val("");
 		$(".spendingResolution__table").css("display", "none");
 		$(".businessContact__table").css("display", "block");
@@ -192,7 +303,7 @@ function formatByDocumentType() {
 
 // 문서 종류 선택시 기본 동작
 function basicForm() {
-	$(".approvalLine .title button").css("display", "inline-block");
+	$("#approvalLineBtn").css("display", "inline-block");
 	$(".approvalLine__table").css("display", "block");
 	$(".approvalLine .infoDiv").css("display", "none");
 	$(".detailDiv").css("display", "none");

@@ -46,20 +46,27 @@
 <body>
 	<input type="hidden" value="전자결재" id="modalType">
 	<input type="hidden" id="applicationEmployeeList">
-	<input type="hidden" id="applicationEmployeeIDList">
 	<input type="hidden" id="processEmployeeList">
-	<input type="hidden" id="processEmployeeIDList">
-	<input type="hidden" id="esDocumentType">
-	<input type="hidden" id="esPreservationPeriod">
-	<input type="hidden" id="esSecurityLevel">
+	
 	<%@ include file="../commons/header.jsp"%>
 	<div class="container" style="margin: 0; padding: 0; width: 100%;">
 		<%@ include
 			file="../electronicsignature/electronicsignatureNaviBar.jsp"%>
 		<div class="electronicsSignatureApp">
+		<form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+			<input type="hidden" name="applicationEmployeeIDList" id="applicationEmployeeIDList">
+			<input type="hidden" name="processEmployeeIDList" id="processEmployeeIDList">
+			<input type="hidden" name="esDocumentType" id="esDocumentType">
+			<input type="hidden" name="esPreservationPeriod" id="esPreservationPeriod">
+			<input type="hidden" name="esSecurityLevel" id="esSecurityLevel">
+			<input type="hidden" name="esSpender" id="esSpender">
+			<input type="hidden" name="temporary" value="false" id="temporary">
+			<input type="hidden" name="expense_category" id="expense_category">
+			<input type="hidden" name="expenseYear" id="expenseYear">
+			<input type="hidden" name="expenseMonth" id="expenseMonth">
 			<div class="draftingBtns">
-				<button class="noneBackgroundBtn" id="vacationdraftingBtn">기안하기</button>
-				<button class="noneBackgroundBtn">임시저장</button>
+				<button class="noneBackgroundBtn" type="submit" formaction="/electronicsignature/insertDocument">기안하기</button>
+				<button class="noneBackgroundBtn" type="submit" id="temporaryBtn" formaction="/electronicsignature/insertDocument">임시저장</button>
 			</div>
 			<div class="electronicsSignatureApp__body">
 				<div class="basicSetting">
@@ -143,8 +150,7 @@
 				<div class="approvalLine">
 					<div class="title">
 						결재선
-						<button class="noneBackgroundBtn" id="approvalLineBtn">결재선
-							설정</button>
+						<input type="button" class="noneBackgroundBtn" id="approvalLineBtn" value="결재선 설정">
 					</div>
 					<div class="approvalLine__table">
 						<div class="table__row">
@@ -165,7 +171,7 @@
 				<div class="esTitle">
 					<div class="title">제목</div>
 					<div class="titleInputBox">
-						<input type="text" class="titleInput">
+						<input type="text" name="documentTitle" class="titleInput">
 					</div>
 				</div>
 				<div class="mainBox">
@@ -205,10 +211,11 @@
 								<div>&nbsp;&nbsp;&nbsp;월</div>
 							</div>
 						</div>
-						<div class="table__row">
+						<div class="table__row" id="spender">
 							<div class="table__header">지출자</div>
 							<div class="table__srLine">
 								<input type="text" id="searchUser">
+								<div id="autoComplete"></div>
 							</div>
 						</div>
 						<div class="table__row" id="accountInfo">
@@ -222,7 +229,7 @@
 						<div class="table__row">
 							<div class="table__header">총괄적요</div>
 							<div class="table__srLine">
-								<textarea name="" id="summary" rows="5"></textarea>
+								<textarea name="summary" id="summary" rows="5"></textarea>
 							</div>
 						</div>
 					</div>
@@ -234,10 +241,11 @@
 				<div class="fileListBox">
 					<div class="title">파일첨부</div>
 					<div class="inputLine__fileList">
-						<input type="file" name="uploadFiles" multiple />
+						<input type="file" name="uploadFiles" id="uploadFiles" multiple />
 					</div>
 				</div>
 			</div>
+			</form>
 		</div>
 		<!-- 결제선 설정 모달창 -->
 		<%@ include file="../commons/approvalLineModal.jsp"%>
