@@ -45,6 +45,7 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ScheduleDTO insert(ScheduleDTO dto) { // 일정 추가
+		System.out.println(dto);
 		dto.setEmp_id((String) session.getAttribute("loginID"));
 		sService.insert(dto);
 		return dto;
@@ -93,27 +94,31 @@ public class ScheduleController {
 	// 일정 변경
 	@ResponseBody
 	@RequestMapping(value="/scheduleUpdate",  method = RequestMethod.POST)
-	public void scheduleUpdate(ScheduleDTO dto){ // 일정 변경 (일반 이벤트)
-		System.out.println();
+	public ScheduleDTO scheduleUpdate(ScheduleDTO dto){ // 일정 변경 (일반 이벤트)
 		if(dto.getRecurring_id()!=0) {
 			sService.deleteRecurring(dto.getRecurring_id()); // 반복이벤트가 존재했다가 사라진 일정이므로 반복 일정 정보 삭제
-			//dto에서 recurring_id 값 0으로 변경 -> DB 외래키 지정하면 해결됨.
-		}
 			
+			//dto에서 recurring_id 값 0으로 변경 -> DB 외래키 지정하면 해결됨.
+			dto.setRecurring_id(0);
+		}
+		
 		sService.scheduleUpdate(dto); // 일정 변경
+		return dto;
 	}
 
 	
 	// 반복 일정 변경
 	 @ResponseBody
-	 @RequestMapping(value="/recurringScheduleUpdate", method = RequestMethod.POST) public void recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ // 일정 변경 (반복 이벤트)
+	 @RequestMapping(value="/recurringScheduleUpdate", method = RequestMethod.POST) public ScheduleDTO recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ // 일정 변경 (반복 이벤트)
 		 if(sdto.getRecurring_id()==0) { // 반복 이벤트가 없었다가 생긴 경우
 			 sdto.setRecurring_id(sService.insertReccuring(srdto)); // 새로운 반복 이벤트 정보 저장
 			 sService.scheduleUpdate(sdto); // 일정 변경
+			 return sdto;
 		 }else { // 기존 반복 이벤트를 수정한 경우
 			 srdto.setId(sdto.getRecurring_id());
 			 sService.recurringScheduleUpdate(srdto); // 반복 이벤트 변경
 			 sService.scheduleUpdate(sdto); // 일정 변경
+			 return sdto;
 		 }
 		
 	 }
