@@ -224,8 +224,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					type:"post",
 					async:false
 				}).done(function(resp){
-					console.log("요기");
-					console.log(resp);
 					$(".calendarModal__calName").text(resp.calendar_name);
 					$(".calendarModal__scheTitle").text(resp.title);
 					let regDate = resp.reg_date.slice(0,10) + " " +resp.reg_date.slice(11,16);

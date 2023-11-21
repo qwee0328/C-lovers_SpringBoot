@@ -44,6 +44,7 @@
 	
 		<div class="calenderBody">
 			<div id="calendar"></div>
+			<div id="searchTag"></div>
 		</div>
 
 		<!-- 일정 추가 모달창 -->

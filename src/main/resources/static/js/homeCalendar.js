@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					url: "/schedule/selectAll",
 					async: false
 				}).done(function(resp) {
-					console.log(resp);
 					for (let i = 0; i < resp.length; i++) {
 
 						let eventData = {
