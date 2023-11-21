@@ -176,4 +176,9 @@ public class AddressBookService {
 		
 		return dao.favoriteDelete(param);
 	}
+	
+	// 휴지통에서 30일 경과한 주소록 삭제
+	public void autoDeleteInTrash() {
+		dao.autoDeleteInTrash();
+	}
 }

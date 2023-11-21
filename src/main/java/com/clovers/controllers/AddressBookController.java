@@ -167,4 +167,10 @@ public class AddressBookController {
 	public int favoriteDelete(int address_book_id) {
 		return abservice.favoriteDelete(address_book_id, (String)session.getAttribute("loginID"));
 	}
+	
+	
+	// 휴지통에서 30일 경과한 캘린더 삭제
+	public void autoDeleteInTrash() {
+		abservice.autoDeleteInTrash();
+	}
 }

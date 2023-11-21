@@ -115,4 +115,9 @@ public class ScheduleService {
 	public int deleteCalendar(int id) {
 		return dao.deleteCalendar(id);
 	} 
+	
+	// 휴지통에서 30일 경과한 캘린더 삭제
+	public void autoDeleteInTrash() {
+		dao.autoDeleteInTrash();
+	}
 }

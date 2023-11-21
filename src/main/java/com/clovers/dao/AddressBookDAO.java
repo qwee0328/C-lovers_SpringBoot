@@ -91,6 +91,11 @@ public class AddressBookDAO {
 	public int favoriteDelete(Map<String,Object> param) {
 		return db.delete("AddressBook.favoriteDelete",param);
 	}
+	
+	// 휴지통에서 30일 경과한 데이터 삭제
+	public void autoDeleteInTrash() {
+		db.delete("AddressBook.autoDeleteInTrash");
+	}
 
 
 }

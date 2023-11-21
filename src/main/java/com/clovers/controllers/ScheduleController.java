@@ -192,4 +192,10 @@ public class ScheduleController {
 	public int deleteCalendar(int id) {
 		return sService.deleteCalendar(id);
 	} 
+	
+	
+	// 휴지통에서 30일 경과한 캘린더 삭제
+	public void autoDeleteInTrash() {
+		sService.autoDeleteInTrash();
+	}
 }

@@ -159,8 +159,9 @@
 	</delete>
 	
 	
-<!-- 	<delete id="autoDeleteInTrash">
-		delete from address_book where id in (select id from (select * from address_book where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
-	</delete> -->
+	<!-- 휴지통에서 30일 경과된 데이터 삭제 -->
+	<delete id="autoDeleteInTrash">
+		delete from calendar where id in (select id from (select * from calendar where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
+	</delete>
 	
 </mapper>
