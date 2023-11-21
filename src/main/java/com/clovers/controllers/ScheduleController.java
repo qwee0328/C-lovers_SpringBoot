@@ -79,7 +79,7 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/selectAll")
 	public List<HashMap<String,Object>> selectAll(){ // 일정 전체 불러오기 (캘린더에 표시하기 위함)
-		return sService.selectAll((String)session.getAttribute("logintID"));
+		return sService.selectAll((String)session.getAttribute("loginID"));
 	}
 	
 	
