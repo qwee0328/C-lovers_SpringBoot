@@ -32,6 +32,11 @@ public class ChatMessageDAO {
 		return db.selectList("ChatMessage.selectMessageListByChatRoomId", chat_room_id);
 	};
 	
+	// 채팅방의 아이디와 사원아이디를 기준으로 채팅 메시지를 가져옴 #3 (초대 시작 지점부터 메시지를 불러오는 것)
+	public List<Map<String,Object>> selectChatMessagesListByChatRoomNEmpId(Map<String,Object> param){
+		return db.selectList("ChatMessage.selectChatMessagesListByChatRoomNEmpId",param);
+	}
+	
 	// 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 가장 최신의 메시지의 아이디 값을 가져온다.
 	public int selectLatestChatMsgIdForInvite() {
 		return db.selectOne("ChatMessage.selectLatestChatMsgIdForInvite");

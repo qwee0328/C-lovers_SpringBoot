@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.clovers.dto.DepartmentDTO;
 import com.clovers.dto.DeptTaskDTO;
+import com.clovers.dto.OfficeDTO;
 import com.clovers.services.DepartmentService;
 import com.clovers.services.DeptTaskService;
+import com.clovers.services.OrganizationService;
 
 @RestController
 @RequestMapping("/org/")
@@ -28,11 +30,15 @@ public class OrganizationController {
 	@Autowired
 	private DeptTaskService dtaskService;
 	
+	@Autowired
+	private OrganizationService orgService;
+	
 	
 	@GetMapping("office")
-	public ResponseEntity<DepartmentDTO> getOfficeDTO(){
-		return ResponseEntity.ok(deptService.selectOffice());
+	public ResponseEntity<OfficeDTO> getOfficeDTO(){
+		return ResponseEntity.ok(orgService.getCompleteOrganizationStructure());
 	}
+	
 	
 	@GetMapping("office/empCount")
 	public ResponseEntity<Integer> getOfficeEmpCount(){

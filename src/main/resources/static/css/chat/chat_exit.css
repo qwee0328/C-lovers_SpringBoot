@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+.exit__modal{
+    width: 300px;
+    display: none;
+    padding: 0;  
+}
+
+.exit__header{
+    border-bottom:1px solid #7d7d7d20;
+    padding:10px 15px;
+}
+
+.exit__name{
+    width: 95%;
+}
+.exit__cancel{
+    width: 5%;
+}
+.exit__input{
+    margin: 10px 15px;
+    font-size: 15px;
+    padding: 8px;
+    height: 50px;
+    outline: none;
+    overflow-y: auto;
+}
+
+.exit_margin{
+    width: 10px;
+}
+.exit__footer>button{
+    width:80px;
+    height: 30px;
+    border:0px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.exit__submitBtn{
+    background-color: #75B47D;
+    color:#FFFFFF;
+}
