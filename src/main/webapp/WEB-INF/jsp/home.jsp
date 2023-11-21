@@ -54,6 +54,7 @@
 					</div>
 					<div class="naviItem__title">메일</div>
 				</div>
+				<!-- 
 				<div class="naviItems__naviItem">
 					<div class="naviItem__itemCurcle">
 						<div class="itemCurcle__Icon">
@@ -62,6 +63,7 @@
 					</div>
 					<div class="naviItem__title">게시판</div>
 				</div>
+				 -->
 				<div class="naviItems__naviItem">
 					<div class="naviItem__itemCurcle">
 						<div class="itemCurcle__Icon">
@@ -78,6 +80,7 @@
 					</div>
 					<div class="naviItem__title">주소록</div>
 				</div>
+				<!-- 
 				<div class="naviItems__naviItem">
 					<div class="naviItem__itemCurcle">
 						<div class="itemCurcle__Icon">
@@ -86,6 +89,7 @@
 					</div>
 					<div class="naviItem__title">예약</div>
 				</div>
+				 -->
 				<div class="naviItems__naviItem" id="humanresources">
 					<div class="naviItem__itemCurcle">
 						<div class="itemCurcle__Icon">
