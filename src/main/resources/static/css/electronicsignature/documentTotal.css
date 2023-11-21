@@ -1,0 +1,98 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;800;900&display=swap");
+
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+body {
+	margin: 0px !important;
+}
+
+.container {
+	display: flex;
+}
+
+.container__wait {
+	padding-top: 20px;
+	flex: 1;
+}
+
+.container__wait div {
+  	font-weight: 400;
+}
+
+.wait__checkboxList {
+	padding: 20px 25px 20px;
+}
+
+.checkboxList__checkbox {
+	margin: 0px 10px 0px 5px;
+}
+
+.approvalForm__dropMenu {
+	display: none;
+	position: absolute;
+	margin: 5px 0px 0px 30px;
+	width: 120px;
+	border: 1px solid #7d7d7d40;
+	background-color: #FFFFFF;
+	font-size: 14px;
+}
+
+.approvalForm__dropMenu > li {
+	padding: 5px 20px;
+}
+
+.approvalForm__dropMenu > li:hover {
+	background-color: #7d7d7d20;
+}
+
+.wrap__documentTable {
+	margin: 0px 20px 0px;
+	border: none;
+	font-size: 14px;
+}
+
+.documentTable {
+	border: none;
+}
+
+.documentTable__header {
+	display: grid;
+	grid-template-columns: 200px 250px 100px 180px 180px 120px 80px;
+	background-color: #F3F7F1;
+	border-top: 1px solid #7d7d7d40;
+	border-bottom: 1px solid #7d7d7d40;
+}
+
+.documentTable__header > div {
+	padding: 9px 10px 9px 15px;
+	
+}
+
+.document__list {
+	display: grid;
+  	grid-template-columns: 200px 250px 100px 180px 180px 120px 80px;
+}
+
+.document__list:hover {
+	background-color: #F3F7F1;
+	cursor: pointer;
+}
+
+.document__list > div {
+	padding: 12px 10px 12px 15px;
+	white-space: nowrap;
+}
+
+.documentTable__title {
+	display: flex;
+}
+
+.fileIcon {
+	width: 9px;
+	height: 14px;
+	margin-top: 3px;
+	margin-left: auto;
+}

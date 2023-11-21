@@ -121,4 +121,8 @@ public class MailDAO {
 	public int updateMail(EmailDTO dto) {
 		return db.update("Mail.updateMail", dto);
 	}
+
+	public String selectContentById(int id) {
+		return db.selectOne("Mail.selectContentById", id);
+	}
 }

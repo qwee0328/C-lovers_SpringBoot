@@ -87,8 +87,12 @@ public class ChatController {
 	@ResponseBody
 	@PostMapping("/inviteChatGroup")
 	public String inviteChatGroup(
-			@RequestBody Map<String,Object> payload, @RequestBody String chat_room_id) {
-		return null;
+			@RequestBody Map<String,Object> payload,
+			@RequestBody String chat_room_id,
+			@SessionAttribute("loginID") String loginID) {
+		@SuppressWarnings("unchecked")
+		List<String> selectedEmployees = (List<String>) payload.get("selectedEmployees");
+		return cgService.setAlreadyExistChatGroupInvite(selectedEmployees, chat_room_id, loginID);
 	}
 	
 	// 채팅그룹의 이름을 변경(본인에게만 적용)

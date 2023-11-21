@@ -28,7 +28,22 @@ public class OfficeDAO {
 		return db.selectList("Office.selectPositionAll");
 	}
 
-	// 사용자 수 불러오기
+	// 부서 명 검색하기
+	public String selectDeptTaskName(String task_id) {
+		return db.selectOne("Office.selectDeptTaskName", task_id);
+	}
+
+	// 직급 명 검색하기
+	public String selectJobName(String job_id) {
+		return db.selectOne("Office.selectJobName", job_id);
+	}
+
+	// 실제 db에 저장된 실 사용자 수 불러오기
+	public int selectRealEmpCount() {
+		return db.selectOne("Office.selectRealEmpCount");
+	}
+
+	// 사번 입력할때 사용할 사용자 수 불러오기 -> 삭제된 사용자까지 합쳐서 숫자 셈
 	public int selectEmpCount() {
 		return db.selectOne("Office.selectEmpCount");
 	}
@@ -45,7 +60,22 @@ public class OfficeDAO {
 
 	// 사내 전화번호 사용중인번호인지 체크
 	public int usingCompanyPhoneCheck(String companyPhone) {
-		return db.selectOne("Office.usingCompanyPhoneCheck",companyPhone);
+		return db.selectOne("Office.usingCompanyPhoneCheck", companyPhone);
+	}
+
+	// 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록
+	public int insertTotalAdmin(String id) {
+		return db.insert("Office.insertTotalAdmin", id);
+	}
+
+	// 인사팀 관리자 등록
+	public int insertHRAdmin(String id) {
+		return db.insert("Office.insertHRAdmin", id);
+	}
+
+	// 재후뫼계 관리자 등록
+	public int insertACAdmin(String id) {
+		return db.insert("Office.insertACAdmin", id);
 	}
 
 	// 사용자 등록하기
@@ -77,5 +107,56 @@ public class OfficeDAO {
 	public List<Map<String, String>> searchUser(String keyword) {
 		keyword = "%" + keyword + "%";
 		return db.selectList("Office.searchUser", keyword);
+	}
+
+	// 부서별 부서명, 인원 수 불러오기
+	public List<Map<String, Object>> selectDeptInfo() {
+		return db.selectList("Office.selectDeptInfo");
+	}
+
+	// 부서별 팀별 인원 수 불러오기
+	public List<Map<String, Object>> selectTaskInfo() {
+		return db.selectList("Office.selectTaskInfo");
+	}
+
+	// 부서별 인원 정보 불러오기
+	public List<Map<String, Object>> selectDepartmentEmpInfo(String dept_id) {
+		return db.selectList("Office.selectDepartmentEmpInfo", dept_id);
+	}
+
+	// 모든 부서별 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectAllEmpInfo() {
+		return db.selectList("Office.selectAllEmpInfo");
+	}
+
+	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id) {
+		return db.selectList("Office.selectDetpTaskEmpInfo", task_id);
+	}
+	
+	// 팀별(생산1팀,2팀..)인원수, 부서명
+	public List<Map<String, Object>> selectAllTaskNameEmpo(){
+		return db.selectList("Office.selectAllTaskNameEmpo");
+	}
+	
+	// 임직원 정보에서 부서 클릭하면 정보
+	public List<Map<String, Object>> selectDeptEmpo(){
+		return db.selectList("Office.selectDeptEmpo");
+	}
+	
+	// 부서 클릭하면 정보 
+	public List<Map<String, Object>> selectByDeptName(String dept_name){
+		return db.selectList("Office.selectByDeptName",dept_name);
+	}
+	
+	// 팀 클릭하면 정보
+	public List<Map<String, Object>> selectByTaskName(String task_name){
+		return db.selectList("Office.selectByTaskName",task_name);
+	}
+	
+	// 임직원 검색
+	public List<Map<String, Object>> searchByName(String name){
+		String name2 = "%"+name+"%";
+		return db.selectList("Office.searchByName",name2);
 	}
 }

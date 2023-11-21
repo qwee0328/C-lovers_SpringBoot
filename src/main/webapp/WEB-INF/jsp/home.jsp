@@ -5,30 +5,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>C-lovers</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
+<!-- css, js -->
 <link rel="stylesheet" href="/css/home.css">
+<script src="/js/home.js"></script>
+
+<link rel="stylesheet" href="/css/homeCalendar.css">
+<script src="/js/homeCalendar.js"></script>
+
+<link rel="stylesheet" href="/css/schedule/scheduleModal.css">
+<link rel="stylesheet" href="/css/schedule/scheduleMain.css">
+
+<script
+	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.9/index.global.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.9/index.global.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@6.1.9/index.global.min.js'></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
 </head>
 <body>
 	<%@ include file="./commons/header.jsp"%>
 
 	<div class="container">
-
-	<!-- 채팅 테스트용 conflict 날 시 지워도 상관없음. -->
-	<button id="goChat">채팅 열기</button>
-	
-	<script>
-		$("#goChat").on("click",function(){
-			let option ="height=700, width=400";
-	        let openUrl = "/chat/goMain";
-	        window.open(openUrl,"chatMain",option);
-		})
-	</script>
-	<!-- 채팅 테스트용 여기까지임.-->
-	
 		<!-- MainNavi -->
 		<div class="mainNavi">
 			<div class="mainNavi__naviItems">
@@ -89,39 +102,24 @@
 					</div>
 					<div class="naviItem__title">전자결재</div>
 				</div>
-				
+				<div id="officeController" class="naviItems__naviItem">
+					<div class="naviItem__itemCurcle">
+						<div class="itemCurcle__Icon">
+							<i class="fa-solid fa-gear"></i>
+						</div>
+					</div>
+					<div class="naviItem__title">오피스 관리</div>
+				</div>
+				<div id="accountingController" class="naviItems__naviItem">
+					<div class="naviItem__itemCurcle">
+						<div class="itemCurcle__Icon">
+							<i class="fa-solid fa-hand-holding-dollar"></i>
+						</div>
+					</div>
+					<div class="naviItem__title">회계지원</div>
+				</div>
 			</div>
 		</div>
-		
-		<script>
-			$(document).on("click", ".naviItem__itemCurcle", function() {
-				if($(this).siblings().html() == "메일") {
-					location.href = "/mail";
-				}
-				if($(this).siblings().html() == "인사") {
-					location.href = "/humanResources";
-				}
-				
-				if($(this).siblings().html() == "일정") {
-					location.href = "/schedule";
-				}
-				
-				if($(this).siblings().html() == "주소록") {
-					location.href = "/addressbook";
-				}
-			})
-			
-			$(document).ready(function() {
-				$.ajax({
-					url: "/members/isAdmin"
-				}).done(function(resp) {
-					console.log(resp);
-					if(resp == "인사") {
-						
-					}
-				})
-			})
-		</script>
 
 		<!-- MainContents  -->
 		<div class="mainContents">
@@ -131,30 +129,30 @@
 				<div class="workCheck">
 					<div class="mainContents__title">근무체크</div>
 					<div class="mainContents__contentBox">
-						<div class="contentBox__date">10월 26일 (목)</div>
+						<div class="contentBox__date"></div>
 						<div class="contentBox__timeline">
 							<div class="timeline__time">15:03:48</div>
 							<div class="timeline__status">출근전</div>
 						</div>
 						<div class="contentBox__commute">
-							<div class="commute__work">
+							<div class="commute__work" id="attendBtn">
 								<div class="work__text">출근하기</div>
-								<div class="work__time">00:00:00</div>
+								<div class="work__time" id="attendTime">00:00:00</div>
 							</div>
 							<div class="mainContents__line"></div>
-							<div class="commute__work">
+							<div class="commute__work" id="leaveBtn">
 								<div class="work__text">퇴근하기</div>
-								<div class="work__time">00:00:00</div>
+								<div class="work__time" id="leaveTime">00:00:00</div>
 							</div>
 						</div>
-						<div class="contentBox__btns">
+						<div class="contentBox__btns" id="workConditionBtns">
 							<div class="btns__line">
-								<button>업무</button>
-								<button>외출</button>
+								<button id="working">업무</button>
+								<button id="goingOut">외출</button>
 							</div>
 							<div class="btns__line">
-								<button>회의</button>
-								<button>외근</button>
+								<button id="conference">회의</button>
+								<button id="outside">외근</button>
 							</div>
 						</div>
 					</div>
@@ -196,10 +194,14 @@
 				<div class="schedule">
 					<div class="mainContents__title">일정</div>
 					<div class="mainContents__contentBox">
-						<div class="contentBox__calendar"></div>
+						<div class="contentBox__calendar">
+							<div id="homeCalendar"></div>
+						</div>
 						<hr></hr>
 						<div class="contentBox__scheduleList">
-							<c:forEach var="test" begin="1" end="3" step="1">
+							<div id="calendarList"></div>
+						
+							<%-- <c:forEach var="test" begin="1" end="3" step="1">
 								<div class="scheduleList__scheduleItem">
 									<div class="scheduleItem__date">
 										<div class="date__dayNum">${test }</div>
@@ -211,7 +213,7 @@
 										<div class="plan__time">${test }</div>
 									</div>
 								</div>
-							</c:forEach>
+							</c:forEach> --%>
 						</div>
 					</div>
 				</div>
@@ -219,5 +221,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- 일정 추가 모달창 -->
+	<%@ include file="../jsp/schedule/scheduleInsertModal.jsp"%>
 </body>
 </html>

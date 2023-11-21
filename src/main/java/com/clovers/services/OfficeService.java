@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.clovers.commons.EncryptionUtils;
@@ -35,7 +36,12 @@ public class OfficeService {
 		return dao.selectPositionAll();
 	}
 
-	// 사용자 수 불러오기
+	// 실제 db에 저장된 실 사용자 수 불러오기
+	public int selectRealEmpCount() {
+		return dao.selectRealEmpCount();
+	}
+
+	// 사번 입력할때 사용할 사용자 수 불러오기 -> 삭제된 사용자까지 합쳐서 숫자 셈
 	public int selectEmpCount() {
 		return dao.selectEmpCount();
 	}
@@ -82,6 +88,24 @@ public class OfficeService {
 
 		// 사내 이메일은 id랑 똑같이 저장
 		dto.setCompany_email(dto.getId());
+		
+		// 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록
+		String jobName = dao.selectJobName(dto.getJob_id());
+		String taskName = dao.selectDeptTaskName(dto.getDept_task_id());
+		dto.setJob_name(jobName);
+		dto.setTask_name(taskName);
+		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			System.out.println("총괄 등록");
+			dao.insertTotalAdmin(id);
+		}else if(taskName.contains("인사")) {
+			System.out.println("인사 등록");
+			dao.insertHRAdmin(id);
+		}else if(taskName.contains("회계")) {
+			System.out.println("회계 등록");
+			dao.insertACAdmin(id);
+		}
+		
+		System.out.println(dto);
 
 		return dao.insertUser(dto);
 	}
@@ -112,6 +136,56 @@ public class OfficeService {
 
 	// 사용자 이름, id 검색하기
 	public List<Map<String, String>> searchUser(String keyword) {
-		return dao.searchUser(keyword);
+		return dao.searchUser("%"+keyword+"%");
+	}
+
+	// 부서별 부서명, 인원 수 불러오기
+	public List<Map<String, Object>> selectDeptInfo() {
+		return dao.selectDeptInfo();
+	}
+
+	// 부서별 팀별 인원 수 불러오기
+	public List<Map<String, Object>> selectTaskInfo() {
+		return dao.selectTaskInfo();
+	}
+
+	// 부서별 인원 정보 불러오기
+	public List<Map<String, Object>> selectDepartmentEmpInfo(String dept_id) {
+		return dao.selectDepartmentEmpInfo(dept_id);
+	}
+
+	// 모든 부서별 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectAllEmpInfo() {
+		return dao.selectAllEmpInfo();
+	}
+	
+	// 팀별 인원 정보 불러오기 - 이름, 부서명, id
+	public List<Map<String, Object>> selectDetpTaskEmpInfo(String task_id){
+		return dao.selectDetpTaskEmpInfo(task_id);
+	}
+	
+	// 팀별(생산1팀,2팀..)인원수, 부서명
+	public List<Map<String, Object>> selectAllTaskNameEmpo(){
+		return dao.selectAllTaskNameEmpo();
+	}
+	
+	// 임직원 정보에서 부서 클릭하면 정보
+	public List<Map<String, Object>> selectDeptEmpo(){
+		return dao.selectDeptEmpo();
+	}
+	
+	// 부서 클릭하면 정보 
+	public List<Map<String, Object>> selectByDeptName(String dept_name){
+		return dao.selectByDeptName(dept_name);
+	}
+	
+	// 팀 클릭하면 정보
+	public List<Map<String, Object>> selectByTaskName(String task_name){
+		return dao.selectByTaskName(task_name);
+	}
+	
+	// 임직원 검색
+	public List<Map<String, Object>> searchByName(String name){
+		return dao.searchByName(name);
 	}
 }

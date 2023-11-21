@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<link rel="stylesheet" href="/css/commons/basicSetting.css">
 <link rel="stylesheet" href="/css/humanresources/mypage.css">
 <title>내 정보 관리</title>
 </head>
@@ -29,7 +30,14 @@
                 <div class="mypageBox__profileBoxMid">
                     <div class="profileBoxMid">
                         <div class="profileImageBox align_center">
-                            <img src="/uploads/${list.profile_img }" alt="프로필 사진" class="profileImage">
+                        	<c:choose>
+                        		<c:when test="${empty list.profile_img}">
+                        			<img src="/assets/profile.png" alt="프로필 사진" class="profileImage">
+                        		</c:when>
+                        		<c:otherwise>
+                        			<img src="/uploads/${list.profile_img }" alt="프로필 사진" class="profileImage">
+                        		</c:otherwise>
+                        	</c:choose>
                         </div>
                         <div class="profileDesBox">
                             <div class="profileDesBox__idBox">
@@ -71,7 +79,14 @@
 	                                <div class="profileImageBox">
 	                                	<div>
 		                                    <div>
-		                                    	<img src="/uploads/${list.profile_img }" id="profile_img" name="profile_img" alt="프로필 사진" class="profileImage">
+		                                    	<c:choose>
+					                        		<c:when test="${empty list.profile_img}">
+					                        			<img src="/assets/profile.png" alt="프로필 사진" class="profileImage" name="profileImage">
+					                        		</c:when>
+					                        		<c:otherwise>
+					                        			<img src="/uploads/${list.profile_img }" alt="프로필 사진" class="profileImage" name="profileImage">
+					                        		</c:otherwise>
+					                        	</c:choose>
 		                                    </div>
                                             <div style="padding-top: 17px;">
                                                 <label for="input-image" class="profileImageBtn">프로필 수정</label>
@@ -115,6 +130,21 @@
 	                                <div class="profileRight">
 	                                    <div>${list.dept_name }</div>
 	                                </div>
+	                            </div>
+	                            
+	                            <div class="profileBox__inner">
+	                                <div class="profileLeft">
+	                                    <span>아이디</span>
+	                                </div>
+	                                <div class="profileRight">
+	                                    <div><input type="text" name="company_email" id="company_email" value=${list.company_email }></div>
+	                                </div>
+	                                <!-- 아이디 regex -->
+									<div class="profileRexBox">
+										<div class="company_email__regex">
+
+										</div>
+									</div>
 	                            </div>
 	
 	                            <div class="profileBox__inner">
@@ -211,31 +241,17 @@
 	
 	// 내 정보 관리 클릭
     $(".profileBtn").click(function () {
-        
-    	// 비밀번호가 사원의 이름과 같으면 변경하는 페이지로 이동시킴
-        $.ajax({
-        	url:"/humanResources/recommendChangPw",
-        	type:"POST",
-        	data : {
-        		id : $(".inputIdNum").val(),
-        		name : $(".inputNameNum").val()
-        	}
-        }).done(function(resp){
-        	console.log(resp);
-        	if(resp == "변경추천"){
-        		alert("비밀번호를 변경해주세요.");
-        		location.href="/humanResources/goChangePw";
-        	}else{
-        		$(".profileBtn").css("display", "none");
-                $(".profileBtnCancle").css("display", "inline");
-                $(".profileBtnSave").css("display", "inline");
-                $(".profileBoxClick").css("display","inline");
+       
+  		$(".profileBtn").css("display", "none");
+        $(".profileBtnCancle").css("display", "inline");
+        $(".profileBtnSave").css("display", "inline");
+        $(".profileBoxClick").css("display","inline");
 
-                $(".mypageBox__profileBoxTop").find(".profileSetting").html("내 정보 관리");
-                $(".profileBoxMid").css("display", "none");
-        	}
-        })
+        $(".mypageBox__profileBoxTop").find(".profileSetting").html("내 정보 관리");
+        $(".profileBoxMid").css("display", "none");
     });
+	
+
 
     // 취소 클릭
     $(".profileBtnCancle").click(function () {
@@ -252,7 +268,7 @@
 		var reader = new FileReader();
 
 		reader.onload = function(event){
-			$("#profile_img").attr("src",event.target.result);
+			$(".profileImage").attr("src",event.target.result);
 			console.log(event.target.result);
 		}
 
@@ -291,8 +307,20 @@
 		}
 	});
 
-	//		사내전화 regex -> 사내전화가 어떤 형식인지 몰라서 못함
-
+	//		아이디 regex 대소문자랑 숫자만 포함해서 8글자 이상
+	let idRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+	$("#company_email").keyup(function(e){
+		result = idRegex.test($("#company_email").val());
+		
+		if (!result) {
+			$(".company_email__regex").html("아이디 형식이 올바르지 않습니다.").css({ "font-size": "12px", "color": "red" });
+			regexResult = false;
+		}
+		if (result) {
+			$(".company_email__regex").html("");
+			regexResult=true;
+		}
+	});
 
 	// 
 	$(".profileBtnSave").click(function(){

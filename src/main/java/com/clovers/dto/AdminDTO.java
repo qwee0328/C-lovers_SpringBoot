@@ -16,10 +16,14 @@ import lombok.ToString;
 public class AdminDTO {
 	
 	public enum AuthorityCategories{
-		TOTAL_MANAGER,HUMAN_RESOURCE_MANAGER,ELECTRIC_APPROVAL_MANAGER,RESERVATION_MANAGER
+		총괄,
+		인사,
+		전자결재,
+		회계
 	}
-	
+	private int id;
 	private String emp_id;
 	private Timestamp reg_date;
-	private AuthorityCategories autority_category_id;
+	private AuthorityCategories authority_category_id;
+	private int exists;
 }

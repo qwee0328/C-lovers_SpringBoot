@@ -8,6 +8,10 @@
 		insert into chat_room values(#{id},#{state} )
 	</insert>
 	
+	<select id="selectStateByChatRoomId" resultType="String">
+		select state from chat_room where id = ${id}
+	</select>
+	
 	<update id="updateChatRoomState">
 		update chat_room set state = #{state} where id = #{id}
 	</update>
@@ -15,6 +19,5 @@
 	<delete id="deleteChatRoom">
 		delete from chat_room where id = ${id}
 	</delete>
-	
 	
 </mapper>

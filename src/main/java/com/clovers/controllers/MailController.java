@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.clovers.constants.Constants;
 import com.clovers.dto.EmailDTO;
 import com.clovers.dto.EmailFileDTO;
-import com.clovers.dto.MemberDTO;
 import com.clovers.services.MailService;
 
 import jakarta.servlet.ServletOutputStream;
@@ -55,21 +54,9 @@ public class MailController {
 	@RequestMapping("")
 	public String main() {
 		String title = "메일";
-		String naviBtn = "편지 쓰기";
-		String naviBtnLocation = "send";
-		String[] naviIcon = {"fa-inbox", "fa-paper-plane", "fa-box-archive", "fa-clock", "fa-trash"};
-		String[] naviMenu = {"받은 편지함", "보낸 편지함", "임시 편지함", "보낼 편지함", "휴지통"}; 
-		String [] naviMenuLocation = {"inBox", "sentBox", "tempBox", "outBox", "trash"};
-		int naviMenuLength = naviMenu.length;
 		String currentMenu = "받은 편지함";
 		
 		session.setAttribute("title", title);
-		session.setAttribute("naviBtn", naviBtn);
-		session.setAttribute("naviBtnLocation", naviBtnLocation);
-		session.setAttribute("naviIcon", naviIcon);
-		session.setAttribute("naviMenu", naviMenu);
-		session.setAttribute("naviMenuLocation", naviMenuLocation);
-		session.setAttribute("naviMenuLength", naviMenuLength);
 		session.setAttribute("currentMenu", currentMenu);
 		
 		return "mail/inBox";
@@ -155,7 +142,7 @@ public class MailController {
 	
 	// 완전삭제
 	@RequestMapping("/perDeleteMail")
-	public String perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+	public String perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) throws Exception {
 		for(int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
 			mservice.perDeleteMail(id);
@@ -339,7 +326,7 @@ public class MailController {
 	
 	// 완전삭제
 	@RequestMapping("/read/perDelete")
-	public String perDeleteAtRead(@RequestParam int id) {
+	public String perDeleteAtRead(@RequestParam int id) throws Exception {
 		mservice.perDeleteMail(id);
 		return "redirect:/mail";
 	}
@@ -372,7 +359,7 @@ public class MailController {
 	// 파일 다운로드
 	@RequestMapping("/downloadFile")
 	public void downloadFile(@RequestParam String sysname, @RequestParam String oriname, HttpServletResponse response) throws Exception {
-		String realPath = "/Users/mailUploads";
+		String realPath = "C:/mailUploads";
 		File targetFile = new File(realPath + "/" + sysname);
 		
 		oriname = new String(oriname.getBytes("utf8"), "ISO-8859-1");
@@ -473,8 +460,7 @@ public class MailController {
 	// summernote 이미지 경로에서 삭제
 	@RequestMapping("/deleteImage")
 	public void deleteImage(@RequestParam("src") String src) throws Exception {
-		Path path = FileSystems.getDefault().getPath("/Users/" + src); // String을 Path 객체로 변환
-		System.out.println(path);
+		Path path = FileSystems.getDefault().getPath("C:/" + src); // String을 Path 객체로 변환
 		Files.deleteIfExists(path);
 	}
 	
@@ -518,5 +504,17 @@ public class MailController {
 			mservice.restoreMail(id);
 		}
 		return "redirect:/mail";
+	}
+	
+	
+	
+	
+	// ------------- 주소록에서 이메일 눌렀을 때 메일 창으로 이동
+	@RequestMapping("/sendSetEmail")
+	public String sendSetEmail(@RequestParam("addressEmail") String addressEmail, Model model) {
+		EmailDTO reply = new EmailDTO();
+		reply.setSend_id(addressEmail);
+		model.addAttribute("reply", reply);
+		return "/mail/send";
 	}
 }
