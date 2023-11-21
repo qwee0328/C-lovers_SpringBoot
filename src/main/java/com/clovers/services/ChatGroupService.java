@@ -13,6 +13,7 @@ import com.clovers.dao.ChatMessageDAO;
 import com.clovers.dao.ChatRoomDAO;
 import com.clovers.dao.MemberDAO;
 import com.clovers.dto.ChatGroupDTO;
+import com.clovers.dto.ChatRoomDTO;
 
 @Service
 public class ChatGroupService {
@@ -65,7 +66,7 @@ public class ChatGroupService {
 	    }
 	    // 1:1 채팅방이 없다면 채팅방 생성 시작.
 	    try {
-	        String newChatroomId = crdao.createChatRoom();
+	        String newChatroomId = crdao.createPersonalChat();
 	        String loginName = mdao.selectNameById(loginID);
 	        String employeeName = mdao.selectNameById(employee_id);
 	        this.inviteInitChatGroup(employee_id, newChatroomId,loginName);
@@ -82,7 +83,7 @@ public class ChatGroupService {
 	@Transactional
 	public String setGroupChattingRoomAndGroup(List<String> selectedEmployees, String loginID) {
 		try {
-			String newChatroomId = crdao.createChatRoom();
+			String newChatroomId = crdao.createGroupChat();
 			String loginName = mdao.selectNameById(loginID);
 			this.inviteInitChatGroup(loginID, newChatroomId,"그룹채팅 made by " + loginName);
 			for(String employee_id : selectedEmployees) {
@@ -97,7 +98,18 @@ public class ChatGroupService {
 	
 	// 이미 만들어진 채팅그룹에 초대
 	@Transactional
-	public String setAlreadyExistChatGroupInvite(List<String> selectedEmployees, String chat_room_id,String loginID) {
+	public String setAlreadyExistChatGroupInvite(List<String> selectedEmployees, String chat_room_id, String loginID) {
+		
+		String roomState = crdao.selectStateByChatRoomId(chat_room_id);
+		
+		if(ChatRoomDTO.ChatRoomStates.ACTIVEPERSONAL.equals(
+				Enum.valueOf(ChatRoomDTO.ChatRoomStates.class, roomState))) {
+			ChatRoomDTO crdto = new ChatRoomDTO();
+			crdto.setId(chat_room_id);
+			crdto.setState(ChatRoomDTO.ChatRoomStates.ACTIVEPERSONAL);
+			crdao.updateChatRoomState(crdto);
+		}
+		
 		try {
 			String loginName = mdao.selectNameById(loginID);
 			for(String employee_id : selectedEmployees) {

@@ -83,12 +83,15 @@
 
 	<!-- 1:1 채팅 시작 시 이미 둘이 존재하는 채팅방이 존재 하는 경우 -->
 	<select id="getExist1v1ChatRoom" resultType="String">
-		SELECT chat_room_id
-		FROM chat_group
-		WHERE emp_id IN (#{employee_id}, #{session_id})
-		GROUP BY
-		chat_room_id
+		SELECT
+		cg.chat_room_id
+		FROM chat_group cg
+		JOIN chat_room cr ON cg.chat_room_id = cr.id
+		WHERE cg.emp_id IN (#{employee_id}, #{session_id})
+		AND cr.state = 'ACTIVEPERSONAL'
+		GROUP BY cg.chat_room_id
 		HAVING COUNT(*) = 2;
+
 	</select>
 
 	<select id="selectChatGroupListByEmpId"
@@ -114,13 +117,15 @@
 	<delete id="closeChatGroup">
 		delete from chat_group
 		where chat_room_id IN (
-		select chat_room_id
+		select
+		chat_room_id
 		from (
 		select chat_room_id, count(emp_id) as employee_count
 		from chat_group
 		group by chat_room_id
 		) as grouped
-		where employee_count = 1
+		where employee_count =
+		1
 		);
 	</delete>
 
