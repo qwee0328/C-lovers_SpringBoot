@@ -23,7 +23,7 @@
 	</resultMap>
 
 
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
 		<selectKey keyProperty="exists" resultType="int"
 			order="BEFORE">
 			SELECT COUNT(*) FROM admin
@@ -34,7 +34,7 @@
 		<if test="exists == 0">
 			INSERT INTO admin (emp_id, reg_date,
 			authority_category_id)
-			VALUES (#{emp_id}, #{reg_date},
+			VALUES (#{emp_id}, now(),
 			#{authority_category_id});
 		</if>
 	</insert>
@@ -43,6 +43,15 @@
 	<select id="selectAll" resultMap="AdminInfoMap">
 		select * from admin_info
 	</select>
+	
+	<select id="newestId" resultType="int">
+		SELECT id FROM admin ORDER BY id DESC LIMIT 1;
+	</select>
+	
+	<select id="selectByAdminId" resultMap="AdminInfoMap">
+		select * from admin_info where id=#{id}
+	</select>
+	
 	
 	<select id="selectAllCount" resultMap="AdminCountMap">
 		select * from authority_category_count

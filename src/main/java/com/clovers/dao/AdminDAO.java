@@ -15,13 +15,23 @@ public class AdminDAO {
 	@Autowired
 	private SqlSession db;
 	
-	public int insert(AdminDTO adto) {
-		return db.insert("Admin.insert", adto);
+	public int insert(AdminDTO dto) {
+		db.insert("Admin.insert", dto);
+		return dto.getId();
 	}
 	
 	public List<Map<String,Object>> selectAll(){
 		return db.selectList("Admin.selectAll");
 	}
+	
+	public int newestId() {
+		return db.selectOne("Admin.newestId");
+	}
+	
+	public Map<String,Object> selectByAdminId(int id){
+		return db.selectOne("Admin.selectByAdminId",id);
+	}
+	
 	
 	public List<Map<String,Object>> selectAllCount(){
 		return db.selectList("Admin.selectAllCount");
@@ -36,8 +46,8 @@ public class AdminDAO {
 		return db.update("Admin.updateAdminInfo",param);
 	}
 	
-	public int deleteById(int id) {
-		return db.delete("Admin.deleteById",id);
+	public int deleteById(int param) {
+		return db.delete("Admin.deleteById",param);
 	}
 	
 	
