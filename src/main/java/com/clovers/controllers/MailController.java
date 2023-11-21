@@ -179,7 +179,9 @@ public class MailController {
 	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
-		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		// 로그인한 사용자의 이메일 가져오기
+		String receive_id = mservice.getEmailByLoginID((String)session.getAttribute("loginID"));
+		
 		List<EmailDTO> mail = mservice.inBoxList(receive_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		String[] send_date = new String[mail.size()];
 		for(int i = 0; i < mail.size(); i++) {
@@ -206,6 +208,7 @@ public class MailController {
 	public Map<String, Object> sentBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
+		// 로그인한 사용자의 이메일 가져오기
 		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		boolean temporary = false;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
@@ -234,6 +237,7 @@ public class MailController {
 	public Map<String, Object> tempBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
+		// 로그인한 사용자의 이메일 가져오기
 		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		boolean temporary = true;
 		List<EmailDTO> mail = mservice.sentBoxList(send_id, temporary, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
@@ -273,6 +277,7 @@ public class MailController {
 	public Map<String, Object> outBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		
+		// 로그인한 사용자의 이메일 가져오기
 		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		List<EmailDTO> mail = mservice.outBoxList(send_id, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		Map<String, Object> param = new HashMap<>();
@@ -376,6 +381,18 @@ public class MailController {
 	
 	
 	// ---------- send ----------
+	
+	// 로그인한 사용자의 이메일을 보낸 사람으로 세팅
+	@ResponseBody
+	@RequestMapping("/getUserEmail")
+	public String getUserEmail() {
+		String loginID = (String) session.getAttribute("loginID");
+		
+		// 로그인한 사용자의 이메일 가져오기
+		String send_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		
+		return send_id;
+	}
 	
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")

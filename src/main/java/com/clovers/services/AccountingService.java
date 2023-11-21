@@ -26,9 +26,28 @@ public class AccountingService {
 	public List<AccountingDTO> searchBy(String keyword){
 		return adao.searchBy(keyword);
 	}
-	
-	public int insert( AccountingDTO dto){
-		return adao.insert(dto);
+	// 계좌 추가
+	public int insert(AccountingDTO dto){
+		System.out.println(dto.getEmp_id());
+		
+		String emp_id = dto.getEmp_id();
+		
+		int isEmployee = adao.isEmployee(emp_id);
+		
+		System.out.println("직원 맞음? (1: 맞음,0:아님) : "+isEmployee);
+		// 직원이 맞음
+		if(isEmployee==1) {
+			int isEmpId = adao.isEmpId(emp_id);
+			
+			// 계좌가 등록된 직원이 아니면
+			if(isEmpId == 0) {
+				return adao.insert(dto); // 1 반환
+			}else {
+				return 0;
+			}
+		}else {
+			return 0;
+		}
 	}
 	
 	public int deleteAccount(String id){
@@ -39,19 +58,59 @@ public class AccountingService {
 		return adao.update(dto);
 	}
 	
-	/////////
+	/////법인카드////
+	// 카드 리스트 전부 부르기
 	public List<AccountingDTO> selectCardAll(){
 		return adao.selectCardAll();
 	}
+	// 검색
 	public List<AccountingDTO> searchCard(String keyword){
 		return adao.searchCard(keyword);
 	}
-	public int insertCard( AccountingDTO dto){
-		return adao.insertCard(dto);
+	// 카드 추가
+	public String insertCard( AccountingDTO dto){
+		System.out.println(dto.getEmp_id());
+		
+		String emp_id = dto.getEmp_id();
+		
+		// 사번이 등록되어있는지 아닌지 확인
+		int isEmployee = adao.isEmployee(emp_id);
+		
+		// 직원이 맞음
+		if(isEmployee==1) {
+			
+			// 카드번호(유니크키) 중복 확인
+			String cardNum = dto.getId();
+			int cardResult = adao.isAlreadyCardNum(cardNum);
+			
+			// 카드번호가 중복 X
+			if(cardResult ==0) {
+				
+				// 사번 등록되었는지 확인
+				int isEmpId = adao.isEmpCardId(emp_id);
+				
+				// 사번 중복 X
+				if(isEmpId == 0) {
+					adao.insertCard(dto);
+					return "성공";
+				}else {
+					return "사번을 다시 확인해주세요.";
+				}
+			}else {
+				return "카드번호를 다시 확인해주세요";
+			}
+			
+		}else { // 직원이 아님(사번이 등록 X)
+			return "사번이 등록되어있지 않습니다.";
+		}
+		
+		
 	}
+	// 카드 삭제
 	public int deleteCard(String id){
 		return adao.deleteCard(id);
 	}
+	// 카드 수정
 	public int updateCard(AccountingDTO dto){
 		return adao.updateCard(dto);
 	}

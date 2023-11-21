@@ -118,7 +118,7 @@
 	</select>
 	
 	<select id="getEmailByLoginID" resultType="String">
-		select * from employee where id = #{loginID}
+		select company_email from employee where id = #{loginID}
 	</select>
 	
 	<update id="updateMail">

@@ -250,27 +250,63 @@ public class HumanResourcesService {
 	}
 
 	// 사용자의 휴가 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetails() {
+	public Map<String, Object> selectAnnaulAppDetails(int start, int count) {
 		String id = (String) session.getAttribute("loginID");
-		return dao.selectAnnaulAppDetails(id);
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("start", start);
+		param.put("count", count);
+		//return ;
+		Map<String, Object> result = new HashMap<>();
+		result.put("detail", dao.selectAnnaulAppDetails(param));
+		result.put("recordTotalCount", dao.selectAnnaulAppCount(id));
+		System.out.println("size"+result.get("recordTotalCount"));
+		return result;
 	}
 
 	// 사용자의 최근 1년치 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetailsForYear() {
+	public Map<String, Object> selectAnnaulAppDetailsForYear(int start, int count) {
 		String id = (String) session.getAttribute("loginID");
-		return dao.selectAnnaulAppDetailsForYear(id);
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("start", start);
+		param.put("count", count);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("detail", dao.selectAnnaulAppDetailsForYear(param));
+		result.put("recordTotalCount", dao.selectAnnaulAppForYearCount(id));
+		System.out.println("size"+result.get("recordTotalCount"));
+		return result;
 	}
 
 	// 사용자의 최근 1달치 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth() {
+	public Map<String, Object> selectAnnaulAppDetailsForMonth(int start, int count) {
 		String id = (String) session.getAttribute("loginID");
-		return dao.selectAnnaulAppDetailsForMonth(id);
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("start", start);
+		param.put("count", count);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("detail", dao.selectAnnaulAppDetailsForMonth(param));
+		result.put("recordTotalCount", dao.selectAnnaulAppForMonthCount(id));
+		System.out.println("size"+result.get("recordTotalCount"));
+		return result;
 	}
 
 	// 사용자의 최근 1주일치 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek() {
+	public Map<String, Object> selectAnnaulAppDetailsForWeek(int start, int count) {
 		String id = (String) session.getAttribute("loginID");
-		return dao.selectAnnaulAppDetailsForWeek(id);
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("start", start);
+		param.put("count", count);
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("detail", dao.selectAnnaulAppDetailsForWeek(param));
+		result.put("recordTotalCount", dao.selectAnnaulAppForWeekCount(id));
+		System.out.println("size"+result.get("recordTotalCount"));
+		return result;
 	}
 
 	// 임직원 정보 전부 불러오기

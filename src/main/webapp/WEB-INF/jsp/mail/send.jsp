@@ -204,7 +204,7 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
-				<input type="hidden" name="send_id" value=${loginID } />
+				<input type="hidden" id="send_id" name="send_id"/>
 				<c:choose>
 					<c:when test="${not empty reply.id }">
 						<input type="hidden" name="id" value=${reply.id } />
