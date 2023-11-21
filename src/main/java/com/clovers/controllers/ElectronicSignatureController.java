@@ -1,8 +1,8 @@
 package com.clovers.controllers;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -311,6 +311,29 @@ public class ElectronicSignatureController {
 	@RequestMapping("/getVacationInfo")
 	public List<Map<String, Object>> getVacationInfo(String document_id) {
 		return esservices.getVacationInfo(document_id);
+	}
+	
+	// 지출 결의서 정보 출력
+	@ResponseBody
+	@RequestMapping("/getExpenceInfo")
+	public Map<String, Object> getExpenceInfo(String document_id) {
+		Map<String, Object> expense_info = esservices.getExpenceInfo(document_id);
+
+		String spender_id = expense_info.get("spender_id").toString();
+		
+		Map<String, String> account = new HashMap<>();
+		// 구분이 개인이면 개인 계좌
+		if(expense_info.get("expense_category").toString().equals("개인")) {
+			account = esservices.getPersonalAccount(spender_id);
+		// 구분이 법인이면 법인 계좌
+		} else if(expense_info.get("expense_category").toString().equals("법인")) {
+			account = esservices.getCorporateAccount(spender_id);
+		}
+		
+		expense_info.put("account_name", account.get("bank"));
+		expense_info.put("account_id", account.get("id"));
+		
+		return expense_info;
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

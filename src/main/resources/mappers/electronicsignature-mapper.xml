@@ -302,4 +302,31 @@
 		WHERE 
 		    d.id = #{document_id};
 	</select>
+	
+	<!-- // 지출 결의서 정보 출력 -->
+	<select id="getExpenceInfo" resultType="map">
+		SELECT 
+	        eri.*, 
+	        e.name AS spender_name
+	    FROM 
+	        expense_resolution_info eri
+	    JOIN 
+	        employee e ON eri.spender_id = e.id
+	    WHERE 
+	        eri.document_id = #{document_id}
+	</select>
+	
+	<!-- 개인 계좌 불러오기 -->
+	<select id="getPersonalAccount" resultType="map">
+		SELECT id, bank
+		FROM emp_account
+		WHERE emp_id = #{spender_id}
+	</select>
+	
+	<!-- 법인 계좌 불러오기 -->
+	<select id="getCorporateAccount" resultType="map">
+		SELECT id, bank
+		FROM corp_card
+		WHERE emp_id = #{spender_id}
+	</select>
 </mapper>

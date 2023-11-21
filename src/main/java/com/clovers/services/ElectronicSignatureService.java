@@ -334,4 +334,19 @@ public class ElectronicSignatureService {
 	public Map<String, String> getMainDrafterDept(String document_id) {
 		return dao.getMainDrafterDept(document_id);
 	}
+
+	// 지출 결의서 정보 출력
+	public Map<String, Object> getExpenceInfo(String document_id) {
+		return dao.getExpenceInfo(document_id);
+	}
+
+	// 개인 계좌 가져오기
+	public Map<String, String> getPersonalAccount(String spender_id) {
+		return dao.getPersonalAccount(spender_id);
+	}
+
+	// 법인 계좌 가져오기
+	public Map<String, String> getCorporateAccount(String spender_id) {
+		return dao.getCorporateAccount(spender_id);
+	}
 }

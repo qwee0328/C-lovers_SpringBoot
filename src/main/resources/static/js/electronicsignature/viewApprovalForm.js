@@ -26,7 +26,11 @@ $(document).ready(function() {
 			url : "/electronicsignature/getExpenceInfo",
 			data : { document_id : document_id }
 		}).done(function(resp){
-			
+			$("#division").text(resp.expense_category);
+			$("#account_base_month").text(resp.expense_date);
+			$("#spender_id").text(resp.spender_name);
+			$("#account_info").text(resp.account_name + " / " + resp.account_id);
+			$("#executive_summary").text(resp.summary);
 		})
 	// 업무연락
 	} else if($("#document_type").t() == '휴가 신청서') {

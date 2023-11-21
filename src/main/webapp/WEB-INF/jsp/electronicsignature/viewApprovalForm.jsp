@@ -64,9 +64,7 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="approvalInfoTable__agree">
-							<div class="agree__choice">신청</div>
-						</th>
+						<th scope="row" class="approvalInfoTable__agree">신청</th>
 						<td>
 							<table class="approvalApplicationTable">
 								<colgroup>
@@ -105,9 +103,7 @@
 								</tbody>
 							</table>
 						</td>
-						<th scope="row" class="approvalInfoTable__agree">
-							<div class="agree__choice">처리</div>
-						</th>
+						<th scope="row" class="approvalInfoTable__agree">처리</th>
 						<td>
 							<table class="approvalProcessTable">
 								<colgroup>
@@ -178,10 +174,39 @@
 					</table>
 				</c:when>
 				<c:when test="${documentInfo.get(0).document_type_id == '지출 결의서'}">
-					<div>지출 결의서</div>
+					<div class="expense__title">${documentInfo.get(0).title}</div>
+					<table class="expense__table">
+						<colgroup>
+							<col style="width: 160px;">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>구분</th>
+								<td id="division"></td>
+							</tr>
+							<tr>
+								<th>회계 기준월</th>
+								<td id="account_base_month"></td>
+							</tr>
+							<tr>
+								<th>지출자</th>
+								<td id="spender_id"></td>
+							</tr>
+							<tr>
+								<th>계좌 정보</th>
+								<td id="account_info"></td>
+							</tr>
+							<tr>
+								<th>총괄 적요</th>
+								<td id="executive_summary"></td>
+							</tr>
+						</tbody>
+					</table>
 				</c:when>
 				<c:when test="${documentInfo.get(0).document_type_id == '업무연락'}">
 					<div>업무 연락</div>
+					
 				</c:when>
 			</c:choose>
 		</div>

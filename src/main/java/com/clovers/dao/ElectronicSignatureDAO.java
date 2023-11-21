@@ -166,4 +166,19 @@ public class ElectronicSignatureDAO {
 	public Map<String, String> getMainDrafterDept(String document_id) {
 		return db.selectOne("ElectronicSignature.getMainDrafterDept", document_id);
 	}
+
+	// 지출 결의서 정보 출력
+	public Map<String, Object> getExpenceInfo(String document_id) {
+		return db.selectOne("ElectronicSignature.getExpenceInfo", document_id);
+	}
+
+	// 개인 계좌 불러오기
+	public Map<String, String> getPersonalAccount(String spender_id) {
+		return db.selectOne("ElectronicSignature.getPersonalAccount", spender_id);
+	}
+
+	// 법인 계좌 불러오기
+	public Map<String, String> getCorporateAccount(String spender_id) {
+		return db.selectOne("ElectronicSignature.getCorporateAccount", spender_id);
+	}
 }
