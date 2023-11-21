@@ -93,11 +93,7 @@ $(document).ready(function() {
 		}
 		
 		if($(this).find(".inner__title").html() == "회계지원"){
-			
-		}
-		
-		if($(this).find(".inner__title").html() == "게시판"){
-			
+			location.href = "/admin/accounting";
 		}
 		
 		if($(this).find(".inner__title").html() == "주소록"){
@@ -109,7 +105,7 @@ $(document).ready(function() {
 		}
 		
 		if($(this).find(".inner__title").html() == "오피스 관리"){
-			
+			location.href = "/admin/office";
 		}
 		
 		

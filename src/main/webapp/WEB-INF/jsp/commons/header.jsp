@@ -197,9 +197,11 @@
 			<div id="goChat">
 				<i class="fa-regular fa-comment"></i>
 			</div>
+			<!-- 
 			<div>
 				<i class="fa-regular fa-bell"></i>
 			</div>
+			 -->
 			<div class="mainHeader_profileBox">
 <!-- 				<img src="/assets/profile.png" alt="" class="profileImg"/> -->
 			</div>
