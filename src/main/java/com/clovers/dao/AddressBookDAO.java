@@ -96,5 +96,8 @@ public class AddressBookDAO {
 		db.delete("AddressBook.autoDeleteInTrash");
 	}
 
-
+	// 휴지통 즉시 비우기
+	public int immediatelyEmpty(String emp_id) {
+		return db.delete("AddressBook.immediatelyEmpty",emp_id);
+	}
 }

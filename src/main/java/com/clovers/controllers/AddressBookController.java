@@ -173,4 +173,12 @@ public class AddressBookController {
 	public void autoDeleteInTrash() {
 		abservice.autoDeleteInTrash();
 	}
+	
+	
+	// 휴지통 즉시 비우기
+	@ResponseBody
+	@RequestMapping("/immediatelyEmpty")
+	public int immediatelyEmpty() {
+		return abservice.immediatelyEmpty((String)session.getAttribute("loginID"));
+	}
 }

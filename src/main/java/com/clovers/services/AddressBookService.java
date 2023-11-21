@@ -181,4 +181,10 @@ public class AddressBookService {
 	public void autoDeleteInTrash() {
 		dao.autoDeleteInTrash();
 	}
+	
+	
+	// 휴지통 즉시 비우기
+	public int immediatelyEmpty(String emp_id) {
+		return dao.immediatelyEmpty(emp_id);
+	}
 }

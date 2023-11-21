@@ -210,6 +210,10 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 						if(resp[i].existFavorite == resp[i].id){
 							favorites__icon.addClass("chk");
 						}
+						$(".body__emptyTrash").css("display","none");
+					}else{
+						// 휴지통 안내 문구 상단에 추가
+						$(".body__emptyTrash").css("display","block");
 					}
 					let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
 					let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
@@ -388,8 +392,6 @@ $(document).on("click", ".toggleInner", function() {
 });
 
 function indexSelect(target){
-	console.log("재로드");
-	
 	$(".activeMenu").removeClass("activeMenu");
 	
 	if($(target).length == 0){ // 만약 메뉴가 삭제되었다면 개인 전체 선택
@@ -400,6 +402,8 @@ function indexSelect(target){
 		reloadAddressBook($(target).attr("authority"), $(target).attr("data-id"));
 	else reloadAddressBook(parseInt($(target).attr("data-id")), $(target).attr("data-id")); // 그 외 태그 선택
 
+	if($(target).attr("authority") == "trash")
+		$(".body__emptyTrash").css("display","block");
 	$(target).addClass("activeMenu");
 }
 
@@ -608,7 +612,7 @@ $(document).on("click",".addListHeader__copy",function(){
 });
 
 
-// 주소록 클릭 시 샂세 정보창
+// 주소록 클릭 시 상세 정보창
 let addressKeyName = {name:"이름",email:"이메일",number:"전화",birth:"생일",company_name:"회사",dept_name:"부서",job_name:"직급",address:"주소",memo:"메모"}
 $(document).on("click",".addList__addessLine ",function(){ 
 	$.ajax({
@@ -807,4 +811,30 @@ $(document).on("click",".addessLine__email",function(e){
 		e.stopPropagation(); // 상세보기 모달창 뜨지 않게 함. (기존 이벤트 중단)
 		location.href = "/mail/sendSetEmail?addressEmail="+$(this).text();	
 	}
+});
+
+
+// 휴지통에서 즉시 삭제 기능 
+$(document).on("click",".emptyTrash__emptyTrashBtn",function(){
+	Swal.fire({
+		text: "정말 휴지통을 비우시겠습니까?",
+		showCancelButton: true,
+		allowOutsideClick: false,
+	}).then(function(result) {
+		if (result.isConfirmed) {
+			$.ajax({
+				url:"/addressbook/immediatelyEmpty"
+			}).done(function(resp){
+				if(resp==0){
+					Swal.fire({
+						icon: "error",
+						text: "휴지통이 비어있습니다."
+					});
+				}
+				indexSelect($(".activeMenu"));	
+			});
+		} else if (result.isDismissed) {
+			return;
+		}
+	});	
 });
