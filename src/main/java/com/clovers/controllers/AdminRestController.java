@@ -50,25 +50,15 @@ public class AdminRestController {
 	}
 	
 	@PutMapping("updateAdminInfo")
-	public ResponseEntity<Void> insertAdmin(String authority_category_id, int id){
-		int result = aService.updateAdminInfo(AdminDTO.AuthorityCategories.valueOf(authority_category_id), id);
-		if(result > 0) {
-			return ResponseEntity.ok().build();
-		}
-		else {
-			return ResponseEntity.status(400).build();
-		}
+	public ResponseEntity<Void> insertAdmin(List<Map<String,Object>> params){
+		aService.updateAdminInfo(params);
+		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping("deleteById")
-	public ResponseEntity<Void> deleteById(int id){
-		int result = aService.deleteById(id);
-		if(result > 0) {
-			return ResponseEntity.ok().build();
-		}
-		else {
-			return ResponseEntity.status(400).build();
-		}
+	public ResponseEntity<Void> deleteById(List<Integer> elements){
+		aService.deleteById(elements);
+		return ResponseEntity.ok().build();
 	}
 	
 	

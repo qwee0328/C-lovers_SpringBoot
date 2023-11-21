@@ -33,14 +33,29 @@ public class AdminService {
 		return adao.selectAuthorityCategories();
 	}
 	
-	public int updateAdminInfo(AdminDTO.AuthorityCategories authority_category_id, int id) {
-		Map<String,Object> param = new HashMap<>();
-		param.put("authority_category_id", authority_category_id);
-		param.put("id",id);
-		return adao.updateAdminInfo(param);
+//	public int updateAdminInfo(AdminDTO.AuthorityCategories authority_category_id, int id) {
+//		Map<String,Object> param = new HashMap<>();
+//		param.put("authority_category_id", authority_category_id);
+//		param.put("id",id);
+//		return adao.updateAdminInfo(param);
+//	}
+	
+	public void updateAdminInfo(List<Map<String,Object>> params) {
+		for(Map<String,Object> param : params) {
+			Map<String,Object> parameter = new HashMap<>();
+			parameter.put("authority_category_id", param.get("authority_category_id"));
+			parameter.put("id",param.get("id"));
+			adao.updateAdminInfo(parameter);
+		}
 	}
 	
-	public int deleteById(int id) {
-		return adao.deleteById(id);
+//	public int deleteById(int id) {
+//		return adao.deleteById(id);
+//	}
+	
+	public void deleteById(List<Integer> elements) {
+		for(int element: elements) {
+			adao.deleteById(element);
+		}
 	}
 }
