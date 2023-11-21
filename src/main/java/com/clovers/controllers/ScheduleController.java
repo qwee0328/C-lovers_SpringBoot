@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +32,10 @@ public class ScheduleController {
 	@RequestMapping("")
 	public String main() {
 		String title="일정";
-		if(session.getAttribute("currentMenu") == null) { // 주소록 페이지 첫 접속 시 주소록 개인 전체 선택
-			session.setAttribute("currentMenu", "0");
-		}
-	
 		session.setAttribute("title", title);
+		if(session.getAttribute("calIds") == null) { // 선택된 캘린더 정보 저장
+			session.setAttribute("calIds", new ArrayList<Integer>());
+		}
 
 		return "/schedule/scheduleMain";
 	}
@@ -140,10 +140,19 @@ public class ScheduleController {
 	// 선택한 캘린더에 포함된 일정 불러오기
 	@ResponseBody
 	@RequestMapping(value="/selectByCalendarIdSchedule")
-	public List<HashMap<String,Object>> selectByCalendarIdSchedule(@RequestParam(value="calIds[]", required=false)List<Integer> calIds){
-		if(calIds == null || calIds.isEmpty())
+	public List<HashMap<String,Object>> selectByCalendarIdSchedule(@RequestParam(value="calIds[]", required=false)List<Integer> calIds, @RequestParam(value="init", required=false, defaultValue = "0")int init){
+		if(init == 1) {		
+			calIds = (List<Integer>) session.getAttribute("calIds");
+		}
+		if(calIds == null || calIds.isEmpty()) {
+			session.setAttribute("calIds", new ArrayList<Integer>()); // 값이 없으면 빈 arrayList 추가
 			return null;
+		}
+		session.setAttribute("calIds", calIds); // 선택한 캘린더 session에 저장
+		
 		return sService.selectByCalendarIdSchedule(calIds);
+		
+		
 	}
 	
 	
@@ -168,6 +177,10 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/trashCalendar")
 	public int trashCalendar(int id, int trash) {
+		if(session.getAttribute("calIds") != null) {
+			List<Integer> calIds = (List<Integer>) session.getAttribute("calIds");
+			calIds.remove(id);
+		}
 		return sService.trashCalendar(id,trash);
 	}
 	

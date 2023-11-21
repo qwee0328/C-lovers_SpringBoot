@@ -1,4 +1,4 @@
-let eventsLoaded = false;
+let eventsLoaded = 0;
 function modalInitail(type,datas) {
 	$(".modalName").text("일정 추가");
 	$(".insertSchedule__title").val("");
@@ -35,7 +35,7 @@ function modalInitail(type,datas) {
 	});
 }
 
-// 초기 네비 목록 불러오기
+// 네비 목록 불러오기
 function getNavi(){
 	$.ajax({
 		url:"/schedule/selectCalendarByEmpId",
@@ -268,7 +268,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			return e.dayNumberText.replace("일", "");
 		},
 		datesSet: function () {
-		    reloadEvent();
+			if(!eventsLoaded){
+				eventsLoaded = 1;
+				reloadEvent(eventsLoaded);
+			}else{
+				reloadEvent();
+			}
+		  
 	    }
 	});
 
@@ -497,8 +503,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			type:"post",
 			async:false
 		}).done(function(resp){
-			console.log(resp);
-			
 			modalInitail("modify",calendar.getEventById($("#eventId").val()));
 
 			let startDate, startTime, endDate, endTime;
@@ -507,10 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			endDate = resp.end_date.slice(0,10);
 			endTime = resp.end_date.slice(11,16);
 
-	
-			console.log($(".calendarModal__calNameList").val(resp.calendar_id));
 			$(".calendarModal__calNameList").val(resp.calendar_id).prop("selected",true);
-			console.log($(".calendarModal__calNameList option:selected").val());
 
 			$(".insertSchedule__content").html(resp.content);
 			$(".insertSchedule__title").val(resp.title);
@@ -690,8 +691,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	calendar.render();
 	
-	function reloadEvent(){ // 캘린더 선택 시 이벤트 다시 로드
+	function reloadEvent(init){ // 캘린더 선택 시 이벤트 다시 로드
 		calendar.removeAllEvents();
+		
+		
+		if(init ==1){ // 누른 캘린더 기억하도록 (로그아웃 시 초기화)
+			let arrString = $("#calIds").val();
+			let arr = arrString.replace(/\[|\]/g, '').split(',');
+			arr.map((e,i)=>{
+				$(".customMenu[data-id='"+parseInt(e)+"']").addClass("selectNavi");
+				let color = $(".customMenu[data-id='"+parseInt(e)+"']").find(".naviConp__calColor");
+				color.css("background-color",color.attr("data-color"));
+			})
+		}
+		
+		
+		
 		if($(".selectNavi").length>=1){
 			let calIds = $(".selectNavi").map((i,e)=>{
 				return parseInt($(e).attr("data-id"));
@@ -699,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 			$.ajax({
 				url:"/schedule/selectByCalendarIdSchedule",
-				data:{calIds:calIds},
+				data:{calIds:calIds, init:init},
 				type:"post",
 				async:false
 			}).done(function(resp){

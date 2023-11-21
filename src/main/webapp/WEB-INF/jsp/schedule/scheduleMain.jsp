@@ -36,6 +36,7 @@
 </head>
 
 <body>
+<input type="hidden" id="calIds" value="${calIds}">
 	<%@ include file="../commons/header.jsp"%>
 
 	<div class="container d-flex">
