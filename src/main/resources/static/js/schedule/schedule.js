@@ -777,7 +777,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	// 캘린더 수정 모달
 	$(document).on("click",".customMenu .editNavi, .trashMenu .editNavi",function(e){
-		console.log($(this));
 		e.stopPropagation(); // 수정 버튼 누르면 캘린더 활성화 이벤트 중지
 		$(".calendarInsertModal__save").addClass("calendarInsertModal__update").removeClass("calendarInsertModal__save").text("수정");
 		calendarModalUpdateInit($(this).attr("data-id"),$(this).parent().parent().find(".naviConp__addTag").attr("data-isshare"));
@@ -1009,6 +1008,7 @@ function calendarModalUpdateInit(id, is_share){
 			let emp_names = resp.emp_names.split(",");
 			let task_names = resp.task_names.split(",");
 			for(let i=0; i<emp_ids.length; i++){
+				if(emp_ids[i]==resp.loginID) continue;
 				let empList__emp = $("<div>").attr("class","empSelectList__emp").attr("data-emp_id",emp_ids[i]);
 				let name = $("<span>").text(emp_names[i]);
 				let taskName = $("<span>").text("("+task_names[i]+")");
@@ -1248,8 +1248,22 @@ $(document).on("click",".empAllList__cancelAll",function(){
 $(document).on("click",".selectIcon__select",function(){
 	let selectEmps = $(".selectEmp").clone();
 	selectEmps.addClass("empSelectList__emp").removeClass("empList__emp");
-	$(".empSelectList__empList").append(selectEmps);
-	$(".empSelectList__cnt").text(parseInt($(".empSelectList__cnt").text())+selectEmps.length);
+	
+	let existingEmpsSet = new Set($(".empSelectList__empList .empSelectList__emp, .myEmpInfo").map(function () {
+	    return $(this).attr("data-emp_id");
+	}));
+	
+	selectEmps.each(function () {
+	    let currentEmpText = $(this).attr("data-emp_id");
+	
+	    // Set에 이미 추가된 직원인지 확인
+	    if (!existingEmpsSet.has(currentEmpText)) {
+	        $(".empSelectList__empList").append($(this));
+	        existingEmpsSet.add(currentEmpText);
+	    }
+	});
+
+	$(".empSelectList__cnt").text(existingEmpsSet.size);
 	$(".selectEmp").removeClass("selectEmp");
 });
 

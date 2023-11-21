@@ -160,7 +160,9 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/selectCaledarInfoByCalendarId")
 	public Map<String,Object> selectCaledarInfoByCalendarId(int id){
-		return sService.selectCaledarInfoByCalendarId(id,(String) session.getAttribute("loginID"));
+		Map<String,Object> updateIfo = sService.selectCaledarInfoByCalendarId(id,(String) session.getAttribute("loginID"));
+		updateIfo.put("loginID", (String) session.getAttribute("loginID"));
+		return updateIfo;
 	}
 	
 	
