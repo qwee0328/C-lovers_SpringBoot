@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		$("input[type='checkbox'][name='week']").prop("checked", false);
 
 		$.ajax({
-			url: "/schedule/calendarByEmpId",
-			async: false
-		}).done(function(resp) {
+			url:"/schedule/selectCalendarByEmpId",
+			async:false
+		}).done(function(resp){
 			$(".calendarModal__calNameList *").remove();
-			for (let i = 0; i < resp.length; i++) {
-				$(".calendarModal__calNameList").append($("<option>").val(resp[i].id).text(resp[i].name).attr("color", resp[i].color));
-			}
-			$(".calendarModal__calNameList:first-child").prop("selected", true);
+			for(let i=0; i<resp.length; i++){
+				$(".calendarModal__calNameList").append($("<option>").val(resp[i].id).text(resp[i].name).attr("color",resp[i].color));
+			}	
+			$(".calendarModal__calNameList:first-child").prop("selected",true);
 		});
 	}
 
