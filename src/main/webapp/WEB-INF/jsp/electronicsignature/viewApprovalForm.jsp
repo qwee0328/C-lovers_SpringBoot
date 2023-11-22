@@ -208,6 +208,12 @@
 								<th>총괄 적요</th>
 								<td id="executive_summary"></td>
 							</tr>
+							<tr>
+								<th>파일</th>
+								<td id="business_file">
+									
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</c:when>

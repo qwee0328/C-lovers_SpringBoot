@@ -427,4 +427,11 @@
 		SET status = #{approval}, approval_date = now()
 		WHERE id = #{document_id}
 	</update>
+	
+	<!-- 문서 첨부파일 리스트 -->
+	<select id="getDocumentFileList" resultType="map">
+		SELECT *
+		FROM document_file
+		WHERE document_id = #{document_id}
+	</select>
 </mapper>

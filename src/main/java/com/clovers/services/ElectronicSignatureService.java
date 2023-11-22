@@ -455,4 +455,9 @@ public class ElectronicSignatureService {
 		param.put("approval", approval);
 		return dao.updateDocumentStatus(param);
 	}
+	
+	// 문서 첨부파일 리스트 
+	public List<Map<String, String>> getDocumentFileList(String document_id) {
+		return dao.getDocumentFileList(document_id);
+	}
 }
