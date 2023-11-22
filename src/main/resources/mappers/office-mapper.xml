@@ -225,5 +225,9 @@
 		select job_id from
 		employee where id = #{id};
 	</select>
-
+	
+	<!-- // 처음 입사 시 15일 연차 지급 -->
+	<insert id="insertFirstAnnaul">
+		insert into annaul_rest (emp_id, rest_type_id, rest_cnt, reg_date) value (#{id}, "연차", 15, convert_tz(now(),'+00:00', '+09:00'))
+	</insert>
 </mapper>

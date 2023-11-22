@@ -1,17 +1,15 @@
 package com.clovers.services;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.clovers.commons.EncryptionUtils;
 import com.clovers.dao.OfficeDAO;
@@ -69,7 +67,7 @@ public class OfficeService {
 
 	// 사용자 등록하기
 	@Transactional
-	public int insertUser(MemberDTO dto) {
+	public int insertUser(MemberDTO dto) throws Exception {
 		// 입사 년도 구하기
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 		String year = sdf.format(dto.getHire_date());
@@ -95,6 +93,14 @@ public class OfficeService {
 		// 사내 이메일은 id랑 똑같이 저장
 		dto.setCompany_email(dto.getId());
 		
+		// 생일 값을 입력하지 않으면 기본값입력
+		if(dto.getBirth()==null) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date parseDate = dateFormat.parse("1900-01-01");
+			Timestamp timestamp = new Timestamp(parseDate.getTime());
+			dto.setBirth(timestamp);
+		}
+		
 		// 직급이 대표이사, 사장, 상무, 이사인 경우 총괄 관리자 등록
 		String jobName = dao.selectJobName(dto.getJob_id());
 		String taskName = dao.selectDeptTaskName(dto.getDept_task_id());
@@ -111,7 +117,8 @@ public class OfficeService {
 			}
 		}
 		
-		System.out.println(dto);
+		// 처음 입사 시 15일 연차 지급
+		dao.insertFirstAnnaul(dto.getId());
 
 		return dao.insertUser(dto);
 	}

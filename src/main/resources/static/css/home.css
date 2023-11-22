@@ -124,7 +124,7 @@ body {
 }
 
 .mainContents__line {
-	border-left: thin solid #B5B5BB;
+	border-left: thin solid #7d7d7d40;
 	height: 100%;
 }
 
@@ -193,13 +193,16 @@ body {
 
 .contentBox__commute {
 	display: flex;
+	justify-content: center;
 	margin-top: 30px;
 	height: 43px;
 }
 
 .contentBox__commute>div {
 	text-align: center;
+	
 }
+
 
 .commute__work {
 	width: 130px;

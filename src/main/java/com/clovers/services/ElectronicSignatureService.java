@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class ElectronicSignatureService {
 
 	@Autowired
 	private MemberDAO mdao;
-	
+
 	@Autowired
 	private OfficeDAO odao;
 
@@ -80,12 +81,20 @@ public class ElectronicSignatureService {
 		document.setTitle(title);
 
 		document.setEmp_id(emp_id);
-		
+
 		String jobID = odao.searchByJobID(emp_id);
 		String jobName = odao.selectJobName(jobID);
-		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+		if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 			document.setStatus("승인");
-		}else {
+
+			// LocalDate를 LocalDateTime으로 변환
+			LocalDateTime localDateTime = today.atStartOfDay();
+			// LocalDateTime을 Timestamp로 변환
+			Timestamp timestamp = Timestamp.valueOf(localDateTime);
+			
+			// 승인 일자 설정
+			document.setApproval_date(timestamp);
+		} else {
 			document.setStatus("대기");
 		}
 
@@ -107,9 +116,9 @@ public class ElectronicSignatureService {
 			approval.setDocument_id(documentID);
 			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
 			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
-			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 				approval.setApproval("승인");
-			}else {
+			} else {
 				approval.setApproval("대기");
 			}
 			approvals.add(approval);
@@ -129,8 +138,8 @@ public class ElectronicSignatureService {
 			info.setRest_reason_type(vacationTypeList.get(i));
 			info.setVacation_reason(reson);
 			vacationInfoList.add(info);
-			
-			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+
+			if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 				// 연차 사용 기록에 등록
 				AnnualUseMemoryDTO memory = new AnnualUseMemoryDTO();
 				memory.setEmp_id(emp_id);
@@ -142,9 +151,9 @@ public class ElectronicSignatureService {
 		}
 		// dao.insertVacationApplicationInfo(vacationInfoList);
 		// System.out.println(reson);
-		
+
 		// 휴가 사용기록 등록
-		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+		if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 			dao.insertVacationUseMemoryInfo(vacationUseMemoryList);
 		}
 
@@ -155,7 +164,8 @@ public class ElectronicSignatureService {
 	@Transactional
 	public int insertDocument(String[] applicationEmployeeIDList, String[] processEmployeeIDList, String esDocumentType,
 			int esPreservationPeriod, String esSecurityLevel, String esSpender, String documentTitle, boolean temporary,
-			String expense_category, String expenseYear, String expenseMonth, String summary, String content, MultipartFile[] uploadFiles) throws Exception {
+			String expense_category, String expenseYear, String expenseMonth, String summary, String content,
+			MultipartFile[] uploadFiles) throws Exception {
 		DocumentDTO document = new DocumentDTO();
 
 		// 정보 설정
@@ -192,14 +202,14 @@ public class ElectronicSignatureService {
 
 		// 전자 문서 등록
 		dao.insertDocument(document);
-		
+
 		// 신청선 등록
 		List<DocumentDrafterDTO> drafters = new ArrayList<DocumentDrafterDTO>();
-		for(int i=0;i<applicationEmployeeIDList.length;i++) {
+		for (int i = 0; i < applicationEmployeeIDList.length; i++) {
 			DocumentDrafterDTO drafter = new DocumentDrafterDTO();
 			drafter.setDocument_id(documentID);
 			drafter.setEmp_id(applicationEmployeeIDList[i]);
-			
+
 			drafters.add(drafter);
 		}
 		dao.insertDrafters(drafters);
@@ -216,52 +226,52 @@ public class ElectronicSignatureService {
 			approvals.add(approval);
 		}
 		dao.insertApprovals(approvals);
-		
-		
+
 		// 지출 결의서 정보 등록
 		if (esDocumentType.equals("지출 결의서")) {
 			ExpenseResolutioinInfoDTO expense = new ExpenseResolutioinInfoDTO();
 			expense.setDocument_id(documentID);
 			expense.setExpense_category(expense_category);
 			System.out.println(expense_category);
-			
+
 			// 문자열로 localdatetime 생성
 			System.out.println(expenseYear);
-			String dateString = expenseYear+"-"+expenseMonth;
+			String dateString = expenseYear + "-" + expenseMonth;
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
 			Date parsedDate = dateFormat.parse(dateString);
 			Timestamp timestampDate = new Timestamp(parsedDate.getTime());
 			expense.setExpense_date(timestampDate);
 			expense.setSpender_id(esSpender);
 			expense.setSummary(summary);
-			
+
 			dao.insertExpenseResolutionInfo(expense);
-		}else {
+		} else {
 			// 업무 연락 정보 등록
 			BusinessContactInfoDTO business = new BusinessContactInfoDTO();
 			business.setDocument_id(documentID);
 			business.setBusiness_contents(content);
-			
+
 			dao.insertBusinessContactInfo(business);
 		}
-		
-		
+
 		// 파일 등록
-		if(!uploadFiles[0].getOriginalFilename().equals("")) {
+		if (!uploadFiles[0].getOriginalFilename().equals("")) {
 			String upload = "C:/C-lovers";
 			File uploadPath = new File(upload);
-			if(!uploadPath.exists()) {uploadPath.mkdir();}
-			
-			for(MultipartFile file:uploadFiles) {
+			if (!uploadPath.exists()) {
+				uploadPath.mkdir();
+			}
+
+			for (MultipartFile file : uploadFiles) {
 				String oriName = file.getOriginalFilename();
 				String sysName = UUID.randomUUID() + "_" + oriName;
-				file.transferTo(new File(uploadPath+"/"+sysName));
+				file.transferTo(new File(uploadPath + "/" + sysName));
 				dao.insertDocumentFile(new DocumentFileDTO(0, documentID, oriName, sysName));
 			}
 		}
 		return 0;
 	}
-	
+
 	// 로그인한 사용자가 결재자인지
 	public boolean isApprover(String loginID, String document_id) {
 		Map<String, String> param = new HashMap<>();
@@ -277,7 +287,7 @@ public class ElectronicSignatureService {
 		param.put("document_id", document_id);
 		return dao.previousApprovalResult(param);
 	}
-	
+
 	// 로그인한 사용자의 직급 가져옴
 	public int getJobRank(String loginID) {
 		return dao.getJobRank(loginID);
@@ -372,7 +382,7 @@ public class ElectronicSignatureService {
 	public List<Map<String, Object>> selectAllByDocumentId(String document_id) {
 		return dao.selectAllByDocumentId(document_id);
 	}
-	
+
 	// 기안자들의 이름과 직급, 부서 가져오기
 	public List<Map<String, Object>> getDraftersByDocumentId(String document_id) {
 		return dao.getDraftersByDocumentId(document_id);
@@ -382,7 +392,7 @@ public class ElectronicSignatureService {
 	public List<Map<String, String>> getApproversByDocumentId(String document_id) {
 		return dao.getApproversByDocumentId(document_id);
 	}
-	
+
 	// 로그인한 사용자가 기안자인지
 	public boolean isDrafterByDocumentId(String document_id, String loginID) {
 		Map<String, String> param = new HashMap<>();
@@ -398,7 +408,7 @@ public class ElectronicSignatureService {
 		param.put("loginID", loginID);
 		return dao.isApproverByDocumentId(param);
 	}
-	
+
 	// 결재한 결재자가 존재하는지
 	public boolean existApproval(String document_id) {
 		return dao.existApproval(document_id);
@@ -433,12 +443,12 @@ public class ElectronicSignatureService {
 	public Map<String, String> getBusinessInfo(String document_id) {
 		return dao.getBusinessInfo(document_id);
 	}
-	
+
 	// 반려가 존재하는지
 	public boolean existRejection(String document_id) {
 		return dao.existRejection(document_id);
 	}
-	
+
 	// 결재 결과 저장
 	public int submitApproval(String loginID, String document_id, String approval) {
 		Map<String, String> param = new HashMap<>();
@@ -447,12 +457,12 @@ public class ElectronicSignatureService {
 		param.put("approval", approval);
 		return dao.submitApproval(param);
 	}
-	
+
 	// 마지막 결재자였는지 확인
 	public boolean checkAllApprovals(String document_id) {
 		return dao.checkAllApprovals(document_id);
 	}
-	
+
 	// 문서 상태 변경
 	public int updateDocumentStatus(String docoment_id, String approval) {
 		Map<String, String> param = new HashMap<>();
@@ -460,7 +470,7 @@ public class ElectronicSignatureService {
 		param.put("approval", approval);
 		return dao.updateDocumentStatus(param);
 	}
-	
+
 	// 문서 삭제
 	public int deleteApproval(String document_id) {
 		return dao.deleteApproval(document_id);

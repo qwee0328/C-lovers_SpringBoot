@@ -9,15 +9,15 @@ $(document).ready(function() {
 		if ($(this).siblings().html() == "메일") {
 			location.href = "/mail";
 		}
-		
+
 		if ($(this).siblings().html() == "일정") {
 			location.href = "/schedule";
 		}
-		
+
 		if ($(this).siblings().html() == "주소록") {
 			location.href = "/addressbook";
 		}
-		
+
 		if ($(this).siblings().html() == "인사") {
 			location.href = "/humanResources";
 		}
@@ -25,11 +25,11 @@ $(document).ready(function() {
 		if ($(this).siblings().html() == "전자결재") {
 			location.href = "/electronicsignature";
 		}
-		
+
 		if ($(this).siblings().html() == "오피스 관리") {
 			location.href = "/admin/office";
 		}
-		
+
 		if ($(this).siblings().html() == "회계지원") {
 			location.href = "/admin/accounting";
 		}
@@ -76,8 +76,10 @@ $(document).ready(function() {
 				window.status = "근무중"
 				$(".timeline__status").html(window.status);
 
-				$("#leaveBtn").css({ "color": "#75b47d", "pointer-events": "auto" });
-				$("#attendBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
+				$("#leaveBtn").css({ "pointer-events": "auto" });
+				$("#leaveBtn>.work__text").css({ "color": "#75b47d" });
+				$("#attendBtn").css({ "pointer-events": "none" });
+				$("#attendBtn>.work__text").css({ "color": "#b5b5bb" });
 				$("#workConditionBtns div button").prop("disabled", false);
 
 				// 현재 근무상태 불러오기
@@ -105,8 +107,10 @@ $(document).ready(function() {
 					minutes = minutes.toString().padStart(2, '0');
 				}
 				$("#leaveTime").html(hour + " : " + minutes + " : " + sec);
-				$("#attendBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
-				$("#leaveBtn").css({ "color": "#b5b5bb", "pointer-events": "none" });
+				$("#attendBtn").css({ "pointer-events": "none" });
+				$("#attendBtn>.work__text").css({ "color": "#b5b5bb" });
+				$("#leaveBtn").css({ "pointer-events": "none" });
+				$("#leaveBtn>.work__text").css({ "color": "#b5b5bb" });
 				$("#workConditionBtns div button").prop("disabled", true);
 			}
 		} else { // 출근을 아직 안한경우
