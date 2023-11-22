@@ -26,7 +26,10 @@ public class HumanResourcesDAO {
 //	}
 
 	public MemberDTO selectById(String id) {
-		return db.selectOne("HumanResources.selectById", id);
+		MemberDTO result = db.selectOne("HumanResources.selectById", id);
+		System.out.println("birth:"+result.getBirth());
+		System.out.println("ent:"+result.getEnt_date());
+		return result;
 	}
 
 	public String reChangePw(String id) {

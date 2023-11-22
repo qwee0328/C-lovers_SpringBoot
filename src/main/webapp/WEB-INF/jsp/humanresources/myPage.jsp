@@ -134,7 +134,7 @@
 	                            
 	                            <div class="profileBox__inner">
 	                                <div class="profileLeft">
-	                                    <span>아이디</span>
+	                                    <span>사내이메일</span>
 	                                </div>
 	                                <div class="profileRight">
 	                                    <div><input type="text" name="company_email" id="company_email" value=${list.company_email }></div>
@@ -216,7 +216,9 @@
 	                                </div>
 	                                <div class="profileRight">
 	                                    <div>
-	                                        ${list.formatBirth }
+	                                    	<c:if test="${list.formatBirth != '1900년 01월 01일'}">
+	                                    		${list.formatBirth }
+	                                    	</c:if>
 	                                    </div>
 	                                </div>
 	                            </div>
