@@ -1,19 +1,43 @@
 @charset "UTF-8";
 
+.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat .fc-daygrid-day-number {
+	color: #3E78E7 !important;
+}
+
+.fc-day-sun .fc-col-header-cell-cushion,
+.fc-day-sun .fc-daygrid-day-number {
+	color: #FF3C3C !important;
+}
+
+
+
+
 .calenderBody {
-	/*max-width: 1200px;
-	margin: 20px auto;
-	height: 600px;
-	width: 100%;*/
 	width: calc(100vw - 250px);
-    height: calc(100vh - 100px);
+    height: calc(100vh - 60px);
     overflow: auto;
-    margin: 20px;
+}
+
+.covers{
+	width: 100%;
+	height: 100%;
+	min-width: 1000px;
+	min-height: 550px;
+	position:relative;
 }
 
 #calendar{
 	min-width: 1000px;
+	min-height: 550px;
+	padding:20px;
 }
+
+
+.modal {
+	max-width: 900px;
+}
+
 .fc {
 	height: 100%;
 }
@@ -35,6 +59,24 @@
 .fc-toolbar-chunk {
 	display: flex;
 }
+
+tr[role="presentation"] {
+	/* 모달창 위로 태그 내용들이 올라오는 것 방지 */
+	position: sticky;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .fc .fc-button-primary:disabled {
 	background-color: #75B47D;
@@ -68,9 +110,7 @@
 	box-shadow: none !important;
 }
 
-.modal {
-	max-width: 900px;
-}
+
 
 .fc .fc-next-button,
 .fc .fc-prev-button {
@@ -109,23 +149,10 @@
 
 .fc-col-header .fc-col-header-cell {
 	background-color: #7d7d7d20;
-	;
 }
 
-.fc-day-sat .fc-col-header-cell-cushion,
-.fc-day-sat .fc-daygrid-day-number {
-	color: #3E78E7 !important;
-}
 
-.fc-day-sun .fc-col-header-cell-cushion,
-.fc-day-sun .fc-daygrid-day-number {
-	color: #FF3C3C !important;
-}
 
-tr[role="presentation"] {
-	/* 모달창 위로 태그 내용들이 올라오는 것 방지 */
-	position: sticky;
-}
 
 .fc-icon {
 	color: #6C6C72;
@@ -138,6 +165,11 @@ tr[role="presentation"] {
 	align-items: center;
 	color: #323B3D;
 }
+
+
+
+
+
 
 
 
@@ -160,35 +192,38 @@ tr[role="presentation"] {
 
 #searchTag{
 	position:absolute;
-	right: 3px;
-	top:10px;
+	right: 120px;
+	top:15px;
+	background-color: #FFFFFF;
+	border-radius: 4px;
 }
 
 .header__searchBar {
 	border: 1px solid #7d7d7d40;
 	border-radius: 4px;
-	height: 35px;
+	height: 30px;
 	width: 200px;
 }
 
 .searchBar__icon {
 	height: 100%;
-	width: 7%;
+
 }
 
 .searchBar__icon>i {
 	height: 100%;
-	padding: 10px;
+	padding: 7px 10px;
 	color: #6C6C72;
 }
 
 .searchBar__inputCover {
 	align-items: center;
 	height: 100%;
-	width: 93%;
+	width: 100%;
 }
 
 .searchBar__input {
+	border-radius: 4px;
 	border: 0;
 	height: 100%;
 	width: 100%;

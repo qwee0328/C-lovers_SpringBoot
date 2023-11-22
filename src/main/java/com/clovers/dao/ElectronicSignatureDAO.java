@@ -87,6 +87,11 @@ public class ElectronicSignatureDAO {
 	public boolean isApprover(Map<String, String> param) {
 		return db.selectOne("ElectronicSignature.isApprover", param);
 	}
+	
+	// 결재한 결재자가 존재하는지
+	public boolean existApproval(String document_id) {
+		return db.selectOne("ElectronicSignature.existApproval", document_id);
+	}
 
 	// 직전 결재자들의 결재 결과
 	public int previousApprovalResult(Map<String, String> param) {
@@ -218,8 +223,8 @@ public class ElectronicSignatureDAO {
 		return db.update("ElectronicSignature.updateDocumentStatus", param);
 	}
 	
-	// 문서 첨부파일 리스트
-	public List<Map<String, String>> getDocumentFileList(String document_id) {
-		return db.selectList("ElectronicSignature.getDocumentFileList", document_id);
+	// 문서 삭제
+	public int deleteApproval(String document_id) {
+		return db.delete("ElectronicSignature.deleteApproval", document_id);
 	}
 }

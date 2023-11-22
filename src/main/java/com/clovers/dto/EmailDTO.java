@@ -26,6 +26,7 @@ public class EmailDTO {
 	private String reference_id;
 	private Timestamp send_date;
 	private boolean confirmation;
+	private Timestamp trash_date;
 	
 	// info_email view에 필요한 member field
 	private String sender_name;

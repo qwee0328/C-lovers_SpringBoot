@@ -53,19 +53,42 @@ $(document).ready(function() {
 		location.href = "/humanResources/showVacationApp";
 	})
 
+	// 휴가/근무 이동
 	$("#vacationWork").on("click", function() {
 		location.href = "/humanResources";
 	})
+
+	// 프로필 설정 이동
 	$("#profileSettings").on("click", function() {
 		location.href = "/humanResources/mypage";
 	})
-	
+
 	// 근무 현황 이동
-	$("#workStatus").on("click",function(){
+	$("#workStatus").on("click", function() {
 		location.href = "/humanResources/workStatus";
 	})
-	 // 임직원 관리 이동
-   	$("#employeeInfo").on("click",function(){
-   		location.href = "/humanResources/employeeInfo";
-   	})
+	// 임직원 관리 이동
+	$("#employeeInfo").on("click", function() {
+		location.href = "/humanResources/employeeInfo";
+	})
+
+	// 조직관리 이동
+	$("#orgManagement").on("click", function() {
+		location.href = "/admin/office/organization";
+	})
+	
+	// 사용자관리 이동
+	$("#userManagement").on("click", function() {
+		location.href = "/admin/office/user";
+	})
+	
+	// 직위/직무 설정 이동
+	$("#positionManagement").on("click", function() {
+		location.href = "/admin/office/positionduty";
+	})
+	
+	// 인사 관리자 설정 이동
+	$("#hrManager").on("click", function() {
+		location.href = "/admin/office/administrator";
+	})
 });

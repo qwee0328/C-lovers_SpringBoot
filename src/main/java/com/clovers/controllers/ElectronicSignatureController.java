@@ -99,6 +99,27 @@ public class ElectronicSignatureController {
 		
 		return isApprovalTurn;
 	}
+	
+	// 이 문서의 기안자인지, 결재 삭제 가능한 상태인지
+	public boolean existApproval(String document_id) {
+		String loginID = (String) session.getAttribute("loginID");
+		
+		boolean existApproval;
+		// 로그인한 사용자가 기안자인지
+		boolean isDrafter = esservices.isDrafterByDocumentId(document_id, loginID);
+		// 기안자라면
+		if(isDrafter) {
+			// 결재를 마친 결재자가 존재하는지
+			existApproval = esservices.existApproval(document_id);
+		// 기안자가 아니라면
+		} else {
+			existApproval = false;
+		}
+		
+		System.out.println("기안자인지? :" + isDrafter);
+		System.out.println("결재한 사람 있으면 false 없으면 true : " + existApproval);		
+		return existApproval;
+	}
 
 	// 메인 화면으로 이동
 	@RequestMapping("")
@@ -393,10 +414,18 @@ public class ElectronicSignatureController {
 			}
 		}
 		
+		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
+		boolean isApprovalTurn = isApprovalTurn(document_id);
+		
+		// 이 문서의 기안자인지, 결재 삭제 가능한 상태인지
+		boolean existApproval = existApproval(document_id);
+		
 		model.addAttribute("mainDrafter", mainDrafter);
 		model.addAttribute("documentInfo", documentInfo);
 		model.addAttribute("draftersInfo", draftersInfo);
 		model.addAttribute("approversInfo", approversInfo);
+		model.addAttribute("isApprovalTurn", isApprovalTurn);
+		model.addAttribute("existApproval", existApproval);
 		
 		return "/electronicsignature/viewApprovalForm";
 	}
@@ -404,16 +433,8 @@ public class ElectronicSignatureController {
 	// 휴가 신청서 정보 출력
 	@ResponseBody
 	@RequestMapping("/getVacationInfo")
-	public Map<String, Object> getVacationInfo(String document_id) {
-		List<Map<String, Object>> list = esservices.getVacationInfo(document_id);
-		
-		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
-		boolean isApprovalTurn = isApprovalTurn(document_id);
-		
-		Map<String, Object> vacation_info = new HashMap<>();
-		vacation_info.put("vacation_info", list);
-		vacation_info.put("isApprovalTurn", isApprovalTurn);
-		return vacation_info;
+	public List<Map<String, Object>> getVacationInfo(String document_id) {
+		return esservices.getVacationInfo(document_id);
 	}
 	
 	// 지출 결의서 정보 출력
@@ -432,37 +453,20 @@ public class ElectronicSignatureController {
 		} else if(expense.get("expense_category").toString().equals("법인")) {
 			account = esservices.getCorporateAccount(spender_id);
 		}
+
+		expense.put("account", account);
 		
-		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
-		boolean isApprovalTurn = isApprovalTurn(document_id);
-		
-		// 문서 첨부파일 리스트
-		List<Map<String, String>> fileList = esservices.getDocumentFileList(document_id);
-		
-		Map<String, Object> expense_info = new HashMap<>();
-		expense_info.put("expense_info", expense);
-		expense_info.put("account", account);
-		expense_info.put("isApprovalTurn", isApprovalTurn);
-		expense_info.put("fileList", fileList);
-		
-		return expense_info;
+		return expense;
 	}
 	
 	// 업무 연락 정보 출력
 	@ResponseBody
 	@RequestMapping("/getBusinessInfo")
-	public Map<String, Object> getBusinessInfo(String document_id) {
+	public Map<String, String> getBusinessInfo(String document_id) {
 		Map<String, String> business = esservices.getBusinessInfo(document_id);
 		business.put("content", removeHtmlTags(business.get("content")));
-	
-		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
-		boolean isApprovalTurn = isApprovalTurn(document_id);
 		
-		Map<String, Object> business_info = new HashMap<>();
-		business_info.put("business_info", business);
-		business_info.put("isApprovalTurn", isApprovalTurn);
-		
-		return business_info;
+		return business;
 	}
 	
 	// 결재 결과 저장
@@ -487,6 +491,13 @@ public class ElectronicSignatureController {
 		}
 		
 		return 1;
+	}
+	
+	// 문서 삭제
+	@ResponseBody
+	@RequestMapping("/deleteApproval")
+	public int deleteApproval(String document_id) {
+		return esservices.deleteApproval(document_id);
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

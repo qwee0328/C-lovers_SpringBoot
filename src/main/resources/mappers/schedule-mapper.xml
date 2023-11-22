@@ -57,11 +57,20 @@
 		insert into schedule_recurring values(null, #{during}, #{frequency_whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{selectWeeks});
 	</insert>
 	
+	
 	<!-- 접속한 유저가 확인 가능한 캘린더 이벤트 전부 가져오기 (home 화면 일정 캘린더에서 사용) -->
 	<select id="selectAll" resultMap="scheduleInfo">
 		select * 
 		from scheduleAll
 		where calendar_id in (select calendar_id from calendar_authority where emp_id = #{emp_id}) and trash = 0;
+	</select>
+	
+	<!-- 검색한 일정 -->
+	<select id="selectByKeyword" resultMap="scheduleInfo">
+		select * 
+		from scheduleAll
+		where calendar_id in (select calendar_id from calendar_authority where emp_id = #{emp_id}) and trash = 0
+		and (content like #{keyword} or title like #{keyword});
 	</select>
 	
 	<!-- schedule 상세 정보 -->
@@ -96,10 +105,7 @@
 	</update>
 	
 	
-	
-	
-	
-	
+
 	
 	
 	<!-- 캘린더 추가 -->
@@ -116,14 +122,6 @@
 	</insert>
 	
 
-	
-	<!-- 캘린더 업데이트를 위해 캘린더 정보 불러오기 -->
-	<!-- <select id="selectByEmpIdCalendarForUpdate" resultMap="calenadarUpdateInfo">
-		select id, color, name, GROUP_CONCAT(emp_id ORDER BY calendar_id) AS emp_ids
-		from calendar_all 
-		where id in (select calendar_id from calendar_authority where emp_id=#{emp_id})
-		group by c.id;
-	</select> -->
 	
 	<!-- 활성화된 캘린더 값만 가져오기 -->
 	<select id="selectByCalendarIdSchedule" resultMap="scheduleInfo" parameterType="java.util.List">

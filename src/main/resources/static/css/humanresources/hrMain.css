@@ -68,9 +68,10 @@
   font-weight: 500;
   margin-bottom: 30px;
 }
-.detail__colortitle * {
+.detail__colortitle {
   color: #75b47d;
   padding: 0 15px;
+  cursor: pointer;
 }
 .detail_conf {
   font-size: 14px;

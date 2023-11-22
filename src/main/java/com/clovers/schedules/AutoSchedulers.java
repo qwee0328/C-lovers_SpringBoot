@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.services.AddressBookService;
+import com.clovers.services.MailService;
 import com.clovers.services.MemberService;
 import com.clovers.services.ScheduleService;
 
@@ -22,9 +23,12 @@ public class AutoSchedulers {
 
 	@Autowired
 	private ScheduleService sservice;
-	
+
 	@Autowired
 	private AddressBookService abservice;
+
+	@Autowired
+	private MailService mailService;
 
 	@Scheduled(cron = "0 30 8 1 1 ?")
 	public void AnnaulScheduler() {
@@ -77,12 +81,13 @@ public class AutoSchedulers {
 			mservice.insertAutomaticAnnaulRest(user);
 		}
 	}
-	
-	
+
 	// 매일 12시에 휴지통에서 30일 경과한 주소록 및 일정 삭제
+	// 메일 추가
 	@Scheduled(cron = "0 0 0 * * *")
-	public void TrashScheduler() {
+	public void TrashScheduler() throws Exception {
 		sservice.autoDeleteInTrash();
 		abservice.autoDeleteInTrash();
+		mailService.autoDeleteInTrash();
 	}
 }

@@ -68,18 +68,19 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">조직/임원 관리</div>
 	           </div>
-	           <div class="naviConp org_ExeInner">
+	           <div class="naviConp org_ExeInner" id="orgManagement">
 	               <div class="naviConp__icon"><i class="fa-solid fa-user-group"></i></div>
 	               <div class="naviConp__title">조직 관리</div>
 	           </div>
-	           <div class="naviConp org_ExeInner">
+	           <div class="naviConp org_ExeInner" id="userManagement">
 	               <div class="naviConp__icon"><i class="fa-solid fa-user-group"></i></div>
-	               <div class="naviConp__title">임직원 관리</div>
+	               <div class="naviConp__title">사용자 관리</div>
 	           </div>
-	           <div class="naviConp org_ExeInner">
+	           <div class="naviConp org_ExeInner" id="positionManagement">
 	               <div class="naviConp__icon"><i class="fa-solid fa-address-card"></i></div>
 	               <div class="naviConp__title">직위/직무 설정</div>
 	           </div>
+	           <!-- 
 	           <div class="naviConp hrToggle" toggleView="true">
 	               <div class="naviConp__icon"><i class="fa-solid fa-chevron-up"></i></div>
 	               <div class="naviConp__title">인사설정</div>
@@ -88,7 +89,8 @@
 	               <div class="naviConp__icon"><i class="fa-solid fa-gear"></i></div>
 	               <div class="naviConp__title">기본설정</div>
 	           </div>
-	           <div class="naviConp hrInner">
+	            -->
+	           <div class="naviConp" id="hrManager">
 	               <div class="naviConp__icon"><i class="fa-solid fa-user-group"></i></div>
 	               <div class="naviConp__title">인사관리자</div>
 	           </div>
