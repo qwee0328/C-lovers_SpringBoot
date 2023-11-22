@@ -28,6 +28,8 @@
 				<div class="documentTable__body">
 					
 				</div>
+				
+				<div class="bottom__pageNavi"></div>
 			</div>
 		</div>
 	</div>

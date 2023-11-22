@@ -109,144 +109,278 @@
 	<!-- 로그인한 결재자와 같은 document_id를 가지고, 로그인한 결재자보다 높은 레벨(낮은 직급)인 사람의 결재 결과를 
 		가져옴 -->
 	<select id="previousApprovalResult" resultType="map">
-		select
-		document_id, approver_status from document_list_info dli where exists
-		(select 1 from document_list_info where approver_id = #{loginID} and
-		dli.document_id = document_list_info.document_id and
-		dli.approver_level > document_list_info.approver_level)
+		SELECT document_id, approver_status
+		FROM approval_list_view alv
+		WHERE exists (SELECT 1
+						FROM approval_list_view
+						WHERE approver_id = #{loginID}
+						AND alv.document_id = approval_list_view.document_id
+						AND alv.approver_security_level > approval_list_view.approver_security_level)
+	</select>
+	
+	<!-- // 로그인한 사용자의 직급 가져옴 -->
+	<select id="getJobRank" resultType="int">
+		SELECT j.sec_level
+        FROM employee e
+        JOIN job j ON e.job_id = j.id
+        WHERE e.id = #{loginID}
 	</select>
 
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-		SELECT document_id, title, drafter_name, drafter_id, approver_id,
-		report_date, approver_status
-		FROM document_list_info
-		WHERE total_status
-		= '대기'
-		AND drafter_id = #{loginID}
-		OR (approver_id = #{loginID}
-		<!-- 제외할 문서 번호가 있을 때만 실행 -->
-		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
-			AND document_id NOT IN
-			<foreach collection="ExcludedIds" item="document_id" open="("
-				close=")" separator=",">
-				#{document_id}
-			</foreach>
-		</if>
-		)
-		ORDER BY report_date desc;
+	    SELECT DISTINCT document_id, title, drafter_name, report_date, status
+	    FROM approval_list_view
+	    WHERE
+	    (
+	        drafter_id = #{loginID} OR approver_id = #{loginID}
+	    )
+	    OR
+	    (
+	        drafter_id != #{loginID} AND approver_id != #{loginID}
+	        AND security_grade IN
+	        <foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
+	            #{sec_grade}
+	        </foreach>
+	    )
+	    ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 진행 중인 문서 대기 리스트 출력 -->
 	<select id="progressWaitList" resultType="map">
-		SELECT document_id, title, drafter_name, drafter_id, approver_id,
-		report_date
-		FROM document_list_info
-		WHERE total_status = '대기'
-		AND
-		drafter_id = #{loginID}
-		OR (approver_id = #{loginID}
-		<!-- 제외할 문서 번호가 있을 때만 실행 -->
-		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
-			AND document_id NOT IN
-			<foreach collection="ExcludedIds" item="document_id" open="("
-				close=")" separator=",">
-				#{document_id}
-			</foreach>
-		</if>
-		) AND approver_status = '대기'
-		ORDER BY report_date desc;
+	    SELECT DISTINCT document_id, title, drafter_name, report_date, status
+	    FROM approval_list_view
+	    WHERE
+	    (
+	        drafter_id = #{loginID} OR approver_id = #{loginID}
+	        AND status = '대기'
+	        AND approver_status = '대기'
+	    )
+	    OR
+	    (
+	        drafter_id != #{loginID} AND approver_id != #{loginID}
+	        AND status = '대기'
+	        AND approver_status = '대기'
+	        AND security_grade IN
+	        <foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
+	            #{sec_grade}
+	        </foreach>
+	    )
+	    ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
-
-	<!-- // 진행 중인 문서 결과 리스트 출력 -->
+	
+	<!-- // 진행 중인 문서 확인 리스트 출력 -->
 	<select id="progressCheckList" resultType="map">
-		SELECT document_id, title, drafter_name, drafter_id, approver_id,
-		approver_status, report_date
-		FROM document_list_info
-		WHERE total_status
-		= '대기'
-		AND drafter_id = #{loginID}
-		OR (approver_id = #{loginID}
-		<!-- 제외할 문서 번호가 있을 때만 실행 -->
-		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
-			AND document_id NOT IN
-			<foreach collection="ExcludedIds" item="document_id" open="("
-				close=")" separator=",">
-				#{document_id}
-			</foreach>
-		</if>
-		) AND approver_status = '승인'
-		ORDER BY report_date desc;
+		SELECT DISTINCT document_id, title, drafter_name, report_date, status
+		FROM approval_list_view
+		WHERE
+		(
+			drafter_id = #{loginID} OR approver_id = #{loginID}
+			AND status = '승인'
+		)
+		OR
+		(
+			drafter_id != #{loginID} AND approver_id != #{loginID}
+			AND status = '승인'
+			AND security_grade IN
+			<foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
+		    	#{sec_grade}
+		    </foreach>
+	    )
+	    ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 진행 중인 문서 진행 리스트 출력 -->
 	<select id="progressList" resultType="map">
-		SELECT document_id, title, drafter_name, drafter_id, approver_id,
-		report_date
-		FROM document_list_info
-		WHERE total_status = '대기'
-		AND
-		drafter_id = #{loginID}
-		OR (approver_id = #{loginID}
-		<!-- 제외할 문서 번호가 있을 때만 실행 -->
-		<if test="ExcludedIds != null and ExcludedIds.size() > 0">
-			AND document_id NOT IN
-			<foreach collection="ExcludedIds" item="document_id" open="("
-				close=")" separator=",">
-				#{document_id}
-			</foreach>
-		</if>
-		) AND approver_status = '승인'
-		ORDER BY report_date desc;
+		SELECT DISTINCT document_id, title, drafter_name, report_date, status
+		FROM approval_list_view
+		WHERE
+		(
+			drafter_id = #{loginID} OR approver_id = #{loginID}
+			AND status = '대기'
+			AND approver_status = '승인'
+		)
+		OR
+		(
+			drafter_id != #{loginID} AND approver_id != #{loginID}
+		 	AND status = '대기'
+			AND approver_status = '승인'
+			AND security_grade IN
+			<foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
+		    	#{sec_grade}
+		    </foreach>
+	    )
+	    ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 문서함 전체 리스트 출력 -->
 	<select id="documentTotalList" resultType="map">
-		SELECT *
-		FROM
-		document_list_info
-		WHERE total_status != '대기'
-		AND (drafter_id =
-		#{loginID}
+		SELECT DISTINCT document_id, title, drafter_name, report_date, approval_date, document_type_id
+		FROM approval_list_view
+		WHERE status != '대기'
+		AND (drafter_id = #{loginID}
 		OR approver_id = #{loginID})
+		ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 문서함 기안 리스트 출력 -->
 	<select id="documentDraftingList" resultType="map">
-		SELECT *
-		FROM
-		document_list_info
-		WHERE total_status = '승인'
+		SELECT DISTINCT document_id, title, drafter_name, report_date, approval_date, document_type_id
+		FROM approval_list_view
+		WHERE status = '승인'
 		AND drafter_id = #{loginID}
+		ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 문서함 결재 리스트 출력 -->
 	<select id="documentApprovalList" resultType="map">
-		SELECT *
-		FROM
-		document_list_info
-		WHERE total_status = '승인'
-		AND approver_id =
-		#{loginID}
+		SELECT DISTINCT document_id, title, drafter_name, report_date, approval_date, document_type_id
+		FROM approval_list_view
+		WHERE status = '승인'
+		AND approver_id = #{loginID}
+		ORDER BY report_date desc
+	    <if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 문서함 반려 리스트 출력 -->
 	<select id="documentRejectList" resultType="map">
-		SELECT *
-		FROM
-		document_list_info
-		WHERE total_status = '반려'
-		AND (drafter_id =
-		#{loginID}
+		SELECT DISTINCT document_id, title, drafter_name, report_date, approval_date, document_type_id
+		FROM approval_list_view
+		WHERE status = '반려'
+		AND (drafter_id = #{loginID}
 		OR approver_id = #{loginID})
+		<if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
 	</select>
 
 	<!-- // 임시저장 리스트 출력 -->
 	<select id="temporaryList" resultType="map">
-		SELECT *
-		FROM
-		document_list_info
+		SELECT DISTINCT title, document_type_id
+		FROM approval_list_view
 		WHERE drafter_id = #{loginID}
 		AND temporary = true
+		<if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
+	</select>
+	
+	<!-- // 문서 번호에 따른 결재 정보 출력 -->
+	<select id="selectAllByDocumentId" resultType="map">
+		select * from document where id = #{document_id}
+	</select>
+
+	<!-- // 기안자들의 이름과 부서, 직급 가져오기 -->
+	<select id="getDraftersByDocumentId" resultType="map">
+		SELECT *
+		FROM drafters_info_view
+		WHERE document_id = #{document_id}
+		ORDER BY sec_level desc;
+			</select>
+	
+	<!-- // 결재자의 이름 및 직급 가져오기 -->
+	<select id="getApproversByDocumentId" resultType="map">
+		SELECT *
+		FROM approvers_info_view
+		WHERE document_id = #{document_id}
+		ORDER BY sec_level desc;
+	</select>
+	 
+	<!-- // 로그인한 사용자가 기안자인지 -->
+	<select id="isDrafterByDocumentId" resultType="boolean">
+		SELECT count(*)
+		FROM document
+		WHERE id = #{document_id}
+			AND emp_id = #{loginID}
+	</select>
+	
+	<!-- // 로그인한 사용자가 결재자인지 -->
+	<select id="isApproverByDocumentId" resultType="boolean">
+		SELECT count(*)
+		FROM document_approvals
+		WHERE id = #{document_id}
+			AND emp_id = #{loginID}
+	</select>
+	
+	<!-- 휴가 신청서 정보 출력 -->
+	<select id="getVacationInfo" resultType="map">
+		SELECT *
+		FROM vacation_application_info
+		WHERE document_id = #{document_id}
+		ORDER BY vacation_date asc;
+	</select>
+	
+	<!-- // 대표 기안자의 부서 불러오기 -->
+	<select id="getMainDrafterDept" resultType="map">
+		SELECT 
+			e.name AS drafter_name,
+		    dt.task_name
+		FROM 
+		    document d
+		JOIN 
+		    employee e ON d.emp_id = e.id
+		JOIN 
+		    dept_task dt ON e.dept_task_id = dt.id
+		WHERE 
+		    d.id = #{document_id};
+	</select>
+	
+	<!-- // 지출 결의서 정보 출력 -->
+	<select id="getExpenceInfo" resultType="map">
+		SELECT 
+	        eri.*, 
+	        e.name AS spender_name
+	    FROM 
+	        expense_resolution_info eri
+	    JOIN 
+	        employee e ON eri.spender_id = e.id
+	    WHERE 
+	        eri.document_id = #{document_id}
+	</select>
+	
+	<!-- 개인 계좌 불러오기 -->
+	<select id="getPersonalAccount" resultType="map">
+		SELECT id, bank
+		FROM emp_account
+		WHERE emp_id = #{spender_id}
+	</select>
+	
+	<!-- 법인 계좌 불러오기 -->
+	<select id="getCorporateAccount" resultType="map">
+		SELECT id, bank
+		FROM corp_card
+		WHERE emp_id = #{spender_id}
+	</select>
+	
+	<!-- 업무 연락 정보 출력 -->
+	<select id="getBusinessInfo" resultType="map">
+		SELECT 
+		    d.title,
+		    bci.business_contents AS content
+		FROM 
+		    document d
+		JOIN 
+		    business_contact_info bci ON d.id = bci.document_id
+		WHERE 
+		    d.id = #{document_id};
 	</select>
 </mapper>

@@ -225,4 +225,9 @@ public class MailService {
 		}
 		return fileList;
 	}
+	
+	// 로그인한 사용자의 이메일 가져오기
+	public String getUserEmail(String loginID) {
+		return dao.getUserEmail(loginID);
+	}
 }

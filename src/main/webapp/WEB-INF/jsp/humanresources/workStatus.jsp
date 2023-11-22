@@ -120,6 +120,7 @@
 							</div>
 						</div>
 					</div>
+					<div id="detailPagination"></div>
 				</div>
 			</div>
 			<div id="companyVacation" class="tab-content">tab content3</div>

@@ -29,10 +29,10 @@
 				</div>
 				
 				<div class="documentTable__body">
-					<div class="document__list">
-						
-					</div>
+
 				</div>
+				
+				<div class="bottom__pageNavi"></div>
 			</div>
 		</div>
 	</div>
