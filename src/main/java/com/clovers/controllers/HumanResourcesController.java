@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.commons.EncryptionUtils;
+import com.clovers.constants.Constants;
 import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.dto.WorkConditionDTO;
@@ -246,31 +247,61 @@ public class HumanResourcesController {
 	}
 
 	// 사용자의 휴가 신청 상세 내역 확인하기
+//	@ResponseBody
+//	@RequestMapping("/selectAnnaulAppDetails")
+//	public List<Map<String, Object>> selectAnnaulAppDetails() {
+//		return hrservice.selectAnnaulAppDetails();
+//	}
+	
 	@ResponseBody
 	@RequestMapping("/selectAnnaulAppDetails")
-	public List<Map<String, Object>> selectAnnaulAppDetails() {
-		return hrservice.selectAnnaulAppDetails();
+	public Map<String, Object> selectAnnaulAppDetails(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		System.out.println(currentPage);
+		Map<String, Object> param = hrservice.selectAnnaulAppDetails((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 사용자의 최근 1년치 신청 상세 내역 확인하기
 	@ResponseBody
 	@RequestMapping("/selectAnnaulAppDetailsForYear")
-	public List<Map<String, Object>> selectAnnaulAppDetailsForYear() {
-		return hrservice.selectAnnaulAppDetailsForYear();
+	public Map<String, Object> selectAnnaulAppDetailsForYear(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		System.out.println(currentPage);
+		Map<String, Object> param = hrservice.selectAnnaulAppDetailsForYear((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 사용자의 최근 1달치 신청 상세 내역 확인하기
 	@ResponseBody
 	@RequestMapping("/selectAnnaulAppDetailsForMonth")
-	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth() {
-		return hrservice.selectAnnaulAppDetailsForMonth();
+	public Map<String, Object> selectAnnaulAppDetailsForMonth(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		System.out.println(currentPage);
+		Map<String, Object> param = hrservice.selectAnnaulAppDetailsForMonth((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 사용자의 최근 1주일치 신청 상세 내역 확인하기
 	@ResponseBody
 	@RequestMapping("/selectAnnaulAppDetailsForWeek")
-	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek() {
-		return hrservice.selectAnnaulAppDetailsForMonth();
+	public Map<String, Object> selectAnnaulAppDetailsForWeek(@RequestParam("cpage") String cpage) {
+		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		System.out.println(currentPage);
+		Map<String, Object> param =  hrservice.selectAnnaulAppDetailsForMonth((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		param.put("lastPageNum", currentPage);
+		return param;
 	}
 
 	// 임직원 관리 페이지 이동

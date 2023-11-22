@@ -90,9 +90,32 @@ body {
 	display: flex;
 }
 
-.fileIcon {
-	width: 9px;
-	height: 14px;
-	margin-top: 3px;
-	margin-left: auto;
+.bottom__pageNavi {
+	display: flex;
+	margin: 50px 0px;
+	align-items: center;
+	justify-content: center;
+}
+
+.bottom__pageNavi > div {
+	margin: 0px 5px;
+}
+
+.bottom__pageNavi > div:hover {
+	cursor: pointer;
+}
+
+.pageNavi__item {
+	width: 15px;
+	height: 25px;
+	text-align: center;
+}
+
+.pageNavi__circle {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	color: #ffffff;
+	background-color: #75B47D;
+	text-align: center;
 }

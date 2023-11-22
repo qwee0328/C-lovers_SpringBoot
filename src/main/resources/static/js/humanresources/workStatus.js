@@ -1,5 +1,8 @@
-let year;
+let year; // 사용자가 선택한 년도
+let type ="전체"; // 휴가 신청 내역 정보
+let count = 1; // 문서 정렬번호
 $(document).ready(function() {
+	window.count=1;
 	// 탭 메뉴 움직이기
 	$("ul.tabs li").click(function() {
 		var tab_id = $(this).attr("data-tab");
@@ -11,6 +14,7 @@ $(document).ready(function() {
 		$("#" + tab_id).addClass("current");
 	});
 	//---------------휴가 내역---------------
+	$("#cpage").val("1");
 	//날짜 설정
 	let date = new Date();
 	window.year = date.getFullYear();
@@ -41,74 +45,109 @@ $(document).ready(function() {
 	annaulDetails();
 
 	$("#detailAll").on("click", function() {
+		window.count=1;
 		annaulDetails();
 	})
-	
-	$("#detailYear").on("click",function(){
+
+	$("#detailYear").on("click", function() {
+		window.count=1;
 		annaulForYearDetails();
 	})
-	
-	$("#detailMonth").on("click",function(){
+
+	$("#detailMonth").on("click", function() {
+		window.count=1;
 		annaulForMonthDetails();
 	})
-	
-	$("#detailWeek").on("click",function(){
+
+	$("#detailWeek").on("click", function() {
+		window.count=1;
 		annaulForWeekDetails();
 	})
+
+	// 페이지 네이션 클릭시 리스트 변경
+	$(document).on("click", "#detailPagination>div", function() {
+		let pageUrl = $(this).attr("href");
+		console.log(pageUrl)
+		$.ajax({
+			url: pageUrl,
+			type: 'POST',
+			data: { cpage: $(this).attr("cpage") }
+		}).done(function(resp) {
+			detailsPrint(resp, window.type);
+		})
+	})
 });
+
+
 
 // 사용자의 휴가 신청 상세 내역 확인하기
 function annaulDetails() {
 	$.ajax({
 		url: "/humanResources/selectAnnaulAppDetails",
 		type: "POST",
+		data: { cpage: "1" }
 	}).done(function(resp) {
-		detailsPrint(resp);
+		console.log(resp)
+		window.type="전체";
+		detailsPrint(resp,window.type);
+
 	})
 }
 
 // 사용자의 최근 1주일치 신청 상세 내역 확인하기
-function annaulForWeekDetails(){
+function annaulForWeekDetails() {
 	$.ajax({
 		url: "/humanResources/selectAnnaulAppDetailsForWeek",
 		type: "POST",
+		data: { cpage: "1" }
 	}).done(function(resp) {
-		detailsPrint(resp);
+		console.log(resp)
+		window.type="1주일";
+		detailsPrint(resp,window.type);
 	})
 }
 
 // 사용자의 최근 1달치 신청 상세 내역 확인하기
-function annaulForMonthDetails(){
+function annaulForMonthDetails() {
 	$.ajax({
 		url: "/humanResources/selectAnnaulAppDetailsForMonth",
 		type: "POST",
+		data: { cpage: "1" }
 	}).done(function(resp) {
-		detailsPrint(resp);
+		console.log(resp)
+		window.type="한달";
+		detailsPrint(resp,window.type);
 	})
 }
 
 // 사용자의 최근 1년치 신청 상세 내역 확인하기
-function annaulForYearDetails(){
+function annaulForYearDetails() {
 	$.ajax({
 		url: "/humanResources/selectAnnaulAppDetailsForYear",
 		type: "POST",
+		data: { cpage: "1" }
 	}).done(function(resp) {
-		detailsPrint(resp);
+		console.log(resp)
+		window.type="1년";
+		detailsPrint(resp,window.type);
 	})
 }
 
+
 // 신청 상세내역 출력하는 함수
-function detailsPrint(resp) {
+function detailsPrint(resp, type) {
 	$(".detailes__body").empty();
-	for (let i = 0; i < resp.length; i++) {
+	console.log(window.count);
+	console.log(resp.detail.length)
+	for (let i = 0; i < resp.detail.length; i++) {
 		let bodyLine = $("<div>").attr("class", "body__line");
-		let num = $("<div>").html(i + 1).addClass("body__td");
-		let writer = $("<div>").html(resp[i].name).addClass("body__td");
-		let type = $("<div>").html(resp[i].rest_reason_type).addClass("body__td");
+		let num = $("<div>").html(window.count++).addClass("body__td");
+		let writer = $("<div>").html(resp.detail[i].name).addClass("body__td");
+		let type = $("<div>").html(resp.detail[i].rest_reason_type).addClass("body__td");
 
 		// 일수 계산
-		let start = resp[i].start_date;
-		let end = resp[i].end_date;
+		let start = resp.detail[i].start_date;
+		let end = resp.detail[i].end_date;
 		let startDate = new Date(start);
 		let endDate = new Date(end);
 
@@ -117,15 +156,117 @@ function detailsPrint(resp) {
 
 		let days = $("<div>").html(dayDiff + 1 + "일").addClass("body__td");
 		let period = $("<div>").addClass("body__td");
-		if (resp[i].start_date === resp[i].end_date) {
-			period.html(resp[i].start_date.split(" ")[0]);
+		if (resp.detail[i].start_date === resp.detail[i].end_date) {
+			period.html(resp.detail[i].start_date.split(" ")[0]);
 		} else {
-			period.html(resp[i].start_date.split(" ")[0] + " ~ " + resp[i].end_date.split(" ")[0]);
+			period.html(resp.detail[i].start_date.split(" ")[0] + " ~ " + resp.detail[i].end_date.split(" ")[0]);
 		}
-		let status = $("<div>").html(resp[i].status).addClass("body__td");
-		let detail = $("<div>").html("상세").attr("id", resp[i].id).addClass("body__td");
+		let status = $("<div>").html(resp.detail[i].status).addClass("body__td");
+		let detail = $("<div>").html("상세").attr("id", resp.detail[i].id).addClass("body__td");
 		bodyLine.append(num).append(writer).append(type).append(days).append(period).append(status).append(detail);
 		$(".detailes__body").append(bodyLine);
+	}
+	pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum, type);
+}
+
+// 페이지 네이션 구성
+function pagination(recordTotalCount, recordCountPerPage, naviCountPerPage, lastPageNum, type) {
+	$("#detailPagination").empty();
+	let pageUrl = "";
+	if (type === "전체") {
+		pageUrl = "/humanResources/selectAnnaulAppDetails";
+	} else if (type === "1년") {
+		pageUrl = "/humanResources/selectAnnaulAppDetailsForYear";
+	} else if (type === "한달") {
+		pageUrl = "/humanResources/selectAnnaulAppDetailsForMonth";
+	} else if (type === "1주일") {
+		pageUrl = "/humanResources/selectAnnaulAppDetailsForWeek";
+	}
+
+	if (recordTotalCount != 0) {
+
+		let pageTotalCount = 0;
+		pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+
+		let currentPage = lastPageNum;
+
+		// 비정상 접근 차단
+		if (currentPage < 1) {
+			currentPage = 1;
+		} else if (currentPage > pageTotalCount) {
+			currentPage = pageTotalCount;
+		}
+
+		let startNavi = Math.floor((currentPage - 1) / naviCountPerPage) * naviCountPerPage + 1;
+		let endNavi = startNavi + (naviCountPerPage - 1);
+		if (endNavi > pageTotalCount) {
+			endNavi = pageTotalCount;
+		}
+		console.log("start" + startNavi);
+		console.log("end" + endNavi)
+
+		let needPrev = true;
+		let needNext = true;
+
+		if (startNavi == 1) {
+			needPrev = false;
+		}
+
+		if (endNavi == pageTotalCount) {
+			needNext = false;
+		}
+
+		let pagination = $("#detailPagination");
+		if (startNavi != 1) {
+			let divTag = $("<div>");
+			divTag.attr("href", pageUrl).attr("cpage", "1");
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-angles-left");
+			divTag.append(iTag);
+			pagination.append(divTag);
+		}
+
+		console.log("startNavi: " + startNavi);
+		console.log("needPrev: " + needPrev);
+		console.log("endNavi:" + endNavi);
+		console.log("pageTotalCount: " + pageTotalCount);
+
+		if (needPrev) {
+			let divTag = $("<div>");
+			divTag.attr("href", pageUrl).attr("cpage", (startNavi - 1));
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-chevron-left");
+			divTag.append(iTag);
+			pagination.append($(divTag));
+		}
+
+		for (let i = startNavi; i <= endNavi; i++) {
+			let divTag = $("<div>");
+			divTag.text(i);
+			divTag.attr("href", pageUrl).attr("cpage", i);
+			if (i == currentPage) {
+				divTag.addClass("pageNavi__circle");
+			}
+			pagination.append(divTag);
+		}
+
+		if (needNext) {
+			let divTag = $("<div>");
+			divTag.attr("href", pageUrl).attr("cpage", (endNavi + 1));
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-chevron-right");
+			divTag.append(iTag);
+			pagination.append(divTag);
+		}
+
+		if (endNavi != pageTotalCount) {
+			let divTag = $("<div>");
+			divTag.attr("href", pageUrl).attr("cpage", (endNavi + 1));
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-angles-right");
+			divTag.append(iTag);
+			pagination.append(divTag);
+		}
 	}
 }
 

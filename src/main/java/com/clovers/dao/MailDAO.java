@@ -125,4 +125,9 @@ public class MailDAO {
 	public String selectContentById(int id) {
 		return db.selectOne("Mail.selectContentById", id);
 	}
+
+	// 로그인한 사용자의 이메일 가져오기
+	public String getUserEmail(String loginID) {
+		return db.selectOne("Mail.getUserEmail", loginID);
+	}
 }
