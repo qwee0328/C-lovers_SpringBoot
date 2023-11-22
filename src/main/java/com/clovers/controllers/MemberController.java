@@ -143,6 +143,7 @@ public class MemberController {
 		} else {
 			System.out.println("로그인 안되어있음");
 		}
+		System.out.println("user"+userInfo.toString());
 		return ResponseEntity.ok(userInfo);
 	}
 
