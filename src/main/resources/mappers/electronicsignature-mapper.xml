@@ -142,7 +142,7 @@
 	    FROM approval_list_view
 	    WHERE
 	    (
-	        drafter_id = #{loginID} OR approver_id = #{loginID}
+	        drafter_id = #{loginID} OR approver_id = #{loginID} AND status = '대기'
 	    )
 	    OR
 	    (
@@ -151,6 +151,7 @@
 	        <foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
 	            #{sec_grade}
 	        </foreach>
+	        AND status = '대기'
 	    )
 	    ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
@@ -427,11 +428,4 @@
 		SET status = #{approval}, approval_date = now()
 		WHERE id = #{document_id}
 	</update>
-	
-	<!-- 문서 첨부파일 리스트 -->
-	<select id="getDocumentFileList" resultType="map">
-		SELECT *
-		FROM document_file
-		WHERE document_id = #{document_id}
-	</select>
 </mapper>

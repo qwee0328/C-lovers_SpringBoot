@@ -43,7 +43,7 @@
 					</tr>
 					<tr>
 						<th scope="row">보존 연한</th>
-						<td>3년</td>
+						<td>${documentInfo.get(0).save_period }년</td>
 						<th scope="row">보안 등급</th>
 						<td>${documentInfo.get(0).security_grade }</td>
 					</tr>
@@ -207,12 +207,6 @@
 							<tr>
 								<th>총괄 적요</th>
 								<td id="executive_summary"></td>
-							</tr>
-							<tr>
-								<th>파일</th>
-								<td id="business_file">
-									
-								</td>
 							</tr>
 						</tbody>
 					</table>

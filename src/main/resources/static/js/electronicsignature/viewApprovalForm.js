@@ -41,16 +41,6 @@ $(document).ready(function() {
 			if(resp.isApprovalTurn) {
 				$(".approvalBtn").css('display', 'flex');
 			}
-			
-			// 파일 출력
-			if(resp.fileList.length > 0) {
-				for(let i = 0; i < resp.fileList.length; i++) {
-					let fileDiv = $("<div>");
-					fileDiv.html(resp.fileList.ori_name);
-					
-					$("#business_file").append(fileDiv);
-				}
-			}
 
 		})
 	// 업무 연락

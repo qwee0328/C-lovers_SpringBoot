@@ -436,14 +436,10 @@ public class ElectronicSignatureController {
 		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
 		boolean isApprovalTurn = isApprovalTurn(document_id);
 		
-		// 문서 첨부파일 리스트
-		List<Map<String, String>> fileList = esservices.getDocumentFileList(document_id);
-		
 		Map<String, Object> expense_info = new HashMap<>();
 		expense_info.put("expense_info", expense);
 		expense_info.put("account", account);
 		expense_info.put("isApprovalTurn", isApprovalTurn);
-		expense_info.put("fileList", fileList);
 		
 		return expense_info;
 	}

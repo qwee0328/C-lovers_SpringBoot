@@ -217,9 +217,4 @@ public class ElectronicSignatureDAO {
 	public int updateDocumentStatus(Map<String, String> param) {
 		return db.update("ElectronicSignature.updateDocumentStatus", param);
 	}
-	
-	// 문서 첨부파일 리스트
-	public List<Map<String, String>> getDocumentFileList(String document_id) {
-		return db.selectList("ElectronicSignature.getDocumentFileList", document_id);
-	}
 }
