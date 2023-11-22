@@ -45,6 +45,7 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ScheduleDTO insert(ScheduleDTO dto) { // 일정 추가
+		System.out.println(dto);
 		dto.setEmp_id((String) session.getAttribute("loginID"));
 		sService.insert(dto);
 		return dto;
@@ -64,10 +65,9 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public int delete(int id) { // 일정 삭제
-		
 		int rid = sService.selectRecurringIdById(id);
 		if(rid!=0) { // 반복 이벤트이면
-			sService.deleteReccuring(rid); // 반복일정 정보 삭제 후
+			sService.deleteRecurring(rid); // 반복일정 정보 삭제 후
 			return sService.delete(id); // 일정 삭제
 		}else { // 반복 이벤트가 아니면
 			return sService.delete(id); // 일정 삭제
@@ -94,23 +94,31 @@ public class ScheduleController {
 	// 일정 변경
 	@ResponseBody
 	@RequestMapping(value="/scheduleUpdate",  method = RequestMethod.POST)
-	public void scheduleUpdate(ScheduleDTO dto){ // 일정 변경 (일반 이벤트)
-		if(dto.getRecurring_id()!=0)
-			sService.deleteReccuring(dto.getRecurring_id()); // 반복이벤트가 존재했다가 사라진 일정이므로 반복 일정 정보 삭제
+	public ScheduleDTO scheduleUpdate(ScheduleDTO dto){ // 일정 변경 (일반 이벤트)
+		if(dto.getRecurring_id()!=0) {
+			sService.deleteRecurring(dto.getRecurring_id()); // 반복이벤트가 존재했다가 사라진 일정이므로 반복 일정 정보 삭제
+			
+			//dto에서 recurring_id 값 0으로 변경 -> DB 외래키 지정하면 해결됨.
+			dto.setRecurring_id(0);
+		}
+		
 		sService.scheduleUpdate(dto); // 일정 변경
+		return dto;
 	}
 
 	
 	// 반복 일정 변경
 	 @ResponseBody
-	 @RequestMapping(value="/recurringScheduleUpdate", method = RequestMethod.POST) public void recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ // 일정 변경 (반복 이벤트)
+	 @RequestMapping(value="/recurringScheduleUpdate", method = RequestMethod.POST) public ScheduleDTO recurringScheduleUpdate(ScheduleRecurringDTO srdto, ScheduleDTO sdto){ // 일정 변경 (반복 이벤트)
 		 if(sdto.getRecurring_id()==0) { // 반복 이벤트가 없었다가 생긴 경우
 			 sdto.setRecurring_id(sService.insertReccuring(srdto)); // 새로운 반복 이벤트 정보 저장
 			 sService.scheduleUpdate(sdto); // 일정 변경
+			 return sdto;
 		 }else { // 기존 반복 이벤트를 수정한 경우
 			 srdto.setId(sdto.getRecurring_id());
 			 sService.recurringScheduleUpdate(srdto); // 반복 이벤트 변경
 			 sService.scheduleUpdate(sdto); // 일정 변경
+			 return sdto;
 		 }
 		
 	 }
@@ -181,7 +189,7 @@ public class ScheduleController {
 	public int trashCalendar(int id, int trash) {
 		if(session.getAttribute("calIds") != null) {
 			List<Integer> calIds = (List<Integer>) session.getAttribute("calIds");
-			calIds.remove(id);
+			if(calIds.contains(id)) calIds.remove(calIds.indexOf(id));
 		}
 		return sService.trashCalendar(id,trash);
 	}
@@ -192,4 +200,10 @@ public class ScheduleController {
 	public int deleteCalendar(int id) {
 		return sService.deleteCalendar(id);
 	} 
+	
+	
+	// 휴지통에서 30일 경과한 캘린더 삭제
+	public void autoDeleteInTrash() {
+		sService.autoDeleteInTrash();
+	}
 }

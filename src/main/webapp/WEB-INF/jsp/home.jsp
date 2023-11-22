@@ -204,20 +204,6 @@
 						<hr></hr>
 						<div class="contentBox__scheduleList">
 							<div id="calendarList"></div>
-						
-							<%-- <c:forEach var="test" begin="1" end="3" step="1">
-								<div class="scheduleList__scheduleItem">
-									<div class="scheduleItem__date">
-										<div class="date__dayNum">${test }</div>
-										<div class="date__dayText">${test }</div>
-									</div>
-									<div class="mainContents__line"></div>
-									<div class="scheduleItem__plan">
-										<div class="plan__title">${test }</div>
-										<div class="plan__time">${test }</div>
-									</div>
-								</div>
-							</c:forEach> --%>
 						</div>
 					</div>
 				</div>

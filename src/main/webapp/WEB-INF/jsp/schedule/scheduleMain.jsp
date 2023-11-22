@@ -36,7 +36,7 @@
 </head>
 
 <body>
-`	<input type="hidden" id="calIds" value="${calIds}">
+	<input type="hidden" id="calIds" value="${calIds}">
 	<%@ include file="../commons/header.jsp"%>
 
 	<div class="container d-flex">
@@ -44,6 +44,7 @@
 	
 		<div class="calenderBody">
 			<div id="calendar"></div>
+			<div id="searchTag"></div>
 		</div>
 
 		<!-- 일정 추가 모달창 -->
