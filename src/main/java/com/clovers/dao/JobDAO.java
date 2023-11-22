@@ -35,6 +35,10 @@ public class JobDAO {
 		return db.selectList("Job.selectAllAcsSecLevelWithOutJobId");
 	}
 	
+	public Map<String,Object> selectNewestSecLevelWithOutJobId(){
+		return db.selectOne("Job.selectNewestSecLevelWithOutJobId");
+	}
+	
 	public List<JobDTO> selectAll(){
 		return db.selectList("Job.selectAll");
 	}

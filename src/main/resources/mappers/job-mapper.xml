@@ -21,12 +21,17 @@
 	</select>
 	
 	<resultMap id="jobResultMap" type="HashMap">
+		<result column="id" property="id"/>
 		<result column="security_level" property="security_level"/>
 		<result column="job_name" property="job_name"/>
 	</resultMap>
 	
 	<select id="selectAllAcsSecLevelWithOutJobId" resultMap="jobResultMap">
-		select concat(sec_level,"등급") as security_level , job_name from job order by sec_level
+		select id, concat(sec_level,"등급") as security_level , job_name from job order by sec_level
+	</select>
+	
+	<select id="selectNewestSecLevelWithOutJobId" resultMap="jobResultMap">
+		select id ,concat(sec_level,"등급") as security_level , job_name from job order by sec_level limit 1
 	</select>
 	
 	<select id="selectAll" resultType="com.clovers.dto.JobDTO">
