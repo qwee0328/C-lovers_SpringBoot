@@ -134,7 +134,7 @@
 	                            
 	                            <div class="profileBox__inner">
 	                                <div class="profileLeft">
-	                                    <span>아이디</span>
+	                                    <span>사내이메일</span>
 	                                </div>
 	                                <div class="profileRight">
 	                                    <div><input type="text" name="company_email" id="company_email" value=${list.company_email }></div>

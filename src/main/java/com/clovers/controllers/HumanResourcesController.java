@@ -47,7 +47,10 @@ public class HumanResourcesController {
 	// view로 mypage에 필요한 정보 가져오기
 	@RequestMapping("/mypage")
 	public String select(Model model) {
-
+		
+		String title = "인사";
+		session.setAttribute("title", title);
+		
 		String id = (String) session.getAttribute("loginID");
 
 //		String name = hrService.selectByIdGetName(id);
