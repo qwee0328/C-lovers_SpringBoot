@@ -85,6 +85,18 @@ public class ElectronicSignatureController {
 			isApprovalTurn = false;
 		}
 		
+		// 반려가 존재하는지
+		boolean existRejection = esservices.existRejection(document_id);
+		if(existRejection) {
+			isApprovalTurn = false;
+		}
+		
+		// 마지막 결재자였는지 확인
+		boolean checkAllApprovals = esservices.checkAllApprovals(document_id);
+		if(checkAllApprovals) {
+			isApprovalTurn = false;
+		}
+		
 		return isApprovalTurn;
 	}
 
@@ -373,8 +385,13 @@ public class ElectronicSignatureController {
 		// 기안자들의 이름과 직급, 부서 불러오기
 		List<Map<String, Object>> draftersInfo = esservices.getDraftersByDocumentId(document_id);
 		
-		// 결재자들의 이름과 직급, 부서 가져오기
+		// 결재자들의 이름과 직급, 결재 결과 가져오기
 		List<Map<String, String>> approversInfo = esservices.getApproversByDocumentId(document_id);		
+		for(Map<String, String> item : approversInfo) {
+			if(item.get("approval").equals("대기")) {
+				item.put("approval", "");
+			}
+		}
 		
 		model.addAttribute("mainDrafter", mainDrafter);
 		model.addAttribute("documentInfo", documentInfo);
@@ -442,6 +459,30 @@ public class ElectronicSignatureController {
 		business_info.put("isApprovalTurn", isApprovalTurn);
 		
 		return business_info;
+	}
+	
+	// 결재 결과 저장
+	@ResponseBody
+	@RequestMapping("/submitApproval")
+	public int submitApproval(String document_id, String approval) {
+		String loginID = (String) session.getAttribute("loginID");
+		esservices.submitApproval(loginID, document_id, approval);
+		
+		// 결재자가 승인했다면
+		if(approval.equals("승인")) {
+			// 마지막 결재자였는지 확인
+			boolean checkAllApprovals = esservices.checkAllApprovals(document_id);
+			// 문서 상태를 승인으로 변경
+			if(checkAllApprovals) {
+				esservices.updateDocumentStatus(document_id, "승인");
+			}
+		// 결재자가 반려했다면
+		} else if(approval.equals("반려")) {
+			// 문서 상태를 반려로 변경
+			esservices.updateDocumentStatus(document_id, "반려");
+		}
+		
+		return 1;
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

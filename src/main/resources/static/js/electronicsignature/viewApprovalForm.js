@@ -58,4 +58,24 @@ $(document).ready(function() {
 			}
 		})
 	}
+	
+	// 승인, 반려 버튼 눌렀을 경우
+	$(".approvalBtn").on("click", "button", function(){
+		let dicision = $(this).text();
+		console.log(dicision);
+		let result = confirm("결재를 " + dicision + "하시겠습니까?");
+		
+		if(result) {
+			$.ajax({
+				url: "/electronicsignature/submitApproval",
+				data : { 
+					document_id : document_id,
+					approval : dicision
+					}
+			}).done(function(resp){
+				alert(dicision + "이 완료되었습니다.");
+				location.reload();
+			})
+		}
+	})
 })

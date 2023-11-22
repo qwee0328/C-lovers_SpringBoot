@@ -197,4 +197,24 @@ public class ElectronicSignatureDAO {
 	public Map<String, String> getBusinessInfo(String document_id) {
 		return db.selectOne("ElectronicSignature.getBusinessInfo", document_id);
 	}
+	
+	// 반려가 존재하는지
+	public boolean existRejection(String loginID) {
+		return db.selectOne("ElectronicSignature.existRejection", loginID);
+	}
+	
+	// 결재 결과 저장
+	public int submitApproval(Map<String, String> param) {
+		return db.update("ElectronicSignature.submitApproval", param);
+	}
+	
+	// 마지막 결재자였는지 확인
+	public boolean checkAllApprovals(String document_id) {
+		return db.selectOne("ElectronicSignature.checkAllApprovals", document_id);
+	}
+	
+	// 문서 상태 변경
+	public int updateDocumentStatus(Map<String, String> param) {
+		return db.update("ElectronicSignature.updateDocumentStatus", param);
+	}
 }

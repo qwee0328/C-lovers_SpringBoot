@@ -124,10 +124,13 @@
 										</c:forEach>
 									</tr>
 									<tr>
-										<td class="stamp"></td>
-										<td class="stamp"></td>
-										<td class="stamp"></td>
-										<td class="stamp"></td>
+										<c:forEach var="item" items="${approversInfo}" varStatus="loop">
+										    <td class="stamp">${item.approval}</td>
+										</c:forEach>
+										
+										<c:forEach begin="${approversInfo.size() + 1}" end="4">
+										    <td class="stamp"></td>
+										</c:forEach>
 									</tr>
 									<tr>
 										<c:forEach var="item" items="${approversInfo}" varStatus="loop">

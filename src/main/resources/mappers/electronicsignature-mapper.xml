@@ -307,7 +307,7 @@
 		ORDER BY sec_level desc;
 			</select>
 	
-	<!-- // 결재자의 이름 및 직급 가져오기 -->
+	<!-- // 결재자들의 이름과 직급, 결재 결과 가져오기 -->
 	<select id="getApproversByDocumentId" resultType="map">
 		SELECT *
 		FROM approvers_info_view
@@ -331,7 +331,7 @@
 			AND emp_id = #{loginID}
 	</select>
 	
-	<!-- 휴가 신청서 정보 출력 -->
+	<!-- // 휴가 신청서 정보 출력 -->
 	<select id="getVacationInfo" resultType="map">
 		SELECT *
 		FROM vacation_application_info
@@ -367,21 +367,21 @@
 	        eri.document_id = #{document_id}
 	</select>
 	
-	<!-- 개인 계좌 불러오기 -->
+	<!-- // 개인 계좌 불러오기 -->
 	<select id="getPersonalAccount" resultType="map">
 		SELECT id, bank
 		FROM emp_account
 		WHERE emp_id = #{spender_id}
 	</select>
 	
-	<!-- 법인 계좌 불러오기 -->
+	<!-- // 법인 계좌 불러오기 -->
 	<select id="getCorporateAccount" resultType="map">
 		SELECT id, bank
 		FROM corp_card
 		WHERE emp_id = #{spender_id}
 	</select>
 	
-	<!-- 업무 연락 정보 출력 -->
+	<!-- // 업무 연락 정보 출력 -->
 	<select id="getBusinessInfo" resultType="map">
 		SELECT 
 		    d.title,
@@ -393,4 +393,38 @@
 		WHERE 
 		    d.id = #{document_id};
 	</select>
+	
+	<!-- // 반려가 존재하는지 -->
+	<select id="existRejection" resultType="boolean">
+		SELECT count(*)
+		FROM document_approvals
+		WHERE document_id = #{document_id}
+			AND approval = '반려'
+	</select>
+	
+	<!-- // 결재 결과 저장 -->
+	<update id="submitApproval">
+		UPDATE document_approvals
+	    SET approval = #{approval}
+	    WHERE document_id = #{document_id}
+	    AND emp_id = #{loginID}
+	</update>
+	
+	<!-- // 마지막 결재자였는지 확인 -->
+	<select id="checkAllApprovals" resultType="boolean">
+		SELECT
+	        CASE
+	            WHEN COUNT(*) = SUM(CASE WHEN approval = '승인' THEN 1 ELSE 0 END) THEN 1
+	            ELSE 0
+	        END AS result
+	    FROM document_approvals
+	    WHERE document_id = #{document_id}
+	</select>
+	
+	<!-- // 문서 상태 변경 -->
+	<update id="updateDocumentStatus">
+		UPDATE DOCUMENT
+		SET status = #{approval}, approval_date = now()
+		WHERE id = #{document_id}
+	</update>
 </mapper>
