@@ -25,7 +25,7 @@ public class OrganizationService {
 	@Transactional
 	public OfficeDTO getCompleteOrganizationStructure() {
 		OfficeDTO office = oService.selectOfficeInfo();
-		office.setTotal_officer(oService.selectEmpCount());
+		office.setTotal_officer(oService.selectUserCount());
 		List<DepartmentDTO> departments = deptService.selectAll();
 		for (DepartmentDTO dept : departments) {
 			List<DeptTaskDTO> depttasks = dtaskService.selectByDeptId(dept.getId());

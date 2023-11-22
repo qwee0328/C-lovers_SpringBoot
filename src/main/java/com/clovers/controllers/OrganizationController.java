@@ -1,13 +1,13 @@
 package com.clovers.controllers;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +17,7 @@ import com.clovers.dto.DeptTaskDTO;
 import com.clovers.dto.OfficeDTO;
 import com.clovers.services.DepartmentService;
 import com.clovers.services.DeptTaskService;
+import com.clovers.services.OfficeService;
 import com.clovers.services.OrganizationService;
 
 @RestController
@@ -33,6 +34,10 @@ public class OrganizationController {
 	@Autowired
 	private OrganizationService orgService;
 	
+	@Autowired
+	private OfficeService oService;
+	
+	
 	
 	@GetMapping("office")
 	public ResponseEntity<OfficeDTO> getOfficeDTO(){
@@ -40,49 +45,13 @@ public class OrganizationController {
 	}
 	
 	
-	@GetMapping("office/empCount")
-	public ResponseEntity<Integer> getOfficeEmpCount(){
-		return ResponseEntity.ok(deptService.selectEmpCount());
-	}
 	
-	@GetMapping("getDepartment")
-	public ResponseEntity<List<DepartmentDTO>> getDepartmentDTOList(){
-		return ResponseEntity.ok(deptService.selectAllWithOutOfficeId());
-	}
-	
-	@GetMapping("getDepartment/{id}")
-	public ResponseEntity<DepartmentDTO> getDepartmentDTO(@PathVariable String id){
-		return ResponseEntity.ok(deptService.selectById(id));
-	}
-	
-	@GetMapping("getDepartment/{id}/empCount")
-	public ResponseEntity<Integer> getEmpCountByDepartment(@PathVariable String id){
-		return ResponseEntity.ok(deptService.selectEmpCountById(id));
-	}
-	
-	@GetMapping("getDeptTaskByDeptId/{dept_id}")
-	public ResponseEntity<List<DeptTaskDTO>> getDeptTaskDTOListByDeptId(@PathVariable String dept_id){
-		return ResponseEntity.ok(dtaskService.selectByDeptId(dept_id));
-	}
-	
-	@GetMapping("getDeptTaskById/{id}")
-	public ResponseEntity<DeptTaskDTO> getDeptTaskDTO(@PathVariable String id){
-		return ResponseEntity.ok(dtaskService.selectById(id));
-	}
-	
-	@GetMapping("getDeptTask/{id}/empCount")
-	public ResponseEntity<Integer> getEmpCountByDeptTask(@PathVariable String id){
-		return ResponseEntity.ok(dtaskService.selectEmpCountById(id));
-	}
-	
-	
-	@PostMapping("postDepartment")
-	public ResponseEntity<Void> postDepartment(@RequestBody DepartmentDTO deptDTO){
-		String newId = deptService.generateNewId();
-		deptDTO.setId(newId);
-		int result = deptService.insert(deptDTO);
+	@PostMapping("insertNewDepartment")
+	public ResponseEntity<DepartmentDTO> postDepartment(@RequestBody Map<String,String> param){
+		String dept_name = param.get("dept_name");
+		int result = deptService.insertNewDepartment(dept_name);
 		if(result>0) {
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(deptService.selectById(deptService.selectLastestIdForUpdate()));
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
@@ -96,6 +65,24 @@ public class OrganizationController {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-	}	
+	}
+	
+	@PutMapping("updateOfficeName")
+	public ResponseEntity<OfficeDTO> updateOfficeName(@RequestBody Map<String,String> param){
+		String office_name = param.get("office_name");
+		OfficeDTO odto = new OfficeDTO();
+		odto.setOffice_name(office_name);
+		oService.updateOfficeName(odto);
+		return ResponseEntity.ok(orgService.getCompleteOrganizationStructure());
+	}
+	
+	@PutMapping("updateOfficeEmail")
+	public ResponseEntity<OfficeDTO> updateOfficeEmail(@RequestBody Map<String,String> param){
+		String office_email = param.get("office_email");
+		OfficeDTO odto = new OfficeDTO();
+		odto.setOffice_email(office_email);
+		oService.updateOfficeEmail(odto);
+		return ResponseEntity.ok(orgService.getCompleteOrganizationStructure());
+	}
 
 }
