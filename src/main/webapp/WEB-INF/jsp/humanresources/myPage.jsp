@@ -216,7 +216,9 @@
 	                                </div>
 	                                <div class="profileRight">
 	                                    <div>
-	                                        ${list.formatBirth }
+	                                    	<c:if test="${list.formatBirth != '1900년 01월 01일'}">
+	                                    		${list.formatBirth }
+	                                    	</c:if>
 	                                    </div>
 	                                </div>
 	                            </div>
