@@ -124,10 +124,13 @@
 										</c:forEach>
 									</tr>
 									<tr>
-										<td class="stamp"></td>
-										<td class="stamp"></td>
-										<td class="stamp"></td>
-										<td class="stamp"></td>
+										<c:forEach var="item" items="${approversInfo}" varStatus="loop">
+										    <td class="stamp">${item.approval}</td>
+										</c:forEach>
+										
+										<c:forEach begin="${approversInfo.size() + 1}" end="4">
+										    <td class="stamp"></td>
+										</c:forEach>
 									</tr>
 									<tr>
 										<c:forEach var="item" items="${approversInfo}" varStatus="loop">
@@ -144,6 +147,10 @@
 					</tr>
 				</tbody>
 			</table>
+			<div class="approvalBtn">
+				<button id="approval">승인</button>
+				<button id="rejection">반려</button>
+			</div>
 			<hr>
 			<c:choose>
 				<c:when test="${documentInfo.get(0).document_type_id == '휴가 신청서'}">
@@ -200,6 +207,12 @@
 							<tr>
 								<th>총괄 적요</th>
 								<td id="executive_summary"></td>
+							</tr>
+							<tr>
+								<th>파일</th>
+								<td id="business_file">
+									
+								</td>
 							</tr>
 						</tbody>
 					</table>

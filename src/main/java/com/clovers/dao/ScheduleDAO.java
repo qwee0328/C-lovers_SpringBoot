@@ -19,29 +19,39 @@ public class ScheduleDAO {
 	@Autowired
 	private SqlSession db;
 	
+	// 일정 추가
 	public ScheduleDTO insert(ScheduleDTO dto) {
 		db.insert("Schedule.insert",dto);
 		return dto;
 	}
 	
+	// 반복 일정 정보 추가
 	public int insertReccuring(ScheduleRecurringDTO	dto) {
 		db.insert("Schedule.insertReccuring",dto);
 		return dto.getId();
 	}
 	
+	// 일정 삭제
 	public int delete(int id) {
 		return db.delete("Schedule.delete",id);
 	}
 	
-	public int deleteReccuring(int id) {
-		return db.delete("Schedule.deleteReccuring",id);
+	// 반복 일정 삭제
+	public int deleteRecurring(int id) {
+		return db.delete("Schedule.deleteRecurring",id);
 	}
 	
+	// 반복 일정 정보가 테이블에서 삭제될 때, 참조중인 내용들 삭제
+	public int deleteRecurringId(int recurring_id) {
+		return db.update("Schedule.deleteRecurringId",recurring_id);
+	}
 	
+	// 일정 불러오기
 	public List<HashMap<String,Object>> selectAll(String emp_id){
 		return db.selectList("Schedule.selectAll",emp_id);
 	}
 	
+	// 일정 세부정보 불러오기
 	public HashMap<String,Object> selectById(int id){
 		return db.selectOne("Schedule.selectById",id);
 	}
@@ -105,9 +115,9 @@ public class ScheduleDAO {
 		return db.delete("Schedule.deleteCalendar",id);
 	} 
 	
-	// 캘린더 휴지통에서 30일 후 삭제
-//	public void autoDeleteInTrash() {
-//		db.delete("Schedule.autoDeleteInTrash");
-//	}
+	// 휴지통에서 30일 경과한 데이터 삭제
+	public void autoDeleteInTrash() {
+		db.delete("Schedule.autoDeleteInTrash");
+	}
 
 }

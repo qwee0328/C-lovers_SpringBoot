@@ -120,3 +120,27 @@ hr {
 	margin: 0px 0px 30px 60px;
 	font-size: 22px;
 }
+
+.approvalBtn {
+	display: none;
+	margin: 50px auto 0px;
+	width: 200px;
+	justify-content: space-around;
+	align-items: center;
+}
+
+#approval, #rejection {
+	border: none;
+	border-radius: 4px;
+	width: 70px;
+	height: 35px;
+}
+
+#approval {
+	color: white;
+	background-color: #75B47D;
+}
+
+#rejection {
+	background-color: #7d7d7d40;
+}

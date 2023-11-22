@@ -261,5 +261,14 @@
 		select count(*) from address_favorite where address_book_id = #{address_book_id} and emp_id = #{emp_id};
 	</select>
 
+	<!-- 휴지통에서 30일 경과된 데이터 삭제 -->
+	<delete id="autoDeleteInTrash">
+		delete from address_book where id in (select id from (select * from address_book where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
+	</delete>
 	
+	
+	<!-- 휴지통에서 지금 비우기 클릭 시 휴지통 비워짐 -->
+	<delete id="immediatelyEmpty">
+		delete from address_book where (is_share = 1 or (emp_id = #{emp_id} and is_share = 0)) and trash = 1;
+	</delete>
 </mapper>

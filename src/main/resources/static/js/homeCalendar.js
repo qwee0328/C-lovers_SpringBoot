@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		$("input[type='checkbox'][name='week']").prop("checked", false);
 
 		$.ajax({
-			url: "/schedule/calendarByEmpId",
-			async: false
-		}).done(function(resp) {
+			url:"/schedule/selectCalendarByEmpId",
+			async:false
+		}).done(function(resp){
 			$(".calendarModal__calNameList *").remove();
-			for (let i = 0; i < resp.length; i++) {
-				$(".calendarModal__calNameList").append($("<option>").val(resp[i].id).text(resp[i].name).attr("color", resp[i].color));
-			}
-			$(".calendarModal__calNameList:first-child").prop("selected", true);
+			for(let i=0; i<resp.length; i++){
+				$(".calendarModal__calNameList").append($("<option>").val(resp[i].id).text(resp[i].name).attr("color",resp[i].color));
+			}	
+			$(".calendarModal__calNameList:first-child").prop("selected",true);
 		});
 	}
 
@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					url: "/schedule/selectAll",
 					async: false
 				}).done(function(resp) {
-					console.log(resp);
 					for (let i = 0; i < resp.length; i++) {
 
 						let eventData = {
@@ -250,6 +249,23 @@ document.addEventListener('DOMContentLoaded', function() {
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
 			return false;
 		}
+		
+		if($(".insertSchedule__title").val()==""){
+			Swal.fire({
+				icon: "error",
+				text: "일정 제목을 입력해주세요."
+			});
+			return;
+		}
+		
+		if($(".insertSchedule__startDate").val()==""){
+			Swal.fire({
+				icon: "error",
+				text: "시작 일자를 입력해주세요."
+			});
+			return;
+		}		
+		
 		let events = generateEvent();
 		calendar.addEventSource(events);
 
