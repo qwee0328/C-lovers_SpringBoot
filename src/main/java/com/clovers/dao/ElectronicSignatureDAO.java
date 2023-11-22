@@ -118,9 +118,9 @@ public class ElectronicSignatureDAO {
 		return db.selectList("ElectronicSignature.progressCheckList", param);
 	}
 
-	// 진행 중인 문서 진행 리스트 출력
-	public List<Map<String, Object>> progressList(Map<String, Object> param) {
-		return db.selectList("ElectronicSignature.progressList", param);
+	// 진행 중인 문서 예정 리스트 출력
+	public List<Map<String, Object>> progressExpectedList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.progressExpectedList", param);
 	}
 
 	// 문서함 전체 리스트 출력
@@ -206,6 +206,11 @@ public class ElectronicSignatureDAO {
 	// 반려가 존재하는지
 	public boolean existRejection(String loginID) {
 		return db.selectOne("ElectronicSignature.existRejection", loginID);
+	}
+	
+	// 이미 결재 내역이 존재하는지
+	public boolean existMyApproval(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.existMyApproval", param);
 	}
 	
 	// 결재 결과 저장
