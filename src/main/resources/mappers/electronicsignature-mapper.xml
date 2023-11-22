@@ -104,19 +104,29 @@
 	<insert id="insertBusinessContactInfo">
 		insert into business_contact_info value (0, #{document_id}, #{business_contents})
 	</insert>
-
-	<!-- // 직전 결재자들의 결재 결과 -->
-	<!-- 로그인한 결재자와 같은 document_id를 가지고, 로그인한 결재자보다 높은 레벨(낮은 직급)인 사람의 결재 결과를 
-		가져옴 -->
-	<select id="previousApprovalResult" resultType="map">
-		SELECT document_id, approver_status
-		FROM approval_list_view alv
-		WHERE exists (SELECT 1
-						FROM approval_list_view
-						WHERE approver_id = #{loginID}
-						AND alv.document_id = approval_list_view.document_id
-						AND alv.approver_security_level > approval_list_view.approver_security_level)
+	
+	<!-- // 로그인한 사용자가 결재자인지 -->
+	<select id="isApprover" resultType="boolean">
+		SELECT count(*)
+		FROM document_approvals
+		WHERE document_id = #{document_id}
+		AND emp_id = #{loginID}
 	</select>
+	
+	<!-- // 직전 결재자들의 결재 결과 -->
+	<select id="previousApprovalResult" resultType="int">
+		SELECT count(*)
+		FROM document_approvals
+		WHERE document_id = #{document_id}
+		  AND emp_id != #{loginID}
+		  AND sec_level > (
+		    SELECT sec_level
+		    FROM document_approvals
+		    WHERE document_id = #{document_id}
+		      AND emp_id = #{loginID}
+		  )
+		  AND approval != '승인';
+	  </select>
 	
 	<!-- // 로그인한 사용자의 직급 가져옴 -->
 	<select id="getJobRank" resultType="int">
@@ -317,7 +327,7 @@
 	<select id="isApproverByDocumentId" resultType="boolean">
 		SELECT count(*)
 		FROM document_approvals
-		WHERE id = #{document_id}
+		WHERE document_id = #{document_id}
 			AND emp_id = #{loginID}
 	</select>
 	
@@ -345,7 +355,7 @@
 	</select>
 	
 	<!-- // 지출 결의서 정보 출력 -->
-	<select id="getExpenceInfo" resultType="map">
+	<select id="getExpenseInfo" resultType="map">
 		SELECT 
 	        eri.*, 
 	        e.name AS spender_name

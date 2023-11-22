@@ -261,10 +261,21 @@ public class ElectronicSignatureService {
 		}
 		return 0;
 	}
+	
+	// 로그인한 사용자가 결재자인지
+	public boolean isApprover(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.isApprover(param);
+	}
 
 	// 직전 결재자들의 결재 결과
-	public List<Map<String, String>> previousApprovalResult(String loginID) {
-		return dao.previousApprovalResult(loginID);
+	public int previousApprovalResult(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.previousApprovalResult(param);
 	}
 	
 	// 로그인한 사용자의 직급 가져옴
@@ -399,8 +410,8 @@ public class ElectronicSignatureService {
 	}
 
 	// 지출 결의서 정보 출력
-	public Map<String, Object> getExpenceInfo(String document_id) {
-		return dao.getExpenceInfo(document_id);
+	public Map<String, Object> getExpenseInfo(String document_id) {
+		return dao.getExpenseInfo(document_id);
 	}
 
 	// 개인 계좌 가져오기

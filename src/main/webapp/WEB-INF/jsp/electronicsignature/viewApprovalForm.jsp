@@ -144,6 +144,10 @@
 					</tr>
 				</tbody>
 			</table>
+			<div class="approvalBtn">
+				<button id="approval">승인</button>
+				<button id="rejection">반려</button>
+			</div>
 			<hr>
 			<c:choose>
 				<c:when test="${documentInfo.get(0).document_type_id == '휴가 신청서'}">
