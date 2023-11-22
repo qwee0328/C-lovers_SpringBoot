@@ -95,7 +95,7 @@
                             <i class="fa-solid fa-calendar-check"></i>
                             근무계획
                         </div>
-                        <div class="conf_detail">
+                        <div class="conf_detail" id="workingPlan">
                             <div class="calendar">
                                 <div class="month">
                                     <div class="day">
@@ -109,11 +109,13 @@
                                 <div id="work_rule_name"></div>
                                 <div id="work_rule_time"></div>
                             </div>
+                            <!-- 
                             <div class="workingPlan">
                                 <div class="detail__colortitle"><a href="">내근무계획</a></div>
                                 <div class="detail_conf"><button class="whiteBtn">연장근무신청</button><button
                                         class="whiteBtn">휴(무)일 근로신청</button></div>
                             </div>
+                             -->
                         </div>
                     </div>
                     <div class="toDayWorkInfo__conf workCheck">
@@ -148,9 +150,11 @@
                         </div>
                         <div class="conf_detail">
                             <div class="commuteTable"></div>
+                            <!-- 
                             <div class="shiftEditBtn">
                                 <button class="whiteBtn">근무체크 수정</button>
                             </div>
+                             -->
                         </div>
                     </div>
                 </div>
