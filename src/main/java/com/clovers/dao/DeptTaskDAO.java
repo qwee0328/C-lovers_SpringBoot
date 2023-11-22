@@ -16,8 +16,8 @@ public class DeptTaskDAO {
     private SqlSession db;
 
     // 삽입: 새로운 부서 직무를 데이터베이스에 추가
-    public int insert(DeptTaskDTO dto) {
-        return db.insert("DeptTask.insert", dto);
+    public int insert(Map<String,Object> param) {
+        return db.insert("DeptTask.insert", param);
     }
 
     // 조회: 모든 부서 직무 정보 조회

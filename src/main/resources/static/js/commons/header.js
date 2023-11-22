@@ -9,10 +9,13 @@ $(document).ready(function() {
 	})
 	
 	// 프로필카드 데이터 부르기
-	$(document).ready(function(){
+	//$(document).ready(function(){
 		$.ajax({
-			url:"/humanResources/headerProfile"
+			url:"/humanResources/headerProfile",
+			
 		}).done(function(resp){
+			
+			console.log(resp);
 
 			let img;
 			
@@ -27,17 +30,15 @@ $(document).ready(function() {
 				main_img.attr("src",img);
 			$(".mainHeader_profileBox").append(main_img);
 			
-			
-			
 			let profileImg = $("<img class='header__profileImage'>");
 				profileImg.attr("src",img);
-				$(".header__profileImageBox").append(profileImg);
+			$(".header__profileImageBox").append(profileImg);
 				
 			$(".profileName").html(resp.name);
-			$(".profileEmail").html(resp.email);
+			$(".profileEmail").html(resp.company_email+"@clovers.com");
 					
 		});
-	})
+	//})
 	
 	// 프로필 카드 바깥영역 클릭시
 	$(document).on("click", function(e) {

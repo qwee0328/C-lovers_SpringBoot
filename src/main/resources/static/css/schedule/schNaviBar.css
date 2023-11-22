@@ -61,7 +61,7 @@
   background-color: #dcedd4 !important;
 }
 
-.naviConp__icon, .naviConp__calColor {
+.naviConp__icon {
   margin-right: 10px;
 }
 
@@ -142,5 +142,7 @@
 	overflow: hidden;
  	text-overflow: ellipsis;
  	white-space: nowrap;
+ 	width:100%;
+ 	padding-left:10px;
 }
   

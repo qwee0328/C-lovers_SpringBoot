@@ -81,6 +81,14 @@ public class ScheduleController {
 		return sService.selectAll((String)session.getAttribute("loginID"));
 	}
 	
+	// 일정 검색
+	@ResponseBody
+	@RequestMapping(value="/selectByKeyword", method = RequestMethod.POST)
+	public List<HashMap<String,Object>> selectByKeyword(String keyword){
+		System.out.println(keyword);
+		return sService.selectByKeyword((String)session.getAttribute("loginID"), "%"+keyword+"%");
+	}
+	
 	
 	// 일정 세부정보 불러오기
 	@ResponseBody

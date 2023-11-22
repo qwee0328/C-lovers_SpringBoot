@@ -1,5 +1,5 @@
 let status = "";
-
+let totalCountHidden = 0;
 window.onload = function() {
 	setClock();
 	setInterval(setClock, 1000);
@@ -38,6 +38,50 @@ window.onload = function() {
 	}).done(function(resp) {
 		$("#userAbsenteeismCount").html(resp + "회");
 	});
+
+	// 사용자 잔여 휴가 정보 불러오기
+
+	let date = new Date();
+	let year = date.getFullYear();
+	//window.totalCountHidden=0;
+	console.log(window.totalCountHidden);
+	$.ajax({
+		url: "/humanResources/selectYearTotalAnnaul",
+		data: { year: year },
+		type: "POST",
+	}).done(function(resp) {
+		console.log(window.totalCountHidden);
+		if (Object.keys(resp).length !== 0) {
+			console.log(window.totalCountHidden);
+			window.totalCountHidden = resp.total_rest_cnt;
+		} else {
+			$("#totalAnnaul").html("0일");
+		}
+
+		// 해당 년도 휴가 사용 정보 불러오기
+		$.ajax({
+			url: "/humanResources/selectUsedAnnaul",
+			data: { year: year },
+			type: "POST",
+		}).done(function(resp) {
+			if (window.totalCountHidden !== 0) {
+				$("#totalAnnaul").html((window.totalCountHidden - resp) + "일");
+			}
+		})
+
+	})
+
+
+	// 휴가 현황 이동 버튼
+	$(".detail__colortitle").on("click", function() {
+		location.href = "/humanResources/workStatus?source=currentSituation";
+	})
+
+	// 휴가 신청 이동 버튼
+	$("#showVacationApp").on("click", function() {
+		location.href = "/humanResources/showVacationApp";
+	})
+
 
 	// 사용자 근무 시간 정보 불러오기
 	$.ajax({

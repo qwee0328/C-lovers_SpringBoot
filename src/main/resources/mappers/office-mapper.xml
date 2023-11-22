@@ -9,7 +9,7 @@
 		resultType="com.clovers.dto.OfficeDTO">
 		select * from office;
 	</select>
-	
+
 
 	<!-- // 부서 명 불러오기 -->
 	<select id="selectDeptTaskAll"
@@ -67,6 +67,14 @@
 		order by cast(right(id,3)as unsigned) desc;
 	</select>
 
+	<!-- 전체 사용자 수 불러오기 -->
+	<select id="selectUserCount" resultType="int">
+		select count(*)
+		from
+		mypageData
+		order by cast(right(id,3)as unsigned) desc;
+	</select>
+
 	<!-- // 사내 전화번호 사용중인지 체크 -->
 	<select id="usingCompanyPhoneCheck" resultType="Integer">
 		select count(*)
@@ -111,8 +119,16 @@
 
 	<!-- 오피스 이름 수정하기 -->
 	<update id="updateOfficeName">
-		update office set office_name = #{office_name} where id = "OFC1001";
+		update office set office_name = #{office_name} where
+		id = "OFC1001";
 	</update>
+	
+	<!-- 오피스 이메일 수정하기 -->
+	<update id="updateOfficeEmail">
+		update office set office_email = #{office_email} where
+		id = "OFC1001";
+	</update>
+	
 	<!-- // 사용자 직위 수정하기 -->
 	<update id="updateUserJob">
 		update employee set job_id=#{job_id} where id =#{id};
@@ -129,7 +145,8 @@
 		select name, id, job_name,
 		task_name
 		from mypageData
-		where id like #{keyword} or name like #{keyword}
+		where id like #{keyword} or name like
+		#{keyword}
 		order by cast(right(id,3)as unsigned) desc;
 	</select>
 
@@ -175,7 +192,8 @@
 		count, task_name,group_concat(distinct dept_name) as dept_name,
 		office_name
 		from company_hierarchy_view
-		where dept_name != "미분류" group by task_name,office_name;
+		where dept_name != "미분류" group
+		by task_name,office_name;
 	</select>
 
 	<!-- 임직원 정보에서 부서 클릭하면 정보 -->
@@ -201,10 +219,15 @@
 		select * from
 		employee_dept_task_view where name like #{name};
 	</select>
-	
+
 	<!-- // 사용자의 jobID 가져오기 -->
 	<select id="searchByJobID" resultType="String">
-		select job_id from employee where id = #{id};
+		select job_id from
+		employee where id = #{id};
 	</select>
-
+	
+	<!-- // 처음 입사 시 15일 연차 지급 -->
+	<insert id="insertFirstAnnaul">
+		insert into annaul_rest (emp_id, rest_type_id, rest_cnt, reg_date) value (#{id}, "연차", 15, convert_tz(now(),'+00:00', '+09:00'))
+	</insert>
 </mapper>

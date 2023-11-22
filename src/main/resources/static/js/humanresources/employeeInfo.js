@@ -21,8 +21,8 @@ $(document).ready(function () {
             $(this).attr("toggleView", "true");
 
             $(this).parent().siblings(".Inner").css("display", "block");
-            $(this).parent().css("background-color", "#dcedd4");
-            $(".Inner").css("background-color", "#dcedd4");
+            $(this).parent().css("background-color", "#f3f7f1");
+            $(".Inner").css("background-color", "#f3f7f1");
 
             $(this).html(`<i class="fa-solid fa-minus"></i>`);
 
@@ -140,7 +140,6 @@ $(document).ready(function () {
 			}
 			
 			let deptArr = Array.from(dept); // set을 배열로
-			console.log(deptArr);
 			
 			for(let i=0;i<deptArr.length;i++){
 				$(".members__Title").remove();

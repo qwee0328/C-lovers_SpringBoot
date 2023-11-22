@@ -33,7 +33,7 @@
 /* 제일 위에 부분 */
 .chart__searchBox{
     display: flex;
-    margin: 20px;
+    margin: 20px 24px;
     justify-content: space-between;
 }
 /* 임직원 검색 */
@@ -70,7 +70,7 @@
     top: 73px;
     bottom: 0; left: 0; right: 0;
     overflow: auto;
-    
+    margin: 0 24px;
 }
 .org__members{
 	border-left: 1px solid #7D7D7D40;
@@ -160,7 +160,7 @@
     background-color: #dcedd4 !important; 
 }
 .ContentBox :hover{
-    background-color: #F3F7F1;
+    background-color: #dcedd4;
 }
 
 /*  */

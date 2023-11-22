@@ -1,8 +1,8 @@
 let year; // 사용자가 선택한 년도
-let type ="전체"; // 휴가 신청 내역 정보
+let type = "전체"; // 휴가 신청 내역 정보
 let count = 1; // 문서 정렬번호
 $(document).ready(function() {
-	window.count=1;
+	window.count = 1;
 	// 탭 메뉴 움직이기
 	$("ul.tabs li").click(function() {
 		var tab_id = $(this).attr("data-tab");
@@ -13,6 +13,27 @@ $(document).ready(function() {
 		$(this).addClass("current");
 		$("#" + tab_id).addClass("current");
 	});
+
+	// 인사 페이지를 통해 휴가 현황으로 넘어온 경우 인식
+	// 현재 페이지의 URL
+	let currentURL = window.location.href;
+	// URL에 source 파라미터가 있는지 확인
+	let urlParams = new URLSearchParams(window.location.search);
+	let sourceParam = urlParams.get('source');
+
+	// source 파라미터가 "detail_colortitle"인 경우에만 설정 적용
+	// 해당 버튼으로 온 경우 휴가 내역페이지를 요청하는 경우임
+	console.log(currentURL);
+	console.log(urlParams);
+	console.log(sourceParam);
+	if (sourceParam === 'currentSituation') {
+		$("ul.tabs li:first-child").removeClass("current");
+		$(".tab-content").removeClass("current");
+
+		$("ul.tabs li:nth-child(2)").addClass("current");
+		$("#vacationDetails").addClass("current");
+	}
+
 	//---------------휴가 내역---------------
 	$("#cpage").val("1");
 	//날짜 설정
@@ -45,22 +66,22 @@ $(document).ready(function() {
 	annaulDetails();
 
 	$("#detailAll").on("click", function() {
-		window.count=1;
+		window.count = 1;
 		annaulDetails();
 	})
 
 	$("#detailYear").on("click", function() {
-		window.count=1;
+		window.count = 1;
 		annaulForYearDetails();
 	})
 
 	$("#detailMonth").on("click", function() {
-		window.count=1;
+		window.count = 1;
 		annaulForMonthDetails();
 	})
 
 	$("#detailWeek").on("click", function() {
-		window.count=1;
+		window.count = 1;
 		annaulForWeekDetails();
 	})
 
@@ -76,6 +97,11 @@ $(document).ready(function() {
 			detailsPrint(resp, window.type);
 		})
 	})
+	
+	// 상세 누르면 해당 문서 출력하는 곳으로 이동
+	$(document).on("click",".showDocument",function(){
+		location.href="/electronicsignature/viewApprovalForm?document_id="+$(this).attr("id");
+	})
 });
 
 
@@ -88,8 +114,8 @@ function annaulDetails() {
 		data: { cpage: "1" }
 	}).done(function(resp) {
 		console.log(resp)
-		window.type="전체";
-		detailsPrint(resp,window.type);
+		window.type = "전체";
+		detailsPrint(resp, window.type);
 
 	})
 }
@@ -102,8 +128,8 @@ function annaulForWeekDetails() {
 		data: { cpage: "1" }
 	}).done(function(resp) {
 		console.log(resp)
-		window.type="1주일";
-		detailsPrint(resp,window.type);
+		window.type = "1주일";
+		detailsPrint(resp, window.type);
 	})
 }
 
@@ -115,8 +141,8 @@ function annaulForMonthDetails() {
 		data: { cpage: "1" }
 	}).done(function(resp) {
 		console.log(resp)
-		window.type="한달";
-		detailsPrint(resp,window.type);
+		window.type = "한달";
+		detailsPrint(resp, window.type);
 	})
 }
 
@@ -128,8 +154,8 @@ function annaulForYearDetails() {
 		data: { cpage: "1" }
 	}).done(function(resp) {
 		console.log(resp)
-		window.type="1년";
-		detailsPrint(resp,window.type);
+		window.type = "1년";
+		detailsPrint(resp, window.type);
 	})
 }
 
@@ -162,7 +188,7 @@ function detailsPrint(resp, type) {
 			period.html(resp.detail[i].start_date.split(" ")[0] + " ~ " + resp.detail[i].end_date.split(" ")[0]);
 		}
 		let status = $("<div>").html(resp.detail[i].status).addClass("body__td");
-		let detail = $("<div>").html("상세").attr("id", resp.detail[i].id).addClass("body__td");
+		let detail = $("<div>").html("상세").attr("id", resp.detail[i].id).addClass("body__td").addClass("showDocument");
 		bodyLine.append(num).append(writer).append(type).append(days).append(period).append(status).append(detail);
 		$(".detailes__body").append(bodyLine);
 	}
