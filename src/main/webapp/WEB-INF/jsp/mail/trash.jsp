@@ -25,6 +25,11 @@
 				<button type="submit" id="restoreMail" class="allCheck__buttons">메일함으로 이동</button>
 				<button type="submit" id="perDeleteMail" class="allCheck__buttons">완전삭제</button>
 			</div>
+			<div class="body__emptyTrash">
+			  <div class="emptyTrash__cover">
+			      <span>휴지통으로 이동한 주소는 30일 후 자동으로 완전히 삭제됩니다.</span>
+			  </div>
+			</div>
 			<div class="inBox__mailListBox"></div>
 			<hr>
 			<div class="inBox__bottom">
