@@ -42,13 +42,9 @@ $(document).ready(function() {
 			
 			let categoryDiv = $("<div>");
 			categoryDiv.addClass("documentTable__documentCategory");
-			categoryDiv.html(resp[i].category);
+			categoryDiv.html(resp[i].document_type_id);
 			
-			let divisionDiv = $("<div>");
-			divisionDiv.addClass("documentTable__division");
-			divisionDiv.html(resp[i].document_type_id);
-			
-			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv).append(divisionDiv);
+			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	}

@@ -113,6 +113,14 @@
 		AND emp_id = #{loginID}
 	</select>
 	
+	<!-- // 결재한 결재자가 존재하는지 -->
+	<select id="existApproval" resultType="boolean">
+		SELECT count(*)
+		FROM approval_list_view
+		WHERE document_id = #{document_id}
+			AND approver_status != '대기';
+	</select>
+	
 	<!-- // 직전 결재자들의 결재 결과 -->
 	<select id="previousApprovalResult" resultType="int">
 		SELECT count(*)
@@ -142,7 +150,7 @@
 	    FROM approval_list_view
 	    WHERE
 	    (
-	        drafter_id = #{loginID} OR approver_id = #{loginID}
+	        drafter_id = #{loginID} OR approver_id = #{loginID} AND status = '대기'
 	    )
 	    OR
 	    (
@@ -151,6 +159,7 @@
 	        <foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
 	            #{sec_grade}
 	        </foreach>
+	        AND status = '대기'
 	    )
 	    ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
@@ -428,10 +437,10 @@
 		WHERE id = #{document_id}
 	</update>
 	
-	<!-- 문서 첨부파일 리스트 -->
-	<select id="getDocumentFileList" resultType="map">
-		SELECT *
-		FROM document_file
-		WHERE document_id = #{document_id}
-	</select>
+	<!-- 문서 삭제 -->
+	<delete id="deleteApproval">
+		DELETE
+		FROM document
+		WHERE id = #{document_id}
+	</delete>
 </mapper>

@@ -43,7 +43,7 @@
 					</tr>
 					<tr>
 						<th scope="row">보존 연한</th>
-						<td>3년</td>
+						<td>${documentInfo.get(0).save_period }년</td>
 						<th scope="row">보안 등급</th>
 						<td>${documentInfo.get(0).security_grade }</td>
 					</tr>
@@ -125,7 +125,19 @@
 									</tr>
 									<tr>
 										<c:forEach var="item" items="${approversInfo}" varStatus="loop">
-										    <td class="stamp">${item.approval}</td>
+											<c:choose>
+												<c:when test="${item.approval eq '승인' }">
+													<td class="stamp">
+														<div class="stamp__approval">${item.approval}</div>
+													</td>
+												</c:when>
+												<c:when test="${item.approval eq '반려' }">
+													<td class="stamp">
+														<div class="stamp__rejection">${item.approval}</div>
+													</td>
+												</c:when>
+											</c:choose>
+										    <%-- <td class="stamp">${item.approval}</td> --%>
 										</c:forEach>
 										
 										<c:forEach begin="${approversInfo.size() + 1}" end="4">
@@ -147,10 +159,19 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="approvalBtn">
-				<button id="approval">승인</button>
-				<button id="rejection">반려</button>
-			</div>
+			<c:choose>
+				<c:when test="${isApprovalTurn == true }">
+					<div class="approvalBtn">
+						<button id="approval">승인</button>
+						<button id="rejection">반려</button>
+					</div>
+				</c:when>
+				<c:when test="${existApproval == false }">
+					<div class="deleteBtn">
+						<button id="delete">삭제</button>
+					</div>
+				</c:when>
+			</c:choose>
 			<hr>
 			<c:choose>
 				<c:when test="${documentInfo.get(0).document_type_id == '휴가 신청서'}">
@@ -207,12 +228,6 @@
 							<tr>
 								<th>총괄 적요</th>
 								<td id="executive_summary"></td>
-							</tr>
-							<tr>
-								<th>파일</th>
-								<td id="business_file">
-									
-								</td>
 							</tr>
 						</tbody>
 					</table>
