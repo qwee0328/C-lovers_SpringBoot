@@ -21,10 +21,6 @@ public class HumanResourcesDAO {
 	@Autowired
 	private SqlSession db;
 
-//	public String selectByIdGetName(String id) {
-//		return db.selectOne("HumanResources.selectByIdGetName",id);
-//	}
-
 	public MemberDTO selectById(String id) {
 		MemberDTO result = db.selectOne("HumanResources.selectById", id);
 		System.out.println("birth:"+result.getBirth());
@@ -35,11 +31,18 @@ public class HumanResourcesDAO {
 	public String reChangePw(String id) {
 		return db.selectOne("HumanResources.getPw", id);
 	}
+	
+	// 사내 이메일 중복 확인
+	public int isDupEmail(String company_email) {
+		return db.selectOne("HumanResources.isDupEmail",company_email);
+	}
 
+	// 사진 등록한 경우
 	public int update(Map<String, String> param) {
 		return db.update("HumanResources.update", param);
 	}
-
+	
+	// 사진 안바꾸거나 기본이미지인 경우
 	public int updateNoImg(Map<String, String> param) {
 		return db.update("HumanResources.updateNoImg", param);
 	}

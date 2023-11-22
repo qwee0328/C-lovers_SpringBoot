@@ -27,26 +27,30 @@ public class AccountingService {
 		return adao.searchBy(keyword);
 	}
 	// 계좌 추가
-	public int insert(AccountingDTO dto){
+	public String insert(AccountingDTO dto){
 		System.out.println(dto.getEmp_id());
 		
 		String emp_id = dto.getEmp_id();
 		
+		// 계좌 추가 전에 유효한 사번인지 아닌지 확인 1:사원 맞음
 		int isEmployee = adao.isEmployee(emp_id);
+		System.out.println("사번맞음? 1:맞음 -> "+isEmployee);
 		
-		System.out.println("직원 맞음? (1: 맞음,0:아님) : "+isEmployee);
 		// 직원이 맞음
 		if(isEmployee==1) {
+			
+			// 1 이면 이미 등록 됨
 			int isEmpId = adao.isEmpId(emp_id);
 			
 			// 계좌가 등록된 직원이 아니면
 			if(isEmpId == 0) {
-				return adao.insert(dto); // 1 반환
+					adao.insert(dto); // 1 반환
+				return "성공";
 			}else {
-				return 0;
+				return "중복된 사용자는 등록할 수 없습니다.";
 			}
 		}else {
-			return 0;
+			return "사번이 등록되어있지 않습니다.";
 		}
 	}
 	
@@ -94,7 +98,7 @@ public class AccountingService {
 					adao.insertCard(dto);
 					return "성공";
 				}else {
-					return "사번을 다시 확인해주세요.";
+					return "중복된 사용자는 등록할 수 없습니다.";
 				}
 			}else {
 				return "카드번호를 다시 확인해주세요";

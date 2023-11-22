@@ -139,13 +139,18 @@
 	                                <div class="profileRight">
 	                                    <div><input type="text" name="company_email" id="company_email" value=${list.company_email }></div>
 	                                </div>
+	                                <div>
+										<button id="emailDup" type="button">중복확인</button>
+									</div>
 	                                <!-- 아이디 regex -->
 									<div class="profileRexBox">
 										<div class="company_email__regex">
 
 										</div>
 									</div>
+									
 	                            </div>
+	                            
 	
 	                            <div class="profileBox__inner">
 	                                <div class="profileLeft">
@@ -239,10 +244,34 @@
 </body>
 
 	<script>
+	let emailResult = true;
+	// 이메일 중복확인
+	$("#emailDup").click(function(){
+		$.ajax({
+			url:"/humanResources/emailDup",
+			data:{
+				company_email : $("#company_email").val()
+			}
+		}).done(function(resp){
+			console.log(resp);
+			
+			if(resp == 0){
+				$(".company_email__regex").html("사용가능한 이메일입니다.").css({ "font-size": "12px", "color": "green" });
+				emailResult = true;
+			}else{
+				$(".company_email__regex").html("이메일이 중복됩니다.").css({ "font-size": "12px", "color": "red" });
+				emailResult = false;
+			}
+		})
+	})
 	
+	// 이미지 임시저장
+	let saveImg;
 	
 	// 내 정보 관리 클릭
     $(".profileBtn").click(function () {
+    	// 이미지 임시저장
+    	saveImg = $(".profileImage").attr("src");
        
   		$(".profileBtn").css("display", "none");
         $(".profileBtnCancle").css("display", "inline");
@@ -257,6 +286,9 @@
 
     // 취소 클릭
     $(".profileBtnCancle").click(function () {
+    	// 취소클릭하면 임시저장 해놓은 이미지 보여주기
+    	$(".profileImage").attr("src",saveImg);
+    	
         $(".profileBtn").css("display", "inline");
         $(".profileBtnCancle").css("display", "none");
         $(".profileBtnSave").css("display", "none");
@@ -282,6 +314,7 @@
 	// 		이메일 regex
 	let emailRegex = /^[a-zA-Z0-9\_]+@[a-z]+\.[a-z]{2,3}$/;
 	$("#email").keyup(function (e) {
+		
 		result = emailRegex.test($("#email").val());
 
 		if (!result) {
@@ -292,6 +325,8 @@
 			$(".email__regex").html("");
 			regexResult=true;
 		}
+		
+		
 	});
 
 	// 		휴대전화 regex
@@ -310,10 +345,10 @@
 	});
 
 	//		아이디 regex 대소문자랑 숫자만 포함해서 8글자 이상
-	let idRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+	let idRegex = /^[a-zA-Z0-9]{8,15}$/;
 	$("#company_email").keyup(function(e){
 		result = idRegex.test($("#company_email").val());
-		
+		emailResult = false;
 		if (!result) {
 			$(".company_email__regex").html("아이디 형식이 올바르지 않습니다.").css({ "font-size": "12px", "color": "red" });
 			regexResult = false;
@@ -324,10 +359,15 @@
 		}
 	});
 
+	
 	// 
 	$(".profileBtnSave").click(function(){
 		if (!regexResult) {
 			alert("형식에 맞추어 다시 입력해주세요.");
+			return;
+		}
+		if(!emailResult){
+			alert("이메일 중복 여부를 다시 확인해주세요.");
 			return;
 		}
 		

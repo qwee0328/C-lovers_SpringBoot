@@ -45,14 +45,19 @@
 <script>
 	//	비밀번호 regex
 	let pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,16}$/;
+	let result;
+	
 	$("#pw").keyup(function(){
-		console.log($("#pw").val());
+		
+// 		console.log($("#pw").val());
+		
 		result = pwRegex.test($("#pw").val());
 		console.log(result);
 		
 		if(!result){
 			$(".findPwBox__pwChk").html("비밀번호의 형식이 올바르지 않습니다.").css({"font-size":"12px","color":"red"});
 		}
+		
 		if(result){
 			$(".findPwBox__pwChk").html("");
 	// 		비밀번호와 비밀번호 확인이 일치하는지 확인
@@ -82,13 +87,17 @@
 				return;
 			}
 			
-			
-			if($("#pw").val() != $("#pw_re").val()){
-				alert("비밀번호가 일치하지 않습니다");
-				return;
+	 		if(result){
+				$(".changePwBtn").attr("type","submit");
+			}else{
+				
+				if($("#pw").val() != $("#pw_re").val()){
+					alert("비밀번호가 일치하지 않습니다");
+					return;
+				}
+				
 			}
 			
-			$(".changePwBtn").attr("type","submit");
 		});
 		
 

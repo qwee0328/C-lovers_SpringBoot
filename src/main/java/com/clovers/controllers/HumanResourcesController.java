@@ -91,6 +91,19 @@ public class HumanResourcesController {
 	public String goChangePw() {
 		return "member/changePW";
 	}
+	
+	
+	// 이메일 중복 확인
+	@ResponseBody
+	@RequestMapping("/emailDup")
+	public int emailDup(String company_email) {
+		System.out.println("이메일 중복확인");
+		// 이메일 중복 확인 : 1 중복
+		int isDupEmail = hrservice.isDupEmail(company_email);
+		System.out.println(isDupEmail);
+		return isDupEmail;
+	}
+	
 
 //	프로필 이미지,사내전화,휴대전화,개인이메일 정보 업데이트
 	@RequestMapping("/update")
@@ -98,7 +111,8 @@ public class HumanResourcesController {
 			String email) throws Exception {
 
 		String id = (String) session.getAttribute("loginID");
-
+		
+		
 		// 사진 등록
 		if (!(profile_img.getOriginalFilename().equals(""))) {
 			String path = "C:/C-lovers";
@@ -113,12 +127,15 @@ public class HumanResourcesController {
 			String sysName = UUID.randomUUID() + "_" + oriName;
 
 			profile_img.transferTo(new File(uploadPath + "/" + sysName));
-
+			
 			hrservice.update(id, sysName, company_email, company_phone, phone, email);
 		} else {
 			// 사진 안바꾸거나 기본이미지인 경우
 			hrservice.updateNoImg(id, company_email, company_phone, phone, email);
 		}
+			
+
+		
 
 		return "redirect:/humanResources/mypage";
 	}
