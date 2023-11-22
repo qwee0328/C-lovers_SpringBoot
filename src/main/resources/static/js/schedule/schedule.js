@@ -252,17 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					showClose: false
 				});
 
-
-				/*$(".calendarModal__delete").on("click", () => { 
-					calendar.getEventById($("#eventId").val()).remove();
-					$.ajax({
-						url:"/schedule/delete",
-						data:{id:$("#eventId").val()},
-						type:"post"
-					}).done(function(resp){}); // resp가 1이면 정살적으로 삭제 
-					$.modal.close(); 
-					
-				}); // 일정 삭제*/
 			} else {
 				e.jsEvent.preventDefault(); // 구글 일정 클릭 시 구글 캘린더 페이지로 이동하는 이벤트 방지
 			}
@@ -303,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		let eventEndDate = new Date($(".insertSchedule__endDate").val());
 		eventEndDate.setHours( parseInt($(".insertSchedule__endTime").val().slice(0, 2)),  parseInt($(".insertSchedule__endTime").val().slice(3, 5)));
 				
+		
 		// 이벤트 등록일자
 		let reg_date = new Date();
 		reg_date.setHours(reg_date.getHours()+9);
@@ -399,6 +389,18 @@ document.addEventListener('DOMContentLoaded', function() {
 						ed.id = resp.id;
 						ed.registor = resp.emp_id;
 						ed.groupId = resp.recurring_id;
+						
+						/*let sdate = new Date(start_date);
+						let edate = new Date(end_date);
+						
+						// allDay 이면
+						if(ed.allDay == true){
+							sdate.setHours(sdate.getHours()+12);
+							edate.setHours(edate.getHours()+12);
+						}
+						ed.start = sdate;
+						ed.end = edate;*/
+						
 						events.push(ed);
 					});	
 				}
@@ -433,6 +435,17 @@ document.addEventListener('DOMContentLoaded', function() {
 				}).done(function(resp){
 					eventData.id = resp.id;
 					eventData.registor = resp.emp_id;
+					
+					
+				
+					// allDay 이면
+					if(eventData.allDay == true){
+						let edate = new Date(eventData.end);
+						edate.setDate(edate.getDate()+1);
+						eventData.end = edate;
+					}
+					
+					
 					events.push(eventData);
 				});
 			}
@@ -482,16 +495,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		let events = generateEvent("insert");
 		calendar.addEventSource(events);
+		//calendar.getEventById(events[0].id).setDates(events[0].start, events[0].end); // 날짜
 
 		$.modal.close(); // 등록 후 모달 닫기
 	});
 	
 	
-	// 일정 수정 모달 띄우기 (클린한 이벤트에 대하여 DB 내용 불러오기)
+	// 일정 수정 모달 띄우기 (클릭한 이벤트에 대하여 DB 내용 불러오기)
 	$(".calendarModal__update").on("click", function() { 
 		$.modal.close();
-		
-		console.log(calendar.getEventById($("#eventId").val()));
+
 		
 		$.ajax({
 			url:"/schedule/selectById",
@@ -555,7 +568,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		// 기존 이벤트 객체
 		let sche = calendar.getEventById($("#eventId").val());
-		console.log("sche");
+		console.log("수정 전 sche");
 		console.log(sche);
 		
 	});
@@ -720,16 +733,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		// 일반 이벤트로 수정 (일반->일반, 반복->일반)	
 		else{
-			let prevRpt = sche._def.extendedProps.repeat;
-			
-			if(prevRpt == false){
-				sche.setProp('title', $(".insertSchedule__title").val()); // 타이틀
-				sche.setDates(eventStartDate, eventEndDate); // 날짜
-				sche.setProp("allDay",$(".insertSchedule__allDay").is(":checked")) // 종일 여부
-				sche.setExtendedProp('content', $(".insertSchedule__content").html()); // 내용
-				sche.setExtendedProp('calNameVal', $(".calendarModal__calNameList option:selected").val()); // 캘린더 종류
-				sche.setProp("color",$(".calendarModal__calNameList option:selected").attr("color")); // 컬러
-			}
 			$.ajax({
 				url:"/schedule/scheduleUpdate",
 				type:"post",
@@ -751,28 +754,33 @@ document.addEventListener('DOMContentLoaded', function() {
 				if(!selectCal.includes(parseInt( $(".calendarModal__calNameList option:selected").val()))){
 					calendar.getEventById($("#eventId").val()).remove();
 				}else{
-					// 일반 -> 일반: 별도의 처리 필요없음.
-							
-					// 반복 -> 일반	
-					if(prevRpt == true){
-						calendar.getEventById($("#eventId").val()).remove();
-	
-						let newEventData = {
-							id : resp.id,
-							title: resp.title, // 일정 제목
-							allDay: resp.all_day, // 종일 여부
-							color:  $(".calendarModal__calNameList option:selected").attr("color"), // 캘린더 색상
-							content: resp.content, // 일정 내용
-							calNameVal: resp.calendar, // 캘린더 번호
-							reg_date: new Date(sche._def.extendedProps.reg_date), // 등록일자
-							repeat: false, // 반복 이벤트 여부
-							start:eventStartDate, // 일정 시작일
-							end: eventEndDate // 일정 종료일
-						}
-												
-						let events = [newEventData];
-						calendar.addEventSource(events);
-					}	
+					
+					// 일반 -> 일반, 반복 -> 일반
+					calendar.getEventById($("#eventId").val()).remove();
+
+					let newEventData = {
+						id : resp.id,
+						title: resp.title, // 일정 제목
+						allDay: resp.all_day, // 종일 여부
+						color:  $(".calendarModal__calNameList option:selected").attr("color"), // 캘린더 색상
+						content: resp.content, // 일정 내용
+						calNameVal: resp.calendar, // 캘린더 번호
+						reg_date: new Date(sche._def.extendedProps.reg_date), // 등록일자
+						repeat: false, // 반복 이벤트 여부
+						start:eventStartDate, // 일정 시작일
+						end: eventEndDate // 일정 종료일
+					}
+								
+								
+					// allDay 이면
+					if(resp.all_day == true){
+						let edate = new Date(eventEndDate);
+						edate.setDate(edate.getDate()+1);
+						newEventData.end = edate;
+					}		
+						
+					let events = [newEventData];
+					calendar.addEventSource(events);
 				}
 			});
 		}
@@ -810,6 +818,14 @@ document.addEventListener('DOMContentLoaded', function() {
 				let eventDatas = [];
 		       	for(let i=0; i<resp.length; i++){
 					
+					
+					let sdate = new Date(resp[i].start_date);
+					let edate = new Date(resp[i].end_date);
+					// allDay 이면
+					if(resp[i].all_day == true){
+						edate.setDate(edate.getDate()+1);
+					}
+						
 					let eventData = {
 						id: resp[i].id,
 						title: resp[i].title,
@@ -820,9 +836,12 @@ document.addEventListener('DOMContentLoaded', function() {
 						registor: resp[i].emp_id,
 						reg_date: resp[i].reg_date,
 						repeat: false,
-						start: resp[i].start_date, // 일정 시작 일자
-						end: resp[i].end_date // 일정 종료 일자
+						/*start: new Date(resp[i].start_date), // 일정 시작 일자
+						end: new Date(resp[i].end_date) // 일정 종료 일자*/
+						start:sdate,
+						end: edate
 					}
+					
 					
 					
 					if(resp[i].recurring_id != 0){
@@ -857,6 +876,8 @@ document.addEventListener('DOMContentLoaded', function() {
 						eventData[`${endKey}`] =resp[i].endValue;
 					}
 					eventDatas.push(eventData);
+					
+		
 				}
 				calendar.addEventSource(eventDatas);
 		        calendar.render();

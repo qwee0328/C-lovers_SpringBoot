@@ -44,7 +44,19 @@
 	
 		<div class="calenderBody">
 			<div id="calendar"></div>
-			<div id="searchTag"></div>
+				<div id="searchTag">
+					<div class="addBook__header d-flex">
+					<div class="header__searchBar d-flex">
+						<div class="searchBar__icon">
+							<i class="fa-solid fa-magnifying-glass align-center"></i>
+						</div>
+						<div class="searchBar__inputCover d-flex">
+							<input type="text" class="searchBar__input" placeholder="검색어 입력">
+						</div>
+					</div>
+					<div class="header__tagName align-center"></div>
+				</div>
+			</div>
 		</div>
 
 		<!-- 일정 추가 모달창 -->
