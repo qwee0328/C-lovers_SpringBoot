@@ -142,7 +142,7 @@ body {
 
 .chat-userList {
 	overflow-y: auto;
-	height: 460px;
+	height: 449px;
 }
 
 .chat-userList::-webkit-scrollbar {
