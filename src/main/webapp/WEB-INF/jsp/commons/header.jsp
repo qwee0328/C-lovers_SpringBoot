@@ -55,25 +55,27 @@
 					</c:choose>
 					
 					<c:choose>
-						<c:when test="${title eq '일정' }">
+						<c:when test="${title eq '주소록' }">
 							<div class="dropNavBox__inner" style="background-color: #DCEDD4;">
 								<div class="inner__icon">
-									<i class="fa-regular fa-calendar"></i>
+									<i class="fa-regular fa-address-book"></i>
 								</div>
-								<div class="inner__title">일정</div>
+								<div class="inner__title">주소록</div>
 							</div>
 						</c:when>
 						<c:otherwise>
 							<div class="dropNavBox__inner">
 							<div class="inner__icon">
-								<i class="fa-regular fa-calendar"></i>
+								<i class="fa-regular fa-address-book"></i>
 							</div>
 							
-							<div class="inner__title">일정</div>
+							<div class="inner__title">주소록</div>
 							
 						</div>
 						</c:otherwise>
 					</c:choose>
+					
+					
 					
 					<c:choose>
 						<c:when test="${title eq '전자결재' }">
@@ -100,7 +102,7 @@
 						<c:when test="${title eq '회계지원' }">
 							<div class="dropNavBox__inner" style="background-color: #DCEDD4;">
 								<div class="inner__icon">
-									<i class="fa-solid fa-credit-card"></i>
+									<i class="fa-solid fa-hand-holding-dollar"></i>
 								</div>
 								<div class="inner__title">회계지원</div>
 							</div>
@@ -108,7 +110,7 @@
 						<c:otherwise>
 							<div class="dropNavBox__inner">
 							<div class="inner__icon">
-								<i class="fa-solid fa-credit-card"></i>
+								<i class="fa-solid fa-hand-holding-dollar"></i>
 							</div>
 							
 							<div class="inner__title">회계지원</div>
@@ -116,46 +118,33 @@
 						</div>
 						</c:otherwise>
 					</c:choose>
-
-					
-<!-- 					<div id="accountingController__small" class="dropNavBox__inner "> -->
-<!-- 						<div class="inner__icon"> -->
-<!-- 							<i class="fa-solid fa-credit-card"></i> -->
-<!-- 						</div> -->
-<!-- 						<div class="inner__title">회계지원</div> -->
-<!-- 					</div> -->
 				</div>
 				
 				
 				<div class="dropNavBox">
 				
-					<div class="dropNavBox__inner">
-						<div class="inner__icon">
-							<i class="fa-regular fa-clipboard"></i>
-						</div>
-						<div class="inner__title">게시판</div>
-					</div>
-					
-					<c:choose>
-						<c:when test="${title eq '주소록' }">
+				<c:choose>
+						<c:when test="${title eq '일정' }">
 							<div class="dropNavBox__inner" style="background-color: #DCEDD4;">
 								<div class="inner__icon">
-									<i class="fa-regular fa-address-book"></i>
+									<i class="fa-regular fa-calendar"></i>
 								</div>
-								<div class="inner__title">주소록</div>
+								<div class="inner__title">일정</div>
 							</div>
 						</c:when>
 						<c:otherwise>
 							<div class="dropNavBox__inner">
 							<div class="inner__icon">
-								<i class="fa-regular fa-address-book"></i>
+								<i class="fa-regular fa-calendar"></i>
 							</div>
 							
-							<div class="inner__title">주소록</div>
+							<div class="inner__title">일정</div>
 							
 						</div>
 						</c:otherwise>
 					</c:choose>
+					
+					
 					
 					<c:choose>
 						<c:when test="${title eq '인사' }">
