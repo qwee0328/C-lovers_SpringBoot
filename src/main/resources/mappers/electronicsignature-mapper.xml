@@ -113,6 +113,14 @@
 		AND emp_id = #{loginID}
 	</select>
 	
+	<!-- // 결재한 결재자가 존재하는지 -->
+	<select id="existApproval" resultType="boolean">
+		SELECT count(*)
+		FROM approval_list_view
+		WHERE document_id = #{document_id}
+			AND approver_status != '대기';
+	</select>
+	
 	<!-- // 직전 결재자들의 결재 결과 -->
 	<select id="previousApprovalResult" resultType="int">
 		SELECT count(*)
@@ -428,4 +436,11 @@
 		SET status = #{approval}, approval_date = now()
 		WHERE id = #{document_id}
 	</update>
+	
+	<!-- 문서 삭제 -->
+	<delete id="deleteApproval">
+		DELETE
+		FROM document
+		WHERE id = #{document_id}
+	</delete>
 </mapper>

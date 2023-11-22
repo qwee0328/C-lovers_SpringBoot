@@ -87,6 +87,11 @@ public class ElectronicSignatureDAO {
 	public boolean isApprover(Map<String, String> param) {
 		return db.selectOne("ElectronicSignature.isApprover", param);
 	}
+	
+	// 결재한 결재자가 존재하는지
+	public boolean existApproval(String document_id) {
+		return db.selectOne("ElectronicSignature.existApproval", document_id);
+	}
 
 	// 직전 결재자들의 결재 결과
 	public int previousApprovalResult(Map<String, String> param) {
@@ -216,5 +221,10 @@ public class ElectronicSignatureDAO {
 	// 문서 상태 변경
 	public int updateDocumentStatus(Map<String, String> param) {
 		return db.update("ElectronicSignature.updateDocumentStatus", param);
+	}
+	
+	// 문서 삭제
+	public int deleteApproval(String document_id) {
+		return db.delete("ElectronicSignature.deleteApproval", document_id);
 	}
 }
