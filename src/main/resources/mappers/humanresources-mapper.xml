@@ -168,7 +168,7 @@
 	<select id="selectYearTotalAnnaul" resultType="map">
 		select emp_id,
 		sum(rest_cnt) as total_rest_cnt from annaul_rest where emp_id = #{id}
-		and year(reg_date)=#{year} group by emp_id;
+		and year(reg_date)&lt;=#{year} group by emp_id;
 	</select>
 
 	<!-- // 해당 년도 휴가 생성 상세 정보 불러오기 -->

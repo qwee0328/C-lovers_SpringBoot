@@ -162,3 +162,18 @@ hr {
 	background-color: #75B47D;
 	text-align: center;
 }
+
+/* 완전삭제 안내문구 */
+.body__emptyTrash{
+    height: 45px;
+    background-color: #7D7D7D20;
+    text-align: center;
+    border: 1px solid #eaeaea;
+    margin: 10px 20px;
+}
+.emptyTrash__cover{
+    padding-top: 10px; padding-bottom: 10px; font-size:14px;
+}
+.emptyTrash__cover>span{
+    color: #676767;
+}
