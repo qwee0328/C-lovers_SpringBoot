@@ -140,7 +140,6 @@ $(document).ready(function () {
 			}
 			
 			let deptArr = Array.from(dept); // set을 배열로
-			console.log(deptArr);
 			
 			for(let i=0;i<deptArr.length;i++){
 				$(".members__Title").remove();
