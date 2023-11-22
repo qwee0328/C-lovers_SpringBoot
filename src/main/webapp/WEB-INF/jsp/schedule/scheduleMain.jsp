@@ -22,7 +22,9 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script type="text/javascript" src="/js/schedule/schedule.js"></script>
+<script type="text/javascript" src="/js/schedule/scheduleSearch.js"></script>
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
@@ -31,6 +33,8 @@
 <link rel="stylesheet" href="/css/schedule/scheduleModal.css">
 <link rel="stylesheet" href="/css/schedule/scheduleMain.css">
 <link rel="stylesheet" href="/css/schedule/scheduleCalendar.css">
+<link rel="stylesheet" href="/css/schedule/scheduleSearch.css">
+
 
 <title>캘린더 테스트</title>
 </head>
@@ -41,23 +45,33 @@
 
 	<div class="container d-flex">
 		<%@ include file="../schedule/schNaviBar.jsp"%>
-	
+		
 		<div class="calenderBody">
-			<div id="calendar"></div>
-				<div id="searchTag">
-					<div class="addBook__header d-flex">
-					<div class="header__searchBar d-flex">
-						<div class="searchBar__icon">
-							<i class="fa-solid fa-magnifying-glass align-center"></i>
-						</div>
-						<div class="searchBar__inputCover d-flex">
-							<input type="text" class="searchBar__input" placeholder="검색어 입력">
-						</div>
-					</div>
-					<div class="header__tagName align-center"></div>
+			<div class="covers">
+				<div id="calendarHide"></div>
+				<div id="calendar"></div>
+				<div id="calendarSearch"></div>
+				<div class="inputSearchDate d-flex">
+					<div><label>시작일 <input type="date" data-type="start" class="inputSearchDate_start" value="2023-08-11"></label></div>
+					<div class="inputSearchDate__margin">-</div>
+					<div><label>종료일 <input type="date" data-type="end" class="inputSearchDate_end" value="2023-12-12"></label></div>
 				</div>
 			</div>
 		</div>
+		<div id="searchTag">
+			<div class="addBook__header d-flex">
+			<div class="header__searchBar d-flex">
+				<div class="searchBar__inputCover d-flex">
+					<input type="text" class="searchBar__input" placeholder="제목, 내용으로 검색">
+				</div>
+				<div class="searchBar__icon searchBar__search">
+					<i class="fa-solid fa-magnifying-glass align-center"></i>
+				</div>
+			</div>
+			<div class="header__tagName align-center"></div>
+		</div>
+		
+		
 
 		<!-- 일정 추가 모달창 -->
 		<%@ include file="../schedule/scheduleInsertModal.jsp"%>

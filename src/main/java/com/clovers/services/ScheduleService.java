@@ -42,6 +42,13 @@ public class ScheduleService {
 		return dao.selectAll(emp_id);
 	}
 	
+	public List<HashMap<String,Object>> selectByKeyword(String emp_id, String keyword){
+		Map<String,Object> param = new HashMap<>();
+		param.put("emp_id", emp_id);
+		param.put("keyword", keyword);
+		return dao.selectByKeyword(param);
+	}
+	
 	public HashMap<String,Object> selectById(int id){
 		return dao.selectById(id);
 	}
