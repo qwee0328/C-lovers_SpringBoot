@@ -31,19 +31,15 @@
 	</select>
 	
 	<select id="selectNewestSecLevelWithOutJobId" resultMap="jobResultMap">
-		select id ,concat(sec_level,"등급") as security_level , job_name from job order by sec_level limit 1
+		select id ,concat(sec_level,"등급") as security_level , job_name from job order by id desc limit 1
 	</select>
 	
 	<select id="selectAll" resultType="com.clovers.dto.JobDTO">
 		select * from job
 	</select>
 	
-	<update id="updateJobNameById">
-		update job set job_name=#{job_name} where id = #{id}
-	</update>
-	
-	<update id="updateSecLevelById">
-		update job set sec_level=#{sec_level} where id = #{id}
+	<update id="updateById">
+		update job set job_name=#{job_name}, sec_level=#{sec_level} where id = #{id}
 	</update>
 	
 	<delete id="deleteById">

@@ -43,15 +43,12 @@ public class JobDAO {
 		return db.selectList("Job.selectAll");
 	}
 	
-	public int updateJobNameById(JobDTO dto) {
-		return db.update("Job.updateJobNameById",dto);
+	public int updateById(JobDTO dto) {
+		return db.update("Job.updateById",dto);
 	}
 	
-	public int updateSecLevelById(JobDTO dto) {
-		return db.update("Job.updateSecLevelById",dto);
-	}
 	
-	public int deleteById(int id) {
+	public int deleteById(String id) {
 		return db.delete("Job.deleteById",id);
 	}
 

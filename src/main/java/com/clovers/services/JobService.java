@@ -56,15 +56,12 @@ public class JobService {
 		return jdao.selectAll();
 	}
 	
-	public int updateJobNameById(JobDTO dto) {
-		return jdao.updateJobNameById(dto);
+	public int updateById(JobDTO dto) {
+		return jdao.updateById(dto);
 	}
 	
-	public int updateSecLevelById(JobDTO dto) {
-		return jdao.updateSecLevelById(dto);
-	}
 	
-	public int deleteById(int id) {
+	public int deleteById(String id) {
 		return jdao.deleteById(id);
 	}
 
