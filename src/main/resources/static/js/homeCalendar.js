@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: 'dayGridMonth',
-		googleCalendarApiKey: "AIzaSyA7ZEbhFsxIvQqSdU-m-3PgDvCfxICmYBc", // 구글 캘린더 api key
+		googleCalendarApiKey: "AIzaSyAStWVnOxLheNeBURhUh6-xC-jitc60FcE", // 구글 캘린더 api key
 		eventSources: [{ // 구글 캘린더를 이용해 한국 공휴일 불러오기
 			googleCalendarId: "ko.south_korea.official#holiday@group.v.calendar.google.com",
 			className: "koHolidays",
