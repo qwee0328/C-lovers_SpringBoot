@@ -164,4 +164,9 @@ public class OfficeDAO {
 	public String searchByJobID(String id) {
 		return db.selectOne("Office.searchByJobID", id);
 	}
+	
+	// 처음 입사 시 15일 연차 지급
+	public void insertFirstAnnaul(String id) {
+		db.insert("Office.insertFirstAnnaul", id);
+	}
 }

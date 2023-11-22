@@ -12,13 +12,13 @@ document.addEventListener("DOMContentLoaded", function() {
 			rest_reason_type.push(resp[i]);
 		}
 	})
-	
+
 	// user 이름 불러오기
 	$.ajax({
-		url:"/humanResources/headerProfile",
+		url: "/humanResources/headerProfile",
 		type: "POST",
-	}).done(function(resp){
-		$("#documentWriter").html("C-lovers "+resp.name);
+	}).done(function(resp) {
+		$("#documentWriter").html("C-lovers " + resp.name);
 	});
 
 	// input의 value가 변경될 때 선택한 날짜가 옆에 나오도록 설정
@@ -160,6 +160,24 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
+	// 잔여 휴가 정보 불러오기
+	let date = new Date();
+	let year = date.getFullYear();
+	let remainingAnnaul;
+	$.ajax({
+		url: "/humanResources/selectYearTotalAnnaul",
+		data: { year: year },
+		type: "POST",
+	}).done(function(resp) {
+		if (Object.keys(resp).length !== 0) {
+			$(".vacationInfo__main>span").html(resp.total_rest_cnt + "일");
+			remainingAnnaul = resp.total_rest_cnt;
+		} else {
+			$("#totalAnnaul").html("0일");
+		}
+
+	})
+
 	$("#vacationdraftingBtn").on("click", function() {
 		if ($("#processEmployeeIDList").val() === "") {
 			alert("결제선을 설정해주세요.");
@@ -175,21 +193,38 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 		if ($("#processEmployeeIDList").val() !== "" && $("#date_selector").val() !== "" && $("#vacationReason").val() !== "") {
-			let processEmployeeIDList = $("#processEmployeeIDList").val();
-			let processEmployeeIDArray = processEmployeeIDList.split(",");
 
-			let vacationTypeList = [];
-			$(".vacationType").each(function() {
-				vacationTypeList.push($(this).val())
-			});
-			$.ajax({
-				url: "/electronicsignature/insertVacation",
-				dataType: "json",
-				type: "POST",
-				data: { processEmployeeIDArray: processEmployeeIDArray, vacationDateList: $("#date_selector").val().split(", "), vacationTypeList: vacationTypeList, reson: $("#vacationReason").val() },
-			}).done(function() {
+			// 사용 가능한 휴가가 남아있으면
+			if (remainingAnnaul > 0) {
+				let processEmployeeIDList = $("#processEmployeeIDList").val();
+				let processEmployeeIDArray = processEmployeeIDList.split(",");
+
+				let vacationTypeList = [];
+				$(".vacationType").each(function() {
+					vacationTypeList.push($(this).val())
+				});
+
+				// 선택 가능한 날짜를 넘어가지 않으면
+				if (vacationTypeList.length <= remainingAnnaul) {
+					$.ajax({
+						url: "/electronicsignature/insertVacation",
+						dataType: "json",
+						type: "POST",
+						data: { processEmployeeIDArray: processEmployeeIDArray, vacationDateList: $("#date_selector").val().split(", "), vacationTypeList: vacationTypeList, reson: $("#vacationReason").val() },
+					}).done(function() {
+						location.href = "/humanResources";
+					})
+				} else {
+					alert("남아있는 휴가보다 많이 신청할 수는 없습니다.");
+					return;
+				}
+
+			} else {
+				alert("사용 가능한 휴가가 남아있지 않습니다.");
 				location.href = "/humanResources";
-			})
+			}
+
+
 		}
 	})
 

@@ -26,7 +26,7 @@ $(document).ready(function() {
 	console.log(currentURL);
 	console.log(urlParams);
 	console.log(sourceParam);
-	if (sourceParam === 'detail__colortitle') {
+	if (sourceParam === 'currentSituation') {
 		$("ul.tabs li:first-child").removeClass("current");
 		$(".tab-content").removeClass("current");
 
@@ -96,6 +96,11 @@ $(document).ready(function() {
 		}).done(function(resp) {
 			detailsPrint(resp, window.type);
 		})
+	})
+	
+	// 상세 누르면 해당 문서 출력하는 곳으로 이동
+	$(document).on("click",".showDocument",function(){
+		location.href="/electronicsignature/viewApprovalForm?document_id="+$(this).attr("id");
 	})
 });
 
@@ -183,7 +188,7 @@ function detailsPrint(resp, type) {
 			period.html(resp.detail[i].start_date.split(" ")[0] + " ~ " + resp.detail[i].end_date.split(" ")[0]);
 		}
 		let status = $("<div>").html(resp.detail[i].status).addClass("body__td");
-		let detail = $("<div>").html("상세").attr("id", resp.detail[i].id).addClass("body__td");
+		let detail = $("<div>").html("상세").attr("id", resp.detail[i].id).addClass("body__td").addClass("showDocument");
 		bodyLine.append(num).append(writer).append(type).append(days).append(period).append(status).append(detail);
 		$(".detailes__body").append(bodyLine);
 	}

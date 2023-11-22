@@ -127,7 +127,6 @@
 									</div>
 								</div>
 								<div class="selector__option">
-									<div class="option__item">S등급</div>
 									<div class="option__item">A등급</div>
 									<div class="option__item">B등급</div>
 									<div class="option__item">C등급</div>
@@ -136,7 +135,6 @@
 									<i class="fa-solid fa-question"></i>
 								</div>
 								<div class="tooltip" id="level__tooltip" style="z-index: 1;">
-									<p>ㆍS등급: 기안 상에 설정된 관련자들만 문서를 볼 수 있음</p>
 									<p>ㆍA등급: 기안 상에 설정된 관련자들과 관리자가 설정한 5등급(부장)등급 이상인 사람이 문서를 볼 수
 										있음.</p>
 									<p>ㆍB등급: 기안 상에 설정된 관련자들과 관리자가 설정한 7등급(과장)등급 이상인 사람이 문서를 볼 수
