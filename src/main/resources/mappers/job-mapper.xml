@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Job">
+	
+	<insert id="insert">
+		insert into job values (#{id},#{job_name},#{sec_level})
+	</insert>
+	
+	<select id="selectNewestIdExtract" resultType="String">
+		SELECT id FROM job ORDER BY id DESC LIMIT 1 FOR UPDATE
+	</select>
+	
+	<select id="selectNewestSecLevelExtract" resultType="int">
+		select sec_level from job order by id desc limit 1 FOR UPDATE
+	</select>
+	
+	<select id="selectAllACSSecLevel" resultType="com.clovers.dto.JobDTO">
+		select * from job order by sec_level
+	</select>
+	
+	<resultMap id="jobResultMap" type="HashMap">
+		<result column="id" property="id"/>
+		<result column="security_level" property="security_level"/>
+		<result column="job_name" property="job_name"/>
+	</resultMap>
+	
+	<select id="selectAllAcsSecLevelWithOutJobId" resultMap="jobResultMap">
+		select id, concat(sec_level,"등급") as security_level , job_name from job order by sec_level
+	</select>
+	
+	<select id="selectNewestSecLevelWithOutJobId" resultMap="jobResultMap">
+		select id ,concat(sec_level,"등급") as security_level , job_name from job order by id desc limit 1
+	</select>
+	
+	<select id="selectAll" resultType="com.clovers.dto.JobDTO">
+		select * from job
+	</select>
+	
+	<update id="updateById">
+		update job set job_name=#{job_name}, sec_level=#{sec_level} where id = #{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from job where id = #{id}
+	</delete>
+	
+</mapper>
