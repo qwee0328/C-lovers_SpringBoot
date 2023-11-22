@@ -1,5 +1,9 @@
 package com.clovers.controllers;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +77,7 @@ public class OfficeController {
 	
 	// 사용자 등록하기
 	@PostMapping("/userInsert")
-	public ResponseEntity<Integer> insertUser(@RequestBody MemberDTO dto){
+	public ResponseEntity<Integer> insertUser(@RequestBody MemberDTO dto) throws Exception{
 		System.out.println(dto.getHire_date());
 		int result = oservice.insertUser(dto);
 		return ResponseEntity.ok(result);

@@ -77,7 +77,7 @@ public class MemberController {
 	public String adminLogout(HttpServletRequest request) {
 		
 		session.invalidate();
-		return "forword:/";
+		return "forward:/";
 //		return "";
 //		return "redirect:/";
 		

@@ -322,10 +322,12 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/headerProfile")
 	public MemberDTO selectProfile() {
-
+		System.out.println("도착");
 		String id = (String) session.getAttribute("loginID");
+		System.out.println(id);
 		MemberDTO profile = hrservice.selectById(id);
-
+		//profile.setBirth(new Timestamp(System.currentTimeMillis()));
+		//System.out.println(profile.toString());
 		return profile;
 	}
 

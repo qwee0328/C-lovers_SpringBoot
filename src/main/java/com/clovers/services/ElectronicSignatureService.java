@@ -398,6 +398,11 @@ public class ElectronicSignatureService {
 		param.put("loginID", loginID);
 		return dao.isApproverByDocumentId(param);
 	}
+	
+	// 결재한 결재자가 존재하는지
+	public boolean existApproval(String document_id) {
+		return dao.existApproval(document_id);
+	}
 
 	// 휴가 신청서 정보 출력
 	public List<Map<String, Object>> getVacationInfo(String document_id) {
@@ -456,8 +461,8 @@ public class ElectronicSignatureService {
 		return dao.updateDocumentStatus(param);
 	}
 	
-	// 문서 첨부파일 리스트 
-	public List<Map<String, String>> getDocumentFileList(String document_id) {
-		return dao.getDocumentFileList(document_id);
+	// 문서 삭제
+	public int deleteApproval(String document_id) {
+		return dao.deleteApproval(document_id);
 	}
 }
