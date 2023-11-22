@@ -23,10 +23,10 @@ public class AutoSchedulers {
 
 	@Autowired
 	private ScheduleService sservice;
-	
+
 	@Autowired
 	private AddressBookService abservice;
-	
+
 	@Autowired
 	private MailService mailService;
 
@@ -81,12 +81,11 @@ public class AutoSchedulers {
 			mservice.insertAutomaticAnnaulRest(user);
 		}
 	}
-	
-	
+
 	// 매일 12시에 휴지통에서 30일 경과한 주소록 및 일정 삭제
 	// 메일 추가
 	@Scheduled(cron = "0 0 0 * * *")
-	public void TrashScheduler() {
+	public void TrashScheduler() throws Exception {
 		sservice.autoDeleteInTrash();
 		abservice.autoDeleteInTrash();
 		mailService.autoDeleteInTrash();

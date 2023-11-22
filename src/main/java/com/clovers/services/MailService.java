@@ -173,7 +173,7 @@ public class MailService {
 
 		while (m.find()) {
 			String getUrl = m.group(1);
-			Path path = FileSystems.getDefault().getPath("/Users" + getUrl);
+			Path path = FileSystems.getDefault().getPath("C:" + getUrl);
 			Files.deleteIfExists(path);
 		}
 		return dao.perDeleteMail(id);
@@ -239,8 +239,37 @@ public class MailService {
 		return dao.getUserEmail(loginID);
 	}
 
-	// 휴지통에서 30일 경과한 캘린더 삭제
-	public void autoDeleteInTrash() {
+	// 휴지통에서 30일 경과한 메일 삭제
+	@Transactional
+	public void autoDeleteInTrash() throws Exception {
+		List<EmailDTO> deleteList = dao.selectDeletedTrashList();
+		
+		String upload = "C:/mailUploads";
+		for(EmailDTO delete:deleteList) {
+			List<EmailFileDTO> fileList = dao.selectAllFileById(delete.getId());
+			
+			// 파일 삭제
+			for (EmailFileDTO file : fileList) {
+				System.out.println(file.getSys_name());
+				File filepath = new File(upload + "/" + file.getSys_name());
+				filepath.delete();
+
+				dao.deleteFiles(file.getSys_name());
+			}
+			
+			// 이미지 삭제
+			String content = dao.selectContentById(delete.getId());
+			String pattern = "<img src=\"(.*?)\">"; // 이미지 태그 안의 src 뽑아냄
+			Pattern r = Pattern.compile(pattern);
+			Matcher m = r.matcher(content);
+
+			while (m.find()) {
+				String getUrl = m.group(1);
+				Path path = FileSystems.getDefault().getPath("C:" + getUrl);
+				System.out.println(path);
+				Files.deleteIfExists(path);
+			}
+		}
 		dao.autoDeleteInTrash();
 	}
 }

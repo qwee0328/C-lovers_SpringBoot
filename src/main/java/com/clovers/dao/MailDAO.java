@@ -130,6 +130,11 @@ public class MailDAO {
 	public String getUserEmail(String loginID) {
 		return db.selectOne("Mail.getUserEmail", loginID);
 	}
+	
+	// 휴지통에서 30일 경과한 이메일 데이터 불러오기
+	public List<EmailDTO> selectDeletedTrashList(){
+		return db.selectList("Mail.selectDeletedTrashList");
+	}
 
 	// 휴지통에서 30일 경과한 캘린더 삭제
 	public void autoDeleteInTrash() {
