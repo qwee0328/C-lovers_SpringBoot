@@ -135,23 +135,48 @@ public class HumanResourcesDAO {
 	}
 
 	// 사용자의 휴가 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetails(String id) {
-		return db.selectList("HumanResources.selectAnnaulAppDetails", id);
+	public List<Map<String, Object>> selectAnnaulAppDetails(Map<String, Object> param) {
+		return db.selectList("HumanResources.selectAnnaulAppDetails", param);
+	}
+
+	// 사용자 휴가 신청 상세 내역 총 개수 불러오기
+	public int selectAnnaulAppCount(String id) {
+		Integer result = db.selectOne("HumanResources.selectAnnaulAppCount", id);
+		System.out.println("dao" + result);
+		return (result != null) ? result.intValue() : 0;
 	}
 
 	// 사용자의 최근 1년치 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetailsForYear(String id) {
-		return db.selectList("HumanResources.selectAnnaulAppDetailsForYear", id);
+	public List<Map<String, Object>> selectAnnaulAppDetailsForYear(Map<String, Object> param) {
+		return db.selectList("HumanResources.selectAnnaulAppDetailsForYear", param);
+	}
+
+	// 사용자의 최근 1년치 신청 상세 내역 총 개수 불러오기
+	public int selectAnnaulAppForYearCount(String id) {
+		Integer result = db.selectOne("HumanResources.selectAnnaulAppForYearCount", id);
+		return (result != null) ? result.intValue() : 0;
 	}
 
 	// 사용자의 최근 1달치 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth(String id) {
-		return db.selectList("HumanResources.selectAnnaulAppDetailsForMonth", id);
+	public List<Map<String, Object>> selectAnnaulAppDetailsForMonth(Map<String, Object> param) {
+		return db.selectList("HumanResources.selectAnnaulAppDetailsForMonth", param);
+	}
+
+	// 사용자의 최근 1달치 신청 상세 내역 총 개수 불러오기
+	public int selectAnnaulAppForMonthCount(String id) {
+		Integer result = db.selectOne("HumanResources.selectAnnaulAppForMonthCount", id);
+		return (result != null) ? result.intValue() : 0;
 	}
 
 	// 사용자의 최근 1주일 신청 상세 내역 확인하기
-	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek(String id) {
-		return db.selectList("HumanResources.selectAnnaulAppDetailsForWeek", id);
+	public List<Map<String, Object>> selectAnnaulAppDetailsForWeek(Map<String, Object> param) {
+		return db.selectList("HumanResources.selectAnnaulAppDetailsForWeek", param);
+	}
+
+	// 사용자의 최근 1주일치 신청 상세 내역 총 개수 불러오기
+	public int selectAnnaulAppForWeekCount(String id) {
+		Integer result = db.selectOne("HumanResources.selectAnnaulAppForWeekCount", id);
+		return (result != null) ? result.intValue() : 0;
 	}
 
 	// 임직원 정보 전부 불러오기

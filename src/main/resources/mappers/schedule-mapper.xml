@@ -20,8 +20,8 @@
 		<result property="endKey" column="endKey"/>
 		<result property="endValue" column="endValue"/>
 		<result property="intervalCnt" column="intervalCnt"/>
-		<result property="startTime" column="startTime"/>
-		<result property="endTime" column="endTime"/>
+		<!-- <result property="startTime" column="startTime"/>
+		<result property="endTime" column="endTime"/> -->
 		<result property="selectWeeks" column="selectWeeks"/>
 		<result property="name" column="name"/>
 		<result property="calendar_name" column="calendar_name"/>
@@ -54,7 +54,7 @@
 	</delete>
 	
 	<insert id="insertReccuring" useGeneratedKeys="true" keyProperty="id">
-		insert into schedule_recurring values(null, #{during}, #{frequency_whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{startTime}, #{endTime}, #{selectWeeks});
+		insert into schedule_recurring values(null, #{during}, #{frequency_whenOption}, #{endKey}, #{endValue}, #{intervalCnt}, #{selectWeeks});
 	</insert>
 	
 	<!-- 접속한 유저가 확인 가능한 캘린더 이벤트 전부 가져오기 (home 화면 일정 캘린더에서 사용) -->
@@ -78,17 +78,28 @@
 	</select>
 	
 	<update id="scheduleUpdate">
-		update schedule set calendar_id = #{calendar_id}, title=#{title}, content=#{content}, start_date=#{start_date}, end_date=#{end_date}, all_day=#{all_day} where id = #{id};
+		update schedule set calendar_id = #{calendar_id}, title=#{title}, content=#{content}, start_date=#{start_date}, end_date=#{end_date}, all_day=#{all_day}, recurring_id = #{recurring_id} where id = #{id};
 	</update>
 	
 		
 	<update id="recurringScheduleUpdate">
-		update schedule_recurring set during = #{during}, frequency_whenOption=#{frequency_whenOption}, endKey=#{endKey}, endValue=#{endValue}, intervalCnt=#{intervalCnt}, startTime=#{startTime}, endTime=#{endTime}, selectWeeks=#{selectWeeks}  where id = #{id};
+		update schedule_recurring set during = #{during}, frequency_whenOption=#{frequency_whenOption}, endKey=#{endKey}, endValue=#{endValue}, intervalCnt=#{intervalCnt}, selectWeeks=#{selectWeeks}  where id = #{id};
 	</update>
 	
-	<delete id="deleteReccuring">
+	<!-- 반복 이벤트 -> 일반 이벤트로 변경 시, 반복 이벤트 정보 삭제 후, -->
+	<delete id="deleteRecurring">
 		delete from schedule_recurring where id=#{id};
 	</delete>
+	<!-- 반복 이벤트 -> 일반 이벤트로 변경 시, 각 이벤트에서 참조 중인 반복 이벤트 정보 제거 -->
+	<update id="deleteRecurringId">
+		update schedule set recurring_id = 0 where recurring_id = #{recurring_id};
+	</update>
+	
+	
+	
+	
+	
+	
 	
 	
 	<!-- 캘린더 추가 -->
@@ -159,8 +170,9 @@
 	</delete>
 	
 	
-<!-- 	<delete id="autoDeleteInTrash">
-		delete from address_book where id in (select id from (select * from address_book where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
-	</delete> -->
+	<!-- 휴지통에서 30일 경과된 데이터 삭제 -->
+	<delete id="autoDeleteInTrash">
+		delete from calendar where id in (select id from (select * from calendar where trash = 1 and DATEDIFF(now(), trash_date)>=30)trash_list);
+	</delete>
 	
 </mapper>

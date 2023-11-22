@@ -54,8 +54,14 @@ public class AccountingController {
 	// 계좌 추가
 	@PostMapping
 	public ResponseEntity<String> insert(@RequestBody AccountingDTO dto){
-		acService.insert(dto);
-		return ResponseEntity.ok("성공");
+		
+		int result = acService.insert(dto);
+		if(result == 1) {
+			return ResponseEntity.ok("성공");
+		}else {
+			return ResponseEntity.ok("실패");
+		}
+		
 	}
 	// id로 삭제
 	@DeleteMapping("/{id}")
@@ -93,8 +99,10 @@ public class AccountingController {
 	// 카드 추가
 	@PostMapping("/cardInsert")
 	public ResponseEntity<String> insertCard(@RequestBody AccountingDTO dto){
-		acService.insertCard(dto);
-		return ResponseEntity.ok("성공");
+		
+		String result = acService.insertCard(dto);
+		
+		return ResponseEntity.ok(result);
 	}
 	// 카드 삭제
 	@DeleteMapping("/deleteCard/{id}")

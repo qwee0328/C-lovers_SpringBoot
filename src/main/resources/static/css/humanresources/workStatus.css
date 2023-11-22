@@ -238,7 +238,7 @@ ul.tabs li.current {
 	text-align: center;
 }
 
-.summaryInfo__conf button{
+.summaryInfo__conf button {
 	cursor: pointer;
 }
 
@@ -256,4 +256,43 @@ ul.tabs li.current {
 
 .applicationDetails .summaryInfo__conf>div {
 	border: none;
+}
+
+#detailPagination {
+	display: flex;
+	margin: 50px 0px;
+	align-items: center;
+	justify-content: center;
+}
+
+#detailPagination>div {
+	margin: 0px 5px;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	border-radius: 50%;
+	border: 1px solid #7d7d7d40;
+}
+
+#detailPagination>div:not(.pageNavi__circle):hover {
+	cursor: pointer;
+	background-color: #f3f7f1;
+}
+
+.pageNavi__item {
+	width: 15px;
+	height: 25px;
+	text-align: center;
+}
+
+.pageNavi__circle {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	color: #ffffff;
+	background-color: #75B47D;
+	text-align: center;
+}
+.pageNavi__circle:hover{
+	cursor: pointer;
 }

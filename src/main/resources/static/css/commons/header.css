@@ -33,7 +33,7 @@
   margin-left: 10px;
 }
 
-.headerLeft__dropNav:hover {
+.dropNav_hover:hover {
   background-color: #dcedd4;
 }
 
@@ -157,4 +157,47 @@
 	display: none;
 }
 
+/* nav 박스 */
+/* div{border: 1px solid black;} */
+
+.headerLeft__dropNavBox{
+	width: 350px; 
+	position: absolute;
+	top: 50px; left: 110px;
+	border-radius: 4px; border: 1px solid #7d7d7d80;
+	display: flex;
+	padding: 20px;
+	background-color: white;
+	display: none;
+	z-index: 999;
+	min-height: 200px;
+}
+.headerLeft__dropNavBox.active{
+	display: flex;
+}
+.dropNavBox{
+	width: 50%;
+	height: 100%;
+}
+.dropNavBox__inner{
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.dropNavBox__inner:hover{
+	background-color: #DCEDD4;
+}
+.inner__icon{
+	padding: 5px;
+}
+.inner__title{
+	width: 100px;
+	align-items: center;
+	padding: 5px;
+}
+
+#accountingController__small,#officeController__small{
+	display: none;
+}
 

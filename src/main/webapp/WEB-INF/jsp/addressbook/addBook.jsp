@@ -45,6 +45,13 @@
 				</div>
 				<div class="header__tagName align-center"></div>
 			</div>
+			<div class="body__emptyTrash">
+			  <div class="emptyTrash__cover">
+			      <span>휴지통으로 이동한 주소는 30일 후 자동으로 완전히 삭제됩니다.</span>
+			      <button class="emptyTrash__emptyTrashBtn">지금 비우기</button>
+			  </div>
+			</div>
+			
 			<div class="addBook__body">
 				<div class="body__addListHeader d-flex">
 					<div class="addListHeader__chkBoxCover align-center">

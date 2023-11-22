@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.dao.ElectronicSignatureDAO;
 import com.clovers.dao.MemberDAO;
+import com.clovers.dao.OfficeDAO;
+import com.clovers.dto.AnnualUseMemoryDTO;
 import com.clovers.dto.BusinessContactInfoDTO;
 import com.clovers.dto.DocumentApprovalsDTO;
 import com.clovers.dto.DocumentDTO;
@@ -40,6 +42,9 @@ public class ElectronicSignatureService {
 
 	@Autowired
 	private MemberDAO mdao;
+	
+	@Autowired
+	private OfficeDAO odao;
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬
 	public List<Map<String, Object>> selectEmpJobLevel(List<String> userList) {
@@ -70,17 +75,24 @@ public class ElectronicSignatureService {
 		document.setSecurity_grade("B등급");
 		document.setDocument_type_id("휴가 신청서");
 
-		String writerName = mdao.selectNameById((String) session.getAttribute("loginID"));
+		String writerName = mdao.selectNameById(emp_id);
 		String title = "휴가 신청서 (" + writerName + ")";
 		document.setTitle(title);
 
-		document.setEmp_id((String) session.getAttribute("loginID"));
+		document.setEmp_id(emp_id);
+		
+		String jobID = odao.searchByJobID(emp_id);
+		String jobName = odao.selectJobName(jobID);
+		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			document.setStatus("승인");
+		}else {
+			document.setStatus("대기");
+		}
 
 		// 휴가 문서 등록
 		dao.insertDocument(document);
 
 		// 문서 등록자 등록
-		String writerId = (String) session.getAttribute("loginID");
 		DocumentDrafterDTO drafter = new DocumentDrafterDTO();
 		drafter.setDocument_id(documentID);
 		drafter.setEmp_id(emp_id);
@@ -95,6 +107,11 @@ public class ElectronicSignatureService {
 			approval.setDocument_id(documentID);
 			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
 			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
+			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+				approval.setApproval("승인");
+			}else {
+				approval.setApproval("대기");
+			}
 			approvals.add(approval);
 		}
 		dao.insertApprovals(approvals);
@@ -102,6 +119,7 @@ public class ElectronicSignatureService {
 //		// 휴가 신청일 정보 등록
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		List<VacationApplicationInfoDTO> vacationInfoList = new ArrayList<VacationApplicationInfoDTO>();
+		List<AnnualUseMemoryDTO> vacationUseMemoryList = new ArrayList<AnnualUseMemoryDTO>();
 		for (int i = 0; i < vacationDateList.size(); i++) {
 			VacationApplicationInfoDTO info = new VacationApplicationInfoDTO();
 			info.setDocument_id(documentID);
@@ -111,9 +129,24 @@ public class ElectronicSignatureService {
 			info.setRest_reason_type(vacationTypeList.get(i));
 			info.setVacation_reason(reson);
 			vacationInfoList.add(info);
+			
+			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+				// 연차 사용 기록에 등록
+				AnnualUseMemoryDTO memory = new AnnualUseMemoryDTO();
+				memory.setEmp_id(emp_id);
+				memory.setRest_reason_type_id(vacationTypeList.get(i));
+				memory.setReason(reson);
+				memory.setAnnual_date(timestampDate);
+				vacationUseMemoryList.add(memory);
+			}
 		}
 		// dao.insertVacationApplicationInfo(vacationInfoList);
 		// System.out.println(reson);
+		
+		// 휴가 사용기록 등록
+		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+			dao.insertVacationUseMemoryInfo(vacationUseMemoryList);
+		}
 
 		return dao.insertVacationApplicationInfo(vacationInfoList);
 	}
@@ -154,6 +187,7 @@ public class ElectronicSignatureService {
 		document.setDocument_type_id(esDocumentType);
 		document.setTitle(documentTitle);
 		document.setTemporary(temporary);
+		document.setStatus("대기");
 		document.setEmp_id((String) session.getAttribute("loginID"));
 
 		// 전자 문서 등록
@@ -178,6 +212,7 @@ public class ElectronicSignatureService {
 			approval.setDocument_id(documentID);
 			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
 			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
+			approval.setApproval("대기");
 			approvals.add(approval);
 		}
 		dao.insertApprovals(approvals);
@@ -226,66 +261,203 @@ public class ElectronicSignatureService {
 		}
 		return 0;
 	}
+	
+	// 로그인한 사용자가 결재자인지
+	public boolean isApprover(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.isApprover(param);
+	}
 
 	// 직전 결재자들의 결재 결과
-	public List<Map<String, String>> previousApprovalResult(String loginID) {
-		return dao.previousApprovalResult(loginID);
+	public int previousApprovalResult(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.previousApprovalResult(param);
+	}
+	
+	// 로그인한 사용자의 직급 가져옴
+	public int getJobRank(String loginID) {
+		return dao.getJobRank(loginID);
 	}
 
 	// 진행 중인 문서 전체 리스트 출력
-	public List<Map<String, Object>> progressTotalList(String loginID, List<String> ExcludedIds) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("ExcludedIds", ExcludedIds);
-		return dao.progressTotalList(userInfo);
+	public List<Map<String, Object>> progressTotalList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressTotalList(param);
 	}
 
 	// 진행 중인 문서 대기 리스트 출력
-	public List<Map<String, Object>> proggressWaitLlist(String loginID, List<String> ExcludedIds) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("ExcludedIds", ExcludedIds);
-		return dao.progressWaitList(userInfo);
+	public List<Map<String, Object>> progressWaitList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressWaitList(param);
 	}
 
 	// 진행 중인 문서 확인 리스트 출력
-	public List<Map<String, Object>> progressCheckList(String loginID, List<String> ExcludedIds) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("ExcludedIds", ExcludedIds);
-		return dao.progressCheckList(userInfo);
+	public List<Map<String, Object>> progressCheckList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressCheckList(param);
 	}
 
 	// 진행 중인 문서 진행 리스트 출력
-	public List<Map<String, Object>> progressList(String loginID, List<String> ExcludedIds) {
-		Map<String, Object> userInfo = new HashMap<>();
-		userInfo.put("loginID", loginID);
-		userInfo.put("ExcludedIds", ExcludedIds);
-		return dao.progressList(userInfo);
+	public List<Map<String, Object>> progressList(String loginID, List<String> keyword, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("keyword", keyword);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.progressList(param);
 	}
 
 	// 문서함 전체 리스트 출력
-	public List<Map<String, Object>> documentTotalList(String loginID) {
-		return dao.documentList(loginID);
+	public List<Map<String, Object>> documentTotalList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentList(param);
 	}
 
 	// 문서함 기안 리스트 출력
-	public List<Map<String, Object>> documentDraftingList(String loginID) {
-		return dao.documentDraftingList(loginID);
+	public List<Map<String, Object>> documentDraftingList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentDraftingList(param);
 	}
 
 	// 문서함 결재 리스트 출력
-	public List<Map<String, Object>> documentApprovalList(String loginID) {
-		return dao.documentApprovalList(loginID);
+	public List<Map<String, Object>> documentApprovalList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentApprovalList(param);
 	}
 
 	// 문서함 반려 리스트 출력
-	public List<Map<String, Object>> documentRejectionList(String loginID) {
-		return dao.documentRejectionList(loginID);
+	public List<Map<String, Object>> documentRejectionList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.documentRejectionList(param);
 	}
 
 	// 임시저장 리스트 출력
-	public List<Map<String, Object>> temporaryList(String loginID) {
-		return dao.temporaryList(loginID);
+	public List<Map<String, Object>> temporaryList(String loginID, int start, int end) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("start", start);
+		param.put("end", end);
+		return dao.temporaryList(param);
+	}
+
+	// 문서 번호에 따른 결재 정보 출력
+	public List<Map<String, Object>> selectAllByDocumentId(String document_id) {
+		return dao.selectAllByDocumentId(document_id);
+	}
+	
+	// 기안자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, Object>> getDraftersByDocumentId(String document_id) {
+		return dao.getDraftersByDocumentId(document_id);
+	}
+
+	// 결재자들의 이름과 직급, 부서 가져오기
+	public List<Map<String, String>> getApproversByDocumentId(String document_id) {
+		return dao.getApproversByDocumentId(document_id);
+	}
+	
+	// 로그인한 사용자가 기안자인지
+	public boolean isDrafterByDocumentId(String document_id, String loginID) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", document_id);
+		param.put("loginID", loginID);
+		return dao.isDrafterByDocumentId(param);
+	}
+
+	// 로그인한 사용자가 결재자인지
+	public boolean isApproverByDocumentId(String document_id, String loginID) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", document_id);
+		param.put("loginID", loginID);
+		return dao.isApproverByDocumentId(param);
+	}
+
+	// 휴가 신청서 정보 출력
+	public List<Map<String, Object>> getVacationInfo(String document_id) {
+		return dao.getVacationInfo(document_id);
+	}
+
+	// 대표 기안자의 부서 불러오기
+	public Map<String, String> getMainDrafterDept(String document_id) {
+		return dao.getMainDrafterDept(document_id);
+	}
+
+	// 지출 결의서 정보 출력
+	public Map<String, Object> getExpenseInfo(String document_id) {
+		return dao.getExpenseInfo(document_id);
+	}
+
+	// 개인 계좌 가져오기
+	public Map<String, String> getPersonalAccount(String spender_id) {
+		return dao.getPersonalAccount(spender_id);
+	}
+
+	// 법인 계좌 가져오기
+	public Map<String, String> getCorporateAccount(String spender_id) {
+		return dao.getCorporateAccount(spender_id);
+	}
+
+	// 업무 연락 정보 출력
+	public Map<String, String> getBusinessInfo(String document_id) {
+		return dao.getBusinessInfo(document_id);
+	}
+	
+	// 반려가 존재하는지
+	public boolean existRejection(String document_id) {
+		return dao.existRejection(document_id);
+	}
+	
+	// 결재 결과 저장
+	public int submitApproval(String loginID, String document_id, String approval) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		param.put("approval", approval);
+		return dao.submitApproval(param);
+	}
+	
+	// 마지막 결재자였는지 확인
+	public boolean checkAllApprovals(String document_id) {
+		return dao.checkAllApprovals(document_id);
+	}
+	
+	// 문서 상태 변경
+	public int updateDocumentStatus(String docoment_id, String approval) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", docoment_id);
+		param.put("approval", approval);
+		return dao.updateDocumentStatus(param);
+	}
+	
+	// 문서 첨부파일 리스트 
+	public List<Map<String, String>> getDocumentFileList(String document_id) {
+		return dao.getDocumentFileList(document_id);
 	}
 }
