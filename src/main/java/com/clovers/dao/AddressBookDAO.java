@@ -1,6 +1,5 @@
 package com.clovers.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +16,10 @@ public class AddressBookDAO {
 	@Autowired
 	private SqlSession db;
 	
-	
-	
 	// 주소 관련
 	public int insert(AddressBookDTO dto) { 
+		System.out.println("추가");
+		System.out.println(dto);
 		return db.insert("AddressBook.insert",dto); 
 	}
 	public List<Map<String,Object>> select(Map<String,Object> param) {
@@ -91,6 +90,14 @@ public class AddressBookDAO {
 	public int favoriteDelete(Map<String,Object> param) {
 		return db.delete("AddressBook.favoriteDelete",param);
 	}
+	
+	// 휴지통에서 30일 경과한 데이터 삭제
+	public void autoDeleteInTrash() {
+		db.delete("AddressBook.autoDeleteInTrash");
+	}
 
-
+	// 휴지통 즉시 비우기
+	public int immediatelyEmpty(String emp_id) {
+		return db.delete("AddressBook.immediatelyEmpty",emp_id);
+	}
 }

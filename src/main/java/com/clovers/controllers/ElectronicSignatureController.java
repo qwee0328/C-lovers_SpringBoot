@@ -30,26 +30,6 @@ public class ElectronicSignatureController {
 	@Autowired
 	private ElectronicSignatureService esservices;
 
-	// 로그인한 결재자의 순서인 문서 번호를 담은 리스트 반환
-	public List<String> ExcludedIds(String loginID) {
-		// 직전 결재자들의 결재 결과
-		List<Map<String, String>> approvalStatus = esservices.previousApprovalResult(loginID);
-
-		// 결재 리스트에서 제외될 문서 번호를 담은 배열
-		List<String> ExcludedIds = new ArrayList<>();
-
-		for (Map<String, String> status : approvalStatus) {
-			String documentId = status.get("document_id");
-			String approverStatus = status.get("approver_status");
-
-			// 직전 결재자들의 결재 결과가 승인이 아니고, 문서 번호 배열에 포함되지 않았을 경우 문서 번호 저장
-			if (!"승인".equals(approverStatus) && !ExcludedIds.contains(documentId)) {
-				ExcludedIds.add(documentId);
-			}
-		}
-		return ExcludedIds;
-	}
-
 	// 기안 또는 결재 구분
 	public void setDivision(String loginID, List<Map<String, Object>> list) {
 		for(Map<String, Object> item : list) {
@@ -81,6 +61,43 @@ public class ElectronicSignatureController {
 		}
 		
 		return secGrade;
+	}
+	
+	// 결재자인지, 만약 결재자라면 결재 순서인지
+	public boolean isApprovalTurn(String document_id) {
+		
+		// 로그인한 사용자가 결재자인지
+		String loginID = (String) session.getAttribute("loginID");
+		boolean isApprover = esservices.isApprover(loginID, document_id);
+		
+		boolean isApprovalTurn;
+		// 만약 결재자라면
+		if(isApprover) {
+			int previousApprover = esservices.previousApprovalResult(loginID, document_id);
+			// 대기자가 존재한다면
+			if(previousApprover != 0) {
+				isApprovalTurn = false;
+			} else {
+				isApprovalTurn = true;
+			}
+		// 결재자가 아니라면
+		} else {
+			isApprovalTurn = false;
+		}
+		
+		// 반려가 존재하는지
+		boolean existRejection = esservices.existRejection(document_id);
+		if(existRejection) {
+			isApprovalTurn = false;
+		}
+		
+		// 마지막 결재자였는지 확인
+		boolean checkAllApprovals = esservices.checkAllApprovals(document_id);
+		if(checkAllApprovals) {
+			isApprovalTurn = false;
+		}
+		
+		return isApprovalTurn;
 	}
 
 	// 메인 화면으로 이동
@@ -368,8 +385,13 @@ public class ElectronicSignatureController {
 		// 기안자들의 이름과 직급, 부서 불러오기
 		List<Map<String, Object>> draftersInfo = esservices.getDraftersByDocumentId(document_id);
 		
-		// 결재자들의 이름과 직급, 부서 가져오기
+		// 결재자들의 이름과 직급, 결재 결과 가져오기
 		List<Map<String, String>> approversInfo = esservices.getApproversByDocumentId(document_id);		
+		for(Map<String, String> item : approversInfo) {
+			if(item.get("approval").equals("대기")) {
+				item.put("approval", "");
+			}
+		}
 		
 		model.addAttribute("mainDrafter", mainDrafter);
 		model.addAttribute("documentInfo", documentInfo);
@@ -382,29 +404,46 @@ public class ElectronicSignatureController {
 	// 휴가 신청서 정보 출력
 	@ResponseBody
 	@RequestMapping("/getVacationInfo")
-	public List<Map<String, Object>> getVacationInfo(String document_id) {
-		return esservices.getVacationInfo(document_id);
+	public Map<String, Object> getVacationInfo(String document_id) {
+		List<Map<String, Object>> list = esservices.getVacationInfo(document_id);
+		
+		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
+		boolean isApprovalTurn = isApprovalTurn(document_id);
+		
+		Map<String, Object> vacation_info = new HashMap<>();
+		vacation_info.put("vacation_info", list);
+		vacation_info.put("isApprovalTurn", isApprovalTurn);
+		return vacation_info;
 	}
 	
 	// 지출 결의서 정보 출력
 	@ResponseBody
-	@RequestMapping("/getExpenceInfo")
-	public Map<String, Object> getExpenceInfo(String document_id) {
-		Map<String, Object> expense_info = esservices.getExpenceInfo(document_id);
+	@RequestMapping("/getExpenseInfo")
+	public Map<String, Object> getExpenseInfo(String document_id) {
+		Map<String, Object> expense = esservices.getExpenseInfo(document_id);
 
-		String spender_id = expense_info.get("spender_id").toString();
+		String spender_id = expense.get("spender_id").toString();
 		
 		Map<String, String> account = new HashMap<>();
 		// 구분이 개인이면 개인 계좌
-		if(expense_info.get("expense_category").toString().equals("개인")) {
+		if(expense.get("expense_category").toString().equals("개인")) {
 			account = esservices.getPersonalAccount(spender_id);
 		// 구분이 법인이면 법인 계좌
-		} else if(expense_info.get("expense_category").toString().equals("법인")) {
+		} else if(expense.get("expense_category").toString().equals("법인")) {
 			account = esservices.getCorporateAccount(spender_id);
 		}
 		
-		expense_info.put("account_name", account.get("bank"));
-		expense_info.put("account_id", account.get("id"));
+		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
+		boolean isApprovalTurn = isApprovalTurn(document_id);
+		
+		// 문서 첨부파일 리스트
+		List<Map<String, String>> fileList = esservices.getDocumentFileList(document_id);
+		
+		Map<String, Object> expense_info = new HashMap<>();
+		expense_info.put("expense_info", expense);
+		expense_info.put("account", account);
+		expense_info.put("isApprovalTurn", isApprovalTurn);
+		expense_info.put("fileList", fileList);
 		
 		return expense_info;
 	}
@@ -412,10 +451,42 @@ public class ElectronicSignatureController {
 	// 업무 연락 정보 출력
 	@ResponseBody
 	@RequestMapping("/getBusinessInfo")
-	public Map<String, String> getBusinessInfo(String document_id) {
+	public Map<String, Object> getBusinessInfo(String document_id) {
 		Map<String, String> business = esservices.getBusinessInfo(document_id);
 		business.put("content", removeHtmlTags(business.get("content")));
-		return business;
+	
+		// 이 문서의 결재자인지, 결재자라면 결재 순서인지
+		boolean isApprovalTurn = isApprovalTurn(document_id);
+		
+		Map<String, Object> business_info = new HashMap<>();
+		business_info.put("business_info", business);
+		business_info.put("isApprovalTurn", isApprovalTurn);
+		
+		return business_info;
+	}
+	
+	// 결재 결과 저장
+	@ResponseBody
+	@RequestMapping("/submitApproval")
+	public int submitApproval(String document_id, String approval) {
+		String loginID = (String) session.getAttribute("loginID");
+		esservices.submitApproval(loginID, document_id, approval);
+		
+		// 결재자가 승인했다면
+		if(approval.equals("승인")) {
+			// 마지막 결재자였는지 확인
+			boolean checkAllApprovals = esservices.checkAllApprovals(document_id);
+			// 문서 상태를 승인으로 변경
+			if(checkAllApprovals) {
+				esservices.updateDocumentStatus(document_id, "승인");
+			}
+		// 결재자가 반려했다면
+		} else if(approval.equals("반려")) {
+			// 문서 상태를 반려로 변경
+			esservices.updateDocumentStatus(document_id, "반려");
+		}
+		
+		return 1;
 	}
 
 	// 멤버의 전자 결재를 위한 전자선 정렬 -> job_id의 순서대로 정렬

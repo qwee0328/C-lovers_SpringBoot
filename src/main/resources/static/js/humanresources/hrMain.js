@@ -39,6 +39,29 @@ window.onload = function() {
 		$("#userAbsenteeismCount").html(resp + "회");
 	});
 
+	// 사용자 잔여 휴가 정보 불러오기
+	let date = new Date();
+	let year = date.getFullYear();
+	$.ajax({
+		url: "/humanResources/selectYearTotalAnnaul",
+		data: { year: year },
+		type: "POST",
+	}).done(function(resp) {
+		if (Object.keys(resp).length !== 0) {
+			if (Object.keys(resp).length !== 0) {
+				$("#totalAnnaul").html(resp.total_rest_cnt +"일");
+			} else {
+				$("#totalAnnaul").html("0일");
+			}
+		}
+	})
+	
+	// 휴가 현황 이동 버튼
+	$(".detail__colortitle").on("click",function(){
+		location.href="/humanResources/workStatus?source=detail__colortitle";
+	})
+
+
 	// 사용자 근무 시간 정보 불러오기
 	$.ajax({
 		url: "/humanResources/selectWorkingDaysThisMonth",

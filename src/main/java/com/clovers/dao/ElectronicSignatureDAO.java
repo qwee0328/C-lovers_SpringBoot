@@ -82,10 +82,15 @@ public class ElectronicSignatureDAO {
 	public int insertDocumentFile(DocumentFileDTO dto) {
 		return db.insert("ElectronicSignature.insertDocumentFile",dto);
 	}
+	
+	// 로그인한 사용자가 결재자인지
+	public boolean isApprover(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.isApprover", param);
+	}
 
 	// 직전 결재자들의 결재 결과
-	public List<Map<String, String>> previousApprovalResult(String loginID) {
-		return db.selectList("ElectronicSignature.previousApprovalResult", loginID);
+	public int previousApprovalResult(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.previousApprovalResult", param);
 	}
 	
 	// 로그인한 사용자의 직급 가져옴
@@ -174,8 +179,8 @@ public class ElectronicSignatureDAO {
 	}
 
 	// 지출 결의서 정보 출력
-	public Map<String, Object> getExpenceInfo(String document_id) {
-		return db.selectOne("ElectronicSignature.getExpenceInfo", document_id);
+	public Map<String, Object> getExpenseInfo(String document_id) {
+		return db.selectOne("ElectronicSignature.getExpenseInfo", document_id);
 	}
 
 	// 개인 계좌 불러오기
@@ -191,5 +196,30 @@ public class ElectronicSignatureDAO {
 	// 업무 연락 정보 출력
 	public Map<String, String> getBusinessInfo(String document_id) {
 		return db.selectOne("ElectronicSignature.getBusinessInfo", document_id);
+	}
+	
+	// 반려가 존재하는지
+	public boolean existRejection(String loginID) {
+		return db.selectOne("ElectronicSignature.existRejection", loginID);
+	}
+	
+	// 결재 결과 저장
+	public int submitApproval(Map<String, String> param) {
+		return db.update("ElectronicSignature.submitApproval", param);
+	}
+	
+	// 마지막 결재자였는지 확인
+	public boolean checkAllApprovals(String document_id) {
+		return db.selectOne("ElectronicSignature.checkAllApprovals", document_id);
+	}
+	
+	// 문서 상태 변경
+	public int updateDocumentStatus(Map<String, String> param) {
+		return db.update("ElectronicSignature.updateDocumentStatus", param);
+	}
+	
+	// 문서 첨부파일 리스트
+	public List<Map<String, String>> getDocumentFileList(String document_id) {
+		return db.selectList("ElectronicSignature.getDocumentFileList", document_id);
 	}
 }

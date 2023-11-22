@@ -58,7 +58,10 @@ public class HumanResourcesController {
 
 		MemberDTO list = hrservice.selectById(id);
 		model.addAttribute("list", list);
-
+		
+		String currentMenu = "프로필 설정";
+		session.setAttribute("currentMenu", currentMenu);
+		
 		return "humanresources/myPage";
 	}
 

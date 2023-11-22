@@ -177,8 +177,6 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 		value = authorityOrTagId;
 	}
 
-
-	console.log(`${key} : ${value} : ${tagId} : ${keyword}`);
 	$.ajax({
 		url: "/addressbook/select",
 		data: {
@@ -188,7 +186,7 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 			keyword: keyword
 		},
 		type: "post"
-	}).done(function(resp) {
+	}).done(function(resp) {		
 		$(".addListHeader__chkBox").prop("checked", false);
 		$(".addListHeader__default").css("display","flex");
 		$(".addListHeader__select").attr("style","display: none !important");
@@ -212,6 +210,10 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 						if(resp[i].existFavorite == resp[i].id){
 							favorites__icon.addClass("chk");
 						}
+						$(".body__emptyTrash").css("display","none");
+					}else{
+						// 휴지통 안내 문구 상단에 추가
+						$(".body__emptyTrash").css("display","block");
 					}
 					let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
 					let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
@@ -340,9 +342,7 @@ $(document).ready(function() {
 
 	$(document).on("click","#addressBookInsert", function() { // 주소록 저장
 	// 유효성 검사
-	
 		let data = settingData();
-		console.log(data);
 		if(data != null){
 			$.ajax({
 				url: "/addressbook/insert",
@@ -352,7 +352,7 @@ $(document).ready(function() {
 			}).done(function(resp) {
 				if (resp >= 1) {
 					$.modal.close();
-					indexSelect($(".activeMenu"));	
+					indexSelect($(".activeMenu"));
 				}
 			});
 		}
@@ -370,7 +370,11 @@ $(document).ready(function() {
 			async: "false"
 		}).done(function(resp) { // 현재 선택한 태그 이름 가져와서 선택해주어야함
 			if (resp > 0) {
+				console.log("흐음");
 				$.modal.close();
+				reloadTags(function(){
+					indexSelect($("div[data-id='" + $("#abCurrentMenu").val() + "']"));	
+				});
 				$(".modalBody__tag").append($("<option>").val(resp).text($(".modalBody__tagName").val()));
 			}
 		});
@@ -398,6 +402,8 @@ function indexSelect(target){
 		reloadAddressBook($(target).attr("authority"), $(target).attr("data-id"));
 	else reloadAddressBook(parseInt($(target).attr("data-id")), $(target).attr("data-id")); // 그 외 태그 선택
 
+	if($(target).attr("authority") == "trash")
+		$(".body__emptyTrash").css("display","block");
 	$(target).addClass("activeMenu");
 }
 
@@ -606,7 +612,7 @@ $(document).on("click",".addListHeader__copy",function(){
 });
 
 
-// 주소록 클릭 시 샂세 정보창
+// 주소록 클릭 시 상세 정보창
 let addressKeyName = {name:"이름",email:"이메일",number:"전화",birth:"생일",company_name:"회사",dept_name:"부서",job_name:"직급",address:"주소",memo:"메모"}
 $(document).on("click",".addList__addessLine ",function(){ 
 	$.ajax({
@@ -805,4 +811,30 @@ $(document).on("click",".addessLine__email",function(e){
 		e.stopPropagation(); // 상세보기 모달창 뜨지 않게 함. (기존 이벤트 중단)
 		location.href = "/mail/sendSetEmail?addressEmail="+$(this).text();	
 	}
+});
+
+
+// 휴지통에서 즉시 삭제 기능 
+$(document).on("click",".emptyTrash__emptyTrashBtn",function(){
+	Swal.fire({
+		text: "정말 휴지통을 비우시겠습니까?",
+		showCancelButton: true,
+		allowOutsideClick: false,
+	}).then(function(result) {
+		if (result.isConfirmed) {
+			$.ajax({
+				url:"/addressbook/immediatelyEmpty"
+			}).done(function(resp){
+				if(resp==0){
+					Swal.fire({
+						icon: "error",
+						text: "휴지통이 비어있습니다."
+					});
+				}
+				indexSelect($(".activeMenu"));	
+			});
+		} else if (result.isDismissed) {
+			return;
+		}
+	});	
 });

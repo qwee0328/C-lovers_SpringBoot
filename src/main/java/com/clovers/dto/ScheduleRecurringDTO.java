@@ -18,7 +18,5 @@ public class ScheduleRecurringDTO {
 	private String endKey;
 	private String endValue;
 	private int intervalCnt;
-	private String startTime;
-	private String endTime;
 	private String selectWeeks;
 }

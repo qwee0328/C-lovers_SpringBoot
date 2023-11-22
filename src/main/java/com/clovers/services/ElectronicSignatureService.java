@@ -261,10 +261,21 @@ public class ElectronicSignatureService {
 		}
 		return 0;
 	}
+	
+	// 로그인한 사용자가 결재자인지
+	public boolean isApprover(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.isApprover(param);
+	}
 
 	// 직전 결재자들의 결재 결과
-	public List<Map<String, String>> previousApprovalResult(String loginID) {
-		return dao.previousApprovalResult(loginID);
+	public int previousApprovalResult(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.previousApprovalResult(param);
 	}
 	
 	// 로그인한 사용자의 직급 가져옴
@@ -399,8 +410,8 @@ public class ElectronicSignatureService {
 	}
 
 	// 지출 결의서 정보 출력
-	public Map<String, Object> getExpenceInfo(String document_id) {
-		return dao.getExpenceInfo(document_id);
+	public Map<String, Object> getExpenseInfo(String document_id) {
+		return dao.getExpenseInfo(document_id);
 	}
 
 	// 개인 계좌 가져오기
@@ -416,5 +427,37 @@ public class ElectronicSignatureService {
 	// 업무 연락 정보 출력
 	public Map<String, String> getBusinessInfo(String document_id) {
 		return dao.getBusinessInfo(document_id);
+	}
+	
+	// 반려가 존재하는지
+	public boolean existRejection(String document_id) {
+		return dao.existRejection(document_id);
+	}
+	
+	// 결재 결과 저장
+	public int submitApproval(String loginID, String document_id, String approval) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		param.put("approval", approval);
+		return dao.submitApproval(param);
+	}
+	
+	// 마지막 결재자였는지 확인
+	public boolean checkAllApprovals(String document_id) {
+		return dao.checkAllApprovals(document_id);
+	}
+	
+	// 문서 상태 변경
+	public int updateDocumentStatus(String docoment_id, String approval) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", docoment_id);
+		param.put("approval", approval);
+		return dao.updateDocumentStatus(param);
+	}
+	
+	// 문서 첨부파일 리스트 
+	public List<Map<String, String>> getDocumentFileList(String document_id) {
+		return dao.getDocumentFileList(document_id);
 	}
 }
