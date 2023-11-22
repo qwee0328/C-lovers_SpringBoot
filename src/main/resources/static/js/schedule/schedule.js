@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				});
 
 
-				$(".calendarModal__delete").on("click", () => { 
+				/*$(".calendarModal__delete").on("click", () => { 
 					calendar.getEventById($("#eventId").val()).remove();
 					$.ajax({
 						url:"/schedule/delete",
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					}).done(function(resp){}); // resp가 1이면 정살적으로 삭제 
 					$.modal.close(); 
 					
-				}); // 일정 삭제
+				}); // 일정 삭제*/
 			} else {
 				e.jsEvent.preventDefault(); // 구글 일정 클릭 시 구글 캘린더 페이지로 이동하는 이벤트 방지
 			}
@@ -864,7 +864,19 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	
-	
+
+
+	// 일정 삭제
+	$(document).on("click",".calendarModal__delete",function(){
+		calendar.getEventById($("#eventId").val()).remove();
+		$.ajax({
+			url:"/schedule/delete",
+			data:{id:$("#eventId").val()},
+			type:"post"
+		}).done(function(resp){}); // resp가 1이면 정살적으로 삭제 
+		$.modal.close(); 
+	})
+
 	
 	// 캘린더 수정 모달
 	$(document).on("click",".customMenu .editNavi, .trashMenu .editNavi",function(e){
