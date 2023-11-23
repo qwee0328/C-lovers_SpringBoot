@@ -90,15 +90,11 @@ public class OfficeService {
 		dto.setId(id);
 
 		String engKeyboardConversionName = EncryptionUtils.kR_EnKeyboardConversion(dto.getName());
-		System.out.println(engKeyboardConversionName);
 
-		// 비밀번호는 이름으로 저장
+		// 초기 비밀번호는 이름으로 저장
 		dto.setPw(EncryptionUtils.getSHA512(engKeyboardConversionName));
 
-		// 입사일을 timestamp값으로 변경
-		System.out.println(dto.getHire_date());
-
-		// 사내 이메일은 id랑 똑같이 저장
+		// 초기 사내 이메일은 id랑 똑같이 저장
 		dto.setCompany_email(dto.getId()+"@clovers.com");
 		
 		// 생일 값을 입력하지 않으면 기본값입력
@@ -117,21 +113,20 @@ public class OfficeService {
 		if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
 			dao.insertTotalAdmin(id);
 		}else {
-			if(taskName.contains("인사")) {
+			if(taskName.contains("인사")) { // 인사 관련 부서인 경우 관리자 등록
 				dao.insertHRAdmin(id);
 			}
-			if(taskName.contains("회계")||taskName.contains("총무")) {
+			if(taskName.contains("회계")||taskName.contains("총무")) { // 회계 관련 부서인 경우 관리자 등록
 				dao.insertACAdmin(id);
 			}
 		}
 		
 		// 처음 입사 시 15일 연차 지급
 		dao.insertFirstAnnaul(dto.getId());
-
-		dao.insertUser(dto);
-		
 		// 공유 주소록에 사용자 정보를 추가하기 위한 내용
-		return dao.insertAddressBook(dto.getId());
+		dao.insertAddressBook(dto.getId());
+		// 사용자 등록
+		return dao.insertUser(dto);
 	}
 
 	// 사용자 삭제하기
@@ -162,8 +157,6 @@ public class OfficeService {
 			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
 				boolean flag = false;
 				for(AdminDTO info : authority) {
-					System.out.println(info.getAuthority_category_id().getClass());
-					System.out.println(AdminDTO.AuthorityCategories.총괄.getClass());
 					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.총괄) {
 						flag=true; // 기존에 고위직이였다면
 					}

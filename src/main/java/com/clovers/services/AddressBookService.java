@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +27,7 @@ public class AddressBookService {
 	
 	// 병행 제어 필요
 	// 태그 선택 후 주소 추가
+	@Transactional
 	public int insert(AddressBookDTO dto, List<Integer> selectedTagArray) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("selectedTagArray", selectedTagArray);	
@@ -141,12 +143,14 @@ public class AddressBookService {
 	
 	// 병행 제어
 	// 주소 변경 (태그 없음)
+	@Transactional
 	public int update(AddressBookDTO dto) {
 		dao.tagListDelete(dto.getId()); // 기존 태그 내용 삭제
 		return dao.update(dto);
 	}
 	
 	// 주소 변경 (태그 있음)
+	@Transactional
 	public int update(AddressBookDTO dto, List<Integer> selectedTagArray) {	
 		dao.tagListDelete(dto.getId()); // 기존 태그 내용 삭제
 		

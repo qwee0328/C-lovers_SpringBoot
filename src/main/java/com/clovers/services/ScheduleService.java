@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.dao.ScheduleDAO;
 import com.clovers.dto.ScheduleDTO;
@@ -74,6 +75,7 @@ public class ScheduleService {
 	
 	// 병행 제어 필요
 	// 캘린더 및 캘린더 권한 추가 
+	@Transactional
 	public int calendarInsert(String name, String color, int is_share, List<String> empIds) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("name", name);

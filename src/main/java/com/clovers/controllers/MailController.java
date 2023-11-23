@@ -596,8 +596,7 @@ public class MailController {
 	@RequestMapping("/sendSetEmail")
 	public String sendSetEmail(@RequestParam("addressEmail") String addressEmail, Model model) {
 		EmailDTO reply = new EmailDTO();
-		reply.setSend_id(addressEmail);
-		model.addAttribute("reply", reply);
+		model.addAttribute("addressEmail", addressEmail);
 		return "/mail/send";
 	}
 }

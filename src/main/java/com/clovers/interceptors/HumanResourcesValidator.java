@@ -38,6 +38,7 @@ public class HumanResourcesValidator implements HandlerInterceptor {
 			for (String per : permission) {
 				System.out.println("인사 있?" + per);
 				if (per.equals("인사")) {
+					System.out.println("인사팀");
 					result = true;
 				} else if (per.equals("총괄")) {
 					result = true;
@@ -46,7 +47,8 @@ public class HumanResourcesValidator implements HandlerInterceptor {
 					accounting = true;
 				}
 			}
-			if (!result|| !full) {
+			System.out.println(full + " " + result);
+			if (!full&&!result ) {
 				System.out.println("메인으로 돌아가");
 				response.sendRedirect("/");
 			}
