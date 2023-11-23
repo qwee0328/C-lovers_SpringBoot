@@ -120,7 +120,10 @@ public class OfficeService {
 		// 처음 입사 시 15일 연차 지급
 		dao.insertFirstAnnaul(dto.getId());
 
-		return dao.insertUser(dto);
+		dao.insertUser(dto);
+		
+		// 공유 주소록에 사용자 정보를 추가하기 위한 내용
+		return dao.insertAddressBook(dto.getId());
 	}
 
 	// 사용자 삭제하기
