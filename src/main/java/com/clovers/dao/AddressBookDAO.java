@@ -26,6 +26,13 @@ public class AddressBookDAO {
 		return db.selectList("AddressBook.select",param);
 	}
 	
+	
+	// 주소록 페이지 네이션
+	public int getCount(Map<String,Object> param) {
+		return db.selectOne("AddressBook.getCount",param);
+	}
+	
+	
 	public Map<String,Object> selectById(Map<String, Object> param) {
 		return db.selectOne("AddressBook.selectById",param);
 	}
@@ -101,4 +108,7 @@ public class AddressBookDAO {
 	public int immediatelyEmpty(String emp_id) {
 		return db.delete("AddressBook.immediatelyEmpty",emp_id);
 	}
+	
+	
+
 }

@@ -40,26 +40,58 @@ public class AddressBookService {
 	}
 	
 	// 주소 출력
-	public List<Map<String,Object>> select(String emp_id, String key, int value, String keyword, int auth) {
+//	public Map<String,Object> select(String emp_id, String key, int value, String keyword, int auth) {
+//		Map<String,Object> param = new HashMap<>();
+//		param.put("emp_id", emp_id);
+//		param.put("key", key);
+//		param.put("value", value);
+//		param.put("keyword", keyword);
+//		param.put("auth", auth);
+//		
+//					
+//		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
+//			Map<String,Object> result = new HashMap<>();
+//			result.put("deleteTag", true);
+//			//List<Map<String,Object>> deleteTag = new ArrayList<>();
+//			//deleteTag.add(result);
+//			return result;
+//		}
+//		
+//		// 주소록 페이지 네이션
+//		Map<String,Object> result = new HashMap<>();
+//		result.put("list", dao.select(param));
+//		result.put("count", dao.getCount(param));
+//		
+//		return result;
+//	}
+	
+	public Map<String,Object> select(String emp_id, String key, int value, String keyword, int auth, int start, int end) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("emp_id", emp_id);
 		param.put("key", key);
 		param.put("value", value);
 		param.put("keyword", keyword);
 		param.put("auth", auth);
-		
+		param.put("start", start);
+		param.put("end", end);
 					
 		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
 			Map<String,Object> result = new HashMap<>();
 			result.put("deleteTag", true);
-			List<Map<String,Object>> deleteTag = new ArrayList<>();
-			deleteTag.add(result);
-			return deleteTag;
+			//List<Map<String,Object>> deleteTag = new ArrayList<>();
+			//deleteTag.add(result);
+			return result;
 		}
-			
-
-		return dao.select(param);
+		
+		// 주소록 페이지 네이션
+		Map<String,Object> result = new HashMap<>();
+		result.put("resp", dao.select(param));
+		result.put("count", dao.getCount(param));
+		
+		return result;
 	}
+	
+
 	
 	// 주소 상세보기 출력
 	public Map<String,Object> selectById(int id, String emp_id) {

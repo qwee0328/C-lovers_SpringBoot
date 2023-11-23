@@ -16,9 +16,9 @@ function modalInit() {
 
 
 // 주소록 변경 시, 태그 새로 불러오기 
-function changeTab(tapName, callback) { 
+function changeTab(tabName, callback) { 
 	let is_share = 1;
-	if (tapName == "personal") is_share = 0;
+	if (tabName == "personal") is_share = 0;
 
 	$.ajax({
 		url: "/addressbook/tagSelectByIsShare",
@@ -28,6 +28,7 @@ function changeTab(tapName, callback) {
 		$(".selectedTags>div").remove();
 		$(".modalBody__tag option").remove();
 		$(".modalBody__tag").append($("<option>").val("").text("선택").prop("selected", true).prop("disabled", true));
+	
 
 		for (let i = 0; i < resp.length; i++) {
 			$(".modalBody__tag").append($("<option>").val(resp[i].id).text(resp[i].name));
@@ -175,9 +176,134 @@ $(document).on("click",".removeNavi",function(e){
 });
 
 
+function pagiMove(cpage){
+	let currentMenu = $(".activeMenu");
+	if($(currentMenu).length == 0){ // 메뉴 삭제된 경우
+		reloadAddressBook("personal", 0, "",cpage);
+		$(".toggleInner[authority='personal']").addClass("activeMenu");
+	}else if ($(currentMenu).attr("authority") == "personal" || $(currentMenu).attr("authority") == "shared" || $(currentMenu).attr("authority") == "favorite" || $(currentMenu).attr("authority") == "trash") // 선택한 메뉴가 개인 전체 혹은 공유 전체일 경우
+		reloadAddressBook($(currentMenu).attr("authority"), $(currentMenu).attr("data-id"),"",cpage);
+	else reloadAddressBook(parseInt($(currentMenu).attr("data-id")), $(currentMenu).attr("data-id"),"",cpage); // 그 외 태그 선택
+
+	if($(currentMenu).attr("authority") == "trash")
+		$(".body__emptyTrash").css("display","block");
+	$(currentMenu).addClass("activeMenu");
+}
+
+function pagination(recordTotalCount, recordCountPerPage, naviCountPerPage, lastPageNum) {
+	$(".pagination").empty();
+	
+	if(recordTotalCount != 0) {
+
+		let pageTotalCount = 0;
+		pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+		
+		let currentPage = lastPageNum;
+		
+		// 비정상 접근 차단
+		if(currentPage < 1) {
+			currentPage = 1;
+		} else if (currentPage > pageTotalCount) {
+			currentPage = pageTotalCount;
+		}
+		
+		let startNavi = Math.floor((currentPage - 1) / naviCountPerPage) * naviCountPerPage + 1;
+		let endNavi = startNavi + (naviCountPerPage - 1);
+		if(endNavi > pageTotalCount) {
+			endNavi = pageTotalCount;
+		}
+		
+		let needPrev = true;
+		let needNext = true;
+		
+		if(startNavi == 1) {
+			needPrev = false;
+		}
+		
+		if(endNavi == pageTotalCount) {
+			needNext = false;
+		}
+
+		
+		let pagination = $(".pagination");
+		if (startNavi != 1) {
+			let divTag = $("<div>");
+			$(divTag).on("click",function(){
+				pagiMove(1)
+			})
+			
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-angles-left");
+			divTag.append(iTag);
+			pagination.append(divTag);
+		}
+
+		if (needPrev) {
+			let divTag = $("<div>");
+			$(divTag).on("click",function(){
+				pagiMove(startNavi - 1);
+			})
+		
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-chevron-left");
+			divTag.append(iTag);
+			pagination.append($(divTag));
+		}
+
+		for (let i = startNavi; i <= endNavi; i++) {
+			let divTag = $("<div>");
+			divTag.addClass("pageNavi__item");
+			divTag.text(i);
+			$(divTag).on("click",function(){
+				pagiMove(i);
+			});
+			if (i == currentPage) {
+				divTag.addClass("pageNavi__circle");
+			}
+			pagination.append(divTag);
+		}
+
+		if (needNext) {
+			let divTag = $("<div>");
+			$(divTag).on("click",function(){
+				pagiMove(endNavi + 1);
+			})
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-chevron-right");
+			divTag.append(iTag);
+			pagination.append(divTag);
+		}
+
+		if (endNavi != pageTotalCount) {
+			let divTag = $("<div>");
+			$(divTag).on("click",function(){
+				pagiMove(pageTotalCount);
+			})
+			let iTag = $("<i>");
+			iTag.addClass("fa-solid fa-angles-right");
+			divTag.append(iTag);
+			pagination.append(divTag);
+		}
+	}
+}
+
+// 페이지네이션 클릭 시 메일 리스트 출력
+$(document).on("click", ".bottom__pageNavi>div", function () {
+    let pageUrl = $(this).attr("href");
+    $.ajax({
+        url: pageUrl,
+        type: 'POST'
+    }).done(function (resp) {
+        documentList(resp.list)
+    	pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
+    })
+})
+
+
+
 
 // 주소록 출력
-function reloadAddressBook(authorityOrTagId, tagId, keyword) {
+function reloadAddressBook(authorityOrTagId, tagId, keyword, cpage) {
 
 	let key, value;
 
@@ -198,16 +324,30 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 			key: key,
 			value: value,
 			currentMenu: tagId,
-			keyword: keyword
+			keyword: keyword,
+			cpage:cpage
 		},
 		type: "post"
-	}).done(function(resp) {		
+	}).done(function(result) {	
+		let resp = result.resp;
+			
+		console.log(result);
 		$(".addListHeader__chkBox").prop("checked", false);
 		$(".addListHeader__default").css("display","flex");
 		$(".addListHeader__select").attr("style","display: none !important");
 		$(".addListHeader__selectInTrash").attr("style","display: none !important");
-		if(resp.length>0){
-			if(resp[0].deleteTag === undefined){ // 삭제된 태그이면 개인 전체 선택되도록
+		
+		if(result.deleteTag === true){	
+			reloadTags(function(){
+				indexSelect($("div[data-id='"+0+"']"));	
+			});
+			$(".pagination").empty();
+			Swal.fire({
+				icon: "error",
+				text: "삭제된 태그입니다."
+			});
+		}else{
+			if(resp.length > 0){ // 삭제된 태그이면 개인 전체 선택되도록
 				$("#abCurrentMenu").val(value);
 				$(".body__addList>*").remove();
 				$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
@@ -266,19 +406,16 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 					addList__addessLine.append(addessLine__chkBoxCover).append(addessLint__favorites).append(addessLine__name).append(addessLine__email).append(addessLine__phone).append(addessLine__company).append(addessLine__tag)
 					$(".body__addList").append(addList__addessLine);
 				}
+				
+				
+			pagination(result.recordTotalCount, result.recordCountPerPage, result.naviCountPerPage, result.lastPageNum);
+				
 			}else{
-				reloadTags(function(){
-					indexSelect($("div[data-id='"+0+"']"));	
-				});
-				Swal.fire({
-					icon: "error",
-					text: "삭제된 태그입니다."
-				});
+				$("#abCurrentMenu").val(value);
+				$(".body__addList>*").remove();
+				$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
+				$(".pagination").empty();
 			}
-		}else{
-			$("#abCurrentMenu").val(value);
-			$(".body__addList>*").remove();
-			$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
 		}
 	});
 }
@@ -308,7 +445,7 @@ function settingData(){
 	
 	if($(".modalBody__email").val() != ""){ // 이메일 정규식
 		// 둘 중 하나. 진짜 이메일 형식 or 영문+숫자 조합
-		let emailRegex = /^[a-zA-Z0-9]+@[a-z]+\.[a-z]+(\.*[a-z])*$/; // 이메일 형식 ex. test@clovers.com or test@clovers.co.kr
+		let emailRegex = /^[a-zA-Z0-9_]+@[a-z]+\.[a-z]+(\.*[a-z])*$/; // 이메일 형식 ex. test@clovers.com or test@clovers.co.kr
 		//let empIdRegex = /^[0-9]{4}DT[0-9]{2}[0-9]{3}$/; // 사번 형식 ex. 2023DT02020 
 		let emailRegex2 = /^[a-zA-Z0-9]+$/; // 사번 형식 ex. 2023DT02020 
 		let val = $(".modalBody__email").val();
@@ -412,8 +549,6 @@ $(document).ready(function() {
 				})
 				prevSelectTag.push(parseInt(resp)) // 새로 등록한 태그 추가
 
-				// changeTab($(".activeType").attr("id"));
-				// 여기$(".modalBody__tag").append($("<option>").val(resp).text($(".modalBody__tagName").val()));
 				changeTab($(".activeType").attr("id"),function(){
 					for(let i=0; i<prevSelectTag.length; i++){
 						console.log(prevSelectTag[i])
@@ -854,7 +989,8 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 					$.ajax({
 						url:"/addressbook/selectById",
 						data:{id:id},
-						type:"post"
+						type:"post",
+						async:"false"
 					}).done(function(resp){
 						modalInit();
 						$(".addBookInsertModal__title").text("주소 변경");
@@ -869,8 +1005,10 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 								}
 								$(".activeType").removeClass("activeType");
 								$(`#${key}`).addClass("activeType");
+								
+								
 								changeTab($(".activeType").attr("id"),function(){
-									if (resp.tag_ids && resp.tag_names) {
+									if (resp.tag_ids !== undefined && resp.tag_names !== undefined) {
 										let tagIdArr = resp.tag_ids.split(",");
 										for(let i=0; i<tagIdArr.length; i++){
 											$("select[name='modalBody__tag']").val(tagIdArr[i]).prop("selected",true);
@@ -878,6 +1016,7 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 										}
 									}	
 								});
+								
 							}
 						}
 							
@@ -905,6 +1044,7 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 				$(`.modalBody__${key}`).val(resp[key]);
 				if(key=="memo") $(`.modalBody__${key}`).text(resp[key]);
 				if(key=="is_share"){
+					console.log("ㅎㅎ")
 					if(resp[key] == 0){
 						key = "personal";
 					}else{
@@ -912,8 +1052,9 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 					}
 					$(".activeType").removeClass("activeType");
 					$(`#${key}`).addClass("activeType");
+					
 					changeTab($(".activeType").attr("id"),function(){
-						if (resp.tag_ids && resp.tag_names) {
+						if (resp.tag_ids !== undefined && resp.tag_names !== undefined) {
 							let tagIdArr = resp.tag_ids.split(",");
 							for(let i=0; i<tagIdArr.length; i++){
 								$("select[name='modalBody__tag']").val(tagIdArr[i]).prop("selected",true);
@@ -921,6 +1062,7 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 							}
 						}	
 					});
+					
 				}
 			}
 				

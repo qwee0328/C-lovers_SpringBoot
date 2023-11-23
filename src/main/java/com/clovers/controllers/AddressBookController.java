@@ -60,47 +60,58 @@ public class AddressBookController {
 	}
 	
 	// 주소 검색
-	@ResponseBody
-	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
-	public List<Map<String,Object>> select(String key, int value, int currentMenu, String keyword) {
-		session.setAttribute("currentMenu", currentMenu);
-		if(keyword != null)
-			keyword = "%"+keyword+"%";
-		String loginID = (String)session.getAttribute("loginID");
-		List<String> authority = mservice.getAuthorityCategory(loginID);
-		for (int i = 0; i < authority.size(); i++) {
-			if (authority.get(i).equals("총괄")||authority.get(i).equals("인사")) {
-				return abservice.select(loginID, key, value, keyword, 1);
-			}
-		}
-		return abservice.select(loginID, key, value, keyword, 0);
-		// key : 전체 주소록을 검색할 것인지, 태그로 주소록을 검색할 것인지 (key 값이 is_shard일 경우 개인 전체/공유 전체이며, key 값이 id일 경우 태그로 검색함.)
-		// value : key 값에 대한 실제 값 (개인: personal, 공유: shared, id: id 값(기본키)
-		// keyword : 검색어
-	}
-	
-	// 페이지 네이션 추가
 //	@ResponseBody
 //	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
-//	public Map<String,Object> select(String key, int value, int currentMenu, String keyword, @RequestParam("cpage") String cpage) {
-//		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+//	public List<Map<String,Object>> select(String key, int value, int currentMenu, String keyword) {
 //		session.setAttribute("currentMenu", currentMenu);
 //		if(keyword != null)
 //			keyword = "%"+keyword+"%";
-//		
-//		List<Map<String,Object>> addressList = abservice.select((String)session.getAttribute("loginID"), key, value, keyword,
-//														(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
-//														(currentPage * Constants.RECORD_COUNT_PER_PAGE));
-//		
-//		Map<String,Object> resp = new HashMap<>();
-//		resp.put("addressList", addressList);
-//		//resp.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
-//		resp.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
-//		resp.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
-//		resp.put("lastPageNum", currentPage);
-//		
-//		//return abservice.select((String)session.getAttribute("loginID"), key, value, keyword);
+//		String loginID = (String)session.getAttribute("loginID");
+//		List<String> authority = mservice.getAuthorityCategory(loginID);
+//		for (int i = 0; i < authority.size(); i++) {
+//			if (authority.get(i).equals("총괄")||authority.get(i).equals("인사")) {
+//				return abservice.select(loginID, key, value, keyword, 1);
+//			}
+//		}
+//		return abservice.select(loginID, key, value, keyword, 0);
+//		// key : 전체 주소록을 검색할 것인지, 태그로 주소록을 검색할 것인지 (key 값이 is_shard일 경우 개인 전체/공유 전체이며, key 값이 id일 경우 태그로 검색함.)
+//		// value : key 값에 대한 실제 값 (개인: personal, 공유: shared, id: id 값(기본키)
+//		// keyword : 검색어
 //	}
+
+	
+	// 페이지 네이션 추가
+	@ResponseBody
+	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
+	public Map<String,Object> select(String key, int value, int currentMenu, String keyword, @RequestParam(value="cpage", required=false) String cpage) {
+		int currentPage = (cpage == null || cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+		session.setAttribute("currentMenu", currentMenu);
+		if(keyword != null)
+			keyword = "%"+keyword+"%";
+		
+		String loginID = (String)session.getAttribute("loginID");
+		List<String> authority = mservice.getAuthorityCategory(loginID);
+		int auth = 0;
+		for (int i = 0; i < authority.size(); i++) {
+			if (authority.get(i).equals("총괄")||authority.get(i).equals("인사")) {
+				auth=1; break;
+			}
+		}
+		
+		
+		Map<String,Object> addressList = abservice.select((String)session.getAttribute("loginID"), key, value, keyword,auth,
+														(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
+														(currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		
+		Map<String,Object> resp = new HashMap<>();
+		resp.put("resp", addressList.get("resp"));
+		resp.put("deleteTag", addressList.get("deleteTag"));
+		resp.put("recordTotalCount", addressList.get("count"));
+		resp.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		resp.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		resp.put("lastPageNum", currentPage);
+		return resp;
+	}
 
 	
 	// 주소 상세 보기

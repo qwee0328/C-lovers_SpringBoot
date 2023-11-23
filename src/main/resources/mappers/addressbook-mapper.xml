@@ -46,6 +46,60 @@
 	</delete>
 	
 	
+	<select id="getCount" resultType="int">
+		 SELECT
+		    count(distinct id) as count
+		FROM (
+			select 
+				address_book_all_including_tags.*,
+		    	af.address_book_id as existFavorite,
+		    	af.emp_id as favorite_emp_id 
+		    from 	
+		    	address_book_all_including_tags  
+		   		LEFT JOIN address_favorite as af on id = af.address_book_id and #{emp_id} = af.emp_id
+		)temp
+		
+		WHERE (favorite_emp_id = #{emp_id} or favorite_emp_id is null) and
+		<if test="key.equals('is_share')">
+		
+			<!-- 공유 -->
+			<if test="value == -1">
+				is_share = 1 and trash = 0
+			</if>
+			
+			<!-- 개인 -->
+			<if test="value == 0">
+				emp_id = #{emp_id} and is_share = #{value} and trash = 0
+			</if>
+			
+			<!-- 즐겨찾기 -->
+			<if test="value == -2">
+				existFavorite is not null and trash = 0
+			</if>
+			
+			<!-- 휴지통 -->
+			<if test="value == -3">
+				
+				<if test="auth==1">
+					(trash = 1 and is_share = 1) or (trash = 1 and emp_id = #{emp_id})
+				</if>
+				<!-- 총괄 X -->
+				<if test="auth == 0"> 
+					trash = 1 and emp_id = #{emp_id}
+				</if>
+				
+			</if>
+		</if>
+		<if test="key.equals('id')">
+			id in (select address_book_id from address_book_tag_list where address_book_tag_id = #{value} and trash = 0)
+		</if>
+		
+		<if test="keyword != null">
+			and (name like #{keyword} or company_name like #{keyword} or number like #{keyword})
+		</if>
+	</select>
+	
+	
 	<select id="select" resultMap="addressBookAll">
 		 SELECT
 		    id,
@@ -116,7 +170,11 @@
 			and (name like #{keyword} or company_name like #{keyword} or number like #{keyword})
 		</if>
 		
-		GROUP BY id; 
+		GROUP BY id
+		<if test="start != 0 or end != 0">
+	    	LIMIT #{start}, #{end}
+    	</if>
+		; 
 	</select>
 	
 	<select id="selectById" resultMap="addressBookAll">
@@ -154,9 +212,9 @@
 		GROUP BY ab.id;
 	</select>
 	
-<!-- 	<select id="getAddressCount" resultType="int">
+	<select id="getAddressCount" resultType="int">
 		
-	</select> -->
+	</select>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
 		insert into address_book( id, name, emp_id, is_share, trash, is_emp	
