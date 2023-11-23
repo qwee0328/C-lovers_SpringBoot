@@ -72,7 +72,7 @@
 					<div class="title">휴가 현황 및 휴가 신청</div>
 					<div class="vacationInfo">
 						<div class="vacationInfo__main">
-							잔여휴가 <span>20일</span>(연차 20일)
+							잔여휴가 <span></span>
 						</div>
 						<div class="vacationInfo__sub">
 							<div>

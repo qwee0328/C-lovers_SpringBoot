@@ -18,8 +18,12 @@ public class DeptTaskService {
     private DeptTaskDAO dtdao;
 
     // 삽입: 새로운 부서 직무를 데이터베이스에 추가
-    public int insert(DeptTaskDTO dto) {
-        return dtdao.insert(dto);
+    public int insert(String id, String task_name, String dept_id) {
+    	Map<String,Object> param = new HashMap<>();
+    	param.put("id", id);
+    	param.put("task_name", task_name);
+    	param.put("dept_id", dept_id);
+        return dtdao.insert(param);
     }
 
     // 조회: 모든 부서 직무 정보 조회

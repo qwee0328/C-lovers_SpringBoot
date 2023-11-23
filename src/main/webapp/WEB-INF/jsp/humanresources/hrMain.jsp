@@ -54,11 +54,11 @@
                         <div class="conf_detail">
                             <div>
                                 <div class="detail__title">잔여 휴가</div>
-                                <div class="detail_conf" id="totalAnnaul">20일</div>
+                                <div class="detail_conf" id="totalAnnaul"></div>
                             </div>
                             <div>
                                 <div class="detail__colortitle">휴가 현황</div>
-                                <div class="detail_conf"><button class="whiteBtn">휴가 신청</button></div>
+                                <div class="detail_conf"><button class="whiteBtn" id="showVacationApp">휴가 신청</button></div>
                             </div>
                         </div>
                     </div>

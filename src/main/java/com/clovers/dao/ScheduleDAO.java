@@ -51,6 +51,12 @@ public class ScheduleDAO {
 		return db.selectList("Schedule.selectAll",emp_id);
 	}
 	
+	// 일정 검색
+	public List<HashMap<String,Object>> selectByKeyword(Map<String,Object> param){
+		return db.selectList("Schedule.selectByKeyword",param);
+	}
+	
+	
 	// 일정 세부정보 불러오기
 	public HashMap<String,Object> selectById(int id){
 		return db.selectOne("Schedule.selectById",id);

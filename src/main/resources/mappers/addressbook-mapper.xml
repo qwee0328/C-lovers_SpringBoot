@@ -272,6 +272,7 @@
 		delete from address_book where (is_share = 1 or (emp_id = #{emp_id} and is_share = 0)) and trash = 1;
 	</delete>
 	
+
 	<!-- numberType가져오기 -->
 	<select id="isNumberType" resultType="String">
 		select numberType from address_book where emp_id=#{id} and is_emp=1
@@ -287,6 +288,8 @@
 		where emp_id=#{id} and is_emp=1
 	</update>
 	
-	
-	
+	<!-- // 주소록에 있는 오피스 네임 업데이트 -->
+	<update id="updateOfficeName">
+		update address_book set company_name=#{name};
+	</update>
 </mapper>

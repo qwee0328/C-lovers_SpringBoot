@@ -110,4 +110,9 @@ public class AddressBookDAO {
 	public int updateCompanyEmailPhone(Map<String,String> param) {
 		return db.update("AddressBook.updateCompanyEmailPhone", param);
 	}
+	
+	// 주소록에 있는 오피스 네임 업데이트
+	public void updateOfficeName(String name) {
+		db.update("AddressBook.updateOfficeName",name);
+	}
 }
