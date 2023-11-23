@@ -76,6 +76,9 @@ body {
 	font-size: 28px;
 	color: #B5B5BB;
 }
+.itemCurcle__Icon * {
+	color: #B5B5BB;
+}
 
 .naviItem__title {
 	margin-top: 7px;

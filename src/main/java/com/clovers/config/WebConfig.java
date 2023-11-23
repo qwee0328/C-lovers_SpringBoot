@@ -55,6 +55,7 @@ public class WebConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/members/**");
 		
 		// 
+		System.out.println("여기인가?");
 		if(loginValidator != null) {
 			if(fullAuthorityValidator!=null) {
 				System.out.println("총괄기능됨");
