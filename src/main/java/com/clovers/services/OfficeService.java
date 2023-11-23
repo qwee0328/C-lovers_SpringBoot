@@ -91,7 +91,7 @@ public class OfficeService {
 		System.out.println(dto.getHire_date());
 
 		// 사내 이메일은 id랑 똑같이 저장
-		dto.setCompany_email(dto.getId());
+		dto.setCompany_email(dto.getId()+"@clovers.com");
 		
 		// 생일 값을 입력하지 않으면 기본값입력
 		if(dto.getBirth()==null) {
@@ -205,5 +205,10 @@ public class OfficeService {
 	// 임직원 검색
 	public List<Map<String, Object>> searchByName(String name){
 		return dao.searchByName(name);
+	}
+	
+	// 회사이름 불러오기
+	public String selectOfficeName() {
+		return dao.selectOfficeName();
 	}
 }

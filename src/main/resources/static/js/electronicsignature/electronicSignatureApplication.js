@@ -1,6 +1,6 @@
 let showSelector = false;
 $(document).ready(function() {
-	
+
 
 	// 기본 정보 세팅
 	$("#esPreservationPeriod").val("5");
@@ -11,14 +11,21 @@ $(document).ready(function() {
 	$("#expenseYear").val(year);
 	$("#expenseMonth").val(month);
 	$("#expense_category").val("개인");
-	
-	// user 이름 불러오기
+
+	// 회사 이름 불러오기
 	$.ajax({
-		url:"/humanResources/headerProfile"
-	}).done(function(resp){
-		$("#documentWriter").html("C-lovers "+resp.name);
-	});
-	
+		url: "/office/selectOfficeName"
+	}).done(function(data) {
+		// user 이름 불러오기
+		$.ajax({
+			url: "/humanResources/headerProfile"
+		}).done(function(resp) {
+			$("#documentWriter").html(data +" "+ resp.name);
+		});
+	})
+
+
+
 	// selector 커스텀 해서 만들기
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {

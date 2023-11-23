@@ -179,4 +179,9 @@ public class OfficeDAO {
 	public void insertFirstAnnaul(String id) {
 		db.insert("Office.insertFirstAnnaul", id);
 	}
+	
+	// 회사 이름 불러오기
+	public String selectOfficeName() {
+		return db.selectOne("Office.selectOfficeName");
+	}
 }
