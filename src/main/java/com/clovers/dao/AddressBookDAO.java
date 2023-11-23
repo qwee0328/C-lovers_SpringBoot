@@ -18,8 +18,6 @@ public class AddressBookDAO {
 	
 	// 주소 관련
 	public int insert(AddressBookDTO dto) { 
-		System.out.println("추가");
-		System.out.println(dto);
 		return db.insert("AddressBook.insert",dto); 
 	}
 	public List<Map<String,Object>> select(Map<String,Object> param) {
@@ -42,7 +40,6 @@ public class AddressBookDAO {
 	}
 	
 	public int update(AddressBookDTO dto) {
-		System.out.println(dto);
 		return db.update("AddressBook.update",dto);
 	}
 	
