@@ -30,4 +30,6 @@ public class ChatMessageDTO {
 	private String content;				// 채팅내용
 	private Timestamp write_date;		// 채팅이 생성된 시간 default CURRENT_TIME
 	private ChatMessageStates state;	// 채팅의 상태
+	
+	private String emp_name;
 }
