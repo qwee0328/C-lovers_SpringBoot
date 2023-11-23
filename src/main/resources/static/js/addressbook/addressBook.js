@@ -23,7 +23,8 @@ function changeTab(tabName, callback) {
 	$.ajax({
 		url: "/addressbook/tagSelectByIsShare",
 		data: { is_share: is_share },
-		type: "post"
+		type: "post",
+		async:"false"
 	}).done(function(resp) {
 		$(".selectedTags>div").remove();
 		$(".modalBody__tag option").remove();
@@ -98,16 +99,13 @@ function reloadTags(callback) {
 			url: "/members/isAdmin",
 			async:"false"
 		}).done(function(resp) {
-			console.log(resp);
 			for (let i = 0; i < resp.length; i++) {
 				if (resp[i] == "총괄" || resp[i] == "인사") {
 					flag = true; 
-					console.log("1 "+flag);
 					break;
 				}
 			}
-			
-			
+				
 			$(".customMenu").remove();
 			let naviConp__icon = $("<div>").attr("class", "naviConp__icon").html(`<i class="fa-solid fa-tag"></i>`);
 			for (let i = 0; i < tagList.length; i++) {
@@ -331,7 +329,6 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword, cpage) {
 	}).done(function(result) {	
 		let resp = result.resp;
 			
-		console.log(result);
 		$(".addListHeader__chkBox").prop("checked", false);
 		$(".addListHeader__default").css("display","flex");
 		$(".addListHeader__select").attr("style","display: none !important");
@@ -350,7 +347,7 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword, cpage) {
 			if(resp.length > 0){ // 삭제된 태그이면 개인 전체 선택되도록
 				$("#abCurrentMenu").val(value);
 				$(".body__addList>*").remove();
-				$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
+				$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+result.recordTotalCount+"</span>개");
 				for (let i = 0; i < resp.length; i++) {
 					let addList__addessLine = $("<div>").attr("class", "addList__addessLine d-flex").attr("data-id",resp[i].id).attr("data-regisger",resp[i].emp_id);
 					let addessLine__chkBoxCover = $("<div>").attr("class", "addessLine__chkBoxCover align-center");
@@ -462,7 +459,6 @@ function settingData(){
 	
 	if($(".modalBody__number").val()!=""){ // 전화번호 정규식		
 		let regex = /^.{11,13}$/; // 10~11자 사이만 입력가능
-		console.log(regex.test($(".modalBody__number").val()));
 		if(!regex.test($(".modalBody__number").val())){
 			Swal.fire({
 				icon: "error",
@@ -551,7 +547,6 @@ $(document).ready(function() {
 
 				changeTab($(".activeType").attr("id"),function(){
 					for(let i=0; i<prevSelectTag.length; i++){
-						console.log(prevSelectTag[i])
 						$("select[name='modalBody__tag']").val(prevSelectTag[i]).prop("selected",true);
 						tagSelect();
 					}
@@ -1044,7 +1039,6 @@ $(document).on("click","#addBookModal__updateBtn",function(){
 				$(`.modalBody__${key}`).val(resp[key]);
 				if(key=="memo") $(`.modalBody__${key}`).text(resp[key]);
 				if(key=="is_share"){
-					console.log("ㅎㅎ")
 					if(resp[key] == 0){
 						key = "personal";
 					}else{

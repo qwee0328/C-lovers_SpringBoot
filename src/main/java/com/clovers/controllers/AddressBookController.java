@@ -80,7 +80,7 @@ public class AddressBookController {
 		
 		
 		Map<String,Object> addressList = abservice.select((String)session.getAttribute("loginID"), key, value, keyword,auth,
-														(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
+														(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)-1),
 														(currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		
 		Map<String,Object> resp = new HashMap<>();
