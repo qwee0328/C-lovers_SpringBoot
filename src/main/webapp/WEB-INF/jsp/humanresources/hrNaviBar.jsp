@@ -34,7 +34,7 @@
 	           </div>
 	           <div class="naviConp toggleInner" id="workStatus">
 	               <div class="naviConp__icon"><i class="fa-solid fa-desktop"></i></div>
-	               <div class="naviConp__title">근무 현황</div>
+	               <div class="naviConp__title">휴가 현황</div>
 	           </div>
 	           <div class="naviConp" id="employeeInfo">
 	               <div class="naviConp__icon"><i class="fa-solid fa-sitemap"></i></div>

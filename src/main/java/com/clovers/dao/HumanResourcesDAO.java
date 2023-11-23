@@ -140,7 +140,10 @@ public class HumanResourcesDAO {
 
 	// 사용자의 휴가 신청 상세 내역 확인하기
 	public List<Map<String, Object>> selectAnnaulAppDetails(Map<String, Object> param) {
-		return db.selectList("HumanResources.selectAnnaulAppDetails", param);
+		System.out.println(param);
+		List<Map<String, Object>> result = db.selectList("HumanResources.selectAnnaulAppDetails", param);
+		System.out.println("result : "+result);
+		return result;
 	}
 
 	// 사용자 휴가 신청 상세 내역 총 개수 불러오기

@@ -168,12 +168,14 @@
 					<div class="mainContents__contentBox">
 						<div class="contentBox__btns">
 							<div class="btns__line">
-								<button>대기</button>
-								<button>확인</button>
+								<button id="total">전체</button>
+								<button id="waiting">대기</button>
+								
 							</div>
 							<div class="btns__line">
-								<button>예정</button>
-								<button>진행</button>
+								<button id="check">확인</button>
+								<button id="expected">예정</button>
+								
 							</div>
 						</div>
 					</div>
@@ -183,11 +185,12 @@
 				<div class="mail">
 					<div class="mainContents__title">메일함 바로가기</div>
 					<div class="mainContents__contentBox">
+						<button id="receivedMail">받은 편지함</button>
+						<button id="reservatioinMail">보낼 편지함</button>
+						<!-- 
 						<div class="contentBox__mailTitle">받은 메일함</div>
 						<div class="contentBox__mailTitle">예약 메일함</div>
-						<hr></hr>
-						<div class="contentBox__mailTitle">오늘 온 메일함</div>
-						<div class="contentBox__mailTitle">중요 메일함</div>
+						 -->
 					</div>
 				</div>
 

@@ -34,6 +34,25 @@ $(document).ready(function() {
 			location.href = "/admin/accounting";
 		}
 	})
+	
+	$("#total").on("click",function(){
+		location.href="/electronicsignature/progressTotal";
+	})
+	$("#waiting").on("click",function(){
+		location.href="/electronicsignature";
+	})
+	$("#expected").on("click",function(){
+		location.href="/electronicsignature/progressCheck";
+	})
+	$("#progress").on("click",function(){
+		location.href="/electronicsignature/progressExpected";
+	})
+	$("#receivedMail").on("click",function(){
+		location.href="/mail";
+	})
+	$("#reservatioinMail").on("click",function(){
+		location.href="/mail/outBox";
+	})
 
 	// 관리자 권한 가져오기
 	$(document).ready(function() {

@@ -372,7 +372,7 @@
 			alert("이메일 중복 여부를 다시 확인해주세요.");
 			return;
 		}
-		if($(".phone").val()==""){
+		if($("#phone").val()==""){
 			alert("휴대전화를 입력해주세요");
 			return;
 		}

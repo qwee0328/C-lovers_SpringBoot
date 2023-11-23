@@ -289,10 +289,14 @@ public class HumanResourcesController {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		System.out.println(currentPage);
 		Map<String, Object> param = hrservice.selectAnnaulAppDetails((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
-		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
-		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
-		param.put("lastPageNum", currentPage);
-		return param;
+		
+		Map<String,Object> result = new HashMap<>();
+		result.put("detail", param.get("detail"));
+		result.put("recordTotalCount", param.get("recordTotalCount"));
+		result.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		result.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		result.put("lastPageNum", currentPage);
+		return result;
 	}
 
 	// 사용자의 최근 1년치 신청 상세 내역 확인하기
@@ -302,9 +306,13 @@ public class HumanResourcesController {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		System.out.println(currentPage);
 		Map<String, Object> param = hrservice.selectAnnaulAppDetailsForYear((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
-		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
-		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
-		param.put("lastPageNum", currentPage);
+		
+		Map<String,Object> result = new HashMap<>();
+		result.put("detail", param.get("detail"));
+		result.put("recordTotalCount", param.get("recordTotalCount"));
+		result.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		result.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		result.put("lastPageNum", currentPage);
 		return param;
 	}
 
@@ -315,9 +323,13 @@ public class HumanResourcesController {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		System.out.println(currentPage);
 		Map<String, Object> param = hrservice.selectAnnaulAppDetailsForMonth((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
-		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
-		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
-		param.put("lastPageNum", currentPage);
+		
+		Map<String,Object> result = new HashMap<>();
+		result.put("detail", param.get("detail"));
+		result.put("recordTotalCount", param.get("recordTotalCount"));
+		result.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		result.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		result.put("lastPageNum", currentPage);
 		return param;
 	}
 
@@ -358,7 +370,7 @@ public class HumanResourcesController {
 	// 근무 현황 이동
 	@RequestMapping("/workStatus")
 	public String workStatus() {
-		String currentMenu = "근무 현황";
+		String currentMenu = "휴가 현황";
 		session.setAttribute("currentMenu", currentMenu);
 		return "humanresources/workStatus";
 	}

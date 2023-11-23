@@ -269,12 +269,13 @@ public class HumanResourcesService {
 		String id = (String) session.getAttribute("loginID");
 		Map<String, Object> param = new HashMap<>();
 		param.put("id", id);
-		param.put("start", start);
+		param.put("start", start-1);
 		param.put("count", count);
 		//return ;
 		Map<String, Object> result = new HashMap<>();
 		result.put("detail", dao.selectAnnaulAppDetails(param));
 		result.put("recordTotalCount", dao.selectAnnaulAppCount(id));
+		System.out.println(dao.selectAnnaulAppDetails(param));
 		System.out.println("size"+result.get("recordTotalCount"));
 		return result;
 	}
@@ -284,7 +285,7 @@ public class HumanResourcesService {
 		String id = (String) session.getAttribute("loginID");
 		Map<String, Object> param = new HashMap<>();
 		param.put("id", id);
-		param.put("start", start);
+		param.put("start", start-1);
 		param.put("count", count);
 		
 		Map<String, Object> result = new HashMap<>();
@@ -299,7 +300,7 @@ public class HumanResourcesService {
 		String id = (String) session.getAttribute("loginID");
 		Map<String, Object> param = new HashMap<>();
 		param.put("id", id);
-		param.put("start", start);
+		param.put("start", start-1);
 		param.put("count", count);
 		
 		Map<String, Object> result = new HashMap<>();
