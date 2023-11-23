@@ -32,4 +32,17 @@ public class ChatMessageDTO {
 	private ChatMessageStates state;	// 채팅의 상태
 	
 	private String emp_name;
+
+	public ChatMessageDTO(int id, String chat_room_id, String emp_id, String content, Timestamp write_date,
+			ChatMessageStates state) {
+		super();
+		this.id = id;
+		this.chat_room_id = chat_room_id;
+		this.emp_id = emp_id;
+		this.content = content;
+		this.write_date = write_date;
+		this.state = state;
+	}
+	
+	
 }
