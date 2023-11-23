@@ -39,11 +39,10 @@
 	
 	<!-- 새로운 부서 만들기 -->
 	<insert id="insert">
-		insert into dept_task values (#{id},#{dept_id},
-		#{task_name})
+		insert into dept_task values (#{id},#{task_name},#{dept_id})
 	</insert>
 
-	<!-- // 사용자 삭제하기 -->
+	<!-- // 부서 삭제하기 -->
 	<delete id="deleteById">
 		delete from dept_task where id = #{id}
 	</delete>
@@ -51,6 +50,11 @@
 	<!-- // 직무 업데이트 -->
 	<update id="updateTaskName">
 		update dept_task set task_name=#{task_name} where id = #{id};
+	</update>
+	
+	<!-- // 상위부서 업데이트 -->
+	<update id="updateDeptId">
+		update dept_task set dept_id=#{dept_id} where id = #{id};
 	</update>
 
 </mapper>

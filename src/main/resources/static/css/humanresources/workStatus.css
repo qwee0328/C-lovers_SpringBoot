@@ -247,6 +247,10 @@ ul.tabs li.current {
 	border-right: 1px solid #7d7d7d40;
 }
 
+.showDocument{
+	cursor: pointer;
+}
+
 .summaryInfo__conf button {
 	background-color: transparent;
 	border: none;
@@ -269,7 +273,9 @@ ul.tabs li.current {
 	margin: 0px 5px;
 	width: 30px;
 	height: 30px;
-	text-align: center;
+	display: flex;
+    justify-content: center;
+    align-items: center;
 	border-radius: 50%;
 	border: 1px solid #7d7d7d40;
 }

@@ -47,7 +47,10 @@ public class HumanResourcesController {
 	// view로 mypage에 필요한 정보 가져오기
 	@RequestMapping("/mypage")
 	public String select(Model model) {
-
+		
+		String title = "인사";
+		session.setAttribute("title", title);
+		
 		String id = (String) session.getAttribute("loginID");
 
 //		String name = hrService.selectByIdGetName(id);
@@ -319,10 +322,12 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/headerProfile")
 	public MemberDTO selectProfile() {
-
+		System.out.println("도착");
 		String id = (String) session.getAttribute("loginID");
+		System.out.println(id);
 		MemberDTO profile = hrservice.selectById(id);
-
+		//profile.setBirth(new Timestamp(System.currentTimeMillis()));
+		//System.out.println(profile.toString());
 		return profile;
 	}
 

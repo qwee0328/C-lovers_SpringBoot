@@ -271,4 +271,9 @@
 	<delete id="immediatelyEmpty">
 		delete from address_book where (is_share = 1 or (emp_id = #{emp_id} and is_share = 0)) and trash = 1;
 	</delete>
+	
+	<!-- // 주소록에 있는 오피스 네임 업데이트 -->
+	<update id="updateOfficeName">
+		update address_book set company_name=#{name};
+	</update>
 </mapper>

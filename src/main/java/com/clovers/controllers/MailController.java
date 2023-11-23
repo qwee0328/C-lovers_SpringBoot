@@ -175,7 +175,7 @@ public class MailController {
 	private String formatTimestamp(Timestamp time) {
 		LocalDateTime currentTime = LocalDateTime.now();
 		LocalDateTime sendTime = time.toLocalDateTime();
-
+		System.out.println("time"+time);
 		// 시간 차이 계산
 		Duration duration = Duration.between(sendTime, currentTime);
 		long minutes = duration.toMinutes();
@@ -198,18 +198,19 @@ public class MailController {
 	@RequestMapping("/inBoxList")
 	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-
+		System.out.println("cpage:"+currentPage);
 		// 로그인한 사용자의 이메일 가져오기
 		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 
 		List<EmailDTO> mail = mservice.inBoxList(receive_id,
 				(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
 				(currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		System.out.println("mailSize:"+mail.size());
 		String[] send_date = new String[mail.size()];
 		for (int i = 0; i < mail.size(); i++) {
 			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
 		}
-
+		System.out.println("mailSize:"+mail.size());
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
 		param.put("send_date", send_date);

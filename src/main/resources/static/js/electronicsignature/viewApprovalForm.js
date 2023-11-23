@@ -33,6 +33,28 @@ $(document).ready(function() {
 			$("#spender_id").text(resp.spender_name);
 			$("#account_info").text(resp.account.bank + " / " + resp.account.id);
 			$("#executive_summary").text(resp.summary);
+			console.log(document_id);
+			$.ajax({
+				url:"/electronicsignature/fileList",
+				data:{ document_id : document_id }
+			}).done(function(resp){
+				console.log("file"+resp);
+				if(resp.length!==0){
+					console.log("ㅍ일 있음")
+					let tr = $("<tr>");
+					let th =$("<th>").html("첨부파일");
+					let td=$("<td>").attr("id","file_info");
+					
+					for(let i=0;i<resp.length;i++){
+						let fileList=$("<div>")
+						let fileHref = $("<a>").attr("href","/electronicsignature/downloadFile?sysname="+resp[i].sys_name+"&oriname="+resp[i].ori_name).html(resp[i].ori_name);
+						fileList.append(fileHref);
+						td.append(fileList);
+					}
+					tr.append(th).append(td);
+					$(".expense__table>tbody").append(tr);
+				}
+			})
 		})
 	// 업무 연락
 	} else if($("#document_type").text() == '업무 연락') {
@@ -42,6 +64,28 @@ $(document).ready(function() {
 		}).done(function(resp){
 			$("#business_title").text(resp.title);
 			$("#business_content").text(resp.content);
+			
+			$.ajax({
+				url:"/electronicsignature/fileList",
+				data:{ document_id : document_id }
+			}).done(function(resp){
+				console.log("file"+resp);
+				if(resp.length!==0){
+					console.log("ㅍ일 있음")
+					let tr = $("<tr>");
+					let th =$("<th>").html("첨부파일");
+					let td=$("<td>").attr("id","file_info");
+					
+					for(let i=0;i<resp.length;i++){
+						let fileList=$("<div>")
+						let fileHref = $("<a>").attr("href","/electronicsignature/downloadFile?sysname="+resp[i].sys_name+"&oriname="+resp[i].ori_name).html(resp[i].ori_name);
+						fileList.append(fileHref);
+						td.append(fileList);
+					}
+					tr.append(th).append(td);
+					$(".business__table>tbody").append(tr);
+				}
+			})
 		})
 	}
 	

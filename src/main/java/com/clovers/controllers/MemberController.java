@@ -77,7 +77,7 @@ public class MemberController {
 	public String adminLogout(HttpServletRequest request) {
 		
 		session.invalidate();
-		return "forword:/";
+		return "forward:/";
 //		return "";
 //		return "redirect:/";
 		
@@ -143,6 +143,7 @@ public class MemberController {
 		} else {
 			System.out.println("로그인 안되어있음");
 		}
+		System.out.println("user"+userInfo.toString());
 		return ResponseEntity.ok(userInfo);
 	}
 

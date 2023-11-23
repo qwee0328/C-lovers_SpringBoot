@@ -2,6 +2,8 @@ package com.clovers.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class AdminDTO {
 	}
 	private int id;
 	private String emp_id;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul")
 	private Timestamp reg_date;
 	private AuthorityCategories authority_category_id;
 	private int exists;

@@ -1,5 +1,6 @@
 let processUserID = []; // 지금까지 처리로 체크된 User 아이디
 let applicationUserID = []; // 지금까지 신청으로 체크된 User 아이디
+let userID = "";
 $(document).ready(function() {
 	// 처리 인원 처음에 초기화
 	$(".process span").text(processUserID.length);
@@ -16,7 +17,16 @@ $(document).ready(function() {
 			.html(resp[0].name + " (" + resp[0].task_name + ")");
 		$(".approvalLine__applyEmployee").append(userInfo);
 		applicationUserID.push(resp[0].id);
+		window.userID = resp[0].id;
 		$(".application span").text(applicationUserID.length);
+	})
+	
+	// 회사 이름 불러오기
+	$.ajax({
+		url: "/office/selectOfficeName"
+	}).done(function(data) {
+		$(".department__title").html(data);
+		$("#officeName").html(data);
 	})
 
 	// 모달창 시작할 때 인원수 정보 불러오기 -> 맨 왼쪽 부서
@@ -153,16 +163,55 @@ $(document).ready(function() {
 	//$(".updateBtns button").addClass("disabled");
 	//}
 	$(document).on("change", "input[type='checkbox'].empChk", function() {
+		console.log($(this).attr("id"))
+		console.log(window.userID)
+		console.log(window.userID === $(this).attr("id"))
+
+		// 모든 선택된 체크박스 가져오기
+		let selectedCheckboxes = $("input[type='checkbox'].empChk:checked");
+
+		// 선택된 체크박스 중에서 id 속성 값이 로그인 아이디랑 같은 것 찾기
+		let isChecked = selectedCheckboxes.filter(function() {
+			return $(this).attr("id") === window.userID;
+		}).length > 0;
+
+		// 신청자에 내가 빠졌을 경우에는 선택이 가능하도록
+		let isDrafter = applicationUserID.filter(function() {
+			return $(this).attr("id") === window.userID;
+		}).length > 0;
+
+		// 해당 로그인 아이디가 체크되지 않았다면
+		if (!isChecked) {
+			let checkedCount = $("input[type='checkbox'].empChk:checked").length;
+			if (checkedCount === 0) {
+				$(".updateBtns>.updateBtns__add button").addClass("disabled");
+			} else {
+				if ($("#modalType").val() === "휴가신청") {
+					$(".updateBtns>.updateBtns__add #processBtn").removeClass("disabled");
+				} else {
+					$(".updateBtns>.updateBtns__add button").removeClass("disabled");
+				}
+			}
+		}
+
+		// 만약 신청자에 내가 제외되었다면 다시 선택할 수 있도록
+		console.log(isDrafter)
+		if (!applicationUserID.includes(window.userID)) {
+			let checkedCount = $("input[type='checkbox'].empChk:checked").length;
+			if (checkedCount === 0) {
+				$(".updateBtns>.updateBtns__add button").addClass("disabled");
+			} else {
+				$(".updateBtns>.updateBtns__add #applyBtn").removeClass("disabled");
+			}
+		} else {
+			$(".updateBtns>.updateBtns__add #processBtn").removeClass("disabled");
+		}
+
 		let checkedCount = $("input[type='checkbox'].empChk:checked").length;
 		if (checkedCount === 0) {
 			$(".updateBtns>.updateBtns__add button").addClass("disabled");
-		} else {
-			if ($("#modalType").val() === "휴가신청") {
-				$(".updateBtns>.updateBtns__add #processBtn").removeClass("disabled");
-			} else {
-				$(".updateBtns>.updateBtns__add button").removeClass("disabled");
-			}
 		}
+
 	});
 
 	// 추가 버튼 눌렀을 때 반영
@@ -177,11 +226,14 @@ $(document).ready(function() {
 				console.log("숫자 카운트")
 				applyBtnClick(this);
 				$(".application span").text(applicationUserID.length);
+
 			} else {
 				processBtnClick(this);
 				$(".process span").text(processUserID.length);
 			}
 		}
+		$(".empChk").prop("checked", false);
+		$(".updateBtns>.updateBtns__add button").addClass("disabled");
 	});
 
 	// 삭제할 user 눌렀을 때 반응
@@ -207,6 +259,7 @@ $(document).ready(function() {
 			} else {
 				cancleProcessBtnClick(this);
 			}
+			$(".updateBtns>.updateBtns__cancle button").addClass("disabled");
 		}
 	});
 

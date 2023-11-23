@@ -17,44 +17,58 @@ public class DepartmentService {
     @Autowired
     private DepartmentDAO ddao;
 
-    // 삽입: 부서 정보를 데이터베이스에 등록
+    // 삽입: 새로운 상위 부서 데이터베이스에 등록
     public int insert(DepartmentDTO dto) {
         return ddao.insert(dto);
     }
+    
+    @Transactional
+    public int insertNewDepartment(String dept_name) {
+    	String newId = this.generateNewId();
+    	DepartmentDTO ddto = new DepartmentDTO();
+    	ddto.setId(newId);
+    	ddto.setDept_name(dept_name);
+    	return this.insert(ddto);
+    }
 
 
-    // 조회: 아이디를 기준으로 부서 정보를 검색
+    // 조회: 아이디를 기준으로 상위 부서 정보를 검색
     public DepartmentDTO selectById(String id) {
         return ddao.selectById(id);
     }
+    
+    // 조회: 최신 아이디 정보를 가져오기
+    public String selectLastestIdForUpdate() {
+    	return ddao.selectLastestIdForUpdate();
+    }
 
-    // 조회: 부서명을 기준으로 아이디를 검색
+    // 조회: 상위 부서명을 기준으로 아이디를 검색
     public String selectIdByDeptName(String dept_name) {
         return ddao.selectIdByDeptName(dept_name);
     }
 
-    // 조회: 부서명으로 부서 정보 리스트를 조회
+    // 조회: 상위 부서명으로 상위 부서 정보 리스트를 조회
     public List<DepartmentDTO> selectByDeptName(String dept_name) {
         return ddao.selectByDeptName(dept_name);
     }
 
-    // 조회: 회사를 제외한 모든 부서의 정보를 리스트로 조회
+    // 조회: 회사를 제외한 모든 상위 부서의 정보를 리스트로 조회
     public List<DepartmentDTO> selectAllWithOutOfficeId() {
         return ddao.selectAllWithOutOfficeId();
     }
 
-    // 조회: 특정 부서의 직원 수를 조회
+    // 조회: 특정 상위 부서의 직원 수를 조회
     public int selectEmpCountById(String id) {
         return ddao.selectEmpCountById(id);
     }
     
-    // 조회: 모든 부서의 직원 수를 조회
+    // 조회: 모든 상위 부서의 직원 수를 조회
     public int selectEmpCount() {
         return ddao.selectEmpCount();
     }
     
 
-    // 수정: 부서 정보를 업데이트
+    // 수정: 상위 부서 정보를 업데이트
     public int update(String dept_name, String id) {
         Map<String, String> param = new HashMap<>();
         param.put("dept_name", dept_name);
@@ -62,12 +76,8 @@ public class DepartmentService {
         return ddao.update(param);
     }
 
-    // 수정: 회사의 이름을 업데이트
-    public int updateCompanyName(String newName) {
-        return ddao.updateOfficeName(newName);
-    }
 
-    // 삭제: 아이디를 기준으로 부서 정보를 삭제
+    // 삭제: 아이디를 기준으로 상위 부서 정보를 삭제
     public int deleteById(String id) {
         return ddao.deleteById(id);
     }
