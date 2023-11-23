@@ -58,29 +58,9 @@ public class AddressBookController {
 			return abservice.insert(dto); // 테이블에 주소록에 내용만 추가
 		return abservice.insert(dto, selectedTagArray); // 태그 선택했다면 테이블에 주소록 내용추가, 태그 추가
 	}
-	
-	// 주소 검색
-//	@ResponseBody
-//	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
-//	public List<Map<String,Object>> select(String key, int value, int currentMenu, String keyword) {
-//		session.setAttribute("currentMenu", currentMenu);
-//		if(keyword != null)
-//			keyword = "%"+keyword+"%";
-//		String loginID = (String)session.getAttribute("loginID");
-//		List<String> authority = mservice.getAuthorityCategory(loginID);
-//		for (int i = 0; i < authority.size(); i++) {
-//			if (authority.get(i).equals("총괄")||authority.get(i).equals("인사")) {
-//				return abservice.select(loginID, key, value, keyword, 1);
-//			}
-//		}
-//		return abservice.select(loginID, key, value, keyword, 0);
-//		// key : 전체 주소록을 검색할 것인지, 태그로 주소록을 검색할 것인지 (key 값이 is_shard일 경우 개인 전체/공유 전체이며, key 값이 id일 경우 태그로 검색함.)
-//		// value : key 값에 대한 실제 값 (개인: personal, 공유: shared, id: id 값(기본키)
-//		// keyword : 검색어
-//	}
 
 	
-	// 페이지 네이션 추가
+	// 주소 불러오기
 	@ResponseBody
 	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
 	public Map<String,Object> select(String key, int value, int currentMenu, String keyword, @RequestParam(value="cpage", required=false) String cpage) {
