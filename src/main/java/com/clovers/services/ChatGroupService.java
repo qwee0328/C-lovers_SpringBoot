@@ -79,7 +79,9 @@ public class ChatGroupService {
 	        this.inviteInitChatGroup(employee_id, newChatroomId,loginName);
 	        this.inviteInitChatGroup(loginID, newChatroomId,employeeName);
 	        
-	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT02036",loginName+"님이 "+ employeeName+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT02036"
+	        		,loginName+"님이 "+ employeeName+"님을 초대하였습니다."
+	        		,new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
 	        cmdao.recordChat(cdto);
 	        messagingTemplate.convertAndSend("/sub/chat/room/"+newChatroomId,cdto);
 	        return newChatroomId;
