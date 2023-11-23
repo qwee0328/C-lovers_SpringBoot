@@ -475,4 +475,14 @@ public class ElectronicSignatureService {
 	public int deleteApproval(String document_id) {
 		return dao.deleteApproval(document_id);
 	}
+	
+	// 문서에 파일이 있는지 확인
+	public boolean selectFileByDocumentId(String id) {
+		return dao.selectFileByDocumentId(id);
+	}
+	
+	// 문서에 파일 리스트 반환
+	public List<DocumentFileDTO> selectAllFileById(String id){
+		return dao.selectAllFileById(id);
+	}
 }

@@ -1,7 +1,6 @@
 package com.clovers.services;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.commons.EncryptionUtils;
+import com.clovers.dao.AddressBookDAO;
 import com.clovers.dao.OfficeDAO;
 import com.clovers.dto.DeptTaskDTO;
 import com.clovers.dto.JobDTO;
@@ -23,6 +23,9 @@ public class OfficeService {
 	// 오피스 관리 서비스 레이어
 	@Autowired
 	private OfficeDAO dao;
+	
+	@Autowired
+	private AddressBookDAO adao;
 
 	// 부서 명 불러오기
 	public List<DeptTaskDTO> selectDeptTaskAll() {
@@ -132,8 +135,10 @@ public class OfficeService {
 	}
 
 	// 오피스 이름 수정
+	@Transactional
 	public void updateOfficeName(OfficeDTO dto) {
 		dao.updateOfficeName(dto);
+		adao.updateOfficeName(dto.getOffice_name());
 	}
 	
 	// 오피스 이메일 수정

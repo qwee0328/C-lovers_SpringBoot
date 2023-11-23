@@ -1,5 +1,9 @@
 package com.clovers.controllers;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,8 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.clovers.constants.Constants;
+import com.clovers.dto.DocumentFileDTO;
 import com.clovers.services.ElectronicSignatureService;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -544,5 +551,35 @@ public class ElectronicSignatureController {
         String regex = "<[^>]*>";
         return input.replaceAll(regex, "");
     }
-
+	
+	// 문서 파일 리스트 불러오기
+	@ResponseBody
+	@RequestMapping("/fileList")
+	public List<DocumentFileDTO> fileList(@RequestParam("document_id") String document_id){
+		System.out.println("doumId"+document_id);
+		List<DocumentFileDTO> fileList = new ArrayList<>();
+		boolean result = esservices.selectFileByDocumentId(document_id);
+		if(result) {
+			fileList = esservices.selectAllFileById(document_id);
+		}
+		return fileList;
+	}
+	
+	// 파일 다운로드
+	@RequestMapping("/downloadFile")
+	public void downloadFile(@RequestParam String sysname, @RequestParam String oriname, HttpServletResponse response) throws Exception {
+		String upload = "C:/C-lovers";
+		File targetFile = new File(upload + "/" + sysname);
+		
+		oriname = new String(oriname.getBytes("utf8"), "ISO-8859-1");
+		response.setHeader("content-disposition", "attachement;filename=" + oriname);
+		byte[] fileContents = new byte[(int) targetFile.length()];
+		
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(targetFile))) {
+			ServletOutputStream sos = response.getOutputStream();
+			dis.readFully(fileContents);
+			sos.write(fileContents);
+			sos.flush();
+		}
+	}
 }

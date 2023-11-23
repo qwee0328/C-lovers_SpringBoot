@@ -227,4 +227,18 @@ public class ElectronicSignatureDAO {
 	public int deleteApproval(String document_id) {
 		return db.delete("ElectronicSignature.deleteApproval", document_id);
 	}
+	
+	// 문서에 파일이 있는지 확인
+	public boolean selectFileByDocumentId(String id) {
+		System.out.println("doid"+id);
+		List<String> result = db.selectList("ElectronicSignature.selectFileByDocumentId", id);
+		System.out.println("result"+result);
+		return !result.isEmpty();
+		//return db.selectOne("ElectronicSignature.selectFileByDocumentId", id);
+	}
+	
+	// 문서에 파일 리스트 반환
+	public List<DocumentFileDTO> selectAllFileById(String id){
+		return db.selectList("ElectronicSignature.selectAllFileById",id);
+	}
 }
