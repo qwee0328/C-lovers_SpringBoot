@@ -206,7 +206,6 @@
     	            let recv = JSON.parse(message.body);
     	            recvMessage(recv);
     	        });
-    	        console.log("/sub/chat/room/"+roomId);
     	    });
     	}
 
