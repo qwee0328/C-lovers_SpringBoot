@@ -121,6 +121,8 @@
 // 	        window.open(openUrl,"chatRoom",option);
 // 		})
 
+
+
         // search input focus 시 우측에 검색 취소 버튼 생성
         $(".chat-search__txt").on("focus", function () {
             $(".chat-search__cancel").css("display", "flex");
@@ -149,6 +151,7 @@
 
             goChat.on("mousedown", function () {
                 window.open("goChat.html", '새창2', 'width=400,height=585');
+                location.reload();
             });
 
             let goProfile = $("<li>").text("프로필보기").attr("class", "ctxMenuList__goProfile");
@@ -336,15 +339,69 @@
 				    data: JSON.stringify({ selectedEmployees: Object.keys(selectedEmployees) }),
 				    success: function(data) {
                     	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
+                    	location.reload();
                     },
 				    error: function(xhr, status, error) {
 				        //console.error('Error:', error);
 				    }
 				});
             });
+        	
+         // 검색 이벤트 핸들러
+         	$('.chat-search__cancel').on('click',function(){
+         	// AJAX 요청
+                $.ajax({
+                    url: '/chat/getChatRoomIdBySearch', // 요청을 보낼 서버의 URL
+                    type: 'GET', 
+                    data: { search: '' },
+                    success: function(response) {
+                        // 검색 결과에 따라 채팅방 목록 필터링
+                        filterChatRooms(response.map(item => item.chat_room_id));
+                    },
+                    error: function(error) {
+                        // 오류 처리
+                        console.error('Error:', error);
+                    }
+                });
+         	})
+         	
+            $('.chat-search__txt').on('input', function() {
+                var searchText = $(this).val();
+
+                // AJAX 요청
+                $.ajax({
+                    url: '/chat/getChatRoomIdBySearch', // 요청을 보낼 서버의 URL
+                    type: 'GET', 
+                    data: { search: searchText },
+                    success: function(response) {
+                        // 검색 결과에 따라 채팅방 목록 필터링
+                        filterChatRooms(response.map(item => item.chat_room_id));
+                    },
+                    error: function(error) {
+                        // 오류 처리
+                        console.error('Error:', error);
+                    }
+                });
+            });
+
+            // 채팅방 목록 필터링 함수
+            function filterChatRooms(chatRoomIds) {
+                $(".chat-chatList__chatRoom").each(function() {
+                    var chatRoomId = $(this).data("chat-room-id");
+                    if (chatRoomIds.includes(chatRoomId)) {
+                        $(this).show(); // 검색 결과에 있는 채팅방은 표시
+                    } else {
+                        $(this).hide(); // 검색 결과에 없는 채팅방은 숨김
+                    }
+                });
+            }
+
+
+        	
         		
         });
     </script>
+    <script src="/js/chat/formatTimeStamp.js"></script>
 </body>
 
 </html>

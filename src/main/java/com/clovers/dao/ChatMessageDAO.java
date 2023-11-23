@@ -12,49 +12,52 @@ import com.clovers.dto.ChatMessageDTO;
 @Repository
 public class ChatMessageDAO {
 	// 채팅 메시지 관련 DAO
-	
+
 	@Autowired
 	private SqlSession db;
-	
-	
+
 	// 채팅방에 채팅 남기기
 	public int recordChat(ChatMessageDTO cdto) {
 		return db.insert("ChatMessage.recordChat", cdto);
 	}
-	
+
 	// 채팅방의 아이디를 기준으로 채팅 메시지를 가져옴.
-	public List<ChatMessageDTO> selectMessagesByChatRoomId(String chat_room_id){
+	public List<ChatMessageDTO> selectMessagesByChatRoomId(String chat_room_id) {
 		return db.selectList("ChatMessage.selectMessagesByChatRoomId", chat_room_id);
 	};
-	
+
 	// 채팅방의 아이디를 기준으로 채팅 메시지를 가져옴 #2 (이름까지 가져오는 것)
-	public List<Map<String,Object>> selectMessageListByChatRoomId(String chat_room_id){
+	public List<Map<String, Object>> selectMessageListByChatRoomId(String chat_room_id) {
 		return db.selectList("ChatMessage.selectMessageListByChatRoomId", chat_room_id);
 	};
-	
+
 	// 채팅방의 아이디와 사원아이디를 기준으로 채팅 메시지를 가져옴 #3 (초대 시작 지점부터 메시지를 불러오는 것)
-	public List<Map<String,Object>> selectChatMessagesListByChatRoomNEmpId(Map<String,Object> param){
-		return db.selectList("ChatMessage.selectChatMessagesListByChatRoomNEmpId",param);
+	public List<Map<String, Object>> selectChatMessagesListByChatRoomNEmpId(Map<String, Object> param) {
+		return db.selectList("ChatMessage.selectChatMessagesListByChatRoomNEmpId", param);
 	}
-	
+
 	// 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 가장 최신의 메시지의 아이디 값을 가져온다.
 	public int selectLatestChatMsgIdForInvite() {
 		return db.selectOne("ChatMessage.selectLatestChatMsgIdForInvite");
 	}
-	
-	// 기존의 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 채팅방 아이디를 기준으로 가장 최신의 메시지의 아이디 값을 가져온다.
+
+	// 검색기록을 바탕으로 채팅방 아이디 가져오기
+	public List<Map<String, Object>> getChatRoomIdBySearch(String search) {
+		return db.selectList("ChatMessage.getChatRoomIdBySearch", search);
+	}
+
+	// 기존의 채팅방에 처음 초대되거나 마지막으로 읽은 메시지를 업데이트 하는데에 사용되는 함수. 채팅방 아이디를 기준으로 가장 최신의 메시지의
+	// 아이디 값을 가져온다.
 	public int selectLatestChatMsgIdByChatRoomIdForUpdate(String chat_room_id) {
 		return db.selectOne("ChatMessage.selectLatestChatMsgIdByChatRoomIdForUpdate", chat_room_id);
 	}
-	
+
 	// 사용자의 아이디를 기준으로 사용자가 현재 채팅방에 들어와 있는지 확인
-	//	public 
-	
+	// public
+
 	// 채팅방의 메시지를 삭제하기(업데이트하여서 가리기)
 	public int deleteExecModifyChatMessageById(int id) {
-		return db.update("ChatMessage.deleteExecModifyChatMessageById",id);
+		return db.update("ChatMessage.deleteExecModifyChatMessageById", id);
 	}
-	
-	
 
 }

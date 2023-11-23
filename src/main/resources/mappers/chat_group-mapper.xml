@@ -42,8 +42,7 @@
 	</insert>
 
 	<select id="selectByEmpId" resultMap="chatRoomListInfo">
-		SELECT cri.*
-		FROM
+		SELECT cri.* FROM
 		chat_room_list_info cri
 		JOIN (
 		SELECT chat_room_id, MAX(write_date) AS
@@ -57,7 +56,11 @@
 		WHERE cri.emp_id=#{emp_id}
 		ORDER BY cri.write_date DESC;
 	</select>
-
+	
+	
+	<select id="selectEmpIDByChatRoomId" resultType="String">
+		select emp_id from chat_group where chat_room_id = #{chat_room_id}
+	</select>
 
 
 	<select id="selectByEmpIdNChatRoomID"

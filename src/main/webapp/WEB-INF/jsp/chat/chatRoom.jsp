@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -7,9 +7,12 @@
 <meta charset="UTF-8">
 <title>채팅창</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css"/>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
 
 <link rel="stylesheet" href="/css/chat/chat_common.css" />
 <link rel="stylesheet" href="/css/chat/chat_invite.css">
@@ -18,102 +21,137 @@
 <link rel="stylesheet" href="/css/chat/chat_profile.css">
 <link rel="stylesheet" href="/css/chat/chat_chatRoom.css">
 <script src="/js/chat/chat_invite.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.min.js"></script>
-
+<script
+	src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <div class="container">
-        <div class="reName__modal">
-            <div class="reName__header d-flex">
-                <div class="reName__name">채팅방 이름 바꾸기</div><div class="reName__cancel"><i class="fa-solid fa-xmark"></i></div>
-            </div>
-            <div class="reName__body">
-                <div class="reName__input" contenteditable="true">
-                    
-                </div>
-            </div>
-            <div class="reName__footer align-center">
-                <button class="reName__cancelBtn">취소</button><div class="reName_margin"></div><button class="reName__submitBtn">확인</button>
-            </div>
-           
-        </div>
-        
-        <div class="exit__modal">
-            <div class="exit__header d-flex">
-                <div class="exit__name">채팅그룹 나가기</div><div class="exit__cancel"><i class="fa-solid fa-xmark"></i></div>
-            </div>
-            <div class="exit__body">
-                <div class="exit__input">
-                    정말 나가시겠습니까?
-                </div>
-            </div>
-            <div class="exit__footer align-center">
-                <button class="exit__cancelBtn">취소</button><div class="exit_margin"></div><button class="exit__submitBtn">확인</button>
-            </div>
-           
-        </div>
+	<div class="container">
+		<div class="reName__modal">
+			<div class="reName__header d-flex">
+				<div class="reName__name">채팅방 이름 바꾸기</div>
+				<div class="reName__cancel">
+					<i class="fa-solid fa-xmark"></i>
+				</div>
+			</div>
+			<div class="reName__body">
+				<div class="reName__input" contenteditable="true"></div>
+			</div>
+			<div class="reName__footer align-center">
+				<button class="reName__cancelBtn">취소</button>
+				<div class="reName_margin"></div>
+				<button class="reName__submitBtn">확인</button>
+			</div>
 
-        <!-- 최하단으로 이동 -->
-        <div class="container__chat-down align-center"><i class="fa-solid fa-arrow-down"></i></div>
-        <script>
+		</div>
+
+		<div class="exit__modal">
+			<div class="exit__header d-flex">
+				<div class="exit__name">채팅그룹 나가기</div>
+				<div class="exit__cancel">
+					<i class="fa-solid fa-xmark"></i>
+				</div>
+			</div>
+			<div class="exit__body">
+				<div class="exit__input">정말 나가시겠습니까?</div>
+			</div>
+			<div class="exit__footer align-center">
+				<button class="exit__cancelBtn">취소</button>
+				<div class="exit_margin"></div>
+				<button class="exit__submitBtn">확인</button>
+			</div>
+
+		</div>
+
+		<!-- 최하단으로 이동 -->
+		<div class="container__chat-down align-center">
+			<i class="fa-solid fa-arrow-down"></i>
+		</div>
+		<script>
             $(".container__chat-down").on("click",function(){
                 $(".chatContainer__chatArea").animate({scrollTop:$(".chatContainer__chatArea")[0].scrollHeight},1000);
             })
         </script>
-        <!-- 최하단으로 이동 끝 -->
+		<!-- 최하단으로 이동 끝 -->
 
-        <div class="chatHeader">
-            <div class="header d-flex">
-                <div class="header__chatNameCover d-flex"><div class="header__chatName">${personalChatRoomInfo.name}</div>
-                <div class="header__numOfPPL fontEN"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;${personalChatRoomInfo.emp_cnt}</div>
-                </div>
-                <div class="header__menuIcon d-flex">
-                    <div class="menuIcon__searchBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
-                    <div class="menuIcon__hamBtn"><i class="fa-solid fa-bars"></i></div>
-                </div>
-                <div class="hamBtn__hamMenu">
-                    <div class="hamMenu__invite hamMenu_menu">채팅방 초대</div>
-                    <div class="hamMenu__reName hamMenu_menu">채팅방명 변경</div>
-                    <div class="hamMenu__exit hamMenu_menu">채팅그룹 탈퇴</div>
-                </div>
-            </div>
-            <div class="header__chatSearch d-flex">
-                <div class="chatSearch__inputCover d-flex">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" class="chatSearch__input" placeholder="대화 내용 검색">
-                    <button class="chatSearch__button search-prev"><i class="fa-solid fa-angle-up"></i></button>
-					<button class="chatSearch__button search-next"><i class="fa-solid fa-angle-down"></i></button>
-                </div>
-                <div class="chatSearch__cancel"><i class="fa-solid fa-xmark"></i></div>
-            </div>
-<!--             이 부분은 구현하지 않기로 함 -->
-<!--             <div class="offlineCnt">최사장님 외 4명은 현재 부재중 입니다.</div> -->
-        </div>
+		<div class="chatHeader">
+			<div class="header d-flex">
+				<div class="header__chatNameCover d-flex">
+					<div class="header__chatName">${personalChatRoomInfo.name}</div>
+					<div class="header__numOfPPL fontEN">
+						<i class="fa-solid fa-user"></i>&nbsp;&nbsp;${personalChatRoomInfo.emp_cnt}
+					</div>
+				</div>
+				<div class="header__menuIcon d-flex">
+					<div class="menuIcon__searchBtn">
+						<i class="fa-solid fa-magnifying-glass"></i>
+					</div>
+					<div class="menuIcon__hamBtn">
+						<i class="fa-solid fa-bars"></i>
+					</div>
+				</div>
+				<div class="hamBtn__hamMenu">
+					<div class="hamMenu__invite hamMenu_menu">채팅방 초대</div>
+					<div class="hamMenu__reName hamMenu_menu">채팅방명 변경</div>
+					<div class="hamMenu__exit hamMenu_menu">채팅그룹 탈퇴</div>
+				</div>
+			</div>
+			<div class="header__chatSearch d-flex">
+				<div class="chatSearch__inputCover d-flex">
+					<i class="fa-solid fa-magnifying-glass"></i> <input type="text"
+						class="chatSearch__input" placeholder="대화 내용 검색">
+					<button class="chatSearch__button search-prev">
+						<i class="fa-solid fa-angle-up"></i>
+					</button>
+					<button class="chatSearch__button search-next">
+						<i class="fa-solid fa-angle-down"></i>
+					</button>
+				</div>
+				<div class="chatSearch__cancel">
+					<i class="fa-solid fa-xmark"></i>
+				</div>
+			</div>
+			<!--             이 부분은 구현하지 않기로 함 -->
+			<!--             <div class="offlineCnt">최사장님 외 4명은 현재 부재중 입니다.</div> -->
+		</div>
 
-        <div class="chatContainer">
-            <div class="chatContainer__chatArea">
-            	<!-- 날짜는 아래와 같이 작성 
+		<div class="chatContainer">
+			<div class="chatContainer__chatArea">
+				<!-- 날짜는 아래와 같이 작성 
             		$(".chatContainer__chatArea").append($("<div>").attr("class","chatArea__DayLine align-center").text("날짜"));
             	-->
-                
-            </div>
 
-            <div class="chatContainer__inputArea">
-                <div class="inputArea__msg" contenteditable="true"></div>
-                <div class="inputArea__btns d-flex">
-                    <div class="inputArea__fileIcon"><i class="fa-solid fa-paperclip"></i></div>
-                    <div class="inputArea__subminBtnCover"><button class="inputArea__subminBtn">전송</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
+			</div>
 
-   
+			<div class="chatContainer__inputArea">
+				<div class="inputArea__msg" contenteditable="true"></div>
+				<div class="inputArea__btns d-flex">
+					<div class="inputArea__fileIcon">
+						<i class="fa-solid fa-paperclip"></i>
+					</div>
+					<div class="inputArea__subminBtnCover">
+						<button class="inputArea__submitBtn">
+							<p class="inputArea__submitText">
+								<i class="fa-regular fa-paper-plane"></i>
+							</p>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- 초대하기 모달 -->
+
+
+	<!-- 초대하기 모달 -->
 	<div class="invite__modal">
 		<div class="invite__header d-flex">
 			<div class="invite__name">채팅방 초대</div>
@@ -154,113 +192,105 @@
 	</div>
 
 
-    <!-- 프로필보기 모달창 -->
-    <div class="profile__modal">
-        <div class="profile__card">
-            <div class="profile__head">
-                <button class="close__btn">&times;</button>
-                <p>사용자 프로필</p>
-            </div>
-            <hr class="profile__hr">
-            <div class="profile__body">
-                <table class="profile__table">
-                    <tbody>
-                        <tr>
-                            <td rowspan="3">
-                                <div class="profileModalImg__cover">
-                                    <img class="profileImg__img" src="/css/chat/profileImg.png">
-                                    <div class="profileImg__state backLightGreen"></div>
-                                </div>
-    
-                            </td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="fontKR__Small profile__text">최사장</div>
-                            </td>
-                            <td class="fontKR__Small profile__text">사장 / 영업</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="fontKR__Small profile__text colorGreen">업무중</div>
-                            </td>
-                            <td>
-                                <div class="fontKR__Small profile__text">클로버산업 > 관리부 > 인사팀</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-    
-                <div class="profile__details">
-                    <table class="profile__details__table">
-                        <tr>
-                            <td>
-                                <div class="fontKR__Small profile__text">
-                                    <div class="profile__icon">
-                                        <i class="fa-solid fa-envelope"></i>
-                                    </div>
-                                    <div class="profile__subject">
-                                        이메일
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="fontKR__Small profile__text">이메일 주소</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="fontKR__Small profile__text">
-                                    <div class="profile__icon">
-                                        <i class="fa-solid fa-phone fa-flip-horizontal"></i>
-                                    </div>
-                                    <div class="profile__subject">
-                                        사내전화
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="fontKR__Small profile__text">101</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="fontKR__Small profile__text">
-                                    <div class="profile__icon">
-                                        <i class="fa-solid fa-mobile-button"></i>
-                                    </div>
-                                    <div class="profile__subject">
-                                        휴대전화
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="fontKR__Small profile__text">휴대전화 번호</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="fontKR__Small profile__text">
-                                    <div class="profile__icon">
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                    </div>
-                                    <div class="profile__subject">
-                                        입사일
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="fontKR__Small profile__text">2023-11-01</div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- 프로필보기 모달창 -->
+	<div class="profile__modal">
+		<div class="profile__card">
+			<div class="profile__head">
+				<button class="close__btn">&times;</button>
+				<p>사용자 프로필</p>
+			</div>
+			<hr class="profile__hr">
+			<div class="profile__body">
+				<table class="profile__table">
+					<tbody>
+						<tr>
+							<td rowspan="3">
+								<div class="profileModalImg__cover">
+									<img class="profileImg__img" src="/css/chat/profileImg.png">
+									<div class="profileImg__state backLightGreen"></div>
+								</div>
 
-    <script>
+							</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="fontKR__Small profile__text">최사장</div>
+							</td>
+							<td class="fontKR__Small profile__text">사장 / 영업</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="fontKR__Small profile__text colorGreen">업무중</div>
+							</td>
+							<td>
+								<div class="fontKR__Small profile__text">클로버산업 > 관리부 > 인사팀</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="profile__details">
+					<table class="profile__details__table">
+						<tr>
+							<td>
+								<div class="fontKR__Small profile__text">
+									<div class="profile__icon">
+										<i class="fa-solid fa-envelope"></i>
+									</div>
+									<div class="profile__subject">이메일</div>
+								</div>
+							</td>
+							<td>
+								<div class="fontKR__Small profile__text">이메일 주소</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="fontKR__Small profile__text">
+									<div class="profile__icon">
+										<i class="fa-solid fa-phone fa-flip-horizontal"></i>
+									</div>
+									<div class="profile__subject">사내전화</div>
+								</div>
+							</td>
+							<td>
+								<div class="fontKR__Small profile__text">101</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="fontKR__Small profile__text">
+									<div class="profile__icon">
+										<i class="fa-solid fa-mobile-button"></i>
+									</div>
+									<div class="profile__subject">휴대전화</div>
+								</div>
+							</td>
+							<td>
+								<div class="fontKR__Small profile__text">휴대전화 번호</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="fontKR__Small profile__text">
+									<div class="profile__icon">
+										<i class="fa-solid fa-calendar-days"></i>
+									</div>
+									<div class="profile__subject">입사일</div>
+								</div>
+							</td>
+							<td>
+								<div class="fontKR__Small profile__text">2023-11-01</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
     	let roomId = "${chatRoomId}";
     	let loginId = "${loginID}";
     	
@@ -278,19 +308,13 @@
     	}
 
     	
-    	function sendMessage() {
-    	    var message = $(".inputArea__msg").text();
-    	    if (message.trim() === '') {
-    	        alert('메시지를 입력하세요');
-    	        return;
-    	    }
-    	    ws.send('/pub/chat/message', {}, JSON.stringify({  // 여기에 중괄호 추가
+    	function sendMessage(msg) {
+    	    ws.send('/pub/chat/message', {}, JSON.stringify({
     	        state: 'CHAT',
     	        chat_room_id: roomId,
     	        emp_id: loginId,
-    	        content: message
+    	        content: msg
     	    }));
-    	    $(".inputArea__msg").text('');
     	}
 
     	function recvMessage(recv) {
@@ -320,17 +344,16 @@
     	                        $('<div>', {class: 'myChat__sendTime', text: formattedTime})
     	                    )
     	                ),
-    	                $('<div>', {class: 'myChat__chatMsg d-flex', text: recv.content})
+    	                $('<div>', {class: 'myChat__chatMsg d-flex'}).html(recv.content) // .html() 사용
     	            )
     	        );
-    	    } 
-    	    else { // 타인이 보낸 메시지
+    	    } else { // 타인이 보낸 메시지
     	        messageItem = $('<div>', {class: 'chatArea__otherPersonChat d-flex'}).append(
     	            $('<div>', {class: 'otherPersonChat__profileImg'}),
     	            $('<div>', {class: 'otherPersonChat__chatInfo'}).append(
     	                $('<div>', {class: 'otherPersonChat__userName', text: recv.emp_name}),
     	                $('<div>', {class: 'otherPersonChat__chatContents d-flex'}).append(
-    	                    $('<div>', {class: 'otherPersonChat__chatMsg d-flex', text: recv.content}),
+    	                    $('<div>', {class: 'otherPersonChat__chatMsg d-flex'}).html(recv.content), // .html() 사용
     	                    $('<div>', {class: 'otherPersonChat__chatMsgRight d-flex'}).append(
     	                        $('<div>', {class: 'chatMsgRight__align'}).append(
     	                            $('<div>', {class: 'otherPersonChat__readCnt', text: '0'}),
@@ -342,19 +365,15 @@
     	        );
     	    }
 
+
     	    $('.chatContainer__chatArea').append(messageItem);
     	    $('.chatContainer__chatArea').scrollTop($('.chatContainer__chatArea')[0].scrollHeight);
     	}
 
+
     	
-    	function handleKeyPress(event){
-    		if (event.keyCode === 13 && !event.shiftKey) {
-				event.preventDefault();
-				sendMessage();
-			}
-    	}
     	
-    	$(".inputArea__subminBtn").on("click",function(){
+    	$(".inputArea__submitBtn").on("click",function(){
     		sendMessage();
     	})
     	
@@ -438,6 +457,7 @@
         }
         
         $(document).ready(function() {
+        	
         	$.ajax({
         	    url: '/chat/getMainData',
         	    type: 'GET',
@@ -524,23 +544,66 @@
                     selectedEmployees: Object.keys(selectedEmployees)
                 };
                 
-               
+                console.log(dataToSend)
 
                 // AJAX 요청
                 $.ajax({
-                	url: '/chat/setGroupChattingRoom', // 서버의 URL
-                    type: 'POST', // 요청 방식
-				    contentType: 'application/json', // JSON 형식으로 데이터 전송
-				    data: JSON.stringify({ selectedEmployees: Object.keys(selectedEmployees),
-				    						chat_room_id : roomId}),
-				    success: function(data) {
-                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
+                    url: '/chat/inviteChatGroup',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        selectedEmployees: Object.keys(selectedEmployees),
+                        chatRoomId: roomId
+                    }),
+                    success: function(data) {
+                    	location.reload();
                     },
-				    error: function(xhr, status, error) {
-				        //console.error('Error:', error);
-				    }
-				});
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+
             });
+        	
+            $(".inputArea__msg").on("keydown", function (event){
+            	if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    let msg = $(".inputArea__msg").html();
+                    if (msg.trim() === "") {
+                        alert("보낼 메시지를 입력해주세요!");
+                        return;
+                    }
+                    sendMessage(msg);
+                    $(".inputArea__msg").empty();
+                    opener.location.reload();
+                    return false;
+                }
+            });
+            
+            $(".exit__submitBtn").on("click", function() {
+                var chatRoomId = roomId;
+
+                // AJAX 요청
+                $.ajax({
+                    url: '/chat/deleteByEmpIdNChatId', // 요청을 보낼 서버의 URL
+                    type: 'POST',
+                    contentType: 'application/json', // JSON 형식으로 데이터 전송
+                    data: JSON.stringify({ chatRoomId: chatRoomId }),
+                    success: function(response) {
+                        alert('채팅방에서 나갔습니다.');
+                        window.close();
+                    },
+                    error: function(error) {
+                        // 오류 처리
+                        console.error('Error:', error);
+                        alert('오류가 발생했습니다.');
+                    }
+                });
+            });
+        })
+        
+        $(".inputArea__fileIcon").on("click",function(){
+        	alert("현재 점검 중입니다.... 개발 완료시기 2023/11/27");
         })
 
         
@@ -592,7 +655,7 @@
         					let chatMsg__download = $("<div>").attr("class","chatMsg__download align-center").html("<i class='fa-solid fa-download'></i>"); //파일 다운도르 아이콘	
         					myChat__chatMsg.append(myChat__fileMsg.append(fileMsg__fileName).append(fileMsg__volume).append(fileMsg__expirationDate)).append(chatMsg__download);
         				}else{ // 파일아니면
-        					myChat__chatMsg.text(resp.chat[i].content); // 채팅 내용	
+        					myChat__chatMsg.html(resp.chat[i].content); // .html() 사용
         				}
         				
         						
@@ -624,7 +687,7 @@
         					let chatMsg__download = $("<div>").attr("class","chatMsg__download align-center").html("<i class='fa-solid fa-download'></i>"); //파일 다운도르 아이콘	
         					otherPersonChat__chatMsg.append(myChat__fileMsg.append(fileMsg__fileName).append(fileMsg__volume).append(fileMsg__expirationDate)).append(chatMsg__download);
         				}else{ // 파일아니면
-        					otherPersonChat__chatMsg.text(resp.chat[i].content); // 채팅 내용	
+        					otherPersonChat__chatMsg.html(resp.chat[i].content); // .html() 사용
         				}
         				
         				let otherPersonChat__chatMsgRight = $("<div>").attr("class", "otherPersonChat__chatMsgRight d-flex");
@@ -650,11 +713,11 @@
         		scrollToBottom();
         	});
         	
-        	$(".inputArea__msg").on("keypress", handleKeyPress);
         	
         	
         	
         	connect();
+        	
         	
         	$('.reName__submitBtn').click(function() {
         	    let newChatRoomName = $('.reName__input').text().trim();
@@ -692,7 +755,7 @@
         	    $('.chatContainer__chatArea').unmark({
         	        done: function() {
         	            $('.chatContainer__chatArea').mark(searchTerm, {
-        	                "element": "span",
+        	                "element": "p",
         	                "className": "highlight",
         	                "separateWordSearch": false,
         	                "accuracy": "partially",
