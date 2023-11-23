@@ -15,10 +15,6 @@
 		<result column="dept_name" property="dept_name" />
 	</resultMap>
 
-	<!-- <select id="selectByIdGetName" resultType="String"> -->
-	<!-- select name from employee where id = #{id} -->
-	<!-- </select> -->
-
 
 	<select id="selectById" resultType="com.clovers.dto.MemberDTO">
 		select * from mypageData
@@ -28,6 +24,11 @@
 	<select id="getPw" resultType="String">
 		select pw from employee where id =
 		#{id};
+	</select>
+	
+<!-- 	// 사내 이메일 중복 확인 -->
+	<select id="isDupEmail" resultType="Integer">
+		select count(*) from employee where company_email=#{company_email}
 	</select>
 
 	<update id="update">

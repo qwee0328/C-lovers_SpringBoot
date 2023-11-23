@@ -9,7 +9,7 @@
 	</insert>
 	
 	<select id="selectStateByChatRoomId" resultType="String">
-		select state from chat_room where id = ${id}
+		SELECT state FROM chat_room WHERE id = #{id}
 	</select>
 	
 	<update id="updateChatRoomState">

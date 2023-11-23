@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+
+
 .header {
 	height: 40px;
 	align-items: center;
@@ -77,11 +79,12 @@
 .inputArea__btns {
 	width: 100%;
 	align-items: center;
+	background-color: white;
+	
 }
 
 .inputArea__btns>div {
-	width: 50%;
-}
+	width: 50%;}
 
 .inputArea__subminBtnCover {
 	display: flex;
@@ -92,21 +95,21 @@
 	font-size: 14px;
 }
 
-.inputArea__subminBtn {
+.inputArea__submitBtn {
 	color: #FFFFFF;
 	background-color: #75B47D;
 	border: 0;
 	border-radius: 3px;
 	width: 50px;
-	height: 20px;
+	height: 50px;
 	font-size: 12px;
 	transition-duration: 0.3s;
 }
 
-.inputArea__subminBtn:hover {
+
+.inputArea__submitBtn:hover {
 	background-color: #095544;
 }
-
 
 
 
@@ -328,23 +331,24 @@
 	display: none;
 }
 
-.chatSearch__button{
-	width:15px;
-	border:none;
+.chatSearch__button {
+	width: 15px;
+	border: none;
 	background-color: #75B47D;
-	margin:2px;
+	margin: 2px;
 	border-radius: 4px;
 }
 
-.search__arrow{
-	color:#F3F7F1;
-	padding:2px
+.search__arrow {
+	color: #F3F7F1;
+	padding: 2px
 }
+
 .highlight {
-    background-color: yellow;
-    color: black;
+	background-color: yellow;
+	color: black;
 }
 
 .current-highlight {
-    background-color: orange;
+	background-color: orange;
 }

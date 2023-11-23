@@ -55,12 +55,12 @@ public class AccountingController {
 	@PostMapping
 	public ResponseEntity<String> insert(@RequestBody AccountingDTO dto){
 		
-		int result = acService.insert(dto);
-		if(result == 1) {
-			return ResponseEntity.ok("성공");
-		}else {
-			return ResponseEntity.ok("실패");
+		if(dto.getBank()==null) {
+			return ResponseEntity.ok("은행을 선택해주세요.");
 		}
+		
+		String result = acService.insert(dto);
+		return ResponseEntity.ok(result);
 		
 	}
 	// id로 삭제
@@ -99,6 +99,10 @@ public class AccountingController {
 	// 카드 추가
 	@PostMapping("/cardInsert")
 	public ResponseEntity<String> insertCard(@RequestBody AccountingDTO dto){
+		
+		if(dto.getBank()==null) {
+			return ResponseEntity.ok("은행을 선택해주세요.");
+		}
 		
 		String result = acService.insertCard(dto);
 		

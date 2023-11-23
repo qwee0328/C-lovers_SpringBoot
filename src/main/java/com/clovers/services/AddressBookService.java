@@ -40,29 +40,65 @@ public class AddressBookService {
 	}
 	
 	// 주소 출력
-	public List<Map<String,Object>> select(String emp_id, String key, int value, String keyword) {
+//	public Map<String,Object> select(String emp_id, String key, int value, String keyword, int auth) {
+//		Map<String,Object> param = new HashMap<>();
+//		param.put("emp_id", emp_id);
+//		param.put("key", key);
+//		param.put("value", value);
+//		param.put("keyword", keyword);
+//		param.put("auth", auth);
+//		
+//					
+//		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
+//			Map<String,Object> result = new HashMap<>();
+//			result.put("deleteTag", true);
+//			//List<Map<String,Object>> deleteTag = new ArrayList<>();
+//			//deleteTag.add(result);
+//			return result;
+//		}
+//		
+//		// 주소록 페이지 네이션
+//		Map<String,Object> result = new HashMap<>();
+//		result.put("list", dao.select(param));
+//		result.put("count", dao.getCount(param));
+//		
+//		return result;
+//	}
+	
+	public Map<String,Object> select(String emp_id, String key, int value, String keyword, int auth, int start, int end) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("emp_id", emp_id);
 		param.put("key", key);
 		param.put("value", value);
 		param.put("keyword", keyword);
-		
+		param.put("auth", auth);
+		param.put("start", start);
+		param.put("end", end);
 					
 		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
 			Map<String,Object> result = new HashMap<>();
 			result.put("deleteTag", true);
-			List<Map<String,Object>> deleteTag = new ArrayList<>();
-			deleteTag.add(result);
-			return deleteTag;
+			//List<Map<String,Object>> deleteTag = new ArrayList<>();
+			//deleteTag.add(result);
+			return result;
 		}
-			
-
-		return dao.select(param);
+		
+		// 주소록 페이지 네이션
+		Map<String,Object> result = new HashMap<>();
+		result.put("resp", dao.select(param));
+		result.put("count", dao.getCount(param));
+		
+		return result;
 	}
 	
+
+	
 	// 주소 상세보기 출력
-	public Map<String,Object> selectById(int id) {
-		return dao.selectById(id);
+	public Map<String,Object> selectById(int id, String emp_id) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("id",id);
+		param.put("emp_id", emp_id);
+		return dao.selectById(param);
 	}
 	
 	// 주소 휴지통으로 이동
@@ -94,10 +130,11 @@ public class AddressBookService {
 		
 	
 	// 주소 복사 (공유 <-> 개인)
-	public int copyAddress(int is_share, List<Integer> ids) {
+	public int copyAddress(int is_share, List<Integer> ids, String id) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("is_share", is_share);
 		param.put("ids", ids);
+		param.put("id", id);
 		return dao.copyAddress(param);
 	}
 	
@@ -186,5 +223,23 @@ public class AddressBookService {
 	// 휴지통 즉시 비우기
 	public int immediatelyEmpty(String emp_id) {
 		return dao.immediatelyEmpty(emp_id);
+	}
+	
+	// humanResource ~ 주소록에 사내 이메일과 휴대폰 업데이트
+	public int updateCompanyEmailPhone(String id, String company_email, String phone) {
+		
+		phone = phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7);
+		// numberType 가져오기
+		String numberType = dao.isNumberType(id);
+		
+		System.out.println("numberType "+numberType);
+		
+		Map<String,String> param = new HashMap<>();
+		param.put("id", id);
+		param.put("company_email", company_email);
+		param.put("phone", phone);
+		param.put("numberType", numberType);
+		
+		return dao.updateCompanyEmailPhone(param);
 	}
 }

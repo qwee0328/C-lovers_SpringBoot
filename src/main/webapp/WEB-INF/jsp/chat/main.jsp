@@ -96,7 +96,7 @@
 						</tr>
 						<tr>
 							<td>
-								<div class="fontKR__Small profile__text colorGreen">업무중</div>
+								<div class="fontKR__Small profile__text colorGreen"></div>
 							</td>
 							<td>
 								<div class="fontKR__Small profile__text profile__office">클로버산업 > 관리부 > 인사팀</div>
@@ -254,7 +254,7 @@
                     type: 'POST',
                     data: { employee_id : employeeId},
                     success: function(data) {
-                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
+                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=620');
                     },
                     error: function(error) {
                         console.log("Error: ", error);
@@ -320,7 +320,7 @@
                     type: 'POST',
                     data: { employee_id : data.employee_id},
                     success: function(data) {
-                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=585');
+                    	window.open("/chat/goChatRoom/"+data, '새창2', 'width=400,height=620');
                     },
                     error: function(error) {
                         console.log("Error: ", error);
@@ -367,7 +367,7 @@
             myInfoHtml += '<div class="infoTxt__name">' + 
                             myInfo.dept_name + '>' + myInfo.task_name + '>' + myInfo.job_name +
                             '&nbsp;&nbsp;' + myInfo.employee_name + '</div>' +
-                          '<div class="infoTxt__state colorGreen">업무중</div>';
+                          '<div class="infoTxt__state colorGreen">&nbsp;</div>';
 
             
             $('.infoTxt__align').html(myInfoHtml);
@@ -475,6 +475,31 @@
                     $('.chat-userList__chat-dept, .chat-userList__chat-team, .chat-userList__chatUserInfo').show();
                 }
             });
+        	$('.chat-search__cancel').on("click",function() {
+        		$('.chat-search__txt').val('');
+        		var searchText = "";
+        		
+        		if (searchText) {
+                    // 검색어가 있을 때, 모든 부서와 오피스 숨기기
+                    $('.chat-userList__chat-dept, .chat-userList__chat-team').hide();
+
+                    $('.chat-userList__chatUserInfo').each(function() {
+                        var employeeName = $(this).find('.chatUserInfo__name').text().toLowerCase();
+                        if (employeeName.includes(searchText)) {
+                            $(this).show(); // 검색어가 포함된 요소 표시
+                            // 관련된 부서와 오피스 표시
+                            $(this).closest('.chat-userList__chat-teams').prev('.chat-userList__chat-dept').show();
+                            $(this).closest('.chat-team__userInfoList').prev('.chat-userList__chat-team').show();
+                        } else {
+                            $(this).hide(); // 그렇지 않은 요소 숨김
+                        }
+                    });
+                } else {
+                    // 검색어가 없을 때, 모든 요소 표시
+                    $('.chat-userList__chat-dept, .chat-userList__chat-team, .chat-userList__chatUserInfo').show();
+                }
+        	})
+        	
         });
         
 

@@ -29,7 +29,6 @@ public class ChatController {
 	@Autowired
 	private ChatMessageService cmService;
 
-
 	// ------------------------------ 뷰 리졸버 관련
 	// -----------------------------------------------------
 
@@ -38,22 +37,23 @@ public class ChatController {
 	public String goMain() {
 		return "chat/main";
 	}
-	
+
 	// 채팅 그룹 리스트 화면
 	@RequestMapping("/chatList")
 	public String goChatList() {
 		return "chat/chatList";
 	}
-	
-	// 파일 모아보기 
+
+	// 파일 모아보기
 	@RequestMapping("/fileList")
 	public String goFileList() {
 		return "chat/fileList";
 	}
-	
+
 	// 채팅방으로 이동
 	@RequestMapping("/goChatRoom/{id}")
-	public String goChatRoom(@PathVariable("id") String chatRoomId,@SessionAttribute("loginID") String loginID, Model model) {
+	public String goChatRoom(@PathVariable("id") String chatRoomId, @SessionAttribute("loginID") String loginID,
+			Model model) {
 		// chatRoomId를 사용하여 필요한 작업 수행
 		Map<String, Object> personalChatRoomInfo = cgService.selectByEmpIdNChatRoomID(loginID, chatRoomId);
 		model.addAttribute("chatRoomId", chatRoomId);
@@ -64,62 +64,84 @@ public class ChatController {
 	// ---------------------------------- RequestBody 관련
 	// ------------------------------------------------
 
-	// 1대 1 채팅방을 최초로 개설하거나 1대1채팅을 할 때 실행되는 함수. 해당 채팅방이 이미 존재 할 경우 이미 존재하는 채팅방 id를 반환,
+	// 1대 1 채팅방을 최초로 개설하거나 1대1채팅을 할 때 실행되는 함수. 해당 채팅방이 이미 존재 할 경우 이미 존재하는 채팅방 id를
+	// 반환,
 	// 그렇지 않다면 새로운 채팅방을 개설하고 채팅 그룹에 연관 관계를 작성한 다음 새로 만든 채팅방 id를 반환
 	@ResponseBody
 	@PostMapping("/setChattingRoom")
-	public String setChattingRoomAndGroup(@RequestParam String employee_id, @SessionAttribute("loginID") String loginID) {
+	public String setChattingRoomAndGroup(@RequestParam String employee_id,
+			@SessionAttribute("loginID") String loginID) {
 		return cgService.setInitChattingRoomAndGroup(employee_id, loginID);
 	}
-	
+
 	// 그룹채팅방을 개설하고 채팅 그룹에 연관관계를 작성한 다음 새로 만든 채팅방 id를 반환
 	@ResponseBody
 	@PostMapping("/setGroupChattingRoom")
-	public String setGroupChattingRoomAndGroup(
-			@RequestBody Map<String, Object> payload,
+	public String setGroupChattingRoomAndGroup(@RequestBody Map<String, Object> payload,
 			@SessionAttribute("loginID") String loginID) {
 		@SuppressWarnings("unchecked")
 		List<String> selectedEmployees = (List<String>) payload.get("selectedEmployees");
 		return cgService.setGroupChattingRoomAndGroup(selectedEmployees, loginID);
 	}
-	
+
 	// 이미 개설된 채팅방의 채팅 그룹에 새로운 사용자를 추가할 때 사용하는 함수.
 	@ResponseBody
 	@PostMapping("/inviteChatGroup")
-	public String inviteChatGroup(
-			@RequestBody Map<String,Object> payload,
-			@RequestBody String chat_room_id,
-			@SessionAttribute("loginID") String loginID) {
-		@SuppressWarnings("unchecked")
-		List<String> selectedEmployees = (List<String>) payload.get("selectedEmployees");
-		return cgService.setAlreadyExistChatGroupInvite(selectedEmployees, chat_room_id, loginID);
+	public String inviteChatGroup(@RequestBody Map<String, Object> payload, 
+	                              @SessionAttribute("loginID") String loginID) {
+
+	    @SuppressWarnings("unchecked")
+	    List<String> selectedEmployees = (List<String>) payload.get("selectedEmployees");
+	    String chatRoomId = (String) payload.get("chatRoomId");
+	    
+	    System.out.println(selectedEmployees);
+	    System.out.println(chatRoomId);
+	    
+	    
+	    return cgService.setAlreadyExistChatGroupInvite(selectedEmployees, chatRoomId, loginID);
 	}
-	
+
+
 	// 채팅그룹의 이름을 변경(본인에게만 적용)
 	@ResponseBody
 	@PostMapping("/updateChatGroupName")
-	public int updateChatGroupName(
-			@RequestBody Map<String,String> payload, @SessionAttribute("loginID") String loginID) {
-		
-		Map<String,Object> param = new HashMap<>();
-		param.put("name",(String) payload.get("chatRoomName"));
+	public int updateChatGroupName(@RequestBody Map<String, String> payload,
+			@SessionAttribute("loginID") String loginID) {
+
+		Map<String, Object> param = new HashMap<>();
+		param.put("name", (String) payload.get("chatRoomName"));
 		param.put("chat_room_id", (String) payload.get("chatRoomId"));
 		param.put("emp_id", loginID);
-		
+
 		return cgService.updateChatGroupName(param);
 	}
 	
+	//채팅그룹에서 나감.
+	@ResponseBody
+	@PostMapping("/deleteByEmpIdNChatId")
+	public int deleteByEmpIdNChatId(@RequestBody Map<String,String> payload,
+			@SessionAttribute("loginID") String loginID) {
+		String extractRoomId = (String) payload.get("chatRoomId");
+		return cgService.deleteByEmpIdNChatId(loginID, extractRoomId);
+	}
+
 	// 메인 페이지 관련 정보 넘기기
 	@ResponseBody
 	@GetMapping("/getMainData")
 	public Map<String, Object> getMainData(@SessionAttribute("loginID") String loginID) {
 		return cgService.getMainData(loginID);
 	}
-	
+
 	@ResponseBody
 	@GetMapping("/getMyInfo")
-	public Map<String, Object> getMyInfo(@SessionAttribute("loginID") String loginID){
+	public Map<String, Object> getMyInfo(@SessionAttribute("loginID") String loginID) {
 		return cgService.getOfficerInfoByEmployeeId(loginID);
+	}
+
+	@ResponseBody
+	@GetMapping("/getChatRoomIdBySearch")
+	public List<Map<String,Object>> getChatRoomIdBySearch(@RequestParam String search) {
+		return cmService.getChatRoomIdBySearch(search);
 	}
 
 	// 세션에 접속한 사용자에게 채팅그룹 목록을 가져옴

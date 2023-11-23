@@ -96,7 +96,7 @@
 }
 
 .addList__addessLine {
-	height: 35px;
+	height: 40px;
 	width: 100%;
 }
 
@@ -256,4 +256,37 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm:focus{
 .emptyTrash__emptyTrashBtn:hover{
     color: #75B47D90;
     cursor:pointer;
+}
+
+
+
+
+.pagination {
+	display: flex;
+	margin: 50px 0px;
+	align-items: center;
+	justify-content: center;
+}
+
+.pagination > div {
+	margin: 0px 5px;
+}
+
+.pagination > div:hover {
+	cursor: pointer;
+}
+
+.pageNavi__item {
+	width: 15px;
+	height: 25px;
+	text-align: center;
+}
+
+.pageNavi__circle {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	color: #ffffff;
+	background-color: #75B47D;
+	text-align: center;
 }

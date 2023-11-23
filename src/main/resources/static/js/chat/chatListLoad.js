@@ -1,13 +1,19 @@
 $(document).ready(function() {
+	let renderedChatRooms = new Set(); // 이미 렌더링된 채팅방 ID 관리
 	$.ajax({
 		url: "/chat/chatListLoad"
 	}).done(function(resp) {
 
 		for (let i = 0; i < resp.length; i++) {
+			
+			let chatRoomId = resp[i].chat_room_id;
+
+            // 중복 방지: 이미 렌더링된 채팅방이면 건너뛰기
+            if (renderedChatRooms.has(chatRoomId)) {
+                continue;
+            }
 			//만약 인원이 2명이면 (개인채팅)
 			let chatList__chatRoom = $("<div>").attr("class", "chat-chatList__chatRoom d-flex");
-
-
 
 
 			let chatRoom__txt = $("<div>").attr("class", "chatRoom__txt d-flex");
@@ -38,10 +44,13 @@ $(document).ready(function() {
 			// 클릭 이벤트 핸들러 수정
 			$(document).on("click", ".chat-chatList__chatRoom", function() {
 				let chatRoomId = $(this).data("chat-room-id"); // data 속성에서 chat_room_id 가져오기
-				let option = "height=585, width=400";
+				let option = "height=610, width=400";
 				let openUrl = "/chat/goChatRoom/" + chatRoomId;
 				window.open(openUrl, "chatRoom", option);
 			});
+			
+			
+			renderedChatRooms.add(chatRoomId);
 
 		}
 
@@ -84,31 +93,3 @@ $(document).ready(function() {
 	});
 });
 
-function formatTimestamp(timestamp) {
-    const messageDate = new Date(timestamp);
-    const now = new Date();
-
-    const isToday = now.toDateString() === messageDate.toDateString();
-    const isYesterday = new Date(now.setDate(now.getDate() - 1)).toDateString() === messageDate.toDateString();
-    const isThisYear = now.getFullYear() === messageDate.getFullYear();
-
-    const timeString = messageDate.toLocaleTimeString('ko-KR', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    }).toUpperCase();
-
-    if (isToday) {
-        // 오늘 보낸 메시지
-        return timeString;
-    } else if (isYesterday) {
-        // 어제 보낸 메시지
-        return `어제 ${timeString}`;
-    } else if (isThisYear) {
-        // 올해 이전에 보낸 메시지
-        return `${messageDate.getMonth() + 1}.${messageDate.getDate()} ${timeString}`;
-    } else {
-        // 작년 이전에 보낸 메시지
-        return `${messageDate.getFullYear().toString().slice(2)}.${messageDate.getMonth() + 1}.${messageDate.getDate()} ${timeString}`;
-    }
-}

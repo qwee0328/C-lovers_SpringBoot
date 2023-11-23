@@ -18,16 +18,21 @@ public class AddressBookDAO {
 	
 	// 주소 관련
 	public int insert(AddressBookDTO dto) { 
-		System.out.println("추가");
-		System.out.println(dto);
 		return db.insert("AddressBook.insert",dto); 
 	}
 	public List<Map<String,Object>> select(Map<String,Object> param) {
 		return db.selectList("AddressBook.select",param);
 	}
 	
-	public Map<String,Object> selectById(int id) {
-		return db.selectOne("AddressBook.selectById",id);
+	
+	// 주소록 페이지 네이션
+	public int getCount(Map<String,Object> param) {
+		return db.selectOne("AddressBook.getCount",param);
+	}
+	
+	
+	public Map<String,Object> selectById(Map<String, Object> param) {
+		return db.selectOne("AddressBook.selectById",param);
 	}
 	
 	public int delete(Map<String,Object> param) {
@@ -47,10 +52,10 @@ public class AddressBookDAO {
 		return db.insert("AddressBook.copyAddress",param);
 	}
 	
-	
 	// 태그 관련
 	public int tagInsert(AddressBookTagDTO dto) {
-		return db.insert("AddressBook.tagInsert",dto);
+		db.insert("AddressBook.tagInsert",dto);
+		return dto.getId();
 	}
 	
 	public List<AddressBookTagDTO> tagSelect(String emp_id){
@@ -101,8 +106,20 @@ public class AddressBookDAO {
 		return db.delete("AddressBook.immediatelyEmpty",emp_id);
 	}
 	
+
+	// numberType 가져오기
+	public String isNumberType(String id) {
+		return db.selectOne("AddressBook.isNumberType",id);
+	}
+	
+	// humanResource ~ 주소록에 사내 이메일과 휴대폰 업데이트
+	public int updateCompanyEmailPhone(Map<String,String> param) {
+		return db.update("AddressBook.updateCompanyEmailPhone", param);
+	}
+	
 	// 주소록에 있는 오피스 네임 업데이트
 	public void updateOfficeName(String name) {
 		db.update("AddressBook.updateOfficeName",name);
 	}
+
 }

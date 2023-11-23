@@ -5,21 +5,21 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	let calendarEl = document.getElementById('calendarSearch');
 	const calendar = new FullCalendar.Calendar(calendarEl, {
-		initialView: 'list',
+		initialView: 'listYear',
        	views: {
             list: { buttonText: 'List' },
           },
-	    visibleRange: {
+	    /*visibleRange: {
 	    	start: currentDate.getFullYear() + '-' + (currentDate.getMonth()).toString().padStart(2, '0') + '-01',
             end: currentDate.getFullYear() + '-' + (currentDate.getMonth()+3).toString().padStart(2, '0') + '-01',
-	    },
+	    },*/
 	    // 높이 스크롤바 자동 생성
 		height: true,
 		
 		// 캘린더 header
 		headerToolbar: { 
 			left: '',
-			center: 'title',
+			center: 'prev title next',
 			right: ''
 		},
 		
@@ -214,61 +214,20 @@ document.addEventListener('DOMContentLoaded', function() {
 			if($(this).hasClass("searchBar__search")){
 				console.log("g");
 				$(this).removeClass("searchBar__search").addClass("searchBar__cancel");
-				$(this).find("i").attr("class","fa-solid fa-xmark align-center")
-			}else if($(this).hasClass("searchBar__cancel")){
-				$(this).removeClass("searchBar__cancel").addClass("searchBar__search");
-				$(this).find("i").attr("class","fa-solid fa-magnifying-glass align-center")
+				$(this).find("i").attr("class","fa-solid fa-xmark align-center");
 			}
+		}
+		
+		if($(this).hasClass("searchBar__cancel")){
+			reloadEvent();	
+			$(this).removeClass("searchBar__cancel").addClass("searchBar__search");
+			$(this).find("i").attr("class","fa-solid fa-magnifying-glass align-center")
 			$("#calendarSearch").css("display","flex");
-			reloadEvent();		
+			reloadEvent()
 		}
 	});
 	
-	
-/*	// 값 바꾸면 다시 출력
-	$(document).on("change",".inputSearchDate_start, .inputSearchDate_end",function(){
-		
-		if($(".inputSearchDate_start").val() > $(".inputSearchDate_end").val()){
-			
-				Swal.fire({
-					icon: "error",
-					text: "시작일보다 종료일이 앞설 수 없습니다."
-				});
-				return false;
-		}else{
-			let currentVisibleRange = calendar.getOption("visibleRange");
-		
-			let startDate = new Date($(".inputSearchDate_start").val() + 'T00:00:00');
-	        let endDate = new Date($(".inputSearchDate_end").val() + 'T23:59:59');
-	
-	        currentVisibleRange.start = startDate.toISOString().split('T')[0];
-	        currentVisibleRange.end = endDate.toISOString().split('T')[0];
-        
- 			//console.log(currentVisibleRange);
 
-	        calendar.setOption('visibleRange', currentVisibleRange);
-	        
-	        
-
-			console.log("Before title change:", calendar.getOption("title"));
-			let newCalendarTitle = "헤헤";
-			calendar.setOption('headerToolbar', {
-			    start: '',
-			    center: 'title',
-			    end: ''
-			});
-
-			calendar.setOption('title', newCalendarTitle);
-			console.log("After title change:", calendar.getOption("title"));
-			
-			
-			console.log(calendar.getOption("visibleRange"));
-	        calendar.render();
-		}
-	
-	});*/
-	
-	
 	// 검색 취소
 	$(document).on("click",".searchBar__cancel",function(){
 		calendar.removeAllEvents();

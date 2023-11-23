@@ -75,6 +75,7 @@
 					<div class="addListHeader__restore addListHeader__selectInTrash">복구</div>
 				</div>
 				<div class="body__addList"></div>
+				<div class="pagination"></div>
 			</div>
 		</div>
 		<%@ include file="../addressbook/addBookInsertModal.jsp"%>

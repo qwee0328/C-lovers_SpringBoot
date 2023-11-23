@@ -36,6 +36,7 @@ function modalInitail(type,datas) {
 	
 	$.ajax({
 		url:"/schedule/selectCalendarByEmpId",
+		data: {all:0},
 		async:false
 	}).done(function(resp){
 		$(".calendarModal__calNameList *").remove();
@@ -51,6 +52,7 @@ function modalInitail(type,datas) {
 function getNavi(){
 	$.ajax({
 		url:"/schedule/selectCalendarByEmpId",
+		data: {all:1},
 		async:false
 	}).done(function(calendarList){
 		let selectedNavi = $(".selectNavi").map((i,e)=>{
@@ -494,6 +496,13 @@ document.addEventListener('DOMContentLoaded', function() {
 						
 						// 반복 이벤트 그룹 아이디
 						ed.groupId = resp.recurring_id;
+						
+						// 반복 종료일 포함되도록
+						if(endKey == "until") {
+							let value = new Date(endValue);
+							value.setDate(value.getDate()+1);
+							ed.rrule[endKey] = value.toISOString().slice(0,10);
+						}
 							
 								
 						// 캘린더에 추가할 이벤트 목록에 해당 이벤트 추가				
@@ -569,6 +578,14 @@ document.addEventListener('DOMContentLoaded', function() {
 				text: "일정 시작일보다 일정 종료일이 앞설 수 없습니다."
 			});
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
+			return false;
+		}
+		if($(".insertSchedule__startDate").val() >= $(".insertSchedule__endDate").val()  &&  $(".insertSchedule__startTime").val() > $(".insertSchedule__endTime").val()){
+			Swal.fire({
+				icon: "error",
+				text: "일정 시작일보다 일정 종료일이 앞설 수 없습니다."
+			});
+			$(".insertSchedule__endTime").val($(".insertSchedule__startTime").val());
 			return false;
 		}
 		
@@ -709,7 +726,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
 			return false;
 		}
-		
+		if($(".insertSchedule__startDate").val() >= $(".insertSchedule__endDate").val()  &&  $(".insertSchedule__startTime").val() > $(".insertSchedule__endTime").val()){
+			Swal.fire({
+				icon: "error",
+				text: "일정 시작일보다 일정 종료일이 앞설 수 없습니다."
+			});
+			$(".insertSchedule__endTime").val($(".insertSchedule__startTime").val());
+			return false;
+		}
 		if($(".insertSchedule__title").val()==""){
 			Swal.fire({
 				icon: "error",
@@ -838,6 +862,15 @@ document.addEventListener('DOMContentLoaded', function() {
 							registor : sche._def.extendedProps.registor,
 							rrule :rrule  
 						}
+						
+
+						// 반복 종료일 포함되도록
+						if(endKey == "until") {
+							let value = new Date(newEventData.rrule[endKey]);
+							value.setDate(value.getDate()+1);
+							newEventData.rrule[endKey] = value.toISOString().slice(0,10);
+						}
+
 						
 						let events = [newEventData]
 						calendar.addEventSource(events);	
@@ -998,7 +1031,13 @@ document.addEventListener('DOMContentLoaded', function() {
 						let endValue = resp[i].endValue;
 						// 주 반복 이벤트의 경우, 반복횟수만큼 요일이 나올 수 있도록 설정 -> ex. 월, 화 선택 후 3으로 지정하면 월 화 월 이 기본 옵션이라서 월 화 월 화 월 화 되도록 설정해주는 것
 						if (endKey == "count" &&  frequency_whenOption == "weekly") endValue *= chkWeekDayList.length; 
-						
+						// 반복 종료일 포함되도록
+						// 반복 종료일 포함되도록
+						if(endKey == "until") {
+							let value = new Date(endValue);
+							value.setDate(value.getDate()+1);
+							endValue = value;
+						}
 						// 반복 일정 시작일
 						let dtstart = new Date(resp[i].start_date);
 						dtstart.setHours(dtstart.getHours()+9);
@@ -1167,8 +1206,10 @@ $(document).ready(function() {
 		modalInitail("insert",e);
 		
 		// 날짜 오늘 날짜로 지정
-		$(".insertSchedule__startDate").val(new Date().toISOString().slice(0,10));
-		$(".insertSchedule__endDate").val(new Date().toISOString().slice(0,10));
+		let currentDate = new Date();
+		currentDate.setHours(currentDate.getHours()+9);
+		$(".insertSchedule__startDate").val(currentDate.toISOString().slice(0,10));
+		$(".insertSchedule__endDate").val(currentDate.toISOString().slice(0,10));
 		$(".scheduleInsertModal").modal({
 			showClose: false
 		});	
@@ -1211,8 +1252,15 @@ $(document).ready(function() {
 			} else {
 				$(".weekDayOption").prop("disabled", false);
 			}
+			
+			
+			// 종료일자 선택 막고, 시작일자랑 맞춰주기
+			$(".insertSchedule__endDate").prop("disabled", true);
+			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
+			
 		} else {
 			$(".bodyLine__repeat").css("display", "none");
+			$(".insertSchedule__endDate").removeAttr("disabled")
 		}
 	});
 
@@ -1475,6 +1523,7 @@ $(document).on("click", ".deptList__companyName", function() {
 		$(this).next().css("display","none");
 		$(this).removeClass("selectToggle");
 		$(".empAllList__empList *").remove();
+		selectAllEmpInfo();
 	}
 	else{ // 선택
 		$(this).addClass("selectToggle");
@@ -1725,5 +1774,4 @@ $(document).on("input", ".empSearchKeyword", function() {
 		$(".deptList__companyName").css("display","block");
 		reloadEmpList();
 	}
-
-})
+});
