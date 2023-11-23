@@ -26,6 +26,7 @@ public class AccountingDAO {
 		String keyword2 = "%"+keyword+"%";
 		return db.selectList("Accounting.searchBy",keyword2);
 	}
+	
 	// 계좌 추가 전에 유효한 사번인지 아닌지 확인
 	public int isEmployee(String emp_id) {
 		return db.selectOne("Accounting.isEmployee",emp_id);
