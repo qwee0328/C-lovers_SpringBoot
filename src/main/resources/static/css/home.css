@@ -237,6 +237,19 @@ body {
 	margin: 12px 0px;
 }
 
+#receivedMail,#reservatioinMail{
+	width: 125px;
+    height: 36px;
+    background-color: #ffffff;
+    border: 1px solid #7d7d7d20;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.mail .mainContents__contentBox{
+	display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
 
 /* Schedule */
 

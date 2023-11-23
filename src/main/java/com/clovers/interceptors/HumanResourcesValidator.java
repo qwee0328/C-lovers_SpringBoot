@@ -38,15 +38,15 @@ public class HumanResourcesValidator implements HandlerInterceptor {
 			for (String per : permission) {
 				System.out.println("인사 있?" + per);
 				if (per.equals("인사")) {
-					return true;
+					result = true;
 				} else if (per.equals("총괄")) {
+					result = true;
 					full = true;
 				} else if (per.equals("회계")) {
 					accounting = true;
 				}
 			}
-			System.out.println(full +" "+ accounting);
-			if (!full|| !accounting) {
+			if (!result|| !full) {
 				System.out.println("메인으로 돌아가");
 				response.sendRedirect("/");
 			}

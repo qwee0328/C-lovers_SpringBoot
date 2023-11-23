@@ -43,7 +43,7 @@ public class AccountingAuthorityValidator implements HandlerInterceptor {
 			}
 		}
 		System.out.println(full + " " + humanResource);
-		if (!full) {
+		if (!full||!result) {
 			System.out.println("메인으로 돌아가");
 			response.sendRedirect("/");
 		}

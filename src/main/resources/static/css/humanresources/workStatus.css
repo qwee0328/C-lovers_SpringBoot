@@ -31,6 +31,7 @@
 }
 
 /* 탭 메뉴 설정 */
+/*
 ul.tabs {
 	margin: 0px;
 	padding: 0px;
@@ -48,9 +49,9 @@ ul.tabs li {
 ul.tabs li.current {
 	border-bottom: 3px solid #75b47d;
 }
-
+*/
 .tab-content {
-	display: none;
+	/*display: none;*/
 	/* background: #ededed; */
 	padding: 30px 0;
 	min-width: 940px;

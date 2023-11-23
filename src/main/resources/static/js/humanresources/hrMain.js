@@ -74,7 +74,7 @@ window.onload = function() {
 
 	// 휴가 현황 이동 버튼
 	$(".detail__colortitle").on("click", function() {
-		location.href = "/humanResources/workStatus?source=currentSituation";
+		location.href = "/humanResources/workStatus";
 	})
 
 	// 휴가 신청 이동 버튼
