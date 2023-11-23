@@ -245,12 +245,6 @@
 		resultType="com.clovers.dto.EmailDTO">
 		select * from email where trash = true and DATEDIFF(now(), trash_date)>=30;
 	</select>
-	<!-- 휴지통에서 30일 경과된 데이터 삭제 -->
-	<delete id="autoDeleteInTrash">
-		delete from email where id in (select id from (select
-		* from email where trash = 1 and DATEDIFF(now(),
-		trash_date)>=30)trash_list);
-	</delete>
 	
 	<select id="existEmail" resultType="boolean">
 		select count(*) from employee where company_email = #{email}
