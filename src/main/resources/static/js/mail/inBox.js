@@ -110,9 +110,9 @@ $(document).ready(function() {
 	        if (selectedMails.length > 0) {
 	            $.ajax({
 	                type: "POST",
-	                url: "/mail/perDeleteMail",
+	                url: "/mail/semiPerDeleteMail",
 	                data: { selectedMails: selectedMails }
-	            }).done(function () {
+	            }).done(function (resp) {
 	            	alert("선택한 메일이 완전삭제되었습니다.");
 	                location.reload();
 	            });

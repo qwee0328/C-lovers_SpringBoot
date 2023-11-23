@@ -14,8 +14,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -128,25 +130,45 @@ public class MailController {
 		return "/mail/send";
 	}
 
-	// 삭제 (휴지통)
+	// 리스트에서 삭제 (휴지통)
+	@ResponseBody
 	@RequestMapping("/deleteMail")
-	public String deleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+	public int deleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+		String loginEmail = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		
 		for (int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
 
-			mservice.deleteMail(id);
+			mservice.deleteMail(id, loginEmail);
 		}
-		return "redirect:/mail";
+		return 1;
 	}
 
-	// 완전삭제
+	// 리스트에서 완전삭제
+	@ResponseBody
 	@RequestMapping("/perDeleteMail")
-	public String perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) throws Exception {
+	public int perDeleteMail(@RequestParam("selectedMails[]") List<String> selectedMails) throws Exception {
+		String loginEmail = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		
 		for (int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
-			mservice.perDeleteMail(id);
+			mservice.semiPerDeleteMail(id, loginEmail);
+			
+			// 만약 발신자와 수신자 모두 완전삭제라면
+			boolean perDeleteBoth = mservice.perDeleteBoth(id);
+			if(perDeleteBoth) {
+				mservice.perDeleteMail(id);
+			}
 		}
-		return "redirect:/mail";
+		
+		return 1;
+	}
+	
+	// 발송 취소
+	@ResponseBody
+	@RequestMapping("/cancelSend")
+	public int cancelSend(@RequestParam("id") int id) throws Exception {
+		return mservice.perDeleteMail(id);
 	}
 
 	// 발송 시간 출력
@@ -327,13 +349,29 @@ public class MailController {
 	// 삭제
 	@RequestMapping("/read/delete")
 	public String deleteAtRead(@RequestParam int id) {
-		mservice.deleteMail(id);
+		String loginEmail = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		mservice.deleteMail(id, loginEmail);
+		return "redirect:/mail";
+	}
+	
+	// 발신자 또는 수신자가 완전삭제
+	@RequestMapping("/read/semiPerDelete")
+	public String semiPerDelete(int id) throws Exception {
+		String loginEmail = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		mservice.semiPerDeleteMail(id, loginEmail);
+		
+		// 만약 발신자와 수신자 모두 완전삭제라면
+		boolean perDeleteBoth = mservice.perDeleteBoth(id);
+		if(perDeleteBoth) {
+			mservice.perDeleteMail(id);
+		}
 		return "redirect:/mail";
 	}
 
-	// 완전삭제
+	// 발송 취소 & 발신자/수신자 모두 완전삭제
 	@RequestMapping("/read/perDelete")
 	public String perDeleteAtRead(@RequestParam int id) throws Exception {
+		String loginEmail = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 		mservice.perDeleteMail(id);
 		return "redirect:/mail";
 	}
@@ -395,14 +433,31 @@ public class MailController {
 
 		return send_id;
 	}
+	
+	// 존재하는 이메일인지
+	@ResponseBody
+	@RequestMapping("/existEmail")
+	public boolean existEmail(String email) {
+		return mservice.existEmail(email);
+	}
 
 	// 보내기 (메일 발송)
 	@RequestMapping("/submitSend")
 	public String submitSend(EmailDTO dto, String reserve_date, String sysName, MultipartFile[] uploadFiles,
 			String deleteUrl) throws Exception {
 		String[] receiveIds = dto.getReceive_id().split("\\s*[,;]\\s*"); // 정규식 \s*는 0개 이상의 공백을 말함
-		for (int i = 0; i < receiveIds.length; i++) {
-			dto.setReceive_id(receiveIds[i]);
+		
+		// 받는 사람 중복 방지
+		Set<String> idWithoutDupl = new HashSet<>();
+		for(String receiveId : receiveIds) {
+			idWithoutDupl.add(receiveId);
+		}
+		
+		for(String id : idWithoutDupl) {
+			dto.setReceive_id(id);
+		}
+		
+		for (int i = 0; i < idWithoutDupl.size(); i++) {
 
 			// 예약 메일이라면
 			if (!reserve_date.isEmpty() && dto.isTemporary() == false) {
@@ -520,9 +575,11 @@ public class MailController {
 	// 복원 (휴지통 -> 받은 메일함)
 	@RequestMapping("/restoreMail")
 	public String restoreMail(@RequestParam("selectedMails[]") List<String> selectedMails) {
+		String loginEmail = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+		
 		for (int i = 0; i < selectedMails.size(); i++) {
 			int id = Integer.parseInt(selectedMails.get(i));
-			mservice.restoreMail(id);
+			mservice.restoreMail(id, loginEmail);
 		}
 		return "redirect:/mail";
 	}
