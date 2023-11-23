@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.clovers.constants.Constants;
 import com.clovers.dto.AddressBookDTO;
 import com.clovers.dto.AddressBookTagDTO;
+import com.clovers.dto.EmailDTO;
 import com.clovers.services.AddressBookService;
+import com.clovers.services.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +30,9 @@ public class AddressBookController {
 	
 	@Autowired
 	private AddressBookService abservice;
+	
+	@Autowired
+	private MemberService mservice;
 	
 	// 주소록 메인 홈
 	@RequestMapping("")
@@ -59,17 +66,71 @@ public class AddressBookController {
 		session.setAttribute("currentMenu", currentMenu);
 		if(keyword != null)
 			keyword = "%"+keyword+"%";
-		return abservice.select((String)session.getAttribute("loginID"), key, value, keyword);
+		String loginID = (String)session.getAttribute("loginID");
+		List<String> authority = mservice.getAuthorityCategory(loginID);
+		for (int i = 0; i < authority.size(); i++) {
+			if (authority.get(i).equals("총괄")) {
+				return abservice.select(loginID, key, value, keyword, 1);
+			}
+		}
+		return abservice.select(loginID, key, value, keyword, 0);
 		// key : 전체 주소록을 검색할 것인지, 태그로 주소록을 검색할 것인지 (key 값이 is_shard일 경우 개인 전체/공유 전체이며, key 값이 id일 경우 태그로 검색함.)
 		// value : key 값에 대한 실제 값 (개인: personal, 공유: shared, id: id 값(기본키)
 		// keyword : 검색어
 	}
 	
+	// 페이지 네이션 추가
+//	@ResponseBody
+//	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
+//	public Map<String,Object> select(String key, int value, int currentMenu, String keyword, @RequestParam("cpage") String cpage) {
+//		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+//		session.setAttribute("currentMenu", currentMenu);
+//		if(keyword != null)
+//			keyword = "%"+keyword+"%";
+//		
+//		List<Map<String,Object>> addressList = abservice.select((String)session.getAttribute("loginID"), key, value, keyword,
+//														(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
+//														(currentPage * Constants.RECORD_COUNT_PER_PAGE));
+//		
+//		Map<String,Object> resp = new HashMap<>();
+//		resp.put("addressList", addressList);
+//		//resp.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
+//		resp.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+//		resp.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+//		resp.put("lastPageNum", currentPage);
+//		
+//		//return abservice.select((String)session.getAttribute("loginID"), key, value, keyword);
+//	}
+	
+//	// 받은 메일 리스트
+//	@ResponseBody
+//	@RequestMapping("/inBoxList")
+//	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
+//		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
+//
+//		// 로그인한 사용자의 이메일 가져오기
+//		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
+//
+//		List<EmailDTO> mail = mservice.inBoxList(receive_id,
+//				(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
+//				(currentPage * Constants.RECORD_COUNT_PER_PAGE));
+//
+//		Map<String, Object> param = new HashMap<>();
+//		param.put("mail", mail);
+//		param.put("send_date", send_date);
+//		param.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
+//		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+//		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+//		param.put("lastPageNum", currentPage);
+//
+//		return param;
+//	}
+	
 	// 주소 상세 보기
 	@ResponseBody
 	@RequestMapping("/selectById") // 주소록 상세 정보 불러오기 (상세보기 모달창 내용)
 	public Map<String,Object> selectById(int id) {
-		return abservice.selectById(id);
+		return abservice.selectById(id, (String)session.getAttribute("loginID"));
 	}
 	
 	// 주소 휴지통으로 이동
@@ -116,7 +177,7 @@ public class AddressBookController {
 	@ResponseBody
 	@RequestMapping("/copyAddress") // 주소 변경
 	public int copyAddress(int is_share, @RequestParam(value="ids[]")List<Integer> ids) {
-		return abservice.copyAddress(is_share, ids);
+		return abservice.copyAddress(is_share, ids, (String)session.getAttribute("loginID"));
 	}
 
 	

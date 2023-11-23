@@ -28,6 +28,7 @@
 			<div class="addBookModal__cancelBtnCover mr15">
 				<button class="addBookModal__cancelBtn">닫기</button>
 			</div>
+		
 			<div class="addBookModal__deleteBtnCover mr15">
 				<button class="addBookModal__deleteBtn" id="addBookModal__deleteBtn">삭제</button>
 			</div>

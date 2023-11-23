@@ -134,8 +134,8 @@ public class ScheduleController {
 	// 캘린더 정보 불러오기
 	@ResponseBody
 	@RequestMapping(value="/selectCalendarByEmpId")
-	public List<HashMap<String, Object>> selectCalendarByEmpId(){ // 로그인한 유저의 캘린더 정보 불러오기
-		return sService.selectCalendarByEmpId((String)session.getAttribute("loginID"));
+	public List<HashMap<String, Object>> selectCalendarByEmpId(int all){ // 로그인한 유저의 캘린더 정보 불러오기
+		return sService.selectCalendarByEmpId((String)session.getAttribute("loginID"), all);
 	}
 	
 	

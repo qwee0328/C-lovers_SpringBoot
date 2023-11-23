@@ -214,9 +214,27 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 					}else{
 						// 휴지통 안내 문구 상단에 추가
 						$(".body__emptyTrash").css("display","block");
+						$(addList__addessLine).attr("data-is_share",resp[i].is_share)
 					}
 					let addessLine__name = $("<div>").attr("class", "addessLine__name").text(resp[i].name);
 					let addessLine__email = $("<div>").attr("class", "addessLine__email").text(resp[i].email);
+					
+					// 이메일 눌러 메일 작성 페이지로 이동
+					// 사내 메일인지 판단
+					
+					if(resp[i].email !== undefined){
+						if(resp[i].email.slice(resp[i].email.length-12,resp[i].email.length)=="@clovers.com"){ 
+							$(addessLine__email).on("click", function(e){
+								if($(this).text() != ""){
+									e.stopPropagation(); // 상세보기 모달창 뜨지 않게 함. (기존 이벤트 중단)
+									location.href = "/mail/sendSetEmail?addressEmail="+$(this).text();	
+								}
+							})
+						}
+					}
+					
+					
+
 					let addessLine__phone = $("<div>").attr("class", "addessLine__phone").text(resp[i].number);
 					let addessLine__company = $("<div>").attr("class", "addessLine__company").text(resp[i].company_name);
 					let addessLine__tag = $("<div>").attr("class", "addessLine__tag d-flex");
@@ -370,12 +388,24 @@ $(document).ready(function() {
 			async: "false"
 		}).done(function(resp) { // 현재 선택한 태그 이름 가져와서 선택해주어야함
 			if (resp > 0) {
-				console.log("흐음");
 				$.modal.close();
 				reloadTags(function(){
 					indexSelect($("div[data-id='" + $("#abCurrentMenu").val() + "']"));	
 				});
-				$(".modalBody__tag").append($("<option>").val(resp).text($(".modalBody__tagName").val()));
+				let prevSelectTag = $(".selectedTag__delete").map((i,e)=>{
+					return parseInt($(e).attr("selectid"));
+				})
+				prevSelectTag.push(parseInt(resp)) // 새로 등록한 태그 추가
+
+				// changeTab($(".activeType").attr("id"));
+				// 여기$(".modalBody__tag").append($("<option>").val(resp).text($(".modalBody__tagName").val()));
+				changeTab($(".activeType").attr("id"),function(){
+					for(let i=0; i<prevSelectTag.length; i++){
+						console.log(prevSelectTag[i])
+						$("select[name='modalBody__tag']").val(prevSelectTag[i]).prop("selected",true);
+						tagSelect();
+					}
+				});
 			}
 		});
 	});
@@ -486,8 +516,21 @@ $(document).on("click", ".addessLine__chkBox", function(e) {
 			$(".addListHeader__selectInTrash").attr("style","display: flex !important");
 			$(".addListHeader__select").attr("style","display: none !important");	
 		}else{
-			$(".addListHeader__selectInTrash").attr("style","display: none !important");
-			$(".addListHeader__select").attr("style","display: flex !important");
+			$.ajax({
+				url: "/members/isAdmin",
+				async:"false"
+			}).done(function(resp) {
+				$(".addListHeader__selectInTrash").attr("style","display: none !important");
+				$(".addListHeader__select").attr("style","display: flex !important");
+				$(".addListHeader__trash").attr("style","display:none !important");
+				if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
+					for (let i = 0; i < resp.length; i++) {
+						if (resp[i] == "총괄") $(".addListHeader__trash").attr("style","display:flex !important");
+					}
+				}else{
+					$(".addListHeader__trash").attr("style","display:flex !important");
+				}
+			});
 			
 			if(currentMenu == -2){ // 중요 주소록
 				$(".addListHeader__copy").attr("style","display: none !important");
@@ -528,8 +571,23 @@ $(document).on("click", ".addListHeader__chkBox", function() {
 			$(".addListHeader__selectInTrash").attr("style","display: flex !important");
 			$(".addListHeader__select").attr("style","display: none !important");	
 		}else{
-			$(".addListHeader__selectInTrash").attr("style","display: none !important");
-			$(".addListHeader__select").attr("style","display: flex !important");
+			$.ajax({
+				url: "/members/isAdmin",
+				async:"false"
+			}).done(function(resp) {
+				$(".addListHeader__selectInTrash").attr("style","display: none !important");
+				$(".addListHeader__select").attr("style","display: flex !important");
+				$(".addListHeader__trash").attr("style","display:none !important");
+				if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
+					for (let i = 0; i < resp.length; i++) {
+						if (resp[i] == "총괄") $(".addListHeader__trash").attr("style","display:flex !important");
+					}
+				}else{
+					$(".addListHeader__trash").attr("style","display:flex !important");
+				}
+			});
+				
+			
 			
 			if(parseInt($("#abCurrentMenu").val()) == -2){ // 중요 주소록
 				$(".addListHeader__copy").attr("style","display: none !important");
@@ -553,23 +611,62 @@ $(document).on("click", ".addListHeader__chkBox", function() {
 
 
 
+
 // 주소 삭제 함수
 function deleteAddress(data){
-	let url
-	if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
-		 url="/addressbook/delete";
-	}else{ // 아니면 휴지통으로 이동
-		url="/addressbook/trash";
+	
+	if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
+		$.ajax({
+			url: "/members/isAdmin"
+		}).done(function(resp) {
+			
+			let flag = false;
+			for (let i = 0; i < resp.length; i++) {
+				if (resp[i] == "총괄") {
+					flag = true;
+					let url
+					if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
+						 url="/addressbook/delete";
+					}else{ // 아니면 휴지통으로 이동
+						url="/addressbook/trash";
+					}
+					
+					$.ajax({
+						url:url,
+						data:data,
+						type:"post"
+					}).done(function(){
+						$.modal.close();
+						indexSelect($(".activeMenu"));	
+					});
+				}
+			}
+			if(!flag){
+				Swal.fire({
+					icon: "error",
+					text: "공유 주소록 삭제 권한이 없습니다."
+				});
+			}
+
+		})
+	}else{
+		let url
+		if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
+			 url="/addressbook/delete";
+		}else{ // 아니면 휴지통으로 이동
+			url="/addressbook/trash";
+		}
+		
+		$.ajax({
+			url:url,
+			data:data,
+			type:"post"
+		}).done(function(){
+			$.modal.close();
+			indexSelect($(".activeMenu"));	
+		});
 	}
 	
-	$.ajax({
-		url:url,
-		data:data,
-		type:"post"
-	}).done(function(){
-		$.modal.close();
-		indexSelect($(".activeMenu"));	
-	});
 }
 
 // 정보창에서 삭제하기 클릭 (주소록 휴지통으로 이동)
@@ -606,9 +703,15 @@ $(document).on("click",".addListHeader__copy",function(){
 			is_share: is_share,
 			ids: ids
 		}
+	}).done(function(resp){
+		if(resp>0){		
+			Swal.fire({
+				icon: "info",
+				text: "주소가 복사되었습니다."
+			});
+			indexSelect($(".toggleInner[data-id='"+(is_share==1?-1:0)+"']"));
+		}
 	});
-	
-	
 });
 
 
@@ -624,7 +727,7 @@ $(document).on("click",".addList__addessLine ",function(){
 		$(".viewFavorite").removeClass("chk");
 		
 		for(let key in resp){
-			if(resp[key]!==""&&(key!="id"&&key!="is_share"&&key!="addressType"&&key!="birthType"&&key!="emp_id"&&key!="numberType"&&key!="name"&&key!="tag_names"&&key!="existFavorite"&&key!="trash")){
+			if(resp[key]!==""&&(key!="id"&&key!="is_share"&&key!="addressType"&&key!="birthType"&&key!="emp_id"&&key!="numberType"&&key!="name"&&key!="tag_names"&&key!="existFavorite"&&key!="trash"&&key!="is_emp")){
 				let modalBody__line = $("<div>").attr("class","modalBody__line d-flex");
 				let modalBody__title = $("<div>").attr("class","modalBody__title d-flex");
 				let modalBody__content = $("<div>").attr("class","modalBody__content modalView__content");
@@ -657,6 +760,8 @@ $(document).on("click",".addList__addessLine ",function(){
 			if(resp.existFavorite == resp.id){
 				$(".viewFavorite").addClass("chk");
 			}
+
+			
 		}
 		
 		if($("#abCurrentMenu").val()==-3){ // 휴지통이면
@@ -682,6 +787,32 @@ $(document).on("click",".addList__addessLine ",function(){
 		$("#addBookModal__updateBtn").attr("data-id",resp.id);
 		$("#addBookModal__restoreBtn").attr("data-id",resp.id);
 		$("#addBookModal__deleteBtn").attr("data-id",resp.id);	
+		
+		
+		
+		
+		$(".addBookModal__deleteBtn").css("display","block");
+		$(".addListHeader__trash").css("display","block");
+		$(".addListHeader__delete").css("display","block");
+		if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
+			$.ajax({
+				url: "/members/isAdmin",
+				async:false
+			}).done(function(resp) {
+				$(".addBookModal__deleteBtn").css("display","none");
+				$(".addListHeader__trash").css("display","none");
+				$(".addListHeader__delete").css("display","none");
+				for (let i = 0; i < resp.length; i++) {
+					// 총괄 권한	
+					if (resp[i] == "총괄") {
+						$(".addBookModal__deleteBtn").css("display","block");
+						$(".addListHeader__trash").css("display","block");
+						$(".addListHeader__delete").css("display","block");
+						
+					}	
+				}
+			})
+		}
 		
 		$(".addBookViewModal").modal({
 			showClose: false
@@ -805,15 +936,6 @@ $(document).on("keyup",".searchBar__input",function(){
 });
 
 
-// 이메일 눌러 메일 작성 페이지로 이동
-$(document).on("click",".addessLine__email",function(e){
-	if($(this).text() != ""){
-		e.stopPropagation(); // 상세보기 모달창 뜨지 않게 함. (기존 이벤트 중단)
-		location.href = "/mail/sendSetEmail?addressEmail="+$(this).text();	
-	}
-});
-
-
 // 휴지통에서 즉시 삭제 기능 
 $(document).on("click",".emptyTrash__emptyTrashBtn",function(){
 	Swal.fire({
@@ -838,3 +960,6 @@ $(document).on("click",".emptyTrash__emptyTrashBtn",function(){
 		}
 	});	
 });
+
+
+

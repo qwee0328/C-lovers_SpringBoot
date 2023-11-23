@@ -145,6 +145,9 @@ tr[role="presentation"] {
 .fc-day-today{
 	background-color: #75B47D20 !important;
 }
+.fc-popover.fc-more-popover.fc-day-today{
+	background-color: var(--fc-page-bg-color) !important;
+}
 
 
 .fc-col-header .fc-col-header-cell {

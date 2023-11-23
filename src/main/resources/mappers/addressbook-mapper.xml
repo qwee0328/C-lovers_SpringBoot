@@ -26,6 +26,7 @@
         <result property="tag_ids" column="tag_ids" />
         <result property="tag_names" column="tag_names" />
         <result property="existFavorite" column="existFavorite"/>
+        <result property="is_emp" column="is_emp"/>
 	</resultMap>
 	
 	<!-- 주소 관련 -->
@@ -43,6 +44,7 @@
 			);
 		</if>
 	</delete>
+	
 	
 	<select id="select" resultMap="addressBookAll">
 		 SELECT
@@ -62,23 +64,48 @@
 		    birth,
 		    memo,
 		    existFavorite,
+		    is_emp,
 		    GROUP_CONCAT(tag_id ORDER BY tag_id) AS tag_ids,
 		    GROUP_CONCAT(tag_name ORDER BY tag_id) AS tag_names
-		FROM address_book_all_including_tags
+		FROM (
+			select 
+				address_book_all_including_tags.*,
+		    	af.address_book_id as existFavorite,
+		    	af.emp_id as favorite_emp_id 
+		    from 	
+		    	address_book_all_including_tags  
+		   		LEFT JOIN address_favorite as af on id = af.address_book_id and #{emp_id} = af.emp_id
+		)temp
 		
-		WHERE
+		WHERE (favorite_emp_id = #{emp_id} or favorite_emp_id is null) and
 		<if test="key.equals('is_share')">
+		
+			<!-- 공유 -->
 			<if test="value == -1">
 				is_share = 1 and trash = 0
 			</if>
+			
+			<!-- 개인 -->
 			<if test="value == 0">
 				emp_id = #{emp_id} and is_share = #{value} and trash = 0
 			</if>
+			
+			<!-- 즐겨찾기 -->
 			<if test="value == -2">
 				existFavorite is not null and trash = 0
 			</if>
+			
+			<!-- 휴지통 -->
 			<if test="value == -3">
-				trash = 1
+				
+				<if test="auth==1">
+					(trash = 1 and is_share = 1) or (trash = 1 and emp_id = #{emp_id})
+				</if>
+				<!-- 총괄 X -->
+				<if test="auth == 0"> 
+					trash = 1 and emp_id = #{emp_id}
+				</if>
+				
 			</if>
 		</if>
 		<if test="key.equals('id')">
@@ -93,11 +120,46 @@
 	</select>
 	
 	<select id="selectById" resultMap="addressBookAll">
-		select * from address_book_select_including_tags where id= #{id}
+		<!-- select * from address_book_select_including_tags where id= #{id} -->
+		SELECT
+		    ab.id,
+		    ANY_VALUE(af.address_book_id) as existFavorite,
+		    ANY_VALUE(ab.name) AS name,
+		    ANY_VALUE(ab.is_share) AS is_share,
+		    ANY_VALUE(ab.emp_id) AS emp_id,
+		    ANY_VALUE(ab.email) AS email,
+		    ANY_VALUE(ab.numberType) AS numberType,
+		    ANY_VALUE(ab.number) AS number,
+		    ANY_VALUE(ab.company_name) AS company_name,
+		    ANY_VALUE(ab.dept_name) AS dept_name,
+		    ANY_VALUE(ab.job_name) AS job_name,
+		    ANY_VALUE(ab.addressType) AS addressType,
+		    ANY_VALUE(ab.address) AS address,
+		    ANY_VALUE(ab.birthType) AS birthType,
+		    ANY_VALUE(ab.birth) AS birth,
+		    ANY_VALUE(ab.memo) AS memo,
+		    ANY_VALUE(ab.trash) AS trash,
+		    ANY_VALUE(ab.is_emp) AS is_emp,
+		    GROUP_CONCAT(at.id ORDER BY at.id) AS tag_ids,
+		    GROUP_CONCAT(at.name ORDER BY at.id) AS tag_names
+		FROM
+		    address_book AS ab
+		LEFT JOIN
+		    address_book_tag_list AS abtl ON ab.id = abtl.address_book_id
+		LEFT JOIN
+		    address_book_tag AS at ON abtl.address_book_tag_id = at.id
+		LEFT JOIN
+		    address_favorite as af on ab.id = af.address_book_id and #{emp_id} = af.emp_id
+		where ab.id= #{id}
+		GROUP BY ab.id;
 	</select>
 	
+<!-- 	<select id="getAddressCount" resultType="int">
+		
+	</select> -->
+	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
-		insert into address_book( id, name, emp_id, is_share, trash		
+		insert into address_book( id, name, emp_id, is_share, trash, is_emp	
 			<if test="email != null">
 				,email
 			</if>
@@ -123,7 +185,7 @@
 				,memo
 			</if>
 		)
-		values( null, #{name}, #{emp_id}, #{is_share}, default
+		values( null, #{name}, #{emp_id}, #{is_share}, default, default
 			<if test="email != null">
 				,#{email}
 			</if>
@@ -154,13 +216,12 @@
 	<insert id="copyAddress">
 		insert into address_book
 		
-		select null, name, #{is_share}, emp_id, email, numberType, number, company_name, dept_name, job_name, addressType, address, birthType, birth, memo, trash, trash_date
+		select null, name, #{is_share}, #{id}, email, numberType, number, company_name, dept_name, job_name, addressType, address, birthType, birth, memo, trash, trash_date, is_emp
 		from address_book
 		where id in
 		<foreach collection="ids" item="id" open="(" separator="," close=")">
 			#{id}
 		</foreach>
-		
 	</insert>
 	
 	<update id="update">

@@ -26,8 +26,8 @@ public class AddressBookDAO {
 		return db.selectList("AddressBook.select",param);
 	}
 	
-	public Map<String,Object> selectById(int id) {
-		return db.selectOne("AddressBook.selectById",id);
+	public Map<String,Object> selectById(Map<String, Object> param) {
+		return db.selectOne("AddressBook.selectById",param);
 	}
 	
 	public int delete(Map<String,Object> param) {
@@ -47,10 +47,10 @@ public class AddressBookDAO {
 		return db.insert("AddressBook.copyAddress",param);
 	}
 	
-	
 	// 태그 관련
 	public int tagInsert(AddressBookTagDTO dto) {
-		return db.insert("AddressBook.tagInsert",dto);
+		db.insert("AddressBook.tagInsert",dto);
+		return dto.getId();
 	}
 	
 	public List<AddressBookTagDTO> tagSelect(String emp_id){

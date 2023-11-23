@@ -40,13 +40,15 @@ public class AddressBookService {
 	}
 	
 	// 주소 출력
-	public List<Map<String,Object>> select(String emp_id, String key, int value, String keyword) {
+	public List<Map<String,Object>> select(String emp_id, String key, int value, String keyword, int auth) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("emp_id", emp_id);
 		param.put("key", key);
 		param.put("value", value);
 		param.put("keyword", keyword);
+		param.put("auth", auth);
 		
+		System.out.println(auth);
 					
 		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
 			Map<String,Object> result = new HashMap<>();
@@ -61,8 +63,11 @@ public class AddressBookService {
 	}
 	
 	// 주소 상세보기 출력
-	public Map<String,Object> selectById(int id) {
-		return dao.selectById(id);
+	public Map<String,Object> selectById(int id, String emp_id) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("id",id);
+		param.put("emp_id", emp_id);
+		return dao.selectById(param);
 	}
 	
 	// 주소 휴지통으로 이동
@@ -94,10 +99,11 @@ public class AddressBookService {
 		
 	
 	// 주소 복사 (공유 <-> 개인)
-	public int copyAddress(int is_share, List<Integer> ids) {
+	public int copyAddress(int is_share, List<Integer> ids, String id) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("is_share", is_share);
 		param.put("ids", ids);
+		param.put("id", id);
 		return dao.copyAddress(param);
 	}
 	

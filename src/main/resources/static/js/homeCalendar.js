@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		$.ajax({
 			url:"/schedule/selectCalendarByEmpId",
+			data: {all:0},
 			async:false
 		}).done(function(resp){
 			$(".calendarModal__calNameList *").remove();
@@ -123,6 +124,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				text: '+',
 				click: function() {
 					modalInitail();
+					// 오늘 날짜
+					let currentDate = new Date();
+					currentDate.setHours(currentDate.getHours()+9);
+					$(".insertSchedule__startDate").val(currentDate.toISOString().slice(0,10)); 
+					
+					// 종료 일자를 오늘 날짜로 설정
+					$(".insertSchedule__endDate").val(currentDate.toISOString().slice(0,10));		
 					$(".scheduleInsertModal").modal({
 						showClose: false
 					});
@@ -247,6 +255,14 @@ document.addEventListener('DOMContentLoaded', function() {
 				text: "일정 시작일보다 일정 종료일이 앞설 수 없습니다."
 			});
 			$(".insertSchedule__endDate").val($(".insertSchedule__startDate").val());
+			return false;
+		}
+		if($(".insertSchedule__startDate").val() >= $(".insertSchedule__endDate").val()  &&  $(".insertSchedule__startTime").val() > $(".insertSchedule__endTime").val()){
+			Swal.fire({
+				icon: "error",
+				text: "일정 시작일보다 일정 종료일이 앞설 수 없습니다."
+			});
+			$(".insertSchedule__endTime").val($(".insertSchedule__startTime").val());
 			return false;
 		}
 		

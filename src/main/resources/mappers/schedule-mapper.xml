@@ -82,8 +82,12 @@
 		select recurring_id from schedule where id=#{id};
 	</select>
 	
+	<!-- 권한 있는 캘린더 가져오기 -->
 	<select id="selectCalendarByEmpId" resultMap="calendarInfo">
-		select id, color, name, is_share,trash from calendar_all where emp_id=#{emp_id};
+		select id, color, name, is_share,trash from calendar_all where emp_id=#{emp_id} 
+		<if test ="all == 0" >
+			and trash = 0
+		</if>;
 	</select>
 	
 	<update id="scheduleUpdate">
