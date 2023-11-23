@@ -80,6 +80,7 @@
 
 // 		이메일 regex
 		let emailRegex = /^[a-zA-Z0-9\_]+@[a-z]+\.[a-z]{2,3}$/;
+		
 		$("#email").keyup(function(e){
 			console.log($("#email").val());
 			result = emailRegex.test($("#email").val());
@@ -93,9 +94,14 @@
 		});
 		
 // 		비밀번호 regex
-		let pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,16}$/;
+		let pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,30}$/;
+		let result;
+		
 		$("#pw").keyup(function(){
 			console.log($("#pw").val());
+			
+			console.log("pw_re : "+$("#pw_re").val());
+			
 			result = pwRegex.test($("#pw").val());
 			console.log(result);
 			
@@ -187,13 +193,21 @@
 				alert("이메일 인증을 해주세요");
 				return;
 			}
-			
-			if($("#pw").val() != $("#pw_re").val()){
-				alert("비밀번호가 일치하지 않습니다");
-				return;
+
+			if(result){
+				$(".changePwBtn").attr("type","submit");
+			}else{
+				
+				if($("#pw").val() != $("#pw_re").val()){
+					alert("비밀번호가 일치하지 않습니다");
+					return;
+				}
+				
 			}
 			
-			$(".changePwBtn").attr("type","submit");
+			
+			
+			
 		});
 		
 		
