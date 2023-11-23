@@ -4,13 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>진행 중인 문서 진행</title>
+<title>진행 중인 문서 예정</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <!-- css, js -->
-<link rel="stylesheet" href="/css/electronicsignature/progress.css">
-<script src="/js/electronicsignature/progress.js"></script>
+<link rel="stylesheet" href="/css/electronicsignature/progressExpected.css">
+<script src="/js/electronicsignature/progressExpected.js"></script>
 </head>
 <body>
 	<%@ include file="../commons/header.jsp" %>

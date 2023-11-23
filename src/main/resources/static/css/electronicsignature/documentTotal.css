@@ -98,11 +98,20 @@ body {
 }
 
 .bottom__pageNavi > div {
+	display: flex;
+    justify-content: center;
+    align-items: center;
 	margin: 0px 5px;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	border-radius: 50%;
+	border: 1px solid #7d7d7d40;
 }
 
-.bottom__pageNavi > div:hover {
+.bottom__pageNavi > div:not(.pageNavi__circle):hover {
 	cursor: pointer;
+	background-color: #f3f7f1;
 }
 
 .pageNavi__item {
@@ -112,10 +121,13 @@ body {
 }
 
 .pageNavi__circle {
-	width: 25px;
-	height: 25px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
 	color: #ffffff;
 	background-color: #75B47D;
 	text-align: center;
+}
+.pageNavi__circle:hover{
+	cursor: pointer;
 }

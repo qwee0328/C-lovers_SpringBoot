@@ -38,7 +38,7 @@ $(document).ready(function() {
 			
 			let dueDateDiv = $("<div>");
 			dueDateDiv.addClass("documentTable__dueDate");
-			dueDateDiv.html("");
+			dueDateDiv.html(resp[i].approval_date);
 			
 			let categoryDiv = $("<div>");
 			categoryDiv.addClass("documentTable__documentCategory");

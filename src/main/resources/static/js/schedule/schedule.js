@@ -1,4 +1,13 @@
 let eventsLoaded = 0;
+$(document).ready(function() {
+	// 회사 이름 불러오기
+	$.ajax({
+		url: "/office/selectOfficeName"
+	}).done(function(data) {
+		// user 이름 불러오기
+		$(".officeName").html(data)
+	})
+})
 
 // 일정 등록 모달창 초기화 함수
 function modalInitail(type,datas) {

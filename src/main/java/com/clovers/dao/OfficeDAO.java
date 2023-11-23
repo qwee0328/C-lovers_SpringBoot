@@ -53,6 +53,11 @@ public class OfficeDAO {
 		return db.selectList("Office.selectUserList");
 	}
 
+	// 사용자 수 불러오기
+	public int selectUserCount() {
+		return db.selectOne("Office.selectUserCount");
+	}
+
 	// 오피스 정보 가져오기
 	public OfficeDTO selectOfficeInfo() {
 		return db.selectOne("Office.selectOfficeInfo");
@@ -96,6 +101,11 @@ public class OfficeDAO {
 	// 오피스 이름 수정하기
 	public int updateOfficeName(OfficeDTO dto) {
 		return db.update("Office.updateOfficeName", dto);
+	}
+
+	// 오피스 이메일 수정하기
+	public int updateOfficeEmail(OfficeDTO dto) {
+		return db.update("Office.updateOfficeEmail", dto);
 	}
 
 	// 사용자 소속 조직 수정하기
@@ -163,5 +173,20 @@ public class OfficeDAO {
 	// 사용자의 jobID 가져오기
 	public String searchByJobID(String id) {
 		return db.selectOne("Office.searchByJobID", id);
+	}
+	
+	// 처음 입사 시 15일 연차 지급
+	public void insertFirstAnnaul(String id) {
+		db.insert("Office.insertFirstAnnaul", id);
+	}
+	
+	// 공유 주소록에 사용자 정보를 추가하기 
+	public int insertAddressBook(String id) {
+		return db.insert("Office.insertAddressBook", id);
+	}
+	
+	// 회사 이름 불러오기
+	public String selectOfficeName() {
+		return db.selectOne("Office.selectOfficeName");
 	}
 }

@@ -109,6 +109,20 @@ public class AddressBookDAO {
 		return db.delete("AddressBook.immediatelyEmpty",emp_id);
 	}
 	
+
+	// numberType 가져오기
+	public String isNumberType(String id) {
+		return db.selectOne("AddressBook.isNumberType",id);
+	}
 	
+	// humanResource ~ 주소록에 사내 이메일과 휴대폰 업데이트
+	public int updateCompanyEmailPhone(Map<String,String> param) {
+		return db.update("AddressBook.updateCompanyEmailPhone", param);
+	}
+	
+	// 주소록에 있는 오피스 네임 업데이트
+	public void updateOfficeName(String name) {
+		db.update("AddressBook.updateOfficeName",name);
+	}
 
 }
