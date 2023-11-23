@@ -556,7 +556,6 @@ public class ElectronicSignatureController {
 	@ResponseBody
 	@RequestMapping("/fileList")
 	public List<DocumentFileDTO> fileList(@RequestParam("document_id") String document_id){
-		System.out.println("doumId"+document_id);
 		List<DocumentFileDTO> fileList = new ArrayList<>();
 		boolean result = esservices.selectFileByDocumentId(document_id);
 		if(result) {
