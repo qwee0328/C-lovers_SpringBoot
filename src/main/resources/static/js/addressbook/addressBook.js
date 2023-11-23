@@ -1160,6 +1160,8 @@ $(document).on("keyup",".searchBar__input",function(){
 		authorityOrTagId = "shared";
 	}else if(tagId == -2){
 		authorityOrTagId = "favorite";
+	}else if(tagId == -3){
+		authorityOrTagId = "trash";
 	}else if(tagId > 0){
 		authorityOrTagId = tagId;
 	}
