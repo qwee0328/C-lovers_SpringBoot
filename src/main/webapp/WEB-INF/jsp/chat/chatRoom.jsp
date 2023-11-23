@@ -494,6 +494,7 @@
                     data: JSON.stringify({ chatRoomId: chatRoomId }),
                     success: function(response) {
                         alert('채팅방에서 나갔습니다.');
+                        opener.location.reload();
                         window.close();
                     },
                     error: function(error) {
