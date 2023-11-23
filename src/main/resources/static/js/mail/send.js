@@ -173,6 +173,7 @@ function uploadImage(files) {
     	success: function(data) {
 			for (let i = 0; i < data.length; i++) {
 				let img = $("<img>");
+				img.css('width', '100%');
 				img.attr("src", data[i]);
 				$("#summernote").summernote("insertNode", img[0]);
 			}

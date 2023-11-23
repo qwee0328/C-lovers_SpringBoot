@@ -17,16 +17,35 @@ body {
 }
 
 .container__send {
-	padding: 30px;
+	padding: 0px 30px 30px;
 	flex: 1;
 	overflow-y: auto;
 	height: calc(100vh - 60px);
+	min-width: 1100px;
+}
+
+.container__send::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.container__send::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d60;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+
+.container__send::-webkit-scrollbar-track {
+  background-color: transparent; /* 스크롤바 뒷 배경을 투명 처리한다 */
 }
 
 .send__btns {
 	display: flex;
+	position: fixed;
+	width: 100%;
 	align-items: center;
-	margin-bottom: 13px;
+	padding: 30px 0px 13px;
+	background-color: white;
 }
 
 .send__btns > * {
