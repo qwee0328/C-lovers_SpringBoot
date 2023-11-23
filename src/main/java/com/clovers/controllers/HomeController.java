@@ -28,7 +28,7 @@ public class HomeController {
 		session.setAttribute("title", title);
 		System.out.println("loginID : "+(String)session.getAttribute("loginID"));
 		Map<String, Object> userWorkRule = hrservice.selectEmployeeWorkRule((String)session.getAttribute("loginID"));
-		System.out.println(userWorkRule.toString());
+
 		session.setAttribute("daily_work_rule_id", userWorkRule.get("daily_work_rule_id"));
 		session.setAttribute("attend_time", userWorkRule.get("attend_time"));
 		session.removeAttribute("currentMenu");

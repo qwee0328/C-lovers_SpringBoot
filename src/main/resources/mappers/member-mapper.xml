@@ -33,6 +33,10 @@
 		select authority_category_id from admin where emp_id = #{id} order by authority_category_id asc;
 	</select>
 	
+	<select id="getAuthorityInfo" resultType="com.clovers.dto.AdminDTO">
+		select * from admin where emp_id=#{id}
+	</select>
+	
 	<!-- // 모든 사용자의 id랑 입사일 불러오기 -->
 	<select id="selectUserList" resultType="com.clovers.dto.MemberDTO">
 		select id, hire_date from employee;

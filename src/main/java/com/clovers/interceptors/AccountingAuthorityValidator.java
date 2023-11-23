@@ -34,15 +34,16 @@ public class AccountingAuthorityValidator implements HandlerInterceptor {
 		for (String per : permission) {
 			System.out.println("회계 있?" + per);
 			if (per.equals("회계")) {
-				return true;
+				result= true;
 			} else if (per.equals("총괄")) {
+				result= true;
 				full = true;
 			} else if (per.equals("인사")) {
 				humanResource = true;
 			}
 		}
 		System.out.println(full + " " + humanResource);
-		if (!full || !humanResource) {
+		if (!full) {
 			System.out.println("메인으로 돌아가");
 			response.sendRedirect("/");
 		}

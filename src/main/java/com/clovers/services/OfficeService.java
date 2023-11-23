@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.commons.EncryptionUtils;
 import com.clovers.dao.AddressBookDAO;
+import com.clovers.dao.MemberDAO;
 import com.clovers.dao.OfficeDAO;
+import com.clovers.dto.AdminDTO;
 import com.clovers.dto.DeptTaskDTO;
 import com.clovers.dto.JobDTO;
 import com.clovers.dto.MemberDTO;
@@ -26,6 +28,9 @@ public class OfficeService {
 	
 	@Autowired
 	private AddressBookDAO adao;
+	
+	@Autowired
+	private MemberDAO mdao;
 
 	// 부서 명 불러오기
 	public List<DeptTaskDTO> selectDeptTaskAll() {
@@ -115,7 +120,7 @@ public class OfficeService {
 			if(taskName.contains("인사")) {
 				dao.insertHRAdmin(id);
 			}
-			if(taskName.contains("회계")) {
+			if(taskName.contains("회계")||taskName.contains("총무")) {
 				dao.insertACAdmin(id);
 			}
 		}
@@ -147,9 +152,39 @@ public class OfficeService {
 	}
 
 	// 사용자 직위 수정하기
+	@Transactional
 	public void updateUserJob(List<MemberDTO> dtoList) {
 		for (MemberDTO dto : dtoList) {
 			dao.updateUserJob(dto);
+			List<AdminDTO> authority = mdao.getAuthorityInfo(dto.getId());
+			String jobName = dao.selectJobName(dto.getJob_id());
+			// 내가 바꾸고 싶은 직급이 고위직인데
+			if(jobName.equals("대표이사") || jobName.equals("사장")||jobName.equals("상무")||jobName.equals("이사")) {
+				boolean flag = false;
+				for(AdminDTO info : authority) {
+					System.out.println(info.getAuthority_category_id().getClass());
+					System.out.println(AdminDTO.AuthorityCategories.총괄.getClass());
+					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.총괄) {
+						flag=true; // 기존에 고위직이였다면
+					}
+				}
+				// 고위직이 아니였을 경우에만 총괄 등록
+				if(!flag) {
+					dao.insertTotalAdmin(dto.getId());
+				}
+
+			}else {// 내가 바꾸고 싶은 직급이 고위직이 아닌데
+				boolean flag=false;
+				for(AdminDTO info : authority) {
+					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.총괄) {
+						flag=true; // 기존에 고위직이였다면
+					}
+				}
+				//기존 총괄 권한 삭제
+				if(flag) {
+					dao.deleteTotalAdmin(dto.getId());
+				}
+			}
 		}
 	}
 
@@ -157,6 +192,59 @@ public class OfficeService {
 	public void updateUserDeptTask(List<MemberDTO> dtoList) {
 		for (MemberDTO dto : dtoList) {
 			dao.updateUserDeptTask(dto);
+			List<AdminDTO> authority = mdao.getAuthorityInfo(dto.getId());
+			String taskName = dao.selectDeptTaskName(dto.getDept_task_id());
+			
+			// 내가 바꾸고 싶은 팀 이름에 인사가 포함된다면
+			if(taskName.contains("인사")) {
+				boolean flag = false;
+				// 내가 바꾸고 싶은 task가 인사팀인데
+				for(AdminDTO info:authority) {
+					// 기존에 인사팀이라면
+					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.인사) {
+						flag=true;
+					}
+				}
+				// 결국 인사팀이 아니였다면
+				if(!flag) {
+					dao.insertHRAdmin(dto.getId());
+				}
+			}else {// 만약에 내가 바꾸고 싶은 팀이 인사팀이 아닌데
+				boolean flag = false;
+				for(AdminDTO info:authority) {
+					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.인사) {
+						flag=true; // 기존에 인사팀이였다면
+					}
+				}
+				// 기존에 인사팀이면 인사권한 삭제
+				if(flag) {
+					dao.deleteHRAdmin(dto.getId());
+				}
+			}
+			// 내가 바꾸고 싶은 팀 이름에 회계가 포함된다면
+			if(taskName.contains("회계")||taskName.contains("총무")) {
+				boolean flag = false;
+				for(AdminDTO info:authority) {
+					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.회계) {
+						flag=true; // 기존에 회계 관련 팀이라면
+					}
+				}
+				// 회계팀이 아니였다면
+				if(!flag) {
+					dao.insertACAdmin(dto.getId());
+				}
+			}else {// 만약 내가 바꾸고 싶은 팀이 회계 관련 팀이 아닌데
+				boolean flag = false;
+				for(AdminDTO info:authority) {
+					if(info.getAuthority_category_id()==AdminDTO.AuthorityCategories.회계) {
+						flag=true; // 기존에 회계팀이였다면
+					}
+				}
+				// 기존에 회계팀 권한 삭제
+				if(flag) {
+					dao.deleteACAdmin(dto.getId());
+				}
+			}
 		}
 	}
 
