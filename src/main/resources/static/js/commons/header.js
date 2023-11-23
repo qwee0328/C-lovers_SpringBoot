@@ -58,7 +58,7 @@ $(document).ready(function() {
 	
 	// 채팅으로 이동
 	$("#goChat").on("click",function(){
-		let option ="height=700, width=400";
+		let option ="height=720, width=400";
         let openUrl = "/chat/goMain";
         window.open(openUrl,"chatMain",option);
 	})

@@ -44,12 +44,23 @@
 		#{chat_room_id}
 	</select>
 
-	<select id="selectChatMessagesListByChatRoomNEmpId" resultMap="chatMessageResultMap">
+	<select id="getChatRoomIdBySearch" resultMap="chatMessageMap">
+		SELECT
+		DISTINCT(chat_room_id)
+		FROM chat_message_view
+		WHERE emp_name LIKE CONCAT('%', #{search}, '%')
+		OR content LIKE CONCAT('%', #{search}, '%');
+	</select>
+
+	<select id="selectChatMessagesListByChatRoomNEmpId"
+		resultMap="chatMessageResultMap">
 		SELECT *
 		FROM chat_room_view
-		WHERE chat_room_id = #{chat_room_id}
+		WHERE chat_room_id =
+		#{chat_room_id}
 		AND id >
-		(SELECT msg_start_id FROM chat_group WHERE emp_id = #{emp_id} AND
+		(SELECT msg_start_id FROM chat_group WHERE
+		emp_id = #{emp_id} AND
 		chat_room_id = #{chat_room_id})
 	</select>
 
