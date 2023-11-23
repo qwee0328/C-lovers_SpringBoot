@@ -124,7 +124,7 @@ function isDateAfterNow(dateString) {
 }
 
 // 필수 입력값들이 존재하는지
-function validateForm() {
+function validateForm() {	
 	// 받는 사람을 입력하지 않았을 경우
 	if($("#receive_id").val() == "") {
 		alert("받는 사람은 필수 입력 항목입니다.");
@@ -136,6 +136,24 @@ function validateForm() {
 		alert("제목은 필수 입력 항목입니다.");
 		return false;
 	}
+	
+	// 받는 사람의 이메일이 존재하는지
+	let email = $("#receive_id").val();
+	let isValidEmail = false;
+	$.ajax({
+		url: "/mail/existEmail",
+		data: { email : email },
+		async: false,
+	}).done(function(resp){
+		// 존재하지 않는다면
+		if(resp == false) {
+			alert("존재하지 않는 이메일입니다. 이메일을 다시 확인해주세요.");
+			$("#receive_id").focus();
+		} else {
+			isValidEmail = true;
+		}
+	})
+	return isValidEmail;
 }
 
 // 이미지에 realpath 경로 부여하고 summernote에 출력
@@ -155,6 +173,7 @@ function uploadImage(files) {
     	success: function(data) {
 			for (let i = 0; i < data.length; i++) {
 				let img = $("<img>");
+				img.css('width', '100%');
 				img.attr("src", data[i]);
 				$("#summernote").summernote("insertNode", img[0]);
 			}
