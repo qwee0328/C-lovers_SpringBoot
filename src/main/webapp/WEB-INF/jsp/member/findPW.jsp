@@ -105,10 +105,25 @@
 			result = pwRegex.test($("#pw").val());
 			console.log(result);
 			
+			
+			
+			// regex 틀림
 			if(!result){
-				$(".findPwBox__pwChk").html("비밀번호의 형식이 올바르지 않습니다.").css({"font-size":"12px","color":"red"});
+				if($("#pw").val()==""){
+					$(".findPwBox__pwChk").html("");
+				}else{
+					$(".findPwBox__pwChk").html("비밀번호의 형식이 올바르지 않습니다.").css({"font-size":"12px","color":"red"});
+					
+				}
+				
+				
 			}
+			// regex 맞음
 			if(result){
+				if($("#pw").val()==""){
+					$(".findPwBox__pwEq").html("");
+				}
+				
 				$(".findPwBox__pwChk").html("");
 //		 		비밀번호와 비밀번호 확인이 일치하는지 확인
 				$("#pw_re").keyup(function(){
