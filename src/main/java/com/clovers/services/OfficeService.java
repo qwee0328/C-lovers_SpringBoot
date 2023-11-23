@@ -53,6 +53,12 @@ public class OfficeService {
 	public List<Map<String, String>> selectUserList() {
 		return dao.selectUserList();
 	}
+	
+	// 전체 사용자 수 불러오기
+	// 사용자 수 불러오기
+	public int selectUserCount() {
+		return dao.selectUserCount();
+	}
 
 	// 사내 전화번호 사용중인번호인지 체크
 	public int usingCompanyPhoneCheck(String companyPhone) {
@@ -125,6 +131,11 @@ public class OfficeService {
 	// 오피스 이름 수정
 	public void updateOfficeName(OfficeDTO dto) {
 		dao.updateOfficeName(dto);
+	}
+	
+	// 오피스 이메일 수정
+	public void updateOfficeEmail(OfficeDTO dto) {
+		dao.updateOfficeEmail(dto);
 	}
 
 	// 사용자 직위 수정하기

@@ -6,8 +6,8 @@
 
 	<!-- 새로운 상위 부서 만들기 -->
 	<insert id="insert">
-		insert into department (id, dept_name) values (#{id},
-		#{dept_name})
+		insert into department (id, dept_name, office_id) values (#{id},
+		#{dept_name}, "OFC1001");
 	</insert>
 
 	<!-- 상위 부서 정보 불러오기 -->
