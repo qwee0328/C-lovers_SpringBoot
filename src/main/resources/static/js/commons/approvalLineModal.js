@@ -20,6 +20,14 @@ $(document).ready(function() {
 		window.userID = resp[0].id;
 		$(".application span").text(applicationUserID.length);
 	})
+	
+	// 회사 이름 불러오기
+	$.ajax({
+		url: "/office/selectOfficeName"
+	}).done(function(data) {
+		$(".department__title").html(data);
+		$("#officeName").html(data);
+	})
 
 	// 모달창 시작할 때 인원수 정보 불러오기 -> 맨 왼쪽 부서
 	// 회사 총 인원 수

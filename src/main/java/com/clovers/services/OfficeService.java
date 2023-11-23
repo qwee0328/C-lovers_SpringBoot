@@ -1,7 +1,6 @@
 package com.clovers.services;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.commons.EncryptionUtils;
+import com.clovers.dao.AddressBookDAO;
 import com.clovers.dao.OfficeDAO;
 import com.clovers.dto.DeptTaskDTO;
 import com.clovers.dto.JobDTO;
@@ -23,6 +23,9 @@ public class OfficeService {
 	// 오피스 관리 서비스 레이어
 	@Autowired
 	private OfficeDAO dao;
+	
+	@Autowired
+	private AddressBookDAO adao;
 
 	// 부서 명 불러오기
 	public List<DeptTaskDTO> selectDeptTaskAll() {
@@ -91,7 +94,7 @@ public class OfficeService {
 		System.out.println(dto.getHire_date());
 
 		// 사내 이메일은 id랑 똑같이 저장
-		dto.setCompany_email(dto.getId());
+		dto.setCompany_email(dto.getId()+"@clovers.com");
 		
 		// 생일 값을 입력하지 않으면 기본값입력
 		if(dto.getBirth()==null) {
@@ -120,7 +123,10 @@ public class OfficeService {
 		// 처음 입사 시 15일 연차 지급
 		dao.insertFirstAnnaul(dto.getId());
 
-		return dao.insertUser(dto);
+		dao.insertUser(dto);
+		
+		// 공유 주소록에 사용자 정보를 추가하기 위한 내용
+		return dao.insertAddressBook(dto.getId());
 	}
 
 	// 사용자 삭제하기
@@ -129,8 +135,10 @@ public class OfficeService {
 	}
 
 	// 오피스 이름 수정
+	@Transactional
 	public void updateOfficeName(OfficeDTO dto) {
 		dao.updateOfficeName(dto);
+		adao.updateOfficeName(dto.getOffice_name());
 	}
 	
 	// 오피스 이메일 수정
@@ -205,5 +213,10 @@ public class OfficeService {
 	// 임직원 검색
 	public List<Map<String, Object>> searchByName(String name){
 		return dao.searchByName(name);
+	}
+	
+	// 회사이름 불러오기
+	public String selectOfficeName() {
+		return dao.selectOfficeName();
 	}
 }

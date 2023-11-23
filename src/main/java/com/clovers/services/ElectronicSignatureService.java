@@ -323,14 +323,14 @@ public class ElectronicSignatureService {
 		return dao.progressCheckList(param);
 	}
 
-	// 진행 중인 문서 진행 리스트 출력
-	public List<Map<String, Object>> progressList(String loginID, List<String> keyword, int start, int end) {
+	// 진행 중인 문서 예정 리스트 출력
+	public List<Map<String, Object>> progressExpectedList(String loginID, List<String> keyword, int start, int end) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("loginID", loginID);
 		param.put("keyword", keyword);
 		param.put("start", start);
 		param.put("end", end);
-		return dao.progressList(param);
+		return dao.progressExpectedList(param);
 	}
 
 	// 문서함 전체 리스트 출력
@@ -448,6 +448,14 @@ public class ElectronicSignatureService {
 	public boolean existRejection(String document_id) {
 		return dao.existRejection(document_id);
 	}
+	
+	// 이미 결재 내역이 존재하는지
+	public boolean existMyApproval(String loginID, String document_id) {
+		Map<String, String> param = new HashMap<>();
+		param.put("loginID", loginID);
+		param.put("document_id", document_id);
+		return dao.existMyApproval(param);
+	}
 
 	// 결재 결과 저장
 	public int submitApproval(String loginID, String document_id, String approval) {
@@ -474,5 +482,15 @@ public class ElectronicSignatureService {
 	// 문서 삭제
 	public int deleteApproval(String document_id) {
 		return dao.deleteApproval(document_id);
+	}
+	
+	// 문서에 파일이 있는지 확인
+	public boolean selectFileByDocumentId(String id) {
+		return dao.selectFileByDocumentId(id);
+	}
+	
+	// 문서에 파일 리스트 반환
+	public List<DocumentFileDTO> selectAllFileById(String id){
+		return dao.selectAllFileById(id);
 	}
 }

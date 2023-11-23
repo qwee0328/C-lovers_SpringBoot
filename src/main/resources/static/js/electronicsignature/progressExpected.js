@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	// 진행 리스트 출력
 	$.ajax({
-		url: "/electronicsignature/progressList?cpage="
+		url: "/electronicsignature/progressExpectedList?cpage="
 	}).done(function(resp){
 		documentList(resp.list);
 		pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
@@ -83,7 +83,7 @@ $(document).ready(function() {
 			let pagination = $(".bottom__pageNavi");
 			if (startNavi != 1) {
 				let divTag = $("<div>");
-				divTag.attr("href", "/electronicsignature/progressList?cpage=1");
+				divTag.attr("href", "/electronicsignature/progressExpectedList?cpage=1");
 				let iTag = $("<i>");
 				iTag.addClass("fa-solid fa-angles-left");
 				divTag.append(iTag);
@@ -92,7 +92,7 @@ $(document).ready(function() {
 	
 			if (needPrev) {
 				let divTag = $("<div>");
-				divTag.attr("href", "/electronicsignature/progressList?cpage=" + (startNavi - 1));
+				divTag.attr("href", "/electronicsignature/progressExpectedList?cpage=" + (startNavi - 1));
 				let iTag = $("<i>");
 				iTag.addClass("fa-solid fa-chevron-left");
 				divTag.append(iTag);
@@ -103,7 +103,7 @@ $(document).ready(function() {
 				let divTag = $("<div>");
 				divTag.addClass("pageNavi__item");
 				divTag.text(i);
-				divTag.attr("href", "/electronicsignature/progressList?cpage=" + i);
+				divTag.attr("href", "/electronicsignature/progressExpectedList?cpage=" + i);
 				if (i == currentPage) {
 					divTag.addClass("pageNavi__circle");
 				}
@@ -112,7 +112,7 @@ $(document).ready(function() {
 	
 			if (needNext) {
 				let divTag = $("<div>");
-				divTag.attr("href", "/electronicsignature/progressList?cpage=" + (endNavi + 1));
+				divTag.attr("href", "/electronicsignature/progressExpectedList?cpage=" + (endNavi + 1));
 				let iTag = $("<i>");
 				iTag.addClass("fa-solid fa-chevron-right");
 				divTag.append(iTag);
@@ -121,7 +121,7 @@ $(document).ready(function() {
 	
 			if (endNavi != pageTotalCount) {
 				let divTag = $("<div>");
-				divTag.attr("href", "/electronicsignature/progressList?cpage="+pageTotalCount);
+				divTag.attr("href", "/electronicsignature/progressExpectedList?cpage="+pageTotalCount);
 				let iTag = $("<i>");
 				iTag.addClass("fa-solid fa-angles-right");
 				divTag.append(iTag);

@@ -122,13 +122,14 @@
 		update office set office_name = #{office_name} where
 		id = "OFC1001";
 	</update>
-	
+
 	<!-- 오피스 이메일 수정하기 -->
 	<update id="updateOfficeEmail">
-		update office set office_email = #{office_email} where
+		update office set office_email = #{office_email}
+		where
 		id = "OFC1001";
 	</update>
-	
+
 	<!-- // 사용자 직위 수정하기 -->
 	<update id="updateUserJob">
 		update employee set job_id=#{job_id} where id =#{id};
@@ -225,9 +226,26 @@
 		select job_id from
 		employee where id = #{id};
 	</select>
-	
+
 	<!-- // 처음 입사 시 15일 연차 지급 -->
 	<insert id="insertFirstAnnaul">
-		insert into annaul_rest (emp_id, rest_type_id, rest_cnt, reg_date) value (#{id}, "연차", 15, convert_tz(now(),'+00:00', '+09:00'))
+		insert into annaul_rest (emp_id, rest_type_id,
+		rest_cnt, reg_date) value (#{id}, "연차", 15, convert_tz(now(),'+00:00',
+		'+09:00'))
 	</insert>
+
+	<!-- 공유 주소록에 사용자 정보 추가하기 -->
+	<insert id="insertAddressBook">
+		insert into address_book
+		select null, name, 1, id, email, "휴대폰", number, company_name,
+		dept_name,job_name, "회사", null, "양력", birth, null, 0, null, 1
+		from emp_address_info
+		where id = #{id};
+	</insert>
+
+	<!-- // 회사 이름 불러오기 -->
+	<select id="selectOfficeName" resultType="String">
+		select office_name from
+		office limit 1;
+	</select>
 </mapper>

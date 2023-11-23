@@ -20,6 +20,7 @@ import com.clovers.constants.Constants;
 import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 import com.clovers.dto.WorkConditionDTO;
+import com.clovers.services.AddressBookService;
 import com.clovers.services.HumanResourcesService;
 
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +35,9 @@ public class HumanResourcesController {
 
 	@Autowired
 	private HumanResourcesService hrservice;
+	
+	@Autowired
+	private AddressBookService adservice;
 
 	@RequestMapping("")
 	public String main() {
@@ -53,10 +57,8 @@ public class HumanResourcesController {
 		
 		String id = (String) session.getAttribute("loginID");
 
-//		String name = hrService.selectByIdGetName(id);
-//		model.addAttribute("name", name);
-
 		MemberDTO list = hrservice.selectById(id);
+		
 		model.addAttribute("list", list);
 		
 		String currentMenu = "프로필 설정";
@@ -91,6 +93,20 @@ public class HumanResourcesController {
 	public String goChangePw() {
 		return "member/changePW";
 	}
+	
+	
+	// 이메일 중복 확인
+	@ResponseBody
+	@RequestMapping("/emailDup")
+	public int emailDup(String company_email) {
+		System.out.println("이메일 중복확인");
+		// 이메일 중복 확인 : 1 중복
+		company_email = company_email.concat("@clovers.com");
+		int isDupEmail = hrservice.isDupEmail(company_email);
+		System.out.println(isDupEmail);
+		return isDupEmail;
+	}
+	
 
 //	프로필 이미지,사내전화,휴대전화,개인이메일 정보 업데이트
 	@RequestMapping("/update")
@@ -99,6 +115,11 @@ public class HumanResourcesController {
 
 		String id = (String) session.getAttribute("loginID");
 
+		company_email = company_email.concat("@clovers.com");
+		
+		// 주소록에 사내 이메일과 휴대폰 업데이트
+		int result = adservice.updateCompanyEmailPhone(id,company_email,phone);
+		System.out.println("controellreaf "+result);
 		// 사진 등록
 		if (!(profile_img.getOriginalFilename().equals(""))) {
 			String path = "C:/C-lovers";
@@ -113,12 +134,15 @@ public class HumanResourcesController {
 			String sysName = UUID.randomUUID() + "_" + oriName;
 
 			profile_img.transferTo(new File(uploadPath + "/" + sysName));
-
+			
 			hrservice.update(id, sysName, company_email, company_phone, phone, email);
 		} else {
 			// 사진 안바꾸거나 기본이미지인 경우
 			hrservice.updateNoImg(id, company_email, company_phone, phone, email);
 		}
+			
+
+		
 
 		return "redirect:/humanResources/mypage";
 	}
@@ -326,8 +350,8 @@ public class HumanResourcesController {
 		String id = (String) session.getAttribute("loginID");
 		System.out.println(id);
 		MemberDTO profile = hrservice.selectById(id);
-		//profile.setBirth(new Timestamp(System.currentTimeMillis()));
-		//System.out.println(profile.toString());
+		profile.setBirth(new Timestamp(System.currentTimeMillis()));
+		System.out.println(profile.toString());
 		return profile;
 	}
 

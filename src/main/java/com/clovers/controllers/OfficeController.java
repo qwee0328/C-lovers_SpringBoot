@@ -194,10 +194,12 @@ public class OfficeController {
 		return oservice.searchByName(name);
 	}
 	
-	
-
-	
-	
+	// 회사 이름 불러오기
+	@ResponseBody
+	@RequestMapping("/selectOfficeName")
+	public String selectOfficeName() {
+		return oservice.selectOfficeName();
+	}
 	
 	
 	// 내 정보 불러오기 - 이름, 부서명, id, session 정보 이용 (일정 메뉴 - 공유 캘린더 insert modal에서 사용)

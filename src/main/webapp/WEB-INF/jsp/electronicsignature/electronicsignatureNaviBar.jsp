@@ -55,10 +55,10 @@
 		        </div>
 		        <div class="naviConp">
 		            <div class="naviConp__icon">
-		                <i class="fa-solid fa-spinner"></i>
+		                <i class="fa-solid fa-clock"></i>
 		            </div>
-		            <div class="naviConp__title">진행</div>
-		            <input type="hidden" class="naviLocation" value="progress">
+		            <div class="naviConp__title">예정</div>
+		            <input type="hidden" class="naviLocation" value="progressExpected">
 		        </div>
 	        </div>
 	        

@@ -41,10 +41,10 @@
 			<div class="approvalLineModal__bodyLine">
 				<div class="approvalLineModal__groupBox">
 					<div class="department">
-						<div class="department__title">클로버산업</div>
+						<div class="department__title"></div>
 						<div class="department__body">
 							<div class="company pagePlus">
-								<i class="fa-solid fa-minus"></i> <span>클로버 산업</span> <span id="officeEmpCount"></span>
+								<i class="fa-solid fa-minus"></i> <span id="officeName"></span> <span id="officeEmpCount"></span>
 							</div>
 						</div>
 					</div>
