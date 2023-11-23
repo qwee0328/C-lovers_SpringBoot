@@ -43,7 +43,7 @@ window.onload = function() {
 
 	let date = new Date();
 	let year = date.getFullYear();
-	//window.totalCountHidden=0;
+	window.totalCountHidden=0;
 	console.log(window.totalCountHidden);
 	$.ajax({
 		url: "/humanResources/selectYearTotalAnnaul",
@@ -118,7 +118,12 @@ window.onload = function() {
 		let average = totalWorkingTime / resp.length;
 		hour = Math.floor(average / (1000 * 60 * 60));
 		min = Math.floor(average % (1000 * 60 * 60) / (1000 * 60));
-		$("#calibratedAverage").html(hour + "시간 " + min + "분");
+		if(totalWorkingTime!==0){
+			$("#calibratedAverage").html(hour + "시간 " + min + "분");
+		}else{
+			$("#calibratedAverage").html("0시간 0분");
+		}
+		
 	})
 
 	$.ajax({

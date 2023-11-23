@@ -26,24 +26,30 @@ public class FullAuthorityValidator implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		session = request.getSession();
-		String loginID = (String)session.getAttribute("loginID");
+		String loginID = (String) session.getAttribute("loginID");
+		System.out.println("총괄 유효성" + loginID);
 		boolean result = false;
+		boolean humanResource = false;
+		boolean accounting = false;
 		List<String> permission = mservice.getAuthorityCategory(loginID);
-	      for(String per:permission) {
-	         if(per.equals("총괄")) {
-	            result = true;
-	         }else {
-	        	 sendUnauthorizedResponse(response);
-	         }
-	      }
-
+		System.out.println(permission.toString());
+		if (permission.size() != 0) {
+			for (String per : permission) {
+				System.out.println("총괄 있?" + per);
+				if (per.equals("총괄")) {
+					return true;
+				} else if (per.equals("인사")) {
+					humanResource = true;
+				} else if (per.equals("회계")) {
+					accounting = true;
+				}
+			}
+			System.out.println(humanResource +" "+ accounting);
+			if (!humanResource || !accounting) {
+				System.out.println("메인으로 돌아가");
+				response.sendRedirect("/");
+			}
+		}
 		return result;
 	}
-	
-	private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().write("Unauthorized Access");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    }
-
 }

@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.clovers.interceptors.AccountingAuthorityValidator;
 import com.clovers.interceptors.FullAuthorityValidator;
+import com.clovers.interceptors.HumanResourcesValidator;
 import com.clovers.interceptors.LoginValidator;
 
 @Configuration
@@ -23,6 +24,10 @@ public class WebConfig implements WebMvcConfigurer{
 	@Autowired
 	private FullAuthorityValidator fullAuthorityValidator;
 	
+	// 인사 인증
+	@Autowired
+	private HumanResourcesValidator humanResourcesValidator;
+	
 	// 회계 인증
 	@Autowired
 	private AccountingAuthorityValidator accountingAuthorityValidator;
@@ -36,56 +41,86 @@ public class WebConfig implements WebMvcConfigurer{
 //	인터셉터
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		String [] loginAddPath={"/","/mail/**","/schedule/**","/humanResources/**","/accounting/**","/addressbook/**","/admin/**","/chat/**","/electronicSignature/**","/employee/**","/members/**","/office/**","/org/**"};
 		registry.addInterceptor(loginValidator)
-				.addPathPatterns("/")
-				.addPathPatterns("/mail/**")
-				.addPathPatterns("/schedule/**")
-				.addPathPatterns("/humanResources/**")
-				.addPathPatterns("/accounting/**")
-				.addPathPatterns("/addressbook/**")
-				.addPathPatterns("/admin/**")
-				.addPathPatterns("/board/**")
-				.addPathPatterns("/chat/**")
-				.addPathPatterns("/electronicSignature/**")
-				.addPathPatterns("/employee/**")
-				.addPathPatterns("/members/**")
-				.addPathPatterns("/office/**")
-				.addPathPatterns("/org/")
-				.addPathPatterns("/reservation/**")
+				.addPathPatterns(loginAddPath)
+//				.addPathPatterns("/mail/**")
+//				.addPathPatterns("/schedule/**")
+//				.addPathPatterns("/humanResources/**")
+//				.addPathPatterns("/accounting/**")
+//				.addPathPatterns("/addressbook/**")
+//				.addPathPatterns("/admin/**")
+//				.addPathPatterns("/chat/**")
+//				.addPathPatterns("/electronicSignature/**")
+//				.addPathPatterns("/employee/**")
+//				.addPathPatterns("/members/**")
+//				.addPathPatterns("/office/**")
+//				.addPathPatterns("/org/**")
 				.excludePathPatterns("/members/**");
 		
-		// 
-		System.out.println("여기인가?");
-		if(loginValidator != null) {
-			if(fullAuthorityValidator!=null) {
-				System.out.println("총괄기능됨");
-				// 총괄 권한이 있을 때 
-				registry.addInterceptor(fullAuthorityValidator)
-						.addPathPatterns("/mail/**")
-						.addPathPatterns("/schedule/**")
-						.addPathPatterns("/humanResources/**")
-						.addPathPatterns("/accounting/**")
-						.addPathPatterns("/addressbook/**")
-						.addPathPatterns("/admin/**")
-						.addPathPatterns("/board/**")
-						.addPathPatterns("/chat/**")
-						.addPathPatterns("/electronicSignature/**")
-						.addPathPatterns("/employee/**")
-						.addPathPatterns("/members/**")
-						.addPathPatterns("/office/**")
-						.addPathPatterns("/org/")
-						.addPathPatterns("/reservation/**")
-						.excludePathPatterns("/members/**");
-			}else {
-				System.out.println("총괄기능안됨");
-			}
-			System.out.println("로그인 되어있음");
-			
-		}
+		String[] excludePath = {"/mail/**","/schedule/**","/humanResources/**","/accounting/**","/addressbook/**","/chat/**","/electronicSignature/**","/employee/**","/members/**","/office/**","/org/**"};
+		String[] authorityPath= {"/admin/office/organization","/admin/office/user","/admin/office/positionduty","/admin/office/administrator"};
+		registry.addInterceptor(fullAuthorityValidator)
+				.addPathPatterns("/admin/**")
+				.excludePathPatterns(excludePath)
+				.excludePathPatterns(authorityPath)
+				.excludePathPatterns("/admin/accounting/**");
+//				.excludePathPatterns("/mail/**")
+//				.excludePathPatterns("/schedule/**")
+//				.excludePathPatterns("/humanResources/**")
+//				.excludePathPatterns("/accounting/**")
+//				.excludePathPatterns("/addressbook/**")
+//				.excludePathPatterns("/chat/**")
+//				.excludePathPatterns("/electronicSignature/**")
+//				.excludePathPatterns("/employee/**")
+//				.excludePathPatterns("/members/**")
+//				.excludePathPatterns("/office/**")
+//				.excludePathPatterns("/org/**")
+//				.excludePathPatterns("/admin/office/organization")
+//				.excludePathPatterns("/admin/office/user")
+//				.excludePathPatterns("/admin/office/positionduty")
+//				.excludePathPatterns("/admin/office/administrator")
+//				.excludePathPatterns("/admin/accounting/**");
+		
+		registry.addInterceptor(humanResourcesValidator)
+				.addPathPatterns(authorityPath)
+//				.addPathPatterns("/admin/office/organization")
+//				.addPathPatterns("/admin/office/user")
+//				.addPathPatterns("/admin/office/positionduty")
+//				.addPathPatterns("/admin/office/administrator")
+				.excludePathPatterns(excludePath);
+//				.excludePathPatterns("/mail/**")
+//				.excludePathPatterns("/schedule/**")
+//				.excludePathPatterns("/humanResources/**")
+//				.excludePathPatterns("/accounting/**")
+//				.excludePathPatterns("/addressbook/**")
+//				.excludePathPatterns("/chat/**")
+//				.excludePathPatterns("/electronicSignature/**")
+//				.excludePathPatterns("/employee/**")
+//				.excludePathPatterns("/members/**")
+//				.excludePathPatterns("/office/**")
+//				.excludePathPatterns("/org/**");
+		
+		registry.addInterceptor(accountingAuthorityValidator)
+				.addPathPatterns("/admin/accounting/**")
+				.excludePathPatterns(excludePath);
+//				.excludePathPatterns("/mail/**")
+//				.excludePathPatterns("/schedule/**")
+//				.excludePathPatterns("/humanResources/**")
+//				.excludePathPatterns("/accounting/**")
+//				.excludePathPatterns("/addressbook/**")
+//				.excludePathPatterns("/chat/**")
+//				.excludePathPatterns("/electronicSignature/**")
+//				.excludePathPatterns("/employee/**")
+//				.excludePathPatterns("/members/**")
+//				.excludePathPatterns("/office/**")
+//				.excludePathPatterns("/org/**");
 		
 		
 		
+		System.out.println("a");
 	}
+	
 	
 	public void addCorsMapping(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("*");
