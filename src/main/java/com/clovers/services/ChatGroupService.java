@@ -157,7 +157,7 @@ public class ChatGroupService {
 			}
 			String invitemember = String.join(",", inviteList);
 			
-			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT02036",
+			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT11034",
 					loginName+"님이 "+invitemember+"님을 초대하였습니다.",
 					new Timestamp(System.currentTimeMillis()),
 					ChatMessageDTO.ChatMessageStates.JOIN);
