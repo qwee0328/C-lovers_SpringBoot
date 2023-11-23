@@ -74,16 +74,24 @@ public class MailDAO {
 		return exist;
 	}
 
-	public int deleteMail(int id) {
-		return db.update("Mail.deleteMail", id);
+	public int deleteMail(Map<String, Object> param) {
+		return db.update("Mail.deleteMail", param);
+	}
+	
+	public int semiPerDeleteMail(Map<String, Object> param) {
+		return db.update("Mail.semiPerDeleteMail", param);
+	}
+	
+	public boolean perDeleteBoth(int id) {
+		return db.selectOne("Mail.perDeleteBoth", id);
 	}
 
 	public int perDeleteMail(int id) {
 		return db.delete("Mail.perDeleteMail", id);
 	}
 
-	public int restoreMail(int id) {
-		return db.update("Mail.restoreMail", id);
+	public int restoreMail(Map<String, Object> param) {
+		return db.update("Mail.restoreMail", param);
 	}
 
 	public EmailDTO selectAllById(int id) {
@@ -139,5 +147,10 @@ public class MailDAO {
 	// 휴지통에서 30일 경과한 캘린더 삭제
 	public void autoDeleteInTrash() {
 		db.delete("Mail.autoDeleteInTrash");
+	}
+	
+	// 존재하는 이메일인지
+	public boolean existEmail(String email) {
+		return db.selectOne("Mail.existEmail", email);
 	}
 }

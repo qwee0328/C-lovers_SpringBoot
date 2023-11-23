@@ -136,8 +136,10 @@
 														<div class="stamp__rejection">${item.approval}</div>
 													</td>
 												</c:when>
+												<c:otherwise>
+													<td class="stamp">${item.approval}</td>
+												</c:otherwise>
 											</c:choose>
-										    <%-- <td class="stamp">${item.approval}</td> --%>
 										</c:forEach>
 										
 										<c:forEach begin="${approversInfo.size() + 1}" end="4">
@@ -166,7 +168,7 @@
 						<button id="rejection">반려</button>
 					</div>
 				</c:when>
-				<c:when test="${existApproval == false }">
+				<c:when test="${isPossibleDelete == true }">
 					<div class="deleteBtn">
 						<button id="delete">삭제</button>
 					</div>

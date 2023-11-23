@@ -87,20 +87,26 @@ public class ElectronicSignatureController {
 			} else {
 				isApprovalTurn = true;
 			}
+			
+			// 이미 결재 내역이 존재하는지
+			boolean existMyApproval = esservices.existMyApproval(loginID, document_id);
+			if(existMyApproval) {
+				isApprovalTurn = false;
+			}
+			
+			// 반려가 존재하는지
+			boolean existRejection = esservices.existRejection(document_id);
+			if(existRejection) {
+				isApprovalTurn = false;
+			}
+			
+			// 마지막 결재자였는지 확인
+			boolean checkAllApprovals = esservices.checkAllApprovals(document_id);
+			if(checkAllApprovals) {
+				isApprovalTurn = false;
+			}
 		// 결재자가 아니라면
 		} else {
-			isApprovalTurn = false;
-		}
-		
-		// 반려가 존재하는지
-		boolean existRejection = esservices.existRejection(document_id);
-		if(existRejection) {
-			isApprovalTurn = false;
-		}
-		
-		// 마지막 결재자였는지 확인
-		boolean checkAllApprovals = esservices.checkAllApprovals(document_id);
-		if(checkAllApprovals) {
 			isApprovalTurn = false;
 		}
 		
@@ -108,24 +114,23 @@ public class ElectronicSignatureController {
 	}
 	
 	// 이 문서의 기안자인지, 결재 삭제 가능한 상태인지
-	public boolean existApproval(String document_id) {
+	public boolean isPossibleDelete(String document_id) {
 		String loginID = (String) session.getAttribute("loginID");
 		
-		boolean existApproval;
+		boolean isPossibleDelete;
 		// 로그인한 사용자가 기안자인지
 		boolean isDrafter = esservices.isDrafterByDocumentId(document_id, loginID);
 		// 기안자라면
 		if(isDrafter) {
 			// 결재를 마친 결재자가 존재하는지
-			existApproval = esservices.existApproval(document_id);
+			// 존재하면 true 반환하므로 not 붙여 false 반환
+			isPossibleDelete = !esservices.existApproval(document_id);
 		// 기안자가 아니라면
 		} else {
-			existApproval = false;
+			isPossibleDelete = false;
 		}
-		
-		System.out.println("기안자인지? :" + isDrafter);
-		System.out.println("결재한 사람 있으면 false 없으면 true : " + existApproval);		
-		return existApproval;
+
+		return isPossibleDelete;
 	}
 
 	// 메인 화면으로 이동
@@ -237,29 +242,29 @@ public class ElectronicSignatureController {
 		return param;
 	}
 
-	// 진행으로 이동
-	@RequestMapping("/progress")
+	// 예정으로 이동
+	@RequestMapping("/progressExpected")
 	public String progress() {
-		String currentMenu = "진행";
+		String currentMenu = "예정";
 
 		session.setAttribute("currentMenu", currentMenu);
-		return "/electronicsignature/progress";
+		return "/electronicsignature/progressExpected";
 	}
 
-	// 진행 중인 문서 진행 리스트 출력
+	// 진행 중인 문서 예정 리스트 출력
 	@ResponseBody
-	@RequestMapping("/progressList")
-	public Map<String, Object> progressList(@RequestParam("cpage") String cpage) {
+	@RequestMapping("/progressExpectedList")
+	public Map<String, Object> progressExpectedList(@RequestParam("cpage") String cpage) {
 		String loginID = (String) session.getAttribute("loginID");
 		List<String> secGrade = getSecurityGrade(loginID);
 		
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		List<Map<String, Object>> list = esservices.progressList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		List<Map<String, Object>> list = esservices.progressExpectedList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		setDivision(loginID, list);
 		
 		Map<String, Object> param = new HashMap<>();
 		param.put("list", list);
-		param.put("recordTotalCount", esservices.progressList(loginID, secGrade, 0, 0).size());
+		param.put("recordTotalCount", esservices.progressExpectedList(loginID, secGrade, 0, 0).size());
 		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
 		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
 		param.put("lastPageNum", currentPage);
@@ -425,14 +430,14 @@ public class ElectronicSignatureController {
 		boolean isApprovalTurn = isApprovalTurn(document_id);
 		
 		// 이 문서의 기안자인지, 결재 삭제 가능한 상태인지
-		boolean existApproval = existApproval(document_id);
+		boolean isPossibleDelete = isPossibleDelete(document_id);
 		
 		model.addAttribute("mainDrafter", mainDrafter);
 		model.addAttribute("documentInfo", documentInfo);
 		model.addAttribute("draftersInfo", draftersInfo);
 		model.addAttribute("approversInfo", approversInfo);
 		model.addAttribute("isApprovalTurn", isApprovalTurn);
-		model.addAttribute("existApproval", existApproval);
+		model.addAttribute("isPossibleDelete", isPossibleDelete);
 		
 		return "/electronicsignature/viewApprovalForm";
 	}
@@ -556,7 +561,6 @@ public class ElectronicSignatureController {
 	@ResponseBody
 	@RequestMapping("/fileList")
 	public List<DocumentFileDTO> fileList(@RequestParam("document_id") String document_id){
-		System.out.println("doumId"+document_id);
 		List<DocumentFileDTO> fileList = new ArrayList<>();
 		boolean result = esservices.selectFileByDocumentId(document_id);
 		if(result) {

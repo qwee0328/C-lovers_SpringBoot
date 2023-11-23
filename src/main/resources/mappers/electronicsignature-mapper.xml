@@ -146,48 +146,29 @@
 
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-	    SELECT DISTINCT document_id, title, drafter_name, report_date, status
+	    SELECT *
 	    FROM approval_list_view
-	    WHERE
-	    (
-	        drafter_id = #{loginID} OR approver_id = #{loginID} AND status = '대기'
-	    )
-	    OR
-	    (
-	        drafter_id != #{loginID} AND approver_id != #{loginID}
-	        AND security_grade IN
-	        <foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
-	            #{sec_grade}
-	        </foreach>
-	        AND status = '대기'
-	    )
+	    WHERE (approver_id = #{loginID} OR drafter_id = #{loginID})
+	    	AND status = '대기'
+	    	AND temporary = false
 	    ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
     	</if>
 	</select>
-
+	
 	<!-- // 진행 중인 문서 대기 리스트 출력 -->
 	<select id="progressWaitList" resultType="map">
-	    SELECT DISTINCT document_id, title, drafter_name, report_date, status
-	    FROM approval_list_view
-	    WHERE
-	    (
-	        drafter_id = #{loginID} OR approver_id = #{loginID}
-	        AND status = '대기'
-	        AND approver_status = '대기'
-	    )
-	    OR
-	    (
-	        drafter_id != #{loginID} AND approver_id != #{loginID}
-	        AND status = '대기'
-	        AND approver_status = '대기'
-	        AND security_grade IN
-	        <foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
-	            #{sec_grade}
-	        </foreach>
-	    )
-	    ORDER BY report_date desc
+		SELECT DISTINCT document_id, title, drafter_name, report_date, approver_status, approver_security_level, status
+		FROM approval_list_view
+		WHERE approver_id != #{loginID}
+		    AND approver_security_level > (SELECT DISTINCT sec_level 
+		                                    FROM document_approvals
+		                                    WHERE emp_id = #{loginID})
+		    AND status = '대기'
+		    AND approver_status = '승인'
+		    AND temporary = false
+		ORDER BY report_date DESC
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
     	</if>
@@ -197,47 +178,31 @@
 	<select id="progressCheckList" resultType="map">
 		SELECT DISTINCT document_id, title, drafter_name, report_date, status
 		FROM approval_list_view
-		WHERE
-		(
-			drafter_id = #{loginID} OR approver_id = #{loginID}
-			AND status = '승인'
-		)
-		OR
-		(
-			drafter_id != #{loginID} AND approver_id != #{loginID}
-			AND status = '승인'
-			AND security_grade IN
-			<foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
-		    	#{sec_grade}
-		    </foreach>
-	    )
+		WHERE approver_id = #{loginID}
+			AND approver_status = '승인'
+			AND status = '대기'
+			AND temporary = false
 	    ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
     	</if>
 	</select>
 
-	<!-- // 진행 중인 문서 진행 리스트 출력 -->
-	<select id="progressList" resultType="map">
+	<!-- // 진행 중인 문서 예정 리스트 출력 -->
+	<select id="progressExpectedList" resultType="map">
 		SELECT DISTINCT document_id, title, drafter_name, report_date, status
 		FROM approval_list_view
-		WHERE
-		(
-			drafter_id = #{loginID} OR approver_id = #{loginID}
-			AND status = '대기'
-			AND approver_status = '승인'
-		)
-		OR
-		(
-			drafter_id != #{loginID} AND approver_id != #{loginID}
-		 	AND status = '대기'
-			AND approver_status = '승인'
-			AND security_grade IN
-			<foreach collection="keyword" item="sec_grade" open="(" separator="," close=")">
-		    	#{sec_grade}
-		    </foreach>
-	    )
-	    ORDER BY report_date desc
+		WHERE approver_id != #{loginID}
+		    AND approver_security_level > (SELECT DISTINCT sec_level 
+		                                    FROM document_approvals
+		                                    WHERE emp_id = #{loginID})
+		    AND status = '대기'
+		    AND approver_status = '대기'
+		    AND document_id IN (SELECT DISTINCT document_id
+		                        FROM approval_list_view
+		                        WHERE approver_id = #{loginID})
+            AND temporary = false
+		ORDER BY report_date DESC
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
     	</if>
@@ -250,6 +215,7 @@
 		WHERE status != '대기'
 		AND (drafter_id = #{loginID}
 		OR approver_id = #{loginID})
+		AND temporary = false
 		ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
@@ -262,6 +228,7 @@
 		FROM approval_list_view
 		WHERE status = '승인'
 		AND drafter_id = #{loginID}
+		AND temporary = false
 		ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
@@ -274,6 +241,7 @@
 		FROM approval_list_view
 		WHERE status = '승인'
 		AND approver_id = #{loginID}
+		AND temporary = false
 		ORDER BY report_date desc
 	    <if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
@@ -287,6 +255,7 @@
 		WHERE status = '반려'
 		AND (drafter_id = #{loginID}
 		OR approver_id = #{loginID})
+		AND temporary = false
 		<if test="start != 0 or end != 0">
 	    	LIMIT #{start}, #{end}
     	</if>
@@ -409,6 +378,15 @@
 		FROM document_approvals
 		WHERE document_id = #{document_id}
 			AND approval = '반려'
+	</select>
+	
+	<!-- // 이미 결재 내역이 존재하는지 -->
+	<select id="existMyApproval" resultType="boolean">
+		SELECT count(*)
+		FROM document_approvals
+		WHERE document_id = #{document_id}
+			AND emp_id = #{loginID}
+			AND approval != '대기'
 	</select>
 	
 	<!-- // 결재 결과 저장 -->

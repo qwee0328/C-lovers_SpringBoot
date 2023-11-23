@@ -30,8 +30,11 @@ public class MailService {
 	@Autowired
 	MailDAO dao;
 
+	// 메일 전송
 	@Transactional
 	public int submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
+		System.out.println("예약 여부:" + dto.isReservation());
+		
 		int email_id = dao.submitSend(dto);
 
 		String upload = "C:/mailUploads";
@@ -52,6 +55,7 @@ public class MailService {
 		return email_id;
 	}
 
+	// 임시 메일 저장
 	@Transactional
 	public void submitTempSend(EmailDTO dto, String deleteSysName, MultipartFile[] files, boolean send)
 			throws Exception {
@@ -91,6 +95,7 @@ public class MailService {
 		}
 	}
 
+	// 받은 메일함 리스트 출력
 	public List<EmailDTO> inBoxList(String receive_id, int start, int end) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("receive_id", receive_id);
@@ -99,10 +104,12 @@ public class MailService {
 		return dao.inBoxList(param);
 	}
 
+	// 받은 메일함 총 개수
 	public int inBoxTotalCount(String receive_id) {
 		return dao.inBoxTotalCount(receive_id);
 	}
 
+	// 보낸 메일함 리스트 출력
 	public List<EmailDTO> sentBoxList(String send_id, boolean temporary, int start, int end) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("send_id", send_id);
@@ -112,6 +119,7 @@ public class MailService {
 		return dao.sentBoxList(param);
 	}
 
+	// 보낸 메일함 총 개수
 	public int sentBoxTotalCount(String send_id, boolean temporary) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("send_id", send_id);
@@ -119,6 +127,7 @@ public class MailService {
 		return dao.sentBoxTotalCount(param);
 	}
 
+	// 보낼 메일함 리스트 출력
 	public List<EmailDTO> outBoxList(String send_id, int start, int end) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("send_id", send_id);
@@ -127,10 +136,12 @@ public class MailService {
 		return dao.outBoxList(param);
 	}
 
+	// 보낼 메일함 총 개수
 	public int outBoxTotalCount(String send_id) {
 		return dao.outBoxTotalCount(send_id);
 	}
 
+	// 휴지통 리스트 출력
 	public List<EmailDTO> trashList(String id, int start, int end) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("id", id);
@@ -139,18 +150,38 @@ public class MailService {
 		return dao.trashList(param);
 	}
 
+	// 휴지통 총 개수
 	public int trashTotalCount(String id) {
 		return dao.trashTotalCount(id);
 	}
 
+	// 첨부파일 유무
 	public boolean selectFileByEmailId(int email_id) {
 		return dao.selectFileByEmailId(email_id);
 	}
 
-	public int deleteMail(int id) {
-		return dao.deleteMail(id);
+	// 메일 삭제
+	public int deleteMail(int id, String loginEmail) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("loginEmail", loginEmail);
+		return dao.deleteMail(param);
+	}
+	
+	// 발신자 또는 수신자가 완전삭제
+	public int semiPerDeleteMail(int id, String loginEmail) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("loginEmail", loginEmail);
+		return dao.semiPerDeleteMail(param);
+	}
+	
+	// 발신자, 수신자 모두 완전삭제
+	public boolean perDeleteBoth(int id) {
+		return dao.perDeleteBoth(id);
 	}
 
+	// 발송 취소 & 발신자/수신자 모두 완전삭제
 	@Transactional
 	public int perDeleteMail(int id) throws Exception {
 		String upload = "C:/mailUploads";
@@ -179,22 +210,30 @@ public class MailService {
 		return dao.perDeleteMail(id);
 	}
 
-	public int restoreMail(int id) {
-		return dao.restoreMail(id);
+	// 메일 복구
+	public int restoreMail(int id, String loginEmail) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("loginEmail", loginEmail);
+		return dao.restoreMail(param);
 	}
 
+	// 메일 내용 가져오기
 	public EmailDTO selectAllById(int id) {
 		return dao.selectAllById(id);
 	}
 
+	// 파일 리스트 출력
 	public List<EmailFileDTO> selectAllFileById(int email_id) {
 		return dao.selectAllFileById(email_id);
 	}
 
+	// 예약 메일 내용 가져오기
 	public List<EmailDTO> selectAllReservationDate() {
 		return dao.selectAllReservationDate();
 	}
 
+	// 예약 메일 전송
 	public int submitReservationMail(int id, Timestamp send_date) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("id", id);
@@ -202,18 +241,22 @@ public class MailService {
 		return dao.submitReservationMail(param);
 	}
 
+	// 읽음 유무
 	public int confirmation(int id) {
 		return dao.confirmation(id);
 	}
 
+	// 받는 사람 자동완성
 	public List<Map<String, String>> autoComplete(String keyword) {
 		return dao.autoComplete(keyword);
 	}
 
+	// 로그인한 사용자의 이메일
 	public String getEmailByLoginID(String loginID) {
 		return dao.getEmailByLoginID(loginID);
 	}
 
+	// summernote 이미지 저장
 	public List<String> saveImage(MultipartFile[] image) throws Exception {
 		String upload = "C:/mailUploads";
 		File uploadPath = new File(upload);
@@ -271,5 +314,10 @@ public class MailService {
 			}
 		}
 		dao.autoDeleteInTrash();
+	}
+	
+	// 존재하는 이메일인지
+	public boolean existEmail(String email) {
+		return dao.existEmail(email);
 	}
 }
