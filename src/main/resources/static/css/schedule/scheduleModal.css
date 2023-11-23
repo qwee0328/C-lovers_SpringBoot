@@ -387,7 +387,7 @@ input[type="radio"]{
     height: 95%;
 }
 
-.empSelectList__emp{
+.empSelectList__emp, .myEmpInfo{
     color:#6C6C72;
     font-size: 14px;
 }

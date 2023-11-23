@@ -66,8 +66,8 @@ public class ScheduleDAO {
 		return db.selectOne("Schedule.selectRecurringIdById",id);
 	}
 	
-	public List<HashMap<String, Object>> selectCalendarByEmpId(String emp_id){
-		return db.selectList("Schedule.selectCalendarByEmpId",emp_id);
+	public List<HashMap<String, Object>> selectCalendarByEmpId(Map<String,Object> param){
+		return db.selectList("Schedule.selectCalendarByEmpId",param);
 	}
 	
 	public int scheduleUpdate(ScheduleDTO dto) {

@@ -1,5 +1,6 @@
 package com.clovers.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.clovers.constants.Constants;
 import com.clovers.dto.AddressBookDTO;
 import com.clovers.dto.AddressBookTagDTO;
+import com.clovers.dto.EmailDTO;
 import com.clovers.services.AddressBookService;
+import com.clovers.services.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +30,9 @@ public class AddressBookController {
 	
 	@Autowired
 	private AddressBookService abservice;
+	
+	@Autowired
+	private MemberService mservice;
 	
 	// 주소록 메인 홈
 	@RequestMapping("")
@@ -51,25 +58,47 @@ public class AddressBookController {
 			return abservice.insert(dto); // 테이블에 주소록에 내용만 추가
 		return abservice.insert(dto, selectedTagArray); // 태그 선택했다면 테이블에 주소록 내용추가, 태그 추가
 	}
+
 	
-	// 주소 검색
+	// 주소 불러오기
 	@ResponseBody
 	@RequestMapping("/select") // 주소록 검색 (전체 / 태그별 / 검색어별)
-	public List<Map<String,Object>> select(String key, int value, int currentMenu, String keyword) {
+	public Map<String,Object> select(String key, int value, int currentMenu, String keyword, @RequestParam(value="cpage", required=false) String cpage) {
+		int currentPage = (cpage == null || cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
 		session.setAttribute("currentMenu", currentMenu);
 		if(keyword != null)
 			keyword = "%"+keyword+"%";
-		return abservice.select((String)session.getAttribute("loginID"), key, value, keyword);
-		// key : 전체 주소록을 검색할 것인지, 태그로 주소록을 검색할 것인지 (key 값이 is_shard일 경우 개인 전체/공유 전체이며, key 값이 id일 경우 태그로 검색함.)
-		// value : key 값에 대한 실제 값 (개인: personal, 공유: shared, id: id 값(기본키)
-		// keyword : 검색어
+		
+		String loginID = (String)session.getAttribute("loginID");
+		List<String> authority = mservice.getAuthorityCategory(loginID);
+		int auth = 0;
+		for (int i = 0; i < authority.size(); i++) {
+			if (authority.get(i).equals("총괄")||authority.get(i).equals("인사")) {
+				auth=1; break;
+			}
+		}
+		
+		
+		Map<String,Object> addressList = abservice.select((String)session.getAttribute("loginID"), key, value, keyword,auth,
+														(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)-1),
+														(currentPage * Constants.RECORD_COUNT_PER_PAGE));
+		
+		Map<String,Object> resp = new HashMap<>();
+		resp.put("resp", addressList.get("resp"));
+		resp.put("deleteTag", addressList.get("deleteTag"));
+		resp.put("recordTotalCount", addressList.get("count"));
+		resp.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
+		resp.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
+		resp.put("lastPageNum", currentPage);
+		return resp;
 	}
+
 	
 	// 주소 상세 보기
 	@ResponseBody
 	@RequestMapping("/selectById") // 주소록 상세 정보 불러오기 (상세보기 모달창 내용)
 	public Map<String,Object> selectById(int id) {
-		return abservice.selectById(id);
+		return abservice.selectById(id, (String)session.getAttribute("loginID"));
 	}
 	
 	// 주소 휴지통으로 이동
@@ -109,6 +138,7 @@ public class AddressBookController {
 		if(selectedTagArray == null || selectedTagArray.isEmpty()) { // 선택된 태그가 없다면
 			return abservice.update(dto); // 기존 태그 삭제 및 주소 내용 업데이트
 		}
+		
 		return abservice.update(dto,selectedTagArray); // 기존 태그 삭제 및 새로운 태그 추가 및 주소 내용 업데이트
 	}
 	
@@ -116,7 +146,7 @@ public class AddressBookController {
 	@ResponseBody
 	@RequestMapping("/copyAddress") // 주소 변경
 	public int copyAddress(int is_share, @RequestParam(value="ids[]")List<Integer> ids) {
-		return abservice.copyAddress(is_share, ids);
+		return abservice.copyAddress(is_share, ids, (String)session.getAttribute("loginID"));
 	}
 
 	
