@@ -228,7 +228,11 @@ public class AddressBookService {
 	// humanResource ~ 주소록에 사내 이메일과 휴대폰 업데이트
 	public int updateCompanyEmailPhone(String id, String company_email, String phone) {
 		
-		phone = phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7);
+		if(phone!=null || phone !="") {
+			phone = phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7);
+			
+		}
+		
 		// numberType 가져오기
 		String numberType = dao.isNumberType(id);
 		
