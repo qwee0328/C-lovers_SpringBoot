@@ -218,9 +218,7 @@ public class ElectronicSignatureController {
 				if(previousApprover != 0) {
 
 				} else {
-
-					list.add(esservices.selectAllWaitByDocumentId(document_id));
-					System.out.println(esservices.selectAllWaitByDocumentId(document_id));
+					list.add(esservices.selectAllWaitByDocumentId(document_id, loginID));
 				}
 			}
 			setDivision(loginID, list);

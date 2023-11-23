@@ -174,13 +174,20 @@ public class MailController {
 	// 발송 시간 출력
 	private String formatTimestamp(Timestamp time) {
 		LocalDateTime currentTime = LocalDateTime.now();
-		LocalDateTime sendTime = time.toLocalDateTime();
-		System.out.println("time"+time);
-		// 시간 차이 계산
-		Duration duration = Duration.between(sendTime, currentTime);
-		long minutes = duration.toMinutes();
-		long hours = duration.toHours();
+		
+		LocalDateTime sendTime = null;
+		long minutes = 0;
+		long hours = 0;
+		if (time != null) {
+			sendTime = time.toLocalDateTime();
 
+			System.out.println("time"+time);
+			// 시간 차이 계산
+			Duration duration = Duration.between(sendTime, currentTime);
+			minutes = duration.toMinutes();
+			hours = duration.toHours();
+
+		}
 		if (minutes < 60) {
 			return minutes + "분 전";
 		} else if (hours < 24) {

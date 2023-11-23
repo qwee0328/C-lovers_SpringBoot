@@ -299,8 +299,11 @@ public class ElectronicSignatureService {
 	}
 	
 	// 결재자의 순서인 진행 중인 문서 대기 리스트 출력
-	public Map<String, Object> selectAllWaitByDocumentId(String document_id) {
-		return dao.selectAllWaitByDocumentId(document_id);
+	public Map<String, Object> selectAllWaitByDocumentId(String document_id, String loginID) {
+		Map<String, String> param = new HashMap<>();
+		param.put("document_id", document_id);
+		param.put("loginID", loginID);
+		return dao.selectAllWaitByDocumentId(param);
 	}
 
 	// 진행 중인 문서 전체 리스트 출력
