@@ -271,4 +271,22 @@
 	<delete id="immediatelyEmpty">
 		delete from address_book where (is_share = 1 or (emp_id = #{emp_id} and is_share = 0)) and trash = 1;
 	</delete>
+	
+	<!-- numberType가져오기 -->
+	<select id="isNumberType" resultType="String">
+		select numberType from address_book where emp_id=#{id} and is_emp=1
+	</select>
+	
+	<!-- humanResource ~ 주소록에 사내 이메일과 휴대폰 업데이트 -->
+	<update id="updateCompanyEmailPhone">
+		update address_book set email=#{company_email}
+	
+		<if test='numberType == "휴대폰"'>
+			, number=#{phone}
+		</if>
+		where emp_id=#{id} and is_emp=1
+	</update>
+	
+	
+	
 </mapper>

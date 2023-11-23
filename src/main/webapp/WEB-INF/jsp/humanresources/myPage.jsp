@@ -345,10 +345,12 @@
 	});
 
 	//		아이디 regex 대소문자랑 숫자만 포함해서 8글자 이상
-	let idRegex = /^[a-zA-Z0-9]{8,15}$/;
+	let idRegex = /^[a-zA-Z0-9]{7,15}$/;
 	$("#company_email").keyup(function(e){
 		result = idRegex.test($("#company_email").val());
+		
 		emailResult = false;
+		
 		if (!result) {
 			$(".company_email__regex").html("아이디 형식이 올바르지 않습니다.").css({ "font-size": "12px", "color": "red" });
 			regexResult = false;

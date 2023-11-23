@@ -35,7 +35,7 @@ $(document).ready(function() {
 			$(".header__profileImageBox").append(profileImg);
 				
 			$(".profileName").html(resp.name);
-			$(".profileEmail").html(resp.company_email+"@clovers.com");
+			$(".profileEmail").html(resp.company_email);
 					
 		});
 	//})

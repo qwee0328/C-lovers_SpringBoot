@@ -38,7 +38,19 @@ public class HumanResourcesService {
 	private HumanResourcesDAO dao;
 
 	public MemberDTO selectById(String id) {
-		return dao.selectById(id);
+		
+		MemberDTO dto = dao.selectById(id);
+		
+		// 사내이메일에 @이후로 없애고 불러옴
+		String company_email = dto.getCompany_email();
+		int index = company_email.indexOf("@");
+		String email = company_email.substring(0,index);
+		
+		System.out.println(email);
+		
+		dto.setCompany_email(email);
+		
+		return dto;
 	}
 
 	public String reChangePw(String id) {
@@ -47,6 +59,7 @@ public class HumanResourcesService {
 
 	// 사내 이메일 중복 확인
 	public int isDupEmail(String company_email) {
+		
 		return dao.isDupEmail(company_email);
 	}
 	
