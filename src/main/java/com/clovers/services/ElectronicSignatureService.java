@@ -292,6 +292,16 @@ public class ElectronicSignatureService {
 	public int getJobRank(String loginID) {
 		return dao.getJobRank(loginID);
 	}
+	
+	// 로그인한 사용자가 결재자인 문서 번호들
+	public List<String> isListApprover(String loginID) {
+		return dao.isListApprover(loginID);
+	}
+	
+	// 결재자의 순서인 진행 중인 문서 대기 리스트 출력
+	public Map<String, Object> selectAllWaitByDocumentId(String document_id) {
+		return dao.selectAllWaitByDocumentId(document_id);
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
 	public List<Map<String, Object>> progressTotalList(String loginID, List<String> keyword, int start, int end) {

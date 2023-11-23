@@ -143,10 +143,24 @@
         JOIN job j ON e.job_id = j.id
         WHERE e.id = #{loginID}
 	</select>
+	
+	<!-- // 로그인한 사용자가 결재자인 문서 번호들 -->
+	<select id="isListApprover" resultType="String">
+		SELECT document_id
+		FROM document_approvals
+		WHERE emp_id = #{loginID}
+	</select>
+	
+	<!-- 결재자의 순서인 진행 중인 문서 대기 리스트 출력 -->
+	<select id="selectAllWaitByDocumentId" resultType="map">
+		SELECT DISTINCT document_id, title, drafter_name, report_date
+		FROM approval_list_view
+		WHERE document_id = #{document_id}
+	</select>
 
 	<!-- // 진행 중인 문서 전체 리스트 출력 -->
 	<select id="progressTotalList" resultType="map">
-	    SELECT *
+	    SELECT DISTINCT document_id, title, drafter_name, report_date, status
 	    FROM approval_list_view
 	    WHERE (approver_id = #{loginID} OR drafter_id = #{loginID})
 	    	AND status = '대기'

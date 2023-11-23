@@ -201,11 +201,32 @@ public class ElectronicSignatureController {
 		List<String> secGrade = getSecurityGrade(loginID);
 		
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		List<Map<String, Object>> list = esservices.progressWaitList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
-		setDivision(loginID, list);
+		//List<Map<String, Object>> list = esservices.progressWaitList(loginID, secGrade, (currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)) - 1, (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		
 		Map<String, Object> param = new HashMap<>();
-		param.put("list", list);
+		
+		// 로그인한 사용자가 결재자인 문서 번호들
+		List<String> isListApprover = esservices.isListApprover(loginID);
+		
+		// 문서가 하나라도 존재한다면
+		List<Map<String, Object>> list = new ArrayList<>();
+		if(isListApprover.size() > 0) {
+			for(String document_id : isListApprover) {
+				// 대기자가 존재하는지
+				int previousApprover = esservices.previousApprovalResult(loginID, document_id);
+				// 대기자가 존재한다면
+				if(previousApprover != 0) {
+
+				} else {
+
+					list.add(esservices.selectAllWaitByDocumentId(document_id));
+					System.out.println(esservices.selectAllWaitByDocumentId(document_id));
+				}
+			}
+			setDivision(loginID, list);
+			param.put("list", list);
+		}
+		
 		param.put("recordTotalCount", esservices.progressWaitList(loginID, secGrade, 0, 0).size());
 		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
 		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);

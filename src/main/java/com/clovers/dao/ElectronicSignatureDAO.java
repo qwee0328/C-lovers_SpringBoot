@@ -102,6 +102,16 @@ public class ElectronicSignatureDAO {
 	public int getJobRank(String loginID) {
 		return db.selectOne("ElectronicSignature.getJobRank", loginID);
 	}
+	
+	// 로그인한 사용자가 결재자인 문서 번호들
+	public List<String> isListApprover(String loginID) {
+		return db.selectList("ElectronicSignature.isListApprover", loginID);
+	}
+	
+	// 결재자의 순서인 진행 중인 문서 대기 리스트 출력
+	public Map<String, Object> selectAllWaitByDocumentId(String document_id) {
+		return db.selectOne("ElectronicSignature.selectAllWaitByDocumentId", document_id);
+	}
 
 	// 진행 중인 문서 전체 리스트 출력
 	public List<Map<String, Object>> progressTotalList(Map<String, Object> param) {
