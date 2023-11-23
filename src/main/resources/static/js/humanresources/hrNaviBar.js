@@ -2,14 +2,23 @@ $(document).ready(function() {
 	$.ajax({
 		url: "/members/isAdmin"
 	}).done(function(resp) {
-		for (let i = 0; i < resp.length; i++) {
+		if(resp.includes("총괄")||resp.includes("인사")){
+			console.log("보임")
+			$(".naviBar__managerMenu").css("display", "block");
+		}else{
+			console.log("안보임")
+			$(".naviBar__managerMenu").css("display", "none");
+		}
+		/*for (let i = 0; i < resp.length; i++) {
 			// 인사 권한
 			if (resp[i] == "인사" || resp[i] == "총괄") {
-				$(".naviBar__managerMenu").css("display", "block");
+				console.log("보임")
+				
 			} else {
-				$(".naviBar__managerMenu").css("display", "none");
+				console.log("안보임")
+				
 			}
-		}
+		}*/
 	});
 
 	$(".regularToggle, .shiftToggle, .org_ExeToggle, .hrToggle").on("click", function() {

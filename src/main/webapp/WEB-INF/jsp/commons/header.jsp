@@ -100,7 +100,7 @@
 					
 					<c:choose>
 						<c:when test="${title eq '회계지원' }">
-							<div class="dropNavBox__inner" style="background-color: #DCEDD4;">
+							<div class="dropNavBox__inner" style="background-color: #DCEDD4;" id="accountingController__small">
 								<div class="inner__icon">
 									<i class="fa-solid fa-hand-holding-dollar"></i>
 								</div>
@@ -108,7 +108,7 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-							<div class="dropNavBox__inner">
+							<div class="dropNavBox__inner" id="accountingController__small">
 							<div class="inner__icon">
 								<i class="fa-solid fa-hand-holding-dollar"></i>
 							</div>

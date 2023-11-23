@@ -134,6 +134,21 @@
 	<update id="updateUserJob">
 		update employee set job_id=#{job_id} where id =#{id};
 	</update>
+	
+	<!-- // 사용자 총괄 관리자 삭제하기 -->
+	<delete id="deleteTotalAdmin">
+		delete from admin where emp_id =#{id} and authority_category_id="총괄";
+	</delete>
+	
+	<!-- // 사용자 인사 관리자 삭제하기 -->
+	<delete id="deleteHRAdmin">
+		delete from admin where emp_id =#{id} and authority_category_id="인사";
+	</delete>
+	
+	<!-- // 사용자 회계 관리자 삭제하기 -->
+	<delete id="deleteACAdmin">
+		delete from admin where emp_id =#{id} and authority_category_id="회계";
+	</delete>
 
 	<!-- // 사용자 소속 조직 수정 -->
 	<update id="updateUserDeptTask">

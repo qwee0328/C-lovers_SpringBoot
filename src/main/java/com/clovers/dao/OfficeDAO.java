@@ -97,7 +97,22 @@ public class OfficeDAO {
 	public int updateUserJob(MemberDTO dto) {
 		return db.update("Office.updateUserJob", dto);
 	}
-
+	
+	// 사용자 총괄 관리자 삭제하기
+	public void deleteTotalAdmin(String id) {
+		db.delete("Office.deleteTotalAdmin", id);
+	}
+	
+	// 사용자 인사 관리자 삭제하기
+	public void deleteHRAdmin(String id) {
+		db.delete("Office.deleteHRAdmin",id);
+	}
+	
+	// 사용자 회계 관리자 삭제하기
+	public void deleteACAdmin(String id) {
+		db.delete("Office.deleteACAdmin",id);
+	}
+	
 	// 오피스 이름 수정하기
 	public int updateOfficeName(OfficeDTO dto) {
 		return db.update("Office.updateOfficeName", dto);

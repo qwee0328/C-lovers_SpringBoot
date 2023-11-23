@@ -143,11 +143,6 @@ public class MailDAO {
 	public List<EmailDTO> selectDeletedTrashList(){
 		return db.selectList("Mail.selectDeletedTrashList");
 	}
-
-	// 휴지통에서 30일 경과한 캘린더 삭제
-	public void autoDeleteInTrash() {
-		db.delete("Mail.autoDeleteInTrash");
-	}
 	
 	// 존재하는 이메일인지
 	public boolean existEmail(String email) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -14,8 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Component
-public class AccountingAuthorityValidator implements HandlerInterceptor {
-	// 회계 권한 유효성 검사
+public class HumanResourcesValidator implements HandlerInterceptor {
+	// 인사 권한 유효성 검사
 	@Autowired
 	private HttpSession session;
 
@@ -27,27 +28,29 @@ public class AccountingAuthorityValidator implements HandlerInterceptor {
 			throws Exception {
 		session = request.getSession();
 		String loginID = (String) session.getAttribute("loginID");
+		System.out.println("인사 유효성" + loginID);
 		boolean result = false;
 		boolean full = false;
-		boolean humanResource = false;
+		boolean accounting = false;
 		List<String> permission = mservice.getAuthorityCategory(loginID);
-		for (String per : permission) {
-			System.out.println("회계 있?" + per);
-			if (per.equals("회계")) {
-				result= true;
-			} else if (per.equals("총괄")) {
-				result= true;
-				full = true;
-			} else if (per.equals("인사")) {
-				humanResource = true;
+		System.out.println(permission.toString());
+		if (permission.size() != 0) {
+			for (String per : permission) {
+				System.out.println("인사 있?" + per);
+				if (per.equals("인사")) {
+					return true;
+				} else if (per.equals("총괄")) {
+					full = true;
+				} else if (per.equals("회계")) {
+					accounting = true;
+				}
+			}
+			System.out.println(full +" "+ accounting);
+			if (!full|| !accounting) {
+				System.out.println("메인으로 돌아가");
+				response.sendRedirect("/");
 			}
 		}
-		System.out.println(full + " " + humanResource);
-		if (!full) {
-			System.out.println("메인으로 돌아가");
-			response.sendRedirect("/");
-		}
-
 		return result;
 	}
 }

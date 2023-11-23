@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.clovers.dto.AdminDTO;
 import com.clovers.dto.AnnaulRestDTO;
 import com.clovers.dto.MemberDTO;
 
@@ -39,6 +40,11 @@ public class MemberDAO {
 
 	public List<String> getAuthorityCategory(String id) {
 		return db.selectList("member.getAuthorityCategory", id);
+	}
+	
+	// 내 관리자 정보 불러오기
+	public List<AdminDTO> getAuthorityInfo(String id){
+		return db.selectList("member.getAuthorityInfo",id);
 	}
 
 	// 모든 사용자의 id랑 입사일 불러오기
