@@ -48,7 +48,6 @@ public class AddressBookService {
 		param.put("keyword", keyword);
 		param.put("auth", auth);
 		
-		System.out.println(auth);
 					
 		if(!key.equals("is_share") && dao.existTag(value)==0) { // 태그가 삭제된 경우
 			Map<String,Object> result = new HashMap<>();

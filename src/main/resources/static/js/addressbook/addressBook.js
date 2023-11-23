@@ -1,15 +1,3 @@
-/*$(document).on("click",".modalBody__plusBtn>i", function() {
-	if ($(this).closest(".modalBody__line").find(".modalBody__input").val() == "" || $(this).closest(".modalBody__line").find("select option:selected").val() == "") {
-		Swal.fire({
-			icon: "error",
-			text: "내용을 먼저 채워주세요."
-		});
-		return false;
-	}
-});*/
-
-
-
 // insert modal 창 내용 초기화
 function modalInit() { 
 	$(".addBookInsertModal__title").text("주소 추가");
@@ -102,31 +90,59 @@ function reloadTags(callback) {
 		url: "/addressbook/tagSelect",
 		async:"false"
 	}).done(function(tagList) {
-		$(".customMenu").remove();
-		let naviConp__icon = $("<div>").attr("class", "naviConp__icon").html(`<i class="fa-solid fa-tag"></i>`);
-		for (let i = 0; i < tagList.length; i++) {
-			let naviConp__title = $("<div>").attr("class", "naviConp__title naviConp__titleMini").text(tagList[i].name)
-			let toggleInner = $("<div>").attr("class", "naviConp toggleInner customMenu").attr("data-id",tagList[i].id);
-			let removeNavi = $("<div>").attr("class","removeNavi").html('<i class="fa-solid fa-minus"></i>').attr("data-id",tagList[i].id);
-			toggleInner.append(naviConp__icon.clone()).append(naviConp__title).attr("data-title", tagList[i].name).append(removeNavi);
-
-			if (tagList[i].is_share) { // 공유주소록
-				$(".naviBar__sharedAddress").append(toggleInner);
-			} else { // 개인주소록
-				$(".naviBar__personalAddress").append(toggleInner);
+		
+		let flag = false;
+		
+		$.ajax({
+			url: "/members/isAdmin",
+			async:"false"
+		}).done(function(resp) {
+			console.log(resp);
+			for (let i = 0; i < resp.length; i++) {
+				if (resp[i] == "총괄" || resp[i] == "인사") {
+					flag = true; 
+					console.log("1 "+flag);
+					break;
+				}
 			}
-		}
+			
+			
+			$(".customMenu").remove();
+			let naviConp__icon = $("<div>").attr("class", "naviConp__icon").html(`<i class="fa-solid fa-tag"></i>`);
+			for (let i = 0; i < tagList.length; i++) {
+				let naviConp__title = $("<div>").attr("class", "naviConp__title naviConp__titleMini").text(tagList[i].name)
+				let toggleInner = $("<div>").attr("class", "naviConp toggleInner customMenu").attr("data-id",tagList[i].id);
+				toggleInner.append(naviConp__icon.clone()).append(naviConp__title).attr("data-title", tagList[i].name);
+				
+				if(flag){
+					let removeNavi = $("<div>").attr("class","removeNavi").html('<i class="fa-solid fa-minus"></i>').attr("data-id",tagList[i].id);
+					toggleInner.append(removeNavi);
+				}
+				
+				if (tagList[i].is_share) { // 공유주소록
+					$(".naviBar__sharedAddress").append(toggleInner);
+				} else { // 개인주소록
+					$(".naviBar__personalAddress").append(toggleInner);
+				}
+			}
+			
+			if($(".naviBar__sharedAddress").find(".toggleMenu").attr("toggleView") == "false"){
+				$(".naviBar__sharedAddress .toggleInner").css("display","none");
+			}
+			if($(".naviBar__personalAddress").find(".toggleMenu").attr("toggleView") == "false"){
+				$(".naviBar__personalAddress .toggleInner").css("display","none");
+			}
+			
+			if (typeof callback === 'function') {
+		        callback();
+		    }
+			
+			
+			
+		});
+					
+					
 		
-		if($(".naviBar__sharedAddress").find(".toggleMenu").attr("toggleView") == "false"){
-			$(".naviBar__sharedAddress .toggleInner").css("display","none");
-		}
-		if($(".naviBar__personalAddress").find(".toggleMenu").attr("toggleView") == "false"){
-			$(".naviBar__personalAddress .toggleInner").css("display","none");
-		}
-		
-		if (typeof callback === 'function') {
-	        callback();
-	    }
 	});
 }
 
@@ -162,7 +178,6 @@ $(document).on("click",".removeNavi",function(e){
 
 // 주소록 출력
 function reloadAddressBook(authorityOrTagId, tagId, keyword) {
-	//console.log(`authOrId: ${authorityOrTagId}, id: ${tagId}`);
 
 	let key, value;
 
@@ -197,7 +212,7 @@ function reloadAddressBook(authorityOrTagId, tagId, keyword) {
 				$(".body__addList>*").remove();
 				$(".header__tagName").html($(".toggleInner[data-id='"+value+"']").text()+":&nbsp;<span class='addressCnt'>"+resp.length+"</span>개");
 				for (let i = 0; i < resp.length; i++) {
-					let addList__addessLine = $("<div>").attr("class", "addList__addessLine d-flex").attr("data-id",resp[i].id);
+					let addList__addessLine = $("<div>").attr("class", "addList__addessLine d-flex").attr("data-id",resp[i].id).attr("data-regisger",resp[i].emp_id);
 					let addessLine__chkBoxCover = $("<div>").attr("class", "addessLine__chkBoxCover align-center");
 					let addessLine__chkBox = $("<input type='checkbox'>").attr("class", "addessLine__chkBox")
 					addessLine__chkBoxCover.append(addessLine__chkBox);
@@ -525,7 +540,7 @@ $(document).on("click", ".addessLine__chkBox", function(e) {
 				$(".addListHeader__trash").attr("style","display:none !important");
 				if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
 					for (let i = 0; i < resp.length; i++) {
-						if (resp[i] == "총괄") $(".addListHeader__trash").attr("style","display:flex !important");
+						if (resp[i] == "총괄" || resp[i] == "인사") {$(".addListHeader__trash").attr("style","display:flex !important"); break;}
 					}
 				}else{
 					$(".addListHeader__trash").attr("style","display:flex !important");
@@ -580,7 +595,7 @@ $(document).on("click", ".addListHeader__chkBox", function() {
 				$(".addListHeader__trash").attr("style","display:none !important");
 				if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
 					for (let i = 0; i < resp.length; i++) {
-						if (resp[i] == "총괄") $(".addListHeader__trash").attr("style","display:flex !important");
+						if (resp[i] == "총괄" || resp[i] == "인사") {$(".addListHeader__trash").attr("style","display:flex !important"); break;}
 					}
 				}else{
 					$(".addListHeader__trash").attr("style","display:flex !important");
@@ -622,7 +637,7 @@ function deleteAddress(data){
 			
 			let flag = false;
 			for (let i = 0; i < resp.length; i++) {
-				if (resp[i] == "총괄") {
+				if (resp[i] == "총괄" || resp[i] == "인사") {
 					flag = true;
 					let url
 					if(parseInt($("#abCurrentMenu").val())==-3){ // 현재 인덱스가 휴지통이면 영구삭제
@@ -639,6 +654,7 @@ function deleteAddress(data){
 						$.modal.close();
 						indexSelect($(".activeMenu"));	
 					});
+					break;
 				}
 			}
 			if(!flag){
@@ -794,6 +810,7 @@ $(document).on("click",".addList__addessLine ",function(){
 		$(".addBookModal__deleteBtn").css("display","block");
 		$(".addListHeader__trash").css("display","block");
 		$(".addListHeader__delete").css("display","block");
+		$("#addBookModal__updateBtn").css("display","block");
 		if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
 			$.ajax({
 				url: "/members/isAdmin",
@@ -802,13 +819,15 @@ $(document).on("click",".addList__addessLine ",function(){
 				$(".addBookModal__deleteBtn").css("display","none");
 				$(".addListHeader__trash").css("display","none");
 				$(".addListHeader__delete").css("display","none");
+				$("#addBookModal__updateBtn").css("display","none");
 				for (let i = 0; i < resp.length; i++) {
 					// 총괄 권한	
-					if (resp[i] == "총괄") {
+					if (resp[i] == "총괄" || resp[i] == "인사") {
 						$(".addBookModal__deleteBtn").css("display","block");
 						$(".addListHeader__trash").css("display","block");
 						$(".addListHeader__delete").css("display","block");
-						
+						$("#addBookModal__updateBtn").css("display","block");
+						break;
 					}	
 				}
 			})
@@ -823,43 +842,97 @@ $(document).on("click",".addList__addessLine ",function(){
 
 // 정보창에서 수정하기 클릭 (최신 정보 불러오기)
 $(document).on("click","#addBookModal__updateBtn",function(){
-	$.ajax({
-		url:"/addressbook/selectById",
-		data:{id:$(this).attr("data-id")},
-		type:"post"
-	}).done(function(resp){
-		modalInit();
-		$(".addBookInsertModal__title").text("주소 변경");
-		for(let key in resp){
-			$(`.modalBody__${key}`).val(resp[key]);
-			if(key=="memo") $(`.modalBody__${key}`).text(resp[key]);
-			if(key=="is_share"){
-				if(resp[key] == 0){
-					key = "personal";
-				}else{
-					key = "shared";
-				}
-				$(".activeType").removeClass("activeType");
-				$(`#${key}`).addClass("activeType");
-				changeTab($(".activeType").attr("id"),function(){
-					if (resp.tag_ids && resp.tag_names) {
-						let tagIdArr = resp.tag_ids.split(",");
-						for(let i=0; i<tagIdArr.length; i++){
-							$("select[name='modalBody__tag']").val(tagIdArr[i]).prop("selected",true);
-							tagSelect();
+	let id = $(this).attr("data-id");
+	if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
+		$.ajax({
+			url: "/members/isAdmin",
+			async:false
+		}).done(function(resp) {
+			for (let i = 0; i < resp.length; i++) {
+				// 총괄 권한	
+				if (resp[i] == "총괄" || resp[i] == "인사") {
+					$.ajax({
+						url:"/addressbook/selectById",
+						data:{id:id},
+						type:"post"
+					}).done(function(resp){
+						modalInit();
+						$(".addBookInsertModal__title").text("주소 변경");
+						for(let key in resp){
+							$(`.modalBody__${key}`).val(resp[key]);
+							if(key=="memo") $(`.modalBody__${key}`).text(resp[key]);
+							if(key=="is_share"){
+								if(resp[key] == 0){
+									key = "personal";
+								}else{
+									key = "shared";
+								}
+								$(".activeType").removeClass("activeType");
+								$(`#${key}`).addClass("activeType");
+								changeTab($(".activeType").attr("id"),function(){
+									if (resp.tag_ids && resp.tag_names) {
+										let tagIdArr = resp.tag_ids.split(",");
+										for(let i=0; i<tagIdArr.length; i++){
+											$("select[name='modalBody__tag']").val(tagIdArr[i]).prop("selected",true);
+											tagSelect();
+										}
+									}	
+								});
+							}
 						}
-					}	
-				});
+							
+						$(".modalBody__addBookType").css("display","none");	
+						$("#addressBookInsert").attr("id","addressBookUpdate");
+						$("#addressBookUpdate").attr("data-id",resp.id);
+						$(".addBookInsertModal").modal({
+							showClose: false
+						});
+					})
+				}	
+				break;
 			}
-		}
-			
-		$(".modalBody__addBookType").css("display","none");	
-		$("#addressBookInsert").attr("id","addressBookUpdate");
-		$("#addressBookUpdate").attr("data-id",resp.id);
-		$(".addBookInsertModal").modal({
-			showClose: false
-		});
-	})
+		})
+				
+	}else{
+		$.ajax({
+			url:"/addressbook/selectById",
+			data:{id:id},
+			type:"post"
+		}).done(function(resp){
+			modalInit();
+			$(".addBookInsertModal__title").text("주소 변경");
+			for(let key in resp){
+				$(`.modalBody__${key}`).val(resp[key]);
+				if(key=="memo") $(`.modalBody__${key}`).text(resp[key]);
+				if(key=="is_share"){
+					if(resp[key] == 0){
+						key = "personal";
+					}else{
+						key = "shared";
+					}
+					$(".activeType").removeClass("activeType");
+					$(`#${key}`).addClass("activeType");
+					changeTab($(".activeType").attr("id"),function(){
+						if (resp.tag_ids && resp.tag_names) {
+							let tagIdArr = resp.tag_ids.split(",");
+							for(let i=0; i<tagIdArr.length; i++){
+								$("select[name='modalBody__tag']").val(tagIdArr[i]).prop("selected",true);
+								tagSelect();
+							}
+						}	
+					});
+				}
+			}
+				
+			$(".modalBody__addBookType").css("display","none");	
+			$("#addressBookInsert").attr("id","addressBookUpdate");
+			$("#addressBookUpdate").attr("data-id",resp.id);
+			$(".addBookInsertModal").modal({
+				showClose: false
+			});
+		})
+	}	
+	
 });
 
 
@@ -896,17 +969,42 @@ $(document).on("click",".addListHeader__restore",function(){
 $(document).on("click","#addressBookUpdate",function(){
 	let data = settingData();
 	data.id = $(this).attr("data-id");
-	$.ajax({
-		url: "/addressbook/update",
-		data: data,
-		type: "post"
-
-	}).done(function(resp) {
-		if (resp >= 1) {
-			$.modal.close();
-			indexSelect($(".activeMenu"));	
-		}
-	});
+	
+	if($(".activeMenu").parent().find(".toggleMenu").find(".naviConp__addTag").attr("data-isshare")==1){
+		$.ajax({
+			url: "/members/isAdmin",
+			async:false
+		}).done(function(resp) {
+			for (let i = 0; i < resp.length; i++) {
+				// 총괄 권한	
+				if (resp[i] == "총괄" || resp[i] == "인사") {
+					$.ajax({
+						url: "/addressbook/update",
+						data: data,
+						type: "post"
+					}).done(function(resp) {
+						if (resp >= 1) {
+							$.modal.close();
+							indexSelect($(".activeMenu"));	
+						}
+					});
+					break;
+				}
+			}
+		});
+	}else{
+		$.ajax({
+			url: "/addressbook/update",
+			data: data,
+			type: "post"
+		
+		}).done(function(resp) {
+			if (resp >= 1) {
+				$.modal.close();
+				indexSelect($(".activeMenu"));	
+			}
+		});
+	}
 });
 
 

@@ -69,7 +69,7 @@ public class AddressBookController {
 		String loginID = (String)session.getAttribute("loginID");
 		List<String> authority = mservice.getAuthorityCategory(loginID);
 		for (int i = 0; i < authority.size(); i++) {
-			if (authority.get(i).equals("총괄")) {
+			if (authority.get(i).equals("총괄")||authority.get(i).equals("인사")) {
 				return abservice.select(loginID, key, value, keyword, 1);
 			}
 		}
@@ -101,30 +101,7 @@ public class AddressBookController {
 //		
 //		//return abservice.select((String)session.getAttribute("loginID"), key, value, keyword);
 //	}
-	
-//	// 받은 메일 리스트
-//	@ResponseBody
-//	@RequestMapping("/inBoxList")
-//	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
-//		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-//
-//		// 로그인한 사용자의 이메일 가져오기
-//		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
-//
-//		List<EmailDTO> mail = mservice.inBoxList(receive_id,
-//				(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
-//				(currentPage * Constants.RECORD_COUNT_PER_PAGE));
-//
-//		Map<String, Object> param = new HashMap<>();
-//		param.put("mail", mail);
-//		param.put("send_date", send_date);
-//		param.put("recordTotalCount", mservice.inBoxTotalCount(receive_id));
-//		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
-//		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
-//		param.put("lastPageNum", currentPage);
-//
-//		return param;
-//	}
+
 	
 	// 주소 상세 보기
 	@ResponseBody
@@ -170,6 +147,7 @@ public class AddressBookController {
 		if(selectedTagArray == null || selectedTagArray.isEmpty()) { // 선택된 태그가 없다면
 			return abservice.update(dto); // 기존 태그 삭제 및 주소 내용 업데이트
 		}
+		
 		return abservice.update(dto,selectedTagArray); // 기존 태그 삭제 및 새로운 태그 추가 및 주소 내용 업데이트
 	}
 	

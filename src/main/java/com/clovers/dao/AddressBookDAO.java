@@ -35,6 +35,7 @@ public class AddressBookDAO {
 	}
 	
 	public int update(AddressBookDTO dto) {
+		System.out.println(dto);
 		return db.update("AddressBook.update",dto);
 	}
 	
