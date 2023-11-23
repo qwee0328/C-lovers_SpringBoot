@@ -25,6 +25,10 @@ public class ChatGroupDAO {
 	public List<Map<String, Object>> selectByEmpId(String emp_id) {
 		return db.selectList("ChatGroup.selectByEmpId", emp_id);
 	}
+	
+	public List<String> selectEmpIDByChatRoomId(String chat_room_id){
+		return db.selectList("ChatGroup.selectEmpIDByChatRoomId",chat_room_id);
+	}
 
 	// 채팅방에 사용자만을 위한 정보를 보여줌.
 	public Map<String, Object> selectByEmpIdNChatRoomID(Map<String, String> param) {
@@ -35,6 +39,7 @@ public class ChatGroupDAO {
 	public List<Map<String, Object>> getAllOfficerInfo() {
 		return db.selectList("ChatGroup.getAllOfficerInfo");
 	}
+	
 
 	// 사용자 아이디로 사용자 정보 가져오기
 	public Map<String, Object> getOfficerInfoByEmployeeId(String employee_id) {
@@ -63,7 +68,7 @@ public class ChatGroupDAO {
 	}
 
 	// 채팅 그룹에서 나가기
-	public int deleteByEmpIdNChatId(Map<String, Integer> param) {
+	public int deleteByEmpIdNChatId(Map<String, Object> param) {
 		return db.delete("ChatGroup.deleteByEmpIdNChatId", param);
 	}
 

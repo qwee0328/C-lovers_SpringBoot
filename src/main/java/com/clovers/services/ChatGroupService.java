@@ -1,10 +1,13 @@
 package com.clovers.services;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +16,7 @@ import com.clovers.dao.ChatMessageDAO;
 import com.clovers.dao.ChatRoomDAO;
 import com.clovers.dao.MemberDAO;
 import com.clovers.dto.ChatGroupDTO;
+import com.clovers.dto.ChatMessageDTO;
 import com.clovers.dto.ChatRoomDTO;
 
 @Service
@@ -29,6 +33,9 @@ public class ChatGroupService {
 	
 	@Autowired
 	private MemberDAO mdao;
+	
+	@Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
 	// 최초로 만든 채팅그룹에 초대할 때 사용하는 함수.
 	@Transactional
@@ -71,6 +78,10 @@ public class ChatGroupService {
 	        String employeeName = mdao.selectNameById(employee_id);
 	        this.inviteInitChatGroup(employee_id, newChatroomId,loginName);
 	        this.inviteInitChatGroup(loginID, newChatroomId,employeeName);
+	        
+	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT02036",loginName+"님이 "+ employeeName+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+	        cmdao.recordChat(cdto);
+	        messagingTemplate.convertAndSend("/sub/chat/room/"+newChatroomId,cdto);
 	        return newChatroomId;
 	    } catch (Exception e) {
 	    	e.printStackTrace();
@@ -89,6 +100,18 @@ public class ChatGroupService {
 			for(String employee_id : selectedEmployees) {
 				this.inviteInitChatGroup(employee_id, newChatroomId,"그룹채팅 made by " + loginName);
 			}
+			
+			List<String> empName = new ArrayList<>();
+			
+			for(String emp_id : selectedEmployees) {
+				empName.add(mdao.selectNameById(emp_id));
+			}
+			String memberString = String.join(",", empName);
+			ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT02036",
+					loginName+"님이 " +memberString+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+			cmdao.recordChat(cdto);
+			messagingTemplate.convertAndSend("/sub/chat/room/"+newChatroomId,cdto);
+			
 			return newChatroomId;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -106,15 +129,33 @@ public class ChatGroupService {
 				Enum.valueOf(ChatRoomDTO.ChatRoomStates.class, roomState))) {
 			ChatRoomDTO crdto = new ChatRoomDTO();
 			crdto.setId(chat_room_id);
-			crdto.setState(ChatRoomDTO.ChatRoomStates.ACTIVEPERSONAL);
+			crdto.setState(ChatRoomDTO.ChatRoomStates.ACTIVEGROUP);
 			crdao.updateChatRoomState(crdto);
 		}
 		
+		List<String> empList = this.selectEmpIDByChatRoomId(chat_room_id);
+		List<String> empName = new ArrayList<>();
+		
+		for(String emp_id : empList) {
+			empName.add(mdao.selectNameById(emp_id));
+		}
+		String memberString = String.join(",", empName);
 		try {
 			String loginName = mdao.selectNameById(loginID);
 			for(String employee_id : selectedEmployees) {
-				this.inviteAlreadyExistChatGroup(employee_id, chat_room_id,"그룹채팅 made by " + loginName);
+				this.inviteAlreadyExistChatGroup(employee_id, chat_room_id,memberString);
 			}
+			
+			List<String> inviteList = new ArrayList<>();
+			for(String emp_id : selectedEmployees) {
+				inviteList.add(mdao.selectNameById(emp_id));
+			}
+			String invitemember = String.join(",", inviteList);
+			
+			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT02036",loginName+"님이 "+invitemember+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+			cmdao.recordChat(cdto);
+			messagingTemplate.convertAndSend("/sub/chat/room/"+chat_room_id,cdto);
+			
 			return chat_room_id;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -135,7 +176,9 @@ public class ChatGroupService {
 		return resp;
 	}
 	
-
+	public List<String> selectEmpIDByChatRoomId(String chat_room_id){
+		return cgdao.selectEmpIDByChatRoomId(chat_room_id);
+	}
 
 	public List<Map<String, Object>> selectByEmpId(String employee_id) {
 		return cgdao.selectByEmpId(employee_id);
@@ -171,6 +214,17 @@ public class ChatGroupService {
 	
 	public int updateChatGroupName(Map<String, Object> param) {
 		return cgdao.updateChatGroupName(param);
+	}
+	
+	public int deleteByEmpIdNChatId(String emp_id, String chat_room_id) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("emp_id", emp_id);
+		param.put("chat_room_id", chat_room_id);
+		String exitmember = mdao.selectNameById(emp_id);
+		ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT02036",exitmember+"님이 채팅방을 나갔습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.EXIT);
+		cmdao.recordChat(cdto);
+		messagingTemplate.convertAndSend("/sub/chat/room/"+chat_room_id,cdto);
+		return cgdao.deleteByEmpIdNChatId(param);
 	}
 
 }

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clovers.dao.ChatGroupDAO;
 import com.clovers.dao.ChatMessageDAO;
-import com.clovers.dao.MemberDAO;
 import com.clovers.dto.ChatMessageDTO;
 
 @Service
@@ -23,8 +22,6 @@ public class ChatMessageService {
 	@Autowired
 	private ChatGroupDAO cgdao;
 	
-	@Autowired
-	private MemberDAO mdao;
 	
 	
 	public int recordChat(ChatMessageDTO cdto) {
@@ -33,6 +30,11 @@ public class ChatMessageService {
 	
 	public List<ChatMessageDTO> selectMessagesByChatRoomId(String chat_room_id){
 		return cmdao.selectMessagesByChatRoomId(chat_room_id);
+	}
+	
+	// 검색기록을 바탕으로 채팅방 아이디 가져오기
+	public List<Map<String,Object>> getChatRoomIdBySearch(String search){
+		return cmdao.getChatRoomIdBySearch(search);
 	}
 	
 	public List<Map<String,Object>> selectMessageListByChatRoomId(String chat_room_id){
