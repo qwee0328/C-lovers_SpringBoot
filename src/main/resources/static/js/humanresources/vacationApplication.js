@@ -15,11 +15,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// user 이름 불러오기
 	$.ajax({
-		url: "/humanResources/headerProfile",
-		type: "POST",
-	}).done(function(resp) {
-		$("#documentWriter").html("C-lovers " + resp.name);
-	});
+		url: "/office/selectOfficeName"
+	}).done(function(data) {
+		// user 이름 불러오기
+		$.ajax({
+			url: "/humanResources/headerProfile",
+			type: "POST",
+		}).done(function(resp) {
+			$("#documentWriter").html(data +" " + resp.name);
+		});
+	})
+
 
 	// input의 value가 변경될 때 선택한 날짜가 옆에 나오도록 설정
 	$("#date_selector").on("change", function() {

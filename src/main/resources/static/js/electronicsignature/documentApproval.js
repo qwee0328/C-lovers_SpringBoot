@@ -44,11 +44,7 @@ $(document).ready(function() {
 			categoryDiv.addClass("documentTable__documentCategory");
 			categoryDiv.html(resp[i].document_type_id);
 			
-			let divisionDiv = $("<div>");
-			divisionDiv.addClass("documentTable__division");
-			divisionDiv.html(resp[i].division);
-			
-			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv).append(divisionDiv);
+			listDiv.append(idDiv).append(titleDiv).append(drafterDiv).append(draftDateDiv).append(dueDateDiv).append(categoryDiv);
 			$(".documentTable__body").append(listDiv);
 		}
 	}

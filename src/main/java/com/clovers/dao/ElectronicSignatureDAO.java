@@ -118,9 +118,9 @@ public class ElectronicSignatureDAO {
 		return db.selectList("ElectronicSignature.progressCheckList", param);
 	}
 
-	// 진행 중인 문서 진행 리스트 출력
-	public List<Map<String, Object>> progressList(Map<String, Object> param) {
-		return db.selectList("ElectronicSignature.progressList", param);
+	// 진행 중인 문서 예정 리스트 출력
+	public List<Map<String, Object>> progressExpectedList(Map<String, Object> param) {
+		return db.selectList("ElectronicSignature.progressExpectedList", param);
 	}
 
 	// 문서함 전체 리스트 출력
@@ -208,6 +208,11 @@ public class ElectronicSignatureDAO {
 		return db.selectOne("ElectronicSignature.existRejection", loginID);
 	}
 	
+	// 이미 결재 내역이 존재하는지
+	public boolean existMyApproval(Map<String, String> param) {
+		return db.selectOne("ElectronicSignature.existMyApproval", param);
+	}
+	
 	// 결재 결과 저장
 	public int submitApproval(Map<String, String> param) {
 		return db.update("ElectronicSignature.submitApproval", param);
@@ -226,5 +231,19 @@ public class ElectronicSignatureDAO {
 	// 문서 삭제
 	public int deleteApproval(String document_id) {
 		return db.delete("ElectronicSignature.deleteApproval", document_id);
+	}
+	
+	// 문서에 파일이 있는지 확인
+	public boolean selectFileByDocumentId(String id) {
+		System.out.println("doid"+id);
+		List<String> result = db.selectList("ElectronicSignature.selectFileByDocumentId", id);
+		System.out.println("result"+result);
+		return !result.isEmpty();
+		//return db.selectOne("ElectronicSignature.selectFileByDocumentId", id);
+	}
+	
+	// 문서에 파일 리스트 반환
+	public List<DocumentFileDTO> selectAllFileById(String id){
+		return db.selectList("ElectronicSignature.selectAllFileById",id);
 	}
 }

@@ -41,10 +41,10 @@
 
 			<div class="calendarModal__bodyBottom shareCalendarEl shareCalendarEl2 d-flex">
 				<div class="calendarModal__deptList">
-					<div class="deptList__title">클로버 산업</div>
+					<div class="deptList__title officeName">클로버 산업</div>
 					<div class="calendarModal__dept">
 						<div class="deptList__companyName selectToggle">
-							<i class="fa-solid fa-minus"></i> <span>클로버 산업</span> <span id="officeEmpCount"></span>
+							<i class="fa-solid fa-minus"></i> <span class="officeName">클로버 산업</span> <span id="officeEmpCount"></span>
 						</div>
 						<div class="deptList__cover"></div>
 						

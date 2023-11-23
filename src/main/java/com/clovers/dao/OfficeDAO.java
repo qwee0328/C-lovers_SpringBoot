@@ -179,4 +179,14 @@ public class OfficeDAO {
 	public void insertFirstAnnaul(String id) {
 		db.insert("Office.insertFirstAnnaul", id);
 	}
+	
+	// 공유 주소록에 사용자 정보를 추가하기 
+	public int insertAddressBook(String id) {
+		return db.insert("Office.insertAddressBook", id);
+	}
+	
+	// 회사 이름 불러오기
+	public String selectOfficeName() {
+		return db.selectOne("Office.selectOfficeName");
+	}
 }
