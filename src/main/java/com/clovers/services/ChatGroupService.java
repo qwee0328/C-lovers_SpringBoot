@@ -79,7 +79,9 @@ public class ChatGroupService {
 	        this.inviteInitChatGroup(employee_id, newChatroomId,loginName);
 	        this.inviteInitChatGroup(loginID, newChatroomId,employeeName);
 	        
-	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT02036",loginName+"님이 "+ employeeName+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"Messager"
+	        		,loginName+"님이 "+ employeeName+"님을 초대하였습니다."
+	        		,new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
 	        cmdao.recordChat(cdto);
 	        messagingTemplate.convertAndSend("/sub/chat/room/"+newChatroomId,cdto);
 	        return newChatroomId;
@@ -107,8 +109,10 @@ public class ChatGroupService {
 				empName.add(mdao.selectNameById(emp_id));
 			}
 			String memberString = String.join(",", empName);
-			ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT02036",
-					loginName+"님이 " +memberString+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+			ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"Messager",
+					loginName+"님이 " +memberString+"님을 초대하였습니다.",
+					new Timestamp(System.currentTimeMillis()),
+					ChatMessageDTO.ChatMessageStates.JOIN);
 			cmdao.recordChat(cdto);
 			messagingTemplate.convertAndSend("/sub/chat/room/"+newChatroomId,cdto);
 			
@@ -121,7 +125,8 @@ public class ChatGroupService {
 	
 	// 이미 만들어진 채팅그룹에 초대
 	@Transactional
-	public String setAlreadyExistChatGroupInvite(List<String> selectedEmployees, String chat_room_id, String loginID) {
+	public String setAlreadyExistChatGroupInvite(List<String> selectedEmployees,
+			String chat_room_id, String loginID) {
 		
 		String roomState = crdao.selectStateByChatRoomId(chat_room_id);
 		
@@ -152,7 +157,10 @@ public class ChatGroupService {
 			}
 			String invitemember = String.join(",", inviteList);
 			
-			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT02036",loginName+"님이 "+invitemember+"님을 초대하였습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
+			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"Messager",
+					loginName+"님이 "+invitemember+"님을 초대하였습니다.",
+					new Timestamp(System.currentTimeMillis()),
+					ChatMessageDTO.ChatMessageStates.JOIN);
 			cmdao.recordChat(cdto);
 			messagingTemplate.convertAndSend("/sub/chat/room/"+chat_room_id,cdto);
 			
@@ -216,12 +224,15 @@ public class ChatGroupService {
 		return cgdao.updateChatGroupName(param);
 	}
 	
+	// 채팅방 퇴장 로직
 	public int deleteByEmpIdNChatId(String emp_id, String chat_room_id) {
 		Map<String,Object> param = new HashMap<>();
 		param.put("emp_id", emp_id);
 		param.put("chat_room_id", chat_room_id);
 		String exitmember = mdao.selectNameById(emp_id);
-		ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT02036",exitmember+"님이 채팅방을 나갔습니다.",new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.EXIT);
+		ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"Messager",
+				exitmember+"님이 채팅방을 나갔습니다.",new Timestamp(System.currentTimeMillis()),
+				ChatMessageDTO.ChatMessageStates.EXIT);
 		cmdao.recordChat(cdto);
 		messagingTemplate.convertAndSend("/sub/chat/room/"+chat_room_id,cdto);
 		return cgdao.deleteByEmpIdNChatId(param);

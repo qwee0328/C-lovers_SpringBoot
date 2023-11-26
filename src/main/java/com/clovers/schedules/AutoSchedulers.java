@@ -88,6 +88,5 @@ public class AutoSchedulers {
 	public void TrashScheduler() throws Exception {
 		sservice.autoDeleteInTrash();
 		abservice.autoDeleteInTrash();
-		mailService.autoDeleteInTrash();
 	}
 }

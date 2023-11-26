@@ -206,7 +206,6 @@
     	            let recv = JSON.parse(message.body);
     	            recvMessage(recv);
     	        });
-    	        console.log("/sub/chat/room/"+roomId);
     	    });
     	}
 
@@ -494,6 +493,7 @@
                     data: JSON.stringify({ chatRoomId: chatRoomId }),
                     success: function(response) {
                         alert('채팅방에서 나갔습니다.');
+                        opener.location.reload();
                         window.close();
                     },
                     error: function(error) {
@@ -628,7 +628,10 @@
         	        chatRoomName: newChatRoomName,
         	        chatRoomId: roomId
         	    });
-
+				
+        	    if(!newChatRoomName){
+        	    	alert();
+        	    }
         	    // AJAX 요청
         	    $.ajax({
         	        url: '/chat/updateChatGroupName',

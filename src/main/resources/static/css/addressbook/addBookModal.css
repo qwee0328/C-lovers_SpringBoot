@@ -46,6 +46,10 @@
 	margin-right: 15px;
 }
 
+.ml15{
+	margin-left:15px;
+}
+
 .addBookViewModal__favorites>i {
 	color: #6C6C72;
 }

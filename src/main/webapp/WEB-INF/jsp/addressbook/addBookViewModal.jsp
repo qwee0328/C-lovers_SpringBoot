@@ -25,11 +25,11 @@
 
 		<div class="addBookModal__modalBody"></div>
 		<div class="addBookModal__btns d-flex">
-			<div class="addBookModal__cancelBtnCover mr15">
+			<div class="addBookModal__cancelBtnCover">
 				<button class="addBookModal__cancelBtn">닫기</button>
 			</div>
-			<div class="addBookModal__deleteBtnCover mr15">
-				<button class="addBookModal__deleteBtn" id="addBookModal__deleteBtn">삭제</button>
+			<div class="addBookModal__deleteBtnCover">
+				<button class="addBookModal__deleteBtn ml15 mr15" id="addBookModal__deleteBtn">삭제</button>
 			</div>
 			<div class="addBookModal__updateBtnCover">
 				<button class="addBookModal__updateBtn" id="addBookModal__updateBtn">수정</button>

@@ -90,15 +90,21 @@
 	</select>
 
 	<select id="trashList" resultType="com.clovers.dto.EmailDTO">
-		select * from (select e.*,
-		row_number() over(order by id desc) rn from (select * from info_email
-		where (send_id = #{id} or receive_id = #{id}) and (sender_trash_status = '삭제' or receiver_trash_status = '삭제')) e)
-		ranked where rn between #{start} and #{end}
+		select * from (select
+		row_number() over(order by id desc) rn, info_email.* from info_email
+		WHERE 
+    (send_id = #{id} AND sender_trash_status = '삭제')
+    OR 
+    (receive_id = #{id} AND receiver_trash_status = '삭제')) temp where rn
+		between #{start} and #{end}
 	</select>
 
 	<select id="trashTotalCount" resultType="int">
 		select count(*) from
-		email where (send_id = #{id} or receive_id = #{id}) and (sender_trash_status = '삭제' or receiver_trash_status = '삭제')
+		email WHERE 
+		    (send_id = #{id} AND sender_trash_status = '삭제')
+		    OR 
+		    (receive_id = #{id} AND receiver_trash_status = '삭제')
 	</select>
 
 	<select id="selectFileByEmailId" resultType="boolean">
@@ -245,12 +251,6 @@
 		resultType="com.clovers.dto.EmailDTO">
 		select * from email where trash = true and DATEDIFF(now(), trash_date)>=30;
 	</select>
-	<!-- 휴지통에서 30일 경과된 데이터 삭제 -->
-	<delete id="autoDeleteInTrash">
-		delete from email where id in (select id from (select
-		* from email where trash = 1 and DATEDIFF(now(),
-		trash_date)>=30)trash_list);
-	</delete>
 	
 	<select id="existEmail" resultType="boolean">
 		select count(*) from employee where company_email = #{email}

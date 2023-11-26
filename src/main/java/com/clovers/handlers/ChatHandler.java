@@ -7,12 +7,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import com.clovers.dto.ChatMessageDTO;
 import com.clovers.services.ChatMessageService;
 import com.clovers.services.MemberService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ChatHandler {
@@ -25,18 +27,15 @@ public class ChatHandler {
 	
 	@Autowired
 	private ChatMessageService cmService;
+	
+	
 
 	@MessageMapping("/chat/message")
 	public void message(ChatMessageDTO chatMessage) {
-		if (ChatMessageDTO.ChatMessageStates.EXIT.equals(chatMessage.getState())) {
-			chatMessage.setContent(mService.selectNameById(chatMessage.getEmp_id()) + " 님이 채팅방을 나갔습니다.");
-		}
-		if (ChatMessageDTO.ChatMessageStates.CHAT.equals(chatMessage.getState())) {
-			
-		}
 		chatMessage.setWrite_date(new Timestamp(System.currentTimeMillis()));
-		cmService.recordChat(chatMessage);
 		
+		cmService.recordChat(chatMessage);
+		chatMessage.setEmp_name(mService.selectNameById(chatMessage.getEmp_id()));
 		messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getChat_room_id(), chatMessage);
 	}
 	

@@ -21,28 +21,33 @@ public class AccountingAuthorityValidator implements HandlerInterceptor {
 
 	@Autowired
 	private MemberService mservice;
-	
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		session = request.getSession();
-		String loginID = (String)session.getAttribute("loginID");
+		String loginID = (String) session.getAttribute("loginID");
 		boolean result = false;
+		boolean full = false;
+		boolean humanResource = false;
 		List<String> permission = mservice.getAuthorityCategory(loginID);
-	      for(String per:permission) {
-	         if(per.equals("회계")) {
-	            result = true;
-	         }else {
-	        	 sendUnauthorizedResponse(response);
-	         }
-	      }
+		for (String per : permission) {
+			System.out.println("회계 있?" + per);
+			if (per.equals("회계")) {
+				result= true;
+			} else if (per.equals("총괄")) {
+				result= true;
+				full = true;
+			} else if (per.equals("인사")) {
+				humanResource = true;
+			}
+		}
+		System.out.println(full + " " + humanResource);
+		if (!full||!result) {
+			System.out.println("메인으로 돌아가");
+			response.sendRedirect("/");
+		}
 
 		return result;
 	}
-	
-	private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().write("Unauthorized Access");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clovers.commons.EncryptionUtils;
+import com.clovers.dto.DeptTaskDTO;
 import com.clovers.services.EmailService;
 import com.clovers.services.MemberService;
 
@@ -176,6 +177,13 @@ public class MemberController {
 		}
 
 		return mservice.getAuthorityCategory(id);
+	}
+	
+	@GetMapping("/isAdminReact")
+	public ResponseEntity<List<String>> getAuthorityCategoryReact(){
+		String id = (String) session.getAttribute("loginID");
+		List<String> authority = mservice.getAuthorityCategory(id);
+		return ResponseEntity.ok(authority);
 	}
 
 }

@@ -126,6 +126,8 @@ $(document).ready(function() {
 			// 회계 권한
 			if (resp[i] == "회계" || resp[i] == "총괄") {
 				$("#accountingController__small").css("display", "flex");
+			}else{
+				//$("#accountingController__small").css("display", "none");
 			}
 
 			// 총괄 권한

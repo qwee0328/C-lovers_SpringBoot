@@ -51,11 +51,6 @@
 				<div id="calendarHide"></div>
 				<div id="calendar"></div>
 				<div id="calendarSearch"></div>
-				<div class="inputSearchDate d-flex">
-					<div><label>시작일 <input type="date" data-type="start" class="inputSearchDate_start" value="2023-08-11"></label></div>
-					<div class="inputSearchDate__margin">-</div>
-					<div><label>종료일 <input type="date" data-type="end" class="inputSearchDate_end" value="2023-12-12"></label></div>
-				</div>
 			</div>
 		</div>
 		<div id="searchTag">

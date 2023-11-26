@@ -28,27 +28,6 @@
 }
 
 
-.inputSearchDate{
-	position:absolute;
-	z-index:4;
-	right:20px;
-	top:30px;
-}
-
-.inputSearchDate__margin{
-	margin:0 10px;
-}
-
-.inputSearchDate label{
-	font-size: 14px;
-}
-.inputSearchDate input{
-	padding:0px 5px;
-	margin-left:3px;
-	border: 1px solid #7d7d7d60;
-	border-radius: 4px;
-}
-
 .jquery-modal{
 	z-index: 999 !important;
 }

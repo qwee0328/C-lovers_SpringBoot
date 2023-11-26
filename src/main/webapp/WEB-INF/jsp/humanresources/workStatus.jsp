@@ -18,13 +18,14 @@
 	<div class="container">
 		<%@ include file="../humanresources/hrNaviBar.jsp"%>
 		<div class="workStatusBox">
+		<!-- 
 			<ul class="tabs">
 				<li class="tab-link current" data-tab="workStatus">근무현황</li>
 				<li class="tab-link" data-tab="vacationDetails">휴가내역</li>
 				<li class="tab-link" data-tab="companyVacation">전사 휴가 캘린더</li>
 			</ul>
-
-			<div id="workStatus" class="tab-content current">tab content1</div>
+ -->
+			<!-- <div id="workStatus" class="tab-content current">tab content1</div> -->
 			<div id="vacationDetails" class="tab-content">
 				<input type="hidden" id="totalCountHidden">
 				<input type="hidden" id="usedCountHidden">
@@ -123,7 +124,7 @@
 					<div id="detailPagination"></div>
 				</div>
 			</div>
-			<div id="companyVacation" class="tab-content">tab content3</div>
+			<!-- <div id="companyVacation" class="tab-content">tab content3</div>-->
 		</div>
 	</div>
 </body>
