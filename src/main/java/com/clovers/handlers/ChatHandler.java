@@ -32,12 +32,6 @@ public class ChatHandler {
 
 	@MessageMapping("/chat/message")
 	public void message(ChatMessageDTO chatMessage) {
-		if (ChatMessageDTO.ChatMessageStates.EXIT.equals(chatMessage.getState())) {
-			chatMessage.setContent(mService.selectNameById(chatMessage.getEmp_id()) + " 님이 채팅방을 나갔습니다.");
-		}
-		if (ChatMessageDTO.ChatMessageStates.CHAT.equals(chatMessage.getState())) {
-			
-		}
 		chatMessage.setWrite_date(new Timestamp(System.currentTimeMillis()));
 		
 		cmService.recordChat(chatMessage);
