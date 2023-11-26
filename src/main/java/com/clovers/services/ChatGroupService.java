@@ -79,7 +79,7 @@ public class ChatGroupService {
 	        this.inviteInitChatGroup(employee_id, newChatroomId,loginName);
 	        this.inviteInitChatGroup(loginID, newChatroomId,employeeName);
 	        
-	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT11034"
+	        ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"Messager"
 	        		,loginName+"님이 "+ employeeName+"님을 초대하였습니다."
 	        		,new Timestamp(System.currentTimeMillis()), ChatMessageDTO.ChatMessageStates.JOIN);
 	        cmdao.recordChat(cdto);
@@ -109,7 +109,7 @@ public class ChatGroupService {
 				empName.add(mdao.selectNameById(emp_id));
 			}
 			String memberString = String.join(",", empName);
-			ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"2023DT11034",
+			ChatMessageDTO cdto = new ChatMessageDTO(0,newChatroomId,"Messager",
 					loginName+"님이 " +memberString+"님을 초대하였습니다.",
 					new Timestamp(System.currentTimeMillis()),
 					ChatMessageDTO.ChatMessageStates.JOIN);
@@ -157,7 +157,7 @@ public class ChatGroupService {
 			}
 			String invitemember = String.join(",", inviteList);
 			
-			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT11034",
+			ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"Messager",
 					loginName+"님이 "+invitemember+"님을 초대하였습니다.",
 					new Timestamp(System.currentTimeMillis()),
 					ChatMessageDTO.ChatMessageStates.JOIN);
@@ -230,7 +230,7 @@ public class ChatGroupService {
 		param.put("emp_id", emp_id);
 		param.put("chat_room_id", chat_room_id);
 		String exitmember = mdao.selectNameById(emp_id);
-		ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"2023DT11034",
+		ChatMessageDTO cdto = new ChatMessageDTO(0,chat_room_id,"Messager",
 				exitmember+"님이 채팅방을 나갔습니다.",new Timestamp(System.currentTimeMillis()),
 				ChatMessageDTO.ChatMessageStates.EXIT);
 		cmdao.recordChat(cdto);

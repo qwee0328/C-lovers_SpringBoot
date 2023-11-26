@@ -628,7 +628,10 @@
         	        chatRoomName: newChatRoomName,
         	        chatRoomId: roomId
         	    });
-
+				
+        	    if(!newChatRoomName){
+        	    	alert();
+        	    }
         	    // AJAX 요청
         	    $.ajax({
         	        url: '/chat/updateChatGroupName',
