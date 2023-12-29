@@ -253,8 +253,6 @@
 				company_email : $("#company_email").val()
 			}
 		}).done(function(resp){
-			console.log(resp);
-			
 			if(resp == 0){
 				$(".company_email__regex").html("사용가능한 이메일입니다.").css({ "font-size": "12px", "color": "green" });
 				emailResult = true;
@@ -303,7 +301,6 @@
 
 		reader.onload = function(event){
 			$(".profileImage").attr("src",event.target.result);
-			console.log(event.target.result);
 		}
 
 		reader.readAsDataURL(event.target.files[0]);

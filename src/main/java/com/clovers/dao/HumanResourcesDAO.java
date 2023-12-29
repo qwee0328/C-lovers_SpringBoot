@@ -129,7 +129,6 @@ public class HumanResourcesDAO {
 	// 해당 년도 휴가 사용 개수 불러오기
 	public int selectUsedAnnaul(Map<String, Object> data) {
 		Integer result = db.selectOne("HumanResources.selectUsedAnnaul", data);
-		System.out.println(result);
 		return (result != null) ? result.intValue() : 0;
 	}
 
@@ -140,16 +139,13 @@ public class HumanResourcesDAO {
 
 	// 사용자의 휴가 신청 상세 내역 확인하기
 	public List<Map<String, Object>> selectAnnaulAppDetails(Map<String, Object> param) {
-		System.out.println(param);
 		List<Map<String, Object>> result = db.selectList("HumanResources.selectAnnaulAppDetails", param);
-		System.out.println("result : "+result);
 		return result;
 	}
 
 	// 사용자 휴가 신청 상세 내역 총 개수 불러오기
 	public int selectAnnaulAppCount(String id) {
 		Integer result = db.selectOne("HumanResources.selectAnnaulAppCount", id);
-		System.out.println("dao" + result);
 		return (result != null) ? result.intValue() : 0;
 	}
 

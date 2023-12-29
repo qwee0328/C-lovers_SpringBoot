@@ -78,24 +78,17 @@ $(document).ready(function() {
 			$(this).attr("class").includes("dept") &&
 			$(this).attr("class").includes("pagePlus")
 		) {
-			console.log($(this));
 			$(this).parent().children(".dept_task").css("display", "none");
 			$(this).children("i").attr("class", "fa-solid fa-plus");
 			$(this).attr("class", "dept");
-			console.log($(this).parent().children(".dept.pagePlus").first());
 			if ($(this).parent().parent().find(".dept.pagePlus").first().length <= 0) {
 				$(".company.pagePlus").attr("class", "company pagePlus selected");
 				selectAllEmpInfo();
 			} else {
 				if ($(".dept_task.selected").first().length <= 0) {
-					console.log("팀명 클릭되어있음")
 					$(this).parent().parent().find(".dept.pagePlus").first().addClass("selected");
 					selectDepartmentEmpInfo($(".dept.pagePlus.selected").attr("dept_id"));
-				} else {
-					console.log("팀명 클릭되어있음2")
-					console.log($(this))
-					console.log($(".selected").parent().find(".dept"))
-				}
+				} 
 			}
 		} else if ( // 부서 명 확대
 			$(this).attr("class").includes("dept") &&
@@ -158,14 +151,7 @@ $(document).ready(function() {
 	});
 
 	// 체크박스가 선택 되어있을때 추가 삭제 버튼 활성화
-	//let checkedCount = $("input[type='checkbox'].empChk:checked").length;
-	//if (checkedCount === 0) {
-	//$(".updateBtns button").addClass("disabled");
-	//}
 	$(document).on("change", "input[type='checkbox'].empChk", function() {
-		console.log($(this).attr("id"))
-		console.log(window.userID)
-		console.log(window.userID === $(this).attr("id"))
 
 		// 모든 선택된 체크박스 가져오기
 		let selectedCheckboxes = $("input[type='checkbox'].empChk:checked");
@@ -195,7 +181,6 @@ $(document).ready(function() {
 		}
 
 		// 만약 신청자에 내가 제외되었다면 다시 선택할 수 있도록
-		console.log(isDrafter)
 		if (!applicationUserID.includes(window.userID)) {
 			let checkedCount = $("input[type='checkbox'].empChk:checked").length;
 			if (checkedCount === 0) {
@@ -223,7 +208,6 @@ $(document).ready(function() {
 			}
 		} else {
 			if ($(this).attr("id") === "applyBtn") {
-				console.log("숫자 카운트")
 				applyBtnClick(this);
 				$(".application span").text(applicationUserID.length);
 
@@ -305,8 +289,7 @@ $(document).ready(function() {
 			let processEmployeeIDList = [];
 			$(".approvalLine__processEmployee .userInfo").each(function() {
 				processEmployeeList.push($(this).html());
-				processEmployeeIDList.push($(this).attr("id"))
-				console.log(processEmployeeList)
+				processEmployeeIDList.push($(this).attr("id"));
 			})
 			$("#processEmployeeList").val(processEmployeeList);
 			$("#processEmployeeIDList").val(processEmployeeIDList);
@@ -319,7 +302,6 @@ $(document).ready(function() {
 				$(".table__approvalLine").html("");
 				let approvalLineText = "";
 				let userCount = 0;
-				console.log("selectempjoblebel")
 				for (let i = resp.length - 1; i >= 0; i--) {
 					approvalLineText = approvalLineText + resp[i].name + " (" + resp[i].task_name + ")";
 					if (i !== 0) {
@@ -402,7 +384,6 @@ function initialSettings() {
 			url: "/office/selectTaskInfo",
 			type: "POST",
 		}).done(function(resp) {
-			console.log("ㄹ")
 			for (let i = 0; i < resp.length; i++) {
 				let deptBox = $(".deptBox[dept=" + resp[i].dept_name + "]")
 				let dept_task = $("<div>").attr("class", "dept_task").attr("task_id", resp[i].task_id);
@@ -465,10 +446,8 @@ function selectDepartmentEmpInfo(id) {
 
 // 내용이 충분한지 확인
 function contentCompleted() {
-	console.log("확인중")
 	if ($(".approvalLine__applyEmployee").html() !== "" && $(".approvalLine__processEmployee").html() !== "") {
 		$(".saveBnt").removeClass("disabled");
-		console.log("충분")
 	} else {
 		$(".saveBnt").addClass("disabled");
 	}
@@ -488,13 +467,9 @@ function applyBtnClick(element) {
 					$(this).parent().children("label").find("span:first").text() + $(this).parent().children("label").find("span:nth-child(2)").text()
 				);
 				applicationUserID.push($(this).attr("id"));
-				console.log(applicationUserID)
 				checkedUserID.push($(this).attr("id"));
-				console.log(checkedUserID)
 			}
 			// 체크된 checkbox의 부모인 label을 선택하여 라벨의 내용을 가져오고 배열에 추가
-			console.log($(this));
-
 			for (let i = 0; i < checkedLabels.length; i++) {
 				let userInfo = $("<div>")
 					.attr("class", "userInfo").attr("id", checkedUserID[i])
@@ -516,7 +491,6 @@ function processBtnClick(element) {
 			checkedLabels = [];
 			checkedUserID = [];
 			if (!processUserID.includes($(this).attr("id"))) {
-				console.log($(this));
 				checkedLabels.push(
 					$(this).parent().children("label").find("span:first").text() + $(this).parent().children("label").find("span:nth-child(2)").text()
 				);
@@ -540,16 +514,12 @@ function processBtnClick(element) {
 // 삭제 버튼 눌렀을 때 이벤트
 function cancleApplyBtnClick(element) {
 	if (!$(element).hasClass("disabled")) {
-		console.log($(element).attr("id"))
 		// 선택된 userInfo div 삭제
 		$(".approvalLine__applyEmployee .userInfo").filter(function() {
 			let currentColor = $(this).css("backgroundColor");
 			let currentId = $(this).attr("id");
-			console.log(currentColor)
 			if (currentColor === "rgb(243, 247, 241)" || currentColor === "#f3f7f1") {
-				console.log(currentId)
 				applicationUserID = applicationUserID.filter(id => id !== currentId);
-				console.log(applicationUserID)
 				$(this).remove();
 			}
 		});
@@ -563,8 +533,6 @@ function cancleApplyBtnClick(element) {
 }
 function cancleProcessBtnClick(element) {
 	if (!$(element).hasClass("disabled")) {
-		console.log($(element).attr("id"))
-
 		$(".approvalLine__processEmployee .userInfo").filter(function() {
 			let currentColor = $(this).css("backgroundColor");
 			let currentId = $(this).attr("id");

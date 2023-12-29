@@ -212,7 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	$(document).on("click",".searchBar__icon",function(){
 		if($(".searchBar__input").val()!=""){
 			if($(this).hasClass("searchBar__search")){
-				console.log("g");
 				$(this).removeClass("searchBar__search").addClass("searchBar__cancel");
 				$(this).find("i").attr("class","fa-solid fa-xmark align-center");
 			}

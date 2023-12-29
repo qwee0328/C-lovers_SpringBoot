@@ -3,22 +3,10 @@ $(document).ready(function() {
 		url: "/members/isAdmin"
 	}).done(function(resp) {
 		if(resp.includes("총괄")||resp.includes("인사")){
-			console.log("보임")
 			$(".naviBar__managerMenu").css("display", "block");
 		}else{
-			console.log("안보임")
 			$(".naviBar__managerMenu").css("display", "none");
 		}
-		/*for (let i = 0; i < resp.length; i++) {
-			// 인사 권한
-			if (resp[i] == "인사" || resp[i] == "총괄") {
-				console.log("보임")
-				
-			} else {
-				console.log("안보임")
-				
-			}
-		}*/
 	});
 
 	$(".regularToggle, .shiftToggle, .org_ExeToggle, .hrToggle").on("click", function() {
@@ -51,7 +39,6 @@ $(document).ready(function() {
 
 	// 메뉴바 설정
 	$(".naviConp__title").each(function() {
-		console.log($("#hrCurrentMenu").val())
 		if ($("#hrCurrentMenu").val() !== "" && $(this).text() == $("#hrCurrentMenu").val()) {
 			$(this).parent().css("background-color", "#DCEDD4");
 		}

@@ -3,36 +3,6 @@ let type = "전체"; // 휴가 신청 내역 정보
 let count = 1; // 문서 정렬번호
 $(document).ready(function() {
 	window.count = 1;
-	// 탭 메뉴 움직이기
-	/*$("ul.tabs li").click(function() {
-		var tab_id = $(this).attr("data-tab");
-
-		$("ul.tabs li").removeClass("current");
-		$(".tab-content").removeClass("current");
-
-		$(this).addClass("current");
-		$("#" + tab_id).addClass("current");
-	});*/
-
-	// 인사 페이지를 통해 휴가 현황으로 넘어온 경우 인식
-	// 현재 페이지의 URL
-	/*let currentURL = window.location.href;
-	// URL에 source 파라미터가 있는지 확인
-	let urlParams = new URLSearchParams(window.location.search);
-	let sourceParam = urlParams.get('source');
-
-	// source 파라미터가 "detail_colortitle"인 경우에만 설정 적용
-	// 해당 버튼으로 온 경우 휴가 내역페이지를 요청하는 경우임
-	console.log(currentURL);
-	console.log(urlParams);
-	console.log(sourceParam);
-	if (sourceParam === 'currentSituation') {
-		$("ul.tabs li:first-child").removeClass("current");
-		$(".tab-content").removeClass("current");
-
-		$("ul.tabs li:nth-child(2)").addClass("current");
-		$("#vacationDetails").addClass("current");
-	}*/
 
 	//---------------휴가 내역---------------
 	$("#cpage").val("1");
@@ -88,7 +58,6 @@ $(document).ready(function() {
 	// 페이지 네이션 클릭시 리스트 변경
 	$(document).on("click", "#detailPagination>div", function() {
 		let pageUrl = $(this).attr("href");
-		console.log(pageUrl)
 		$.ajax({
 			url: pageUrl,
 			type: 'POST',
@@ -113,7 +82,6 @@ function annaulDetails() {
 		type: "POST",
 		data: { cpage: "1" }
 	}).done(function(resp) {
-		console.log(resp.detail)
 		window.type = "전체";
 		detailsPrint(resp, window.type);
 
@@ -127,7 +95,6 @@ function annaulForWeekDetails() {
 		type: "POST",
 		data: { cpage: "1" }
 	}).done(function(resp) {
-		console.log(resp)
 		window.type = "1주일";
 		detailsPrint(resp, window.type);
 	})
@@ -140,7 +107,6 @@ function annaulForMonthDetails() {
 		type: "POST",
 		data: { cpage: "1" }
 	}).done(function(resp) {
-		console.log(resp)
 		window.type = "한달";
 		detailsPrint(resp, window.type);
 	})
@@ -153,7 +119,6 @@ function annaulForYearDetails() {
 		type: "POST",
 		data: { cpage: "1" }
 	}).done(function(resp) {
-		console.log(resp)
 		window.type = "1년";
 		detailsPrint(resp, window.type);
 	})
@@ -163,8 +128,6 @@ function annaulForYearDetails() {
 // 신청 상세내역 출력하는 함수
 function detailsPrint(resp, type) {
 	$(".detailes__body").empty();
-	console.log(window.count);
-	console.log(resp.detail.length)
 	for (let i = 0; i < resp.detail.length; i++) {
 		let bodyLine = $("<div>").attr("class", "body__line");
 		let num = $("<div>").html(window.count++).addClass("body__td");
@@ -192,8 +155,6 @@ function detailsPrint(resp, type) {
 		bodyLine.append(num).append(writer).append(type).append(days).append(period).append(status).append(detail);
 		$(".detailes__body").append(bodyLine);
 	}
-	console.log(resp)
-	console.log("total" + resp.recordTotalCount)
 	pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum, type);
 }
 
@@ -230,8 +191,6 @@ function pagination(recordTotalCount, recordCountPerPage, naviCountPerPage, last
 		if (endNavi > pageTotalCount) {
 			endNavi = pageTotalCount;
 		}
-		console.log("start" + startNavi);
-		console.log("end" + endNavi)
 
 		let needPrev = true;
 		let needNext = true;
@@ -253,11 +212,6 @@ function pagination(recordTotalCount, recordCountPerPage, naviCountPerPage, last
 			divTag.append(iTag);
 			pagination.append(divTag);
 		}
-
-		console.log("startNavi: " + startNavi);
-		console.log("needPrev: " + needPrev);
-		console.log("endNavi:" + endNavi);
-		console.log("pageTotalCount: " + pageTotalCount);
 
 		if (needPrev) {
 			let divTag = $("<div>");
@@ -306,13 +260,9 @@ function yearTotalAnnaul() {
 		dataType: "json",
 		type: "POST",
 	}).done(function(resp) {
-		console.log(resp)
-		console.log(resp == undefined)
-		console.log(resp === {})
 		if (Object.keys(resp).length !== 0) {
 			$("#totalAnnaul").html("총 휴가 : " + resp.total_rest_cnt);
 			$("#totalCountHidden").val(resp.total_rest_cnt);
-			console.log($("#totalCountHidden").val())
 		} else {
 			$("#totalAnnaul").html("총 휴가 : 0");
 			$("#totalCountHidden").val(0);
@@ -332,12 +282,10 @@ function yearDetailAnnual() {
 		data: { year: window.year },
 		type: "POST",
 	}).done(function(resp) {
-		console.log(resp)
 		$(".table__body").empty();
 		let usedCount = $("#usedCountHidden").val();//실 사용개수
 		let restCount = $("#usedCountHidden").val();//남은 제거 개수
 		let totaluse = false;
-		console.log("use" + usedCount);
 		if (resp.length > 0) {
 			for (let i = 0; i < resp.length; i++) {
 				let printCount = 0;
@@ -357,9 +305,6 @@ function yearDetailAnnual() {
 					}
 					
 				}
-				console.log("use" + usedCount);
-				console.log("rest" + restCount)
-				console.log("print" + printCount)
 				let lineDiv_right = $("<div>").html(printCount);
 				let bodyConf_type = $("<div>").attr("class", "body__conf").html((resp[i].rest_type_id === "연차") ? "정기휴가" : resp[i].rest_type_id);
 				let bodyConf_etc = $("<div>").attr("class", "body__conf").attr("id", "detailNote").html(resp[i].rest_type_id + " (" + resp[i].rest_cnt + "일 x 8시간 = " + resp[i].rest_cnt * 8 + "시간)");
@@ -382,10 +327,7 @@ function usedAnnualInfo() {
 		data: { year: window.year },
 		type: "POST",
 	}).done(function(resp) {
-		console.log(resp)
 		$("#usedAnnaul").html("사용 : " + resp);
-		console.log($("#totalCountHidden").val());
-		console.log($("#totalCountHidden").val() - resp)
 		if ($("#totalCountHidden").val() !== 0) {
 			$("#remainingCnt").html("잔여 : " + ($("#totalCountHidden").val() - resp));
 		} else {

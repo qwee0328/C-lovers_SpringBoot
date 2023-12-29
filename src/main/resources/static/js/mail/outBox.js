@@ -3,7 +3,6 @@ $(document).ready(function() {
         url: "/mail/outBoxList?cpage=",
         type: 'POST'
     }).done(function (resp) {
-    	console.log(resp.mail);
         mailList(resp.mail, resp.recordTotalCount);
         pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
     })
@@ -13,7 +12,6 @@ $(document).ready(function() {
 	    $(".inBox__mailListBox").empty();
 	    
 	    $(".bottom__mailNum").html("편지 수 : " + mailCount);
-	    console.log("mailCount: " + mailCount);
 	
 	    for (let i = 0; i < mail.length; i++) {
 	        let mailListDiv = $("<div>");

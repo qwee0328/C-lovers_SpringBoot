@@ -245,9 +245,7 @@ public class ElectronicSignatureDAO {
 	
 	// 문서에 파일이 있는지 확인
 	public boolean selectFileByDocumentId(String id) {
-		System.out.println("doid"+id);
 		List<String> result = db.selectList("ElectronicSignature.selectFileByDocumentId", id);
-		System.out.println("result"+result);
 		return !result.isEmpty();
 		//return db.selectOne("ElectronicSignature.selectFileByDocumentId", id);
 	}

@@ -2,10 +2,6 @@ $(document).ready(function() {
 	$.ajax({
 		url: "/chat/chatMsgLoad"
 	}).done(function(resp) {
-		console.log(resp);
-		//
-
-
 		for (let i = 0; i < resp.chat.length; i++) {
 			if (resp.chat[i].emp_id == resp.loginID) {
 				let chatArea__myChat = $("<div>").attr("class", "chatArea__myChat d-flex");

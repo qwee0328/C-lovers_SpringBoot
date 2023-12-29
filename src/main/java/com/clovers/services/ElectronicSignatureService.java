@@ -76,12 +76,14 @@ public class ElectronicSignatureService {
 		document.setSecurity_grade("B등급");
 		document.setDocument_type_id("휴가 신청서");
 
+		// 제목 설정
 		String writerName = mdao.selectNameById(emp_id);
 		String title = "휴가 신청서 (" + writerName + ")";
 		document.setTitle(title);
 
 		document.setEmp_id(emp_id);
 
+		// 상위 직급자일 경우 승일으로 처리
 		String jobID = odao.searchByJobID(emp_id);
 		String jobName = odao.selectJobName(jobID);
 		if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
@@ -116,6 +118,7 @@ public class ElectronicSignatureService {
 			approval.setDocument_id(documentID);
 			approval.setEmp_id((String) approvalsLevel.get(i).get("id"));
 			approval.setSec_level((int) approvalsLevel.get(i).get("sec_level"));
+			// 상위 직급자일 경우 승일으로 처리
 			if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 				approval.setApproval("승인");
 			} else {
@@ -127,9 +130,12 @@ public class ElectronicSignatureService {
 
 //		// 휴가 신청일 정보 등록
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		// 휴가 신청 정보
 		List<VacationApplicationInfoDTO> vacationInfoList = new ArrayList<VacationApplicationInfoDTO>();
+		// 휴가 사용 정보
 		List<AnnualUseMemoryDTO> vacationUseMemoryList = new ArrayList<AnnualUseMemoryDTO>();
 		for (int i = 0; i < vacationDateList.size(); i++) {
+			// 휴가 신청일 개수만큼 휴가 신청 정보 생성
 			VacationApplicationInfoDTO info = new VacationApplicationInfoDTO();
 			info.setDocument_id(documentID);
 			Date parsedDate = dateFormat.parse(vacationDateList.get(i));
@@ -138,7 +144,8 @@ public class ElectronicSignatureService {
 			info.setRest_reason_type(vacationTypeList.get(i));
 			info.setVacation_reason(reson);
 			vacationInfoList.add(info);
-
+			
+			// 상위 직급자라면 바로 사용 가능
 			if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 				// 연차 사용 기록에 등록
 				AnnualUseMemoryDTO memory = new AnnualUseMemoryDTO();
@@ -149,14 +156,12 @@ public class ElectronicSignatureService {
 				vacationUseMemoryList.add(memory);
 			}
 		}
-		// dao.insertVacationApplicationInfo(vacationInfoList);
-		// System.out.println(reson);
 
 		// 휴가 사용기록 등록
 		if (jobName.equals("대표이사") || jobName.equals("사장") || jobName.equals("상무") || jobName.equals("이사")) {
 			dao.insertVacationUseMemoryInfo(vacationUseMemoryList);
 		}
-
+		// 휴가 신청 정보 등록
 		return dao.insertVacationApplicationInfo(vacationInfoList);
 	}
 
@@ -232,10 +237,8 @@ public class ElectronicSignatureService {
 			ExpenseResolutioinInfoDTO expense = new ExpenseResolutioinInfoDTO();
 			expense.setDocument_id(documentID);
 			expense.setExpense_category(expense_category);
-			System.out.println(expense_category);
 
 			// 문자열로 localdatetime 생성
-			System.out.println(expenseYear);
 			String dateString = expenseYear + "-" + expenseMonth;
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
 			Date parsedDate = dateFormat.parse(dateString);

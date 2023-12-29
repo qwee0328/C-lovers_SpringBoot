@@ -56,7 +56,6 @@ public class MemberController {
 
 		if (result) {
 			session.setAttribute("loginID", id);
-			System.out.println("login( ) : " + session.getAttribute("loginID"));
 		}
 
 		return result;
@@ -64,12 +63,8 @@ public class MemberController {
 
 //	로그아웃
 	@RequestMapping("logout")
-//	@GetMapping("logout")
-//	@ResponseBody
 	public String logout(HttpServletRequest request) {
-
 		session.invalidate();
-//		return "";
 		return "redirect:/";
 
 	}
@@ -79,15 +74,11 @@ public class MemberController {
 		
 		session.invalidate();
 		return "forward:/";
-//		return "";
-//		return "redirect:/";
-		
 	}
 
 //	비밀번호 페이지 이동
 	@RequestMapping("goFindPW")
 	public String goFindPW() {
-		System.out.println("goFindPW ( )");
 		return "member/findPW";
 	}
 
@@ -95,10 +86,6 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("email")
 	public String MailSend(String email) {
-		System.out.println(email);
-
-		System.out.println("Cont- 이메일 전송 완료");
-
 		int number = EmailService.sendMail(email);
 
 		num = "" + number;
@@ -136,15 +123,11 @@ public class MemberController {
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<Map<String, String>> getUserInfo() {
 		String loginID = (String) session.getAttribute("loginID");
-		System.out.println(loginID);
+
 		Map<String, String> userInfo = null;
 		if (loginID != null) {
-			System.out.println("로그인 되어있음");
 			userInfo = mservice.selectUserInfo(loginID);
-		} else {
-			System.out.println("로그인 안되어있음");
-		}
-		System.out.println("user"+userInfo.toString());
+		} 
 		return ResponseEntity.ok(userInfo);
 	}
 
@@ -154,8 +137,6 @@ public class MemberController {
 		// 여기는 로그인을 한 상태(session이 남아있음)로 비밀번호를 바꾸는 것
 		String id = (String) session.getAttribute("loginID");
 		String pwEnc = EncryptionUtils.getSHA512(pw);
-
-		System.out.println(id + " : " + pw);
 
 		mservice.updatePW(id, pwEnc);
 		return "redirect:/";

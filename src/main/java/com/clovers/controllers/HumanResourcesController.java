@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +40,8 @@ public class HumanResourcesController {
 	
 	@Autowired
 	private AddressBookService adservice;
+	
+	private static final Logger logger = LoggerFactory.getLogger(HumanResourcesController.class);
 
 	@RequestMapping("")
 	public String main() {
@@ -45,6 +49,7 @@ public class HumanResourcesController {
 		String currentMenu = "휴가/근무";
 		session.setAttribute("title", title);
 		session.setAttribute("currentMenu", currentMenu);
+		logger.info("logger test");
 		return "humanresources/hrMain";
 	}
 
@@ -71,13 +76,11 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/recommendChangPw")
 	public String reChangePw(String id, String pw) {
-		System.out.println(id + " : " + pw);
 
 		MemberDTO list = hrservice.selectById(id);
 
 		// 사원의 이름을 암호화 한 값
 		String enPw = EncryptionUtils.getSHA512(EncryptionUtils.kR_EnKeyboardConversion(list.getName()));
-		System.out.println(enPw);
 
 		// DB에 있는 비밀번호 값
 		String pwdb = hrservice.reChangePw(id);
@@ -99,11 +102,9 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/emailDup")
 	public int emailDup(String company_email) {
-		System.out.println("이메일 중복확인");
 		// 이메일 중복 확인 : 1 중복
 		company_email = company_email.concat("@clovers.com");
 		int isDupEmail = hrservice.isDupEmail(company_email);
-		System.out.println(isDupEmail);
 		return isDupEmail;
 	}
 	
@@ -119,7 +120,6 @@ public class HumanResourcesController {
 		
 		// 주소록에 사내 이메일과 휴대폰 업데이트
 		int result = adservice.updateCompanyEmailPhone(id,company_email,phone);
-		System.out.println("controellreaf "+result);
 		// 사진 등록
 		if (!(profile_img.getOriginalFilename().equals(""))) {
 			String path = "C:/C-lovers";
@@ -277,17 +277,10 @@ public class HumanResourcesController {
 	}
 
 	// 사용자의 휴가 신청 상세 내역 확인하기
-//	@ResponseBody
-//	@RequestMapping("/selectAnnaulAppDetails")
-//	public List<Map<String, Object>> selectAnnaulAppDetails() {
-//		return hrservice.selectAnnaulAppDetails();
-//	}
-	
 	@ResponseBody
 	@RequestMapping("/selectAnnaulAppDetails")
 	public Map<String, Object> selectAnnaulAppDetails(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		System.out.println(currentPage);
 		Map<String, Object> param = hrservice.selectAnnaulAppDetails((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		
 		Map<String,Object> result = new HashMap<>();
@@ -303,8 +296,8 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/selectAnnaulAppDetailsForYear")
 	public Map<String, Object> selectAnnaulAppDetailsForYear(@RequestParam("cpage") String cpage) {
+		logger.info("logger test");
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		System.out.println(currentPage);
 		Map<String, Object> param = hrservice.selectAnnaulAppDetailsForYear((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		
 		Map<String,Object> result = new HashMap<>();
@@ -321,7 +314,6 @@ public class HumanResourcesController {
 	@RequestMapping("/selectAnnaulAppDetailsForMonth")
 	public Map<String, Object> selectAnnaulAppDetailsForMonth(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		System.out.println(currentPage);
 		Map<String, Object> param = hrservice.selectAnnaulAppDetailsForMonth((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		
 		Map<String,Object> result = new HashMap<>();
@@ -338,7 +330,6 @@ public class HumanResourcesController {
 	@RequestMapping("/selectAnnaulAppDetailsForWeek")
 	public Map<String, Object> selectAnnaulAppDetailsForWeek(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		System.out.println(currentPage);
 		Map<String, Object> param =  hrservice.selectAnnaulAppDetailsForMonth((currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE-1)), (currentPage * Constants.RECORD_COUNT_PER_PAGE));
 		param.put("recordCountPerPage", Constants.RECORD_COUNT_PER_PAGE);
 		param.put("naviCountPerPage", Constants.NAVI_COUNT_PER_PAGE);
@@ -358,12 +349,9 @@ public class HumanResourcesController {
 	@ResponseBody
 	@RequestMapping("/headerProfile")
 	public MemberDTO selectProfile() {
-		System.out.println("도착");
 		String id = (String) session.getAttribute("loginID");
-		System.out.println(id);
 		MemberDTO profile = hrservice.selectById(id);
 		profile.setBirth(new Timestamp(System.currentTimeMillis()));
-		System.out.println(profile.toString());
 		return profile;
 	}
 

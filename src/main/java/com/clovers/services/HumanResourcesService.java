@@ -46,8 +46,6 @@ public class HumanResourcesService {
 		int index = company_email.indexOf("@");
 		String email = company_email.substring(0,index);
 		
-		System.out.println(email);
-		
 		dto.setCompany_email(email);
 		
 		return dto;
@@ -129,7 +127,6 @@ public class HumanResourcesService {
 
 		// 이번달 근무일 정보 불러오기
 		List<Map<String, Timestamp>> workingDays = dao.selectWorkingDaysThisMonth(id);
-		System.out.println(workingDays);
 
 		// 평일 중 근무를 한 날은 제거
 		for (int i = 0; i < weekdays.size(); i++) {
@@ -196,7 +193,6 @@ public class HumanResourcesService {
 		Duration duration = Duration.between(now, instant).abs(); // 두 시간의 차이 계산 (음수 방지를 위해 abs() 사용)
 		long differenceInSeconds = duration.getSeconds(); // 차이를 초 단위로 변환
 
-		System.out.println(differenceInSeconds);
 		if (differenceInSeconds / 60 >= 1) {
 			user.replace("daily_work_rule_id", "지각");
 			return dao.insertAttendingWork(user);
@@ -224,7 +220,6 @@ public class HumanResourcesService {
 		dao.updateWorkCondtionEndTime(attend_status_id);
 		// 업무상태 삽입 후 id 받아오기
 		int workConditionId = dao.insertWorkCondition(data);
-		System.out.println(workConditionId);
 
 		// 삽입한 업무 상태 확인
 		return dao.selectWorkCondition(workConditionId);
@@ -275,8 +270,6 @@ public class HumanResourcesService {
 		Map<String, Object> result = new HashMap<>();
 		result.put("detail", dao.selectAnnaulAppDetails(param));
 		result.put("recordTotalCount", dao.selectAnnaulAppCount(id));
-		System.out.println(dao.selectAnnaulAppDetails(param));
-		System.out.println("size"+result.get("recordTotalCount"));
 		return result;
 	}
 
@@ -291,7 +284,6 @@ public class HumanResourcesService {
 		Map<String, Object> result = new HashMap<>();
 		result.put("detail", dao.selectAnnaulAppDetailsForYear(param));
 		result.put("recordTotalCount", dao.selectAnnaulAppForYearCount(id));
-		System.out.println("size"+result.get("recordTotalCount"));
 		return result;
 	}
 
@@ -306,7 +298,6 @@ public class HumanResourcesService {
 		Map<String, Object> result = new HashMap<>();
 		result.put("detail", dao.selectAnnaulAppDetailsForMonth(param));
 		result.put("recordTotalCount", dao.selectAnnaulAppForMonthCount(id));
-		System.out.println("size"+result.get("recordTotalCount"));
 		return result;
 	}
 
@@ -321,7 +312,6 @@ public class HumanResourcesService {
 		Map<String, Object> result = new HashMap<>();
 		result.put("detail", dao.selectAnnaulAppDetailsForWeek(param));
 		result.put("recordTotalCount", dao.selectAnnaulAppForWeekCount(id));
-		System.out.println("size"+result.get("recordTotalCount"));
 		return result;
 	}
 

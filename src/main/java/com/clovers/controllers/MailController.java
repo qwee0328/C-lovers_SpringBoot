@@ -181,7 +181,6 @@ public class MailController {
 		if (time != null) {
 			sendTime = time.toLocalDateTime();
 
-			System.out.println("time"+time);
 			// 시간 차이 계산
 			Duration duration = Duration.between(sendTime, currentTime);
 			minutes = duration.toMinutes();
@@ -205,19 +204,18 @@ public class MailController {
 	@RequestMapping("/inBoxList")
 	public Map<String, Object> inBoxList(@RequestParam("cpage") String cpage) {
 		int currentPage = (cpage.isEmpty()) ? 1 : Integer.parseInt(cpage);
-		System.out.println("cpage:"+currentPage);
+
 		// 로그인한 사용자의 이메일 가져오기
 		String receive_id = mservice.getEmailByLoginID((String) session.getAttribute("loginID"));
 
 		List<EmailDTO> mail = mservice.inBoxList(receive_id,
 				(currentPage * Constants.RECORD_COUNT_PER_PAGE - (Constants.RECORD_COUNT_PER_PAGE - 1)),
 				(currentPage * Constants.RECORD_COUNT_PER_PAGE));
-		System.out.println("mailSize:"+mail.size());
+
 		String[] send_date = new String[mail.size()];
 		for (int i = 0; i < mail.size(); i++) {
 			send_date[i] = formatTimestamp(mail.get(i).getSend_date());
 		}
-		System.out.println("mailSize:"+mail.size());
 		Map<String, Object> param = new HashMap<>();
 		param.put("mail", mail);
 		param.put("send_date", send_date);
@@ -337,7 +335,6 @@ public class MailController {
 
 				if (currentDateTime.isEqual(reservationDateTime) || currentDateTime.isAfter(reservationDateTime)) {
 					// 예약 날짜가 현재 시간과 같다면
-					System.out.println("시간 같아용");
 					mservice.submitReservationMail(dto.getId(), dto.getReservation_date()); // 실제로 send() 메서드를 호출하는 부분
 				}
 			}
@@ -493,12 +490,10 @@ public class MailController {
 			}
 		}
 
-		System.out.println("deleteUrl: " + deleteUrl);
 		// 삭제한 이미지가 있다면
 		if (!deleteUrl.isEmpty()) {
 			String[] urls = deleteUrl.split(":");
 			for (int i = 1; i < urls.length; i++) {
-				System.out.println("urls: " + urls[i]);
 				deleteImage(urls[i]);
 			}
 		}

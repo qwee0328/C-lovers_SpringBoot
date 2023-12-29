@@ -4,19 +4,12 @@ $(document).ready(function() {
 		location.href = "/";
 	})
 	
-	$(".dropNavi__icon").on("click", function() {
-		
-	})
-	
 	// 프로필카드 데이터 부르기
 	//$(document).ready(function(){
 		$.ajax({
 			url:"/humanResources/headerProfile",
 			
 		}).done(function(resp){
-			
-			console.log(resp);
-
 			let img;
 			
 			let main_img = $("<img class='profileImg'/>");
@@ -79,7 +72,6 @@ $(document).ready(function() {
 	})
 	
 	$(document).on("click",".dropNavBox__inner",function(e){
-		console.log($(this));
 		
 		if($(this).find(".inner__title").html() == "메일"){
 			location.href="/mail";
@@ -122,12 +114,9 @@ $(document).ready(function() {
 			url: "/members/isAdmin"
 		}).done(function(resp) {
 			for (let i = 0; i < resp.length; i++) {
-				console.log(resp[i]);
 			// 회계 권한
 			if (resp[i] == "회계" || resp[i] == "총괄") {
 				$("#accountingController__small").css("display", "flex");
-			}else{
-				//$("#accountingController__small").css("display", "none");
 			}
 
 			// 총괄 권한

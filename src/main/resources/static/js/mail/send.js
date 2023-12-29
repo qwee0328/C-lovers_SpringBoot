@@ -49,7 +49,6 @@ $(document).ready(function () {
 				url: "/mail/autoComplete",
 				data: { keyword : inputId }
 			}).done(function(resp) {
-				console.log(resp);
 				$("#autoComplete").empty();
 				if(resp.length > 0) {
 					for(let i = 0; i < resp.length; i++) {
@@ -88,7 +87,6 @@ $(document).ready(function () {
 	let deleteFileList = "";
 	$(document).on("click", ".deleteFile__btn", function() {
 		deleteFileList = deleteFileList.concat($(this).attr("sysName")+":");
-		console.log(deleteFileList);
 		
 		$(this).parent().remove();
 		$("#deleteFiles").val(deleteFileList);

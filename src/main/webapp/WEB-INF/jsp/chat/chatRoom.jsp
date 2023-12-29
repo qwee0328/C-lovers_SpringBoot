@@ -220,12 +220,9 @@
     	}
 
     	function recvMessage(recv) {
-    	    console.log(recv);
     	    let lastDate = new Date().toDateString();
     	    let formattedTime = formatChatTime(recv.write_date);
     	    let currentDate = new Date(recv.write_date).toDateString();
-    	    console.log(currentDate);
-    	    console.log(lastDate);
 
     	    // 날짜가 변경되었거나 첫 메시지인 경우
     	    if (lastDate !== currentDate) {
@@ -397,7 +394,6 @@
         	    if (this.checked) {
         	        // 체크된 경우, 선택된 직원 목록에 추가
         	        selectedEmployees[empId] = empName;
-        	        console.log(selectedEmployees);
         	    } else {
         	        // 체크 해제된 경우, 선택된 직원 목록에서 제거
         	        delete selectedEmployees[empId];
@@ -445,8 +441,6 @@
                     // 데이터 예시: 선택된 직원들의 ID를 서버로 전송
                     selectedEmployees: Object.keys(selectedEmployees)
                 };
-                
-                console.log(dataToSend)
 
                 // AJAX 요청
                 $.ajax({
@@ -518,8 +512,6 @@
         			chat_room_id : roomId
         		}
         	}).done(function(resp) {
-        		console.log(resp);
-        		//
         		
         		let lastDate = null;
         		
@@ -636,7 +628,6 @@
         	        contentType: 'application/json', // 추가
         	        data: dataToSend, // JSON 문자열로 변환
         	        success: function(response) {
-        	            console.log('Chat room name updated:', response);
         	            location.reload();
         	        },
         	        error: function(xhr, status, error) {

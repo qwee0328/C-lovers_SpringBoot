@@ -44,15 +44,12 @@ window.onload = function() {
 	let date = new Date();
 	let year = date.getFullYear();
 	window.totalCountHidden=0;
-	console.log(window.totalCountHidden);
 	$.ajax({
 		url: "/humanResources/selectYearTotalAnnaul",
 		data: { year: year },
 		type: "POST",
 	}).done(function(resp) {
-		console.log(window.totalCountHidden);
 		if (Object.keys(resp).length !== 0) {
-			console.log(window.totalCountHidden);
 			window.totalCountHidden = resp.total_rest_cnt;
 		} else {
 			$("#totalAnnaul").html("0일");
@@ -88,7 +85,6 @@ window.onload = function() {
 		url: "/humanResources/selectWorkingDaysThisMonth",
 		dataType: "json"
 	}).done(function(resp) {
-		console.log(resp)
 		$("#workingDyas").html(resp.length + "일");
 		// 현재 날짜를 얻기
 		let currentDate = new Date();
@@ -102,14 +98,12 @@ window.onload = function() {
 			}
 		}
 		calculateAndAddTimeDifference(resp);
-		console.log(resp)
 		let totalWorkingTime = 0;
 		for (let i = 0; i < resp.length; i++) {
 			if (resp[i].timeDifference) {
 				totalWorkingTime = totalWorkingTime + resp[i].timeDifference
 			}
 		}
-		console.log(totalWorkingTime);
 		let hour = Math.floor(totalWorkingTime / (1000 * 60 * 60));
 		let min = Math.floor(totalWorkingTime % (1000 * 60 * 60) / (1000 * 60));
 
@@ -373,7 +367,6 @@ function selectWorkConditionsList() {
 			window.status = "근무중";
 			$(".statusBox").html(window.status);
 		} else {
-			console.log(respList)
 			if (respList[respList.length - 1].work_condition_status_id === "업무") {
 				statusWorking();
 			} else if (respList[respList.length - 1].work_condition_status_id === "외출") {

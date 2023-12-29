@@ -4,7 +4,6 @@ $(document).ready(function() {
 	
 	// 휴가 신청서
 	if($("#document_type").text() == '휴가 신청서') {
-		console.log("휴가 신청서");
 		$.ajax({
 			url : "/electronicsignature/getVacationInfo",
 			data : { 
@@ -26,21 +25,18 @@ $(document).ready(function() {
 			url : "/electronicsignature/getExpenseInfo",
 			data : { document_id : document_id }
 		}).done(function(resp){
-			console.log(resp);
 			
 			$("#division").text(resp.expense_category);
 			$("#account_base_month").text(resp.expense_date);
 			$("#spender_id").text(resp.spender_name);
 			$("#account_info").text(resp.account.bank + " / " + resp.account.id);
 			$("#executive_summary").text(resp.summary);
-			console.log(document_id);
+	
 			$.ajax({
 				url:"/electronicsignature/fileList",
 				data:{ document_id : document_id }
 			}).done(function(resp){
-				console.log("file"+resp);
 				if(resp.length!==0){
-					console.log("ㅍ일 있음")
 					let tr = $("<tr>");
 					let th =$("<th>").html("첨부파일");
 					let td=$("<td>").attr("id","file_info");
@@ -69,9 +65,7 @@ $(document).ready(function() {
 				url:"/electronicsignature/fileList",
 				data:{ document_id : document_id }
 			}).done(function(resp){
-				console.log("file"+resp);
 				if(resp.length!==0){
-					console.log("ㅍ일 있음")
 					let tr = $("<tr>");
 					let th =$("<th>").html("첨부파일");
 					let td=$("<td>").attr("id","file_info");

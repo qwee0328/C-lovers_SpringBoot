@@ -43,7 +43,6 @@ $(document).ready(function() {
 	
 	// 완전삭제 버튼 클릭 시
 	$("#perDeleteMail").on("click", function() {
-		console.log('${mail.id}');
 		let result = confirm("메일을 완전삭제하시겠습니까? 삭제된 메일은 복구되지 않습니다.");
 		if(result) {
 			window.location.href = "/mail/read/perDelete?id=" + id;

@@ -69,16 +69,13 @@ public class OfficeController {
 	@GetMapping("/usingCompanyPhoneCheck")
 	public ResponseEntity<Boolean> usingCompanyPhoneCheck(@RequestParam("company_phone") String companyPhone){
 		int count = oservice.usingCompanyPhoneCheck(companyPhone);
-		System.out.println("사용중인 번호 개수 :"+count);
 		boolean result = count>0;
-		System.out.println(result);
 		return ResponseEntity.ok(result);
 	}
 	
 	// 사용자 등록하기
 	@PostMapping("/userInsert")
 	public ResponseEntity<Integer> insertUser(@RequestBody MemberDTO dto) throws Exception{
-		System.out.println(dto.getHire_date());
 		int result = oservice.insertUser(dto);
 		return ResponseEntity.ok(result);
 	}
@@ -107,12 +104,7 @@ public class OfficeController {
 	// 사용자 이름, id 검색하기
 	@GetMapping("/searchUser")
 	public ResponseEntity<List<Map<String, String>>> searchUser(@RequestParam("keyword")String keyword){
-		System.out.println(keyword);
-		System.out.println("durl");
 		List<Map<String, String>> list = oservice.searchUser(keyword);
-		for(Map<String,String>d :list) {
-			System.out.println(d.toString());
-		}
 		return ResponseEntity.ok(list);
 	}
 	
@@ -190,7 +182,6 @@ public class OfficeController {
 	@ResponseBody
 	@RequestMapping("/searchByName")
 	public List<Map<String, Object>> searchByName(String name){
-		System.out.println(name);
 		return oservice.searchByName(name);
 	}
 	

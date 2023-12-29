@@ -240,8 +240,6 @@ public class AddressBookService {
 		// numberType 가져오기
 		String numberType = dao.isNumberType(id);
 		
-		System.out.println("numberType "+numberType);
-		
 		Map<String,String> param = new HashMap<>();
 		param.put("id", id);
 		param.put("company_email", company_email);

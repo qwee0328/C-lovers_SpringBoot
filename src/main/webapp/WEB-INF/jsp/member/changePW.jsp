@@ -48,11 +48,7 @@
 	let result;
 	
 	$("#pw").keyup(function(){
-		
-// 		console.log($("#pw").val());
-		
 		result = pwRegex.test($("#pw").val());
-		console.log(result);
 		
 		if(!result){
 			$(".findPwBox__pwChk").html("비밀번호의 형식이 올바르지 않습니다.").css({"font-size":"12px","color":"red"});

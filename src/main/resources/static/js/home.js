@@ -41,10 +41,10 @@ $(document).ready(function() {
 	$("#waiting").on("click",function(){
 		location.href="/electronicsignature";
 	})
-	$("#expected").on("click",function(){
+	$("#check").on("click",function(){
 		location.href="/electronicsignature/progressCheck";
 	})
-	$("#progress").on("click",function(){
+	$("#expected").on("click",function(){
 		location.href="/electronicsignature/progressExpected";
 	})
 	$("#receivedMail").on("click",function(){
@@ -231,7 +231,6 @@ function selectWorkConditionsList() {
 			window.status = "근무중";
 			$(".timeline__status").html(window.status);
 		} else {
-			console.log(respList)
 			if (respList[respList.length - 1].work_condition_status_id === "업무") {
 				statusWorking();
 			} else if (respList[respList.length - 1].work_condition_status_id === "외출") {

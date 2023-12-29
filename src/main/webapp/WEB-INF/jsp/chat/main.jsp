@@ -239,7 +239,6 @@
 
      	// 컨텍스트 메뉴 생성 함수
         function mkContextMenu(employeeId) {
-     		console.log(employeeId);
             let menuBox = $("<div>").attr("class", "ctxMenuBox");
             let menuList = $("<ul>").attr("class", "ctxMenuBox__ctxMenuList");
 			let employee_id = employeeId
@@ -272,7 +271,6 @@
                     type: 'GET',
                     data: { employee_id: employeeId },
                     success: function(data) {
-                    	console.log(data);
                         // 모달 내용 업데이트
                         updateProfileModal(data);
                         // 모달 표시

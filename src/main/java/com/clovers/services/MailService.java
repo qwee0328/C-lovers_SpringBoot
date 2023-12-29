@@ -33,8 +33,6 @@ public class MailService {
 	// 메일 전송
 	@Transactional
 	public int submitSend(EmailDTO dto, MultipartFile[] files) throws Exception {
-		System.out.println("예약 여부:" + dto.isReservation());
-		
 		int email_id = dao.submitSend(dto);
 
 		String upload = "C:/mailUploads";
@@ -189,7 +187,6 @@ public class MailService {
 
 		// 파일 삭제
 		for (EmailFileDTO file : fileList) {
-			System.out.println(file.getSys_name());
 			File filepath = new File(upload + "/" + file.getSys_name());
 			filepath.delete();
 

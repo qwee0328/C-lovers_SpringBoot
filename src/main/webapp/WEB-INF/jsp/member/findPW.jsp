@@ -82,7 +82,6 @@
 		let emailRegex = /^[a-zA-Z0-9\_]+@[a-z]+\.[a-z]{2,3}$/;
 		
 		$("#email").keyup(function(e){
-			console.log($("#email").val());
 			result = emailRegex.test($("#email").val());
 			
 			if(!result){
@@ -98,14 +97,7 @@
 		let result;
 		
 		$("#pw").keyup(function(){
-			console.log($("#pw").val());
-			
-			console.log("pw_re : "+$("#pw_re").val());
-			
 			result = pwRegex.test($("#pw").val());
-			console.log(result);
-			
-			
 			
 			// regex 틀림
 			if(!result){
@@ -162,8 +154,6 @@
 				data:{
 					email : $("#email").val()
 				}
-			}).done(function(resp){
-				console.log(resp);
 			})
 			
 		});
@@ -184,8 +174,6 @@
 				}
 			}).done(function(resp){
 				emailAuthFlag = resp;
-				
-				console.log("이메일 인증 클라이언트 : "+resp);
 				
 				if(resp == "true"){
 					$(".findPwBox__authChk").html("인증되었습니다.").css({"font-size":"12px","color":"green"});

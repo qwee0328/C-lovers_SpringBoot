@@ -41,88 +41,38 @@ public class WebConfig implements WebMvcConfigurer{
 //	인터셉터
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		// login 사용자만 접근가능
 		String [] loginAddPath={"/","/mail/**","/schedule/**","/humanResources/**","/accounting/**","/addressbook/**","/admin/**","/chat/**","/electronicSignature/**","/employee/**","/members/**","/office/**","/org/**"};
 		registry.addInterceptor(loginValidator)
 				.addPathPatterns(loginAddPath)
-//				.addPathPatterns("/mail/**")
-//				.addPathPatterns("/schedule/**")
-//				.addPathPatterns("/humanResources/**")
-//				.addPathPatterns("/accounting/**")
-//				.addPathPatterns("/addressbook/**")
-//				.addPathPatterns("/admin/**")
-//				.addPathPatterns("/chat/**")
-//				.addPathPatterns("/electronicSignature/**")
-//				.addPathPatterns("/employee/**")
-//				.addPathPatterns("/members/**")
-//				.addPathPatterns("/office/**")
-//				.addPathPatterns("/org/**")
 				.excludePathPatterns("/members/**");
 		
+		// 기본 권한으로 접근할 수 있는 경로
 		String[] excludePath = {"/mail/**","/schedule/**","/humanResources/**","/accounting/**","/addressbook/**","/chat/**","/electronicSignature/**","/employee/**","/members/**","/office/**","/org/**"};
+		// 관리자 권한이 필요한 경로
 		String[] authorityPath= {"/admin/office/organization","/admin/office/user","/admin/office/positionduty","/admin/office/administrator"};
+		
 		registry.addInterceptor(fullAuthorityValidator)
 				.addPathPatterns("/admin/**")
 				.excludePathPatterns(excludePath)
 				.excludePathPatterns(authorityPath)
 				.excludePathPatterns("/admin/accounting/**");
-//				.excludePathPatterns("/mail/**")
-//				.excludePathPatterns("/schedule/**")
-//				.excludePathPatterns("/humanResources/**")
-//				.excludePathPatterns("/accounting/**")
-//				.excludePathPatterns("/addressbook/**")
-//				.excludePathPatterns("/chat/**")
-//				.excludePathPatterns("/electronicSignature/**")
-//				.excludePathPatterns("/employee/**")
-//				.excludePathPatterns("/members/**")
-//				.excludePathPatterns("/office/**")
-//				.excludePathPatterns("/org/**")
-//				.excludePathPatterns("/admin/office/organization")
-//				.excludePathPatterns("/admin/office/user")
-//				.excludePathPatterns("/admin/office/positionduty")
-//				.excludePathPatterns("/admin/office/administrator")
-//				.excludePathPatterns("/admin/accounting/**");
 		
+		// 인사 권한
 		registry.addInterceptor(humanResourcesValidator)
 				.addPathPatterns(authorityPath)
-//				.addPathPatterns("/admin/office/organization")
-//				.addPathPatterns("/admin/office/user")
-//				.addPathPatterns("/admin/office/positionduty")
-//				.addPathPatterns("/admin/office/administrator")
 				.excludePathPatterns(excludePath);
-//				.excludePathPatterns("/mail/**")
-//				.excludePathPatterns("/schedule/**")
-//				.excludePathPatterns("/humanResources/**")
-//				.excludePathPatterns("/accounting/**")
-//				.excludePathPatterns("/addressbook/**")
-//				.excludePathPatterns("/chat/**")
-//				.excludePathPatterns("/electronicSignature/**")
-//				.excludePathPatterns("/employee/**")
-//				.excludePathPatterns("/members/**")
-//				.excludePathPatterns("/office/**")
-//				.excludePathPatterns("/org/**");
 		
+		// 회계 권한
 		registry.addInterceptor(accountingAuthorityValidator)
 				.addPathPatterns("/admin/accounting/**")
 				.excludePathPatterns(excludePath);
-//				.excludePathPatterns("/mail/**")
-//				.excludePathPatterns("/schedule/**")
-//				.excludePathPatterns("/humanResources/**")
-//				.excludePathPatterns("/accounting/**")
-//				.excludePathPatterns("/addressbook/**")
-//				.excludePathPatterns("/chat/**")
-//				.excludePathPatterns("/electronicSignature/**")
-//				.excludePathPatterns("/employee/**")
-//				.excludePathPatterns("/members/**")
-//				.excludePathPatterns("/office/**")
-//				.excludePathPatterns("/org/**");
 		
-		
-		
-		System.out.println("a");
 	}
 	
 	
 	public void addCorsMapping(CorsRegistry registry) {
+		
 		registry.addMapping("/**").allowedOrigins("*");
 	}
 }

@@ -9,11 +9,16 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.clovers.controllers.HomeController;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EncryptionUtils {
-	
+	private static final Logger logger = LoggerFactory.getLogger(EncryptionUtils.class);
 	
 	private static final String ALGORITHM = "AES/CBC/PKCS5Padding";  // AES/CBC 방식 암호화방식
     private static final byte[] KEY = "clover2ndproject".getBytes(); // 16 bytes for AES/CBC
@@ -42,8 +47,8 @@ public class EncryptionUtils {
 		try {
 			keyPairGenerator = KeyPairGenerator.getInstance("DH");
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error(e.getMessage());
 		}
         keyPairGenerator.initialize(2048);
         return keyPairGenerator.generateKeyPair();

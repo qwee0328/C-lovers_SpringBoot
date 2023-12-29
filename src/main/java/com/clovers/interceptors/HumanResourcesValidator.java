@@ -28,17 +28,17 @@ public class HumanResourcesValidator implements HandlerInterceptor {
 			throws Exception {
 		session = request.getSession();
 		String loginID = (String) session.getAttribute("loginID");
-		System.out.println("인사 유효성" + loginID);
+
 		boolean result = false;
 		boolean full = false;
 		boolean accounting = false;
 		List<String> permission = mservice.getAuthorityCategory(loginID);
-		System.out.println(permission.toString());
+
 		if (permission.size() != 0) {
 			for (String per : permission) {
-				System.out.println("인사 있?" + per);
+
 				if (per.equals("인사")) {
-					System.out.println("인사팀");
+			
 					result = true;
 				} else if (per.equals("총괄")) {
 					result = true;
@@ -47,9 +47,8 @@ public class HumanResourcesValidator implements HandlerInterceptor {
 					accounting = true;
 				}
 			}
-			System.out.println(full + " " + result);
+		
 			if (!full&&!result ) {
-				System.out.println("메인으로 돌아가");
 				response.sendRedirect("/");
 			}
 		}

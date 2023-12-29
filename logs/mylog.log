@@ -1,0 +1,273 @@
+2023-12-28T09:56:02.553+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 28428 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T09:56:02.554+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T09:56:02.848+09:00  WARN 28428 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T09:56:02.904+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T09:56:02.915+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T09:56:02.916+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T09:56:03.233+09:00  INFO 28428 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T09:56:03.242+09:00  INFO 28428 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T09:56:03.242+09:00  INFO 28428 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 686 ms
+2023-12-28T09:56:03.659+09:00  INFO 28428 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T09:56:03.715+09:00  INFO 28428 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T09:56:03.735+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T09:56:03.735+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T09:56:03.735+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2428bbb8]]
+2023-12-28T09:56:03.735+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T09:56:03.741+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 1.237 seconds (process running for 239.324)
+2023-12-28T09:56:03.742+09:00  INFO 28428 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-12-28T09:56:09.276+09:00  INFO 28428 --- [http-nio-80-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-28T09:56:09.276+09:00  INFO 28428 --- [http-nio-80-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-28T09:56:09.279+09:00  INFO 28428 --- [http-nio-80-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-12-28T09:56:09.281+09:00  INFO 28428 --- [http-nio-80-exec-1] c.c.c.HumanResourcesController           : logger test
+2023-12-28T09:56:09.879+09:00  INFO 28428 --- [http-nio-80-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2023-12-28T09:56:10.031+09:00  INFO 28428 --- [http-nio-80-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@bb1d5d6
+2023-12-28T09:56:10.031+09:00  INFO 28428 --- [http-nio-80-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2023-12-28T09:57:03.618+09:00  INFO 28428 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 0]
+2023-12-28T10:13:04.890+09:00  INFO 28428 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2023-12-28T10:13:04.892+09:00  INFO 28428 --- [Thread-27] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T10:13:04.892+09:00  INFO 28428 --- [Thread-27] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2428bbb8]]
+2023-12-28T10:13:04.892+09:00  INFO 28428 --- [Thread-27] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T10:13:04.911+09:00  INFO 28428 --- [Thread-27] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T10:13:04.911+09:00  INFO 28428 --- [Thread-27] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-12-28T10:13:04.917+09:00  WARN 28428 --- [Thread-27] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-5 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2023-12-28T10:13:04.923+09:00  INFO 28428 --- [Thread-27] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2023-12-28T10:13:05.049+09:00  INFO 28428 --- [Thread-27] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2023-12-28T10:13:05.162+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 28428 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T10:13:05.162+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T10:13:05.498+09:00  WARN 28428 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T10:13:05.579+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T10:13:05.579+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T10:13:05.579+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T10:13:05.899+09:00  INFO 28428 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T10:13:05.909+09:00  INFO 28428 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T10:13:05.909+09:00  INFO 28428 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 744 ms
+2023-12-28T10:13:06.339+09:00  INFO 28428 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T10:13:06.421+09:00  INFO 28428 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T10:13:06.441+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T10:13:06.441+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T10:13:06.441+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7d75ef94]]
+2023-12-28T10:13:06.441+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T10:13:06.448+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 1.32 seconds (process running for 1262.122)
+2023-12-28T10:13:06.450+09:00  INFO 28428 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-12-28T10:14:06.292+09:00  INFO 28428 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 0]
+2023-12-28T10:14:59.993+09:00  INFO 28428 --- [MessageBroker-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2023-12-28T10:15:00.147+09:00  INFO 28428 --- [MessageBroker-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@238c48cc
+2023-12-28T10:15:00.148+09:00  INFO 28428 --- [MessageBroker-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2023-12-28T10:15:13.139+09:00  INFO 28428 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2023-12-28T10:15:13.140+09:00  INFO 28428 --- [Thread-31] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T10:15:13.141+09:00  INFO 28428 --- [Thread-31] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7d75ef94]]
+2023-12-28T10:15:13.141+09:00  INFO 28428 --- [Thread-31] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T10:15:13.160+09:00  INFO 28428 --- [Thread-31] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T10:15:13.170+09:00  INFO 28428 --- [Thread-31] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2023-12-28T10:15:13.289+09:00  INFO 28428 --- [Thread-31] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2023-12-28T10:15:13.391+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 28428 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T10:15:13.391+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T10:15:13.734+09:00  WARN 28428 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T10:15:13.814+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T10:15:13.814+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T10:15:13.814+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T10:15:14.176+09:00  INFO 28428 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T10:15:14.184+09:00  INFO 28428 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T10:15:14.185+09:00  INFO 28428 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 790 ms
+2023-12-28T10:15:14.635+09:00  INFO 28428 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T10:15:14.704+09:00  INFO 28428 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T10:15:14.725+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T10:15:14.725+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T10:15:14.726+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3b139c68]]
+2023-12-28T10:15:14.726+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T10:15:14.733+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 1.376 seconds (process running for 1390.416)
+2023-12-28T10:15:14.734+09:00  INFO 28428 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-12-28T10:16:14.596+09:00  INFO 28428 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 0]
+2023-12-28T10:17:37.701+09:00  INFO 28428 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2023-12-28T10:17:37.702+09:00  INFO 28428 --- [Thread-35] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T10:17:37.703+09:00  INFO 28428 --- [Thread-35] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3b139c68]]
+2023-12-28T10:17:37.703+09:00  INFO 28428 --- [Thread-35] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T10:17:37.717+09:00  INFO 28428 --- [Thread-35] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T10:17:37.817+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 28428 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T10:17:37.817+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T10:17:38.205+09:00  WARN 28428 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T10:17:38.269+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T10:17:38.269+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T10:17:38.269+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T10:17:38.592+09:00  INFO 28428 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T10:17:38.604+09:00  INFO 28428 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T10:17:38.604+09:00  INFO 28428 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 784 ms
+2023-12-28T10:17:38.980+09:00  INFO 28428 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T10:17:39.060+09:00  INFO 28428 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T10:17:39.085+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T10:17:39.086+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T10:17:39.086+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1df9a097]]
+2023-12-28T10:17:39.086+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T10:17:39.091+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 1.301 seconds (process running for 1534.782)
+2023-12-28T10:17:39.092+09:00  INFO 28428 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-12-28T10:17:52.398+09:00  INFO 28428 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2023-12-28T10:17:52.400+09:00  INFO 28428 --- [Thread-39] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T10:17:52.400+09:00  INFO 28428 --- [Thread-39] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1df9a097]]
+2023-12-28T10:17:52.400+09:00  INFO 28428 --- [Thread-39] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T10:17:52.416+09:00  INFO 28428 --- [Thread-39] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T10:17:52.515+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 28428 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T10:17:52.516+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T10:17:52.840+09:00  WARN 28428 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T10:17:52.901+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T10:17:52.902+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T10:17:52.902+09:00  INFO 28428 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T10:17:53.228+09:00  INFO 28428 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T10:17:53.236+09:00  INFO 28428 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T10:17:53.237+09:00  INFO 28428 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 720 ms
+2023-12-28T10:17:53.762+09:00  INFO 28428 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T10:17:53.825+09:00  INFO 28428 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T10:17:53.840+09:00  INFO 28428 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T10:17:53.841+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T10:17:53.841+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@48472483]]
+2023-12-28T10:17:53.841+09:00  INFO 28428 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T10:17:53.846+09:00  INFO 28428 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 1.358 seconds (process running for 1549.539)
+2023-12-28T10:17:53.847+09:00  INFO 28428 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-12-28T10:18:53.721+09:00  INFO 28428 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 0]
+2023-12-28T10:19:59.992+09:00  INFO 28428 --- [MessageBroker-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2023-12-28T10:20:00.181+09:00  INFO 28428 --- [MessageBroker-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6b7d9902
+2023-12-28T10:20:00.181+09:00  INFO 28428 --- [MessageBroker-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2023-12-28T10:48:53.636+09:00  INFO 28428 --- [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 3, completed tasks = 7]
+2023-12-28T11:18:53.597+09:00  INFO 28428 --- [MessageBroker-4] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 3, completed tasks = 14]
+2023-12-28T11:46:05.078+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-12-28T11:46:05.106+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T11:46:05.107+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@48472483]]
+2023-12-28T11:46:05.107+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T11:46:05.129+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T11:46:05.189+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2023-12-28T11:46:05.309+09:00  INFO 28428 --- [RMI TCP Connection(117)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2023-12-28T11:49:03.031+09:00  INFO 24532 --- [main] com.clovers.CLoversApplicationTests      : Starting CLoversApplicationTests using Java 17.0.8.1 with PID 24532 (started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T11:49:03.034+09:00  INFO 24532 --- [main] com.clovers.CLoversApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T11:49:04.464+09:00  WARN 24532 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T11:49:06.427+09:00  INFO 24532 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T11:49:06.694+09:00  INFO 24532 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T11:49:06.699+09:00  INFO 24532 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2d4fb0d8]]
+2023-12-28T11:49:06.701+09:00  INFO 24532 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T11:49:06.723+09:00  INFO 24532 --- [main] com.clovers.CLoversApplicationTests      : Started CLoversApplicationTests in 4.149 seconds (process running for 5.721)
+2023-12-28T11:49:08.342+09:00  INFO 24532 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T11:49:08.343+09:00  INFO 24532 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2d4fb0d8]]
+2023-12-28T11:49:08.344+09:00  INFO 24532 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T14:16:51.557+09:00  INFO 51868 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 51868 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T14:16:51.560+09:00  INFO 51868 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T14:16:51.630+09:00  INFO 51868 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-12-28T14:16:51.630+09:00  INFO 51868 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-12-28T14:16:52.673+09:00  WARN 51868 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T14:16:53.439+09:00  INFO 51868 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T14:16:53.455+09:00  INFO 51868 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T14:16:53.456+09:00  INFO 51868 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T14:16:54.054+09:00  INFO 51868 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T14:16:54.071+09:00  INFO 51868 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T14:16:54.071+09:00  INFO 51868 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2440 ms
+2023-12-28T14:16:55.425+09:00  INFO 51868 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T14:16:55.770+09:00  INFO 51868 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T14:16:55.848+09:00  INFO 51868 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T14:16:55.851+09:00  INFO 51868 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T14:16:55.851+09:00  INFO 51868 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@782e0e79]]
+2023-12-28T14:16:55.852+09:00  INFO 51868 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T14:16:55.869+09:00  INFO 51868 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 4.788 seconds (process running for 6.069)
+2023-12-28T14:17:02.027+09:00  INFO 51868 --- [http-nio-80-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-28T14:17:02.027+09:00  INFO 51868 --- [http-nio-80-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-28T14:17:02.029+09:00  INFO 51868 --- [http-nio-80-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-12-28T14:17:13.126+09:00  INFO 51868 --- [http-nio-80-exec-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-28T14:17:13.966+09:00  INFO 51868 --- [http-nio-80-exec-5] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3c1ec7e3
+2023-12-28T14:17:13.976+09:00  INFO 51868 --- [http-nio-80-exec-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-28T14:17:18.895+09:00  INFO 51868 --- [http-nio-80-exec-5] c.c.c.HumanResourcesController           : logger test
+2023-12-28T14:17:43.619+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-12-28T14:17:43.621+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T14:17:43.622+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@782e0e79]]
+2023-12-28T14:17:43.622+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T14:17:43.645+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T14:17:43.648+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-12-28T14:17:43.656+09:00  WARN 51868 --- [RMI TCP Connection(4)-127.0.0.1] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2023-12-28T14:17:43.669+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-28T14:17:43.782+09:00  INFO 51868 --- [RMI TCP Connection(4)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-12-28T14:20:22.294+09:00  INFO 57104 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 57104 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T14:20:22.297+09:00  INFO 57104 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T14:20:22.371+09:00  INFO 57104 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-12-28T14:20:22.371+09:00  INFO 57104 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-12-28T14:20:23.418+09:00  WARN 57104 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T14:20:24.195+09:00  INFO 57104 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T14:20:24.210+09:00  INFO 57104 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T14:20:24.211+09:00  INFO 57104 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T14:20:24.756+09:00  INFO 57104 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T14:20:24.780+09:00  INFO 57104 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T14:20:24.781+09:00  INFO 57104 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2408 ms
+2023-12-28T14:20:26.057+09:00  INFO 57104 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T14:20:26.368+09:00  INFO 57104 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T14:20:26.451+09:00  INFO 57104 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T14:20:26.454+09:00  INFO 57104 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T14:20:26.455+09:00  INFO 57104 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1e71a9ff]]
+2023-12-28T14:20:26.455+09:00  INFO 57104 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T14:20:26.470+09:00  INFO 57104 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 4.713 seconds (process running for 5.987)
+2023-12-28T14:20:37.955+09:00  INFO 57104 --- [http-nio-80-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-28T14:20:37.955+09:00  INFO 57104 --- [http-nio-80-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-28T14:20:37.957+09:00  INFO 57104 --- [http-nio-80-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-12-28T14:20:38.031+09:00  INFO 57104 --- [http-nio-80-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-28T14:20:38.603+09:00  INFO 57104 --- [http-nio-80-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@586f2951
+2023-12-28T14:20:38.606+09:00  INFO 57104 --- [http-nio-80-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-28T14:21:25.913+09:00  INFO 57104 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 0]
+2023-12-28T14:21:57.058+09:00  INFO 57104 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2023-12-28T14:21:57.063+09:00  INFO 57104 --- [Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T14:21:57.063+09:00  INFO 57104 --- [Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1e71a9ff]]
+2023-12-28T14:21:57.063+09:00  INFO 57104 --- [Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T14:21:57.082+09:00  INFO 57104 --- [Thread-5] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T14:21:57.083+09:00  INFO 57104 --- [Thread-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-12-28T14:21:57.089+09:00  WARN 57104 --- [Thread-5] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2023-12-28T14:21:57.102+09:00  INFO 57104 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-28T14:21:57.218+09:00  INFO 57104 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-12-28T14:21:57.345+09:00  INFO 57104 --- [restartedMain] com.clovers.CLoversApplication           : Starting CLoversApplication using Java 17.0.8.1 with PID 57104 (D:\STS4\C-lovers\C-lovers\target\classes started by qwee0 in D:\STS4\C-lovers\C-lovers)
+2023-12-28T14:21:57.345+09:00  INFO 57104 --- [restartedMain] com.clovers.CLoversApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-12-28T14:21:57.823+09:00  WARN 57104 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.clovers]' package. Please check your configuration.
+2023-12-28T14:21:57.907+09:00  INFO 57104 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2023-12-28T14:21:57.909+09:00  INFO 57104 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-28T14:21:57.909+09:00  INFO 57104 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-28T14:21:58.272+09:00  INFO 57104 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-12-28T14:21:58.284+09:00  INFO 57104 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-28T14:21:58.285+09:00  INFO 57104 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 937 ms
+2023-12-28T14:21:58.815+09:00  INFO 57104 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2023-12-28T14:21:58.899+09:00  INFO 57104 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-12-28T14:21:58.921+09:00  INFO 57104 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2023-12-28T14:21:58.922+09:00  INFO 57104 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-12-28T14:21:58.922+09:00  INFO 57104 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd3181d]]
+2023-12-28T14:21:58.922+09:00  INFO 57104 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-12-28T14:21:58.930+09:00  INFO 57104 --- [restartedMain] com.clovers.CLoversApplication           : Started CLoversApplication in 1.627 seconds (process running for 98.447)
+2023-12-28T14:21:58.933+09:00  INFO 57104 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-12-28T14:22:58.780+09:00  INFO 57104 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 0]
+2023-12-28T14:25:00.001+09:00  INFO 57104 --- [MessageBroker-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2023-12-28T14:25:00.156+09:00  INFO 57104 --- [MessageBroker-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6bba4ff2
+2023-12-28T14:25:00.157+09:00  INFO 57104 --- [MessageBroker-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2023-12-28T14:52:58.782+09:00  INFO 57104 --- [MessageBroker-6] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 3, completed tasks = 7]
+2023-12-28T15:22:58.784+09:00  INFO 57104 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 3, completed tasks = 14]
+2023-12-28T15:36:06.183+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-12-28T15:36:06.214+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-12-28T15:36:06.214+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd3181d]]
+2023-12-28T15:36:06.215+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2023-12-28T15:36:06.238+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-12-28T15:36:06.259+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2023-12-28T15:36:06.390+09:00  INFO 57104 --- [RMI TCP Connection(79)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.

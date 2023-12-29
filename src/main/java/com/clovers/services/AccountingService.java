@@ -28,13 +28,10 @@ public class AccountingService {
 	}
 	// 계좌 추가
 	public String insert(AccountingDTO dto){
-		System.out.println(dto.getEmp_id());
-		
 		String emp_id = dto.getEmp_id();
 		
 		// 계좌 추가 전에 유효한 사번인지 아닌지 확인 1:사원 맞음
 		int isEmployee = adao.isEmployee(emp_id);
-		System.out.println("사번맞음? 1:맞음 -> "+isEmployee);
 		
 		// 직원이 맞음
 		if(isEmployee==1) {
@@ -73,8 +70,6 @@ public class AccountingService {
 	}
 	// 카드 추가
 	public String insertCard( AccountingDTO dto){
-		System.out.println(dto.getEmp_id());
-		
 		String emp_id = dto.getEmp_id();
 		
 		// 사번이 등록되어있는지 아닌지 확인

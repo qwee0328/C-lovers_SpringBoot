@@ -39,16 +39,13 @@ public class AccountingController {
 	//이름, 사번으로 검색
 	@GetMapping("/search")
 	public ResponseEntity<List<AccountingDTO>> searchBy(String keyword){
-		System.out.println(keyword);
 		List<AccountingDTO> list = acService.searchBy(keyword);
-		System.out.println(list);
 		return ResponseEntity.ok(list);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/searchByAjax")
 	public List<AccountingDTO> searchByAjax(@RequestParam("keyword")String keyword){
-		System.out.println(keyword);
 		return acService.searchBy(keyword);
 	}
 	// 계좌 추가
@@ -87,7 +84,6 @@ public class AccountingController {
 	// 검색
 	@GetMapping("/searchCard")
 	public ResponseEntity<List<AccountingDTO>> searchCard(String keyword){
-		System.out.println(keyword);
 		List<AccountingDTO> list = acService.searchCard(keyword);
 		return ResponseEntity.ok(list);
 	}

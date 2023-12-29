@@ -1,5 +1,4 @@
 $(document).on("click",".invite__selectEmp",function(){
-    console.log($(this).css("background-color"));
     if($(this).css("background-color")=="rgb(9, 85, 68)"){
         $(this).css({"background-color":"#DCEDD4","color":"black"});
         $(this).find(".selectEmp_remove").remove();

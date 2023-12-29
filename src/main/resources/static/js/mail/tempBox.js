@@ -3,7 +3,6 @@ $(document).ready(function() {
         url: "/mail/tempBoxList?cpage=",
         type: 'POST'
     }).done(function (resp) {
-    	console.log(resp.mail);
         mailList(resp.mail, resp.recordTotalCount);
         pagination(resp.recordTotalCount, resp.recordCountPerPage, resp.naviCountPerPage, resp.lastPageNum);
     })
@@ -13,7 +12,6 @@ $(document).ready(function() {
 	    $(".inBox__mailListBox").empty();
 	    
 	    $(".bottom__mailNum").html("편지 수 : " + mailCount);
-	    console.log("mailCount: " + mailCount);
 	
 	    for (let i = 0; i < mail.length; i++) {
 	        let mailListDiv = $("<div>");
@@ -67,7 +65,6 @@ $(document).ready(function() {
 	// 체크박스 개별 클릭 시
 	$(document).on("change", ".mailList__checkbox", function() {
 		let check = $(this).is(":checked");
-		console.log("체크박스 클릭: " + check);
 		if(check) {
 			$(this).prop("checked", true);
 			$(this).parent().css("background-color", "#DCEDD4");

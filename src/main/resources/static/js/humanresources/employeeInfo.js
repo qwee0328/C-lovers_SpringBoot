@@ -8,7 +8,6 @@ $(document).ready(function () {
 	
 	 // 아코디언 메뉴
     $(document).on("click",".Toggle", function () {
-        console.log($(this));
 
         if ($(this).attr("toggleView") == "true") {
             $(this).attr("toggleView", "false");
@@ -34,7 +33,6 @@ $(document).ready(function () {
 	$.ajax({
 		url:"/office/selectAllTaskNameEmpo"
 	}).done(function(resp){
-		console.log(resp);
 		let sum=0; // 총인원
 		let dept = new Set(); //set으로 안겹치게 부서명
 		
@@ -44,8 +42,6 @@ $(document).ready(function () {
 		}
 		
 		let deptArr = Array.from(dept); // set을 배열로
-		console.log(deptArr);
-		
 		
 		let innerBox__title = $("<div class='innerBox__title cloverEmployee'>");
 			let innerBox__title_div = $("<div class='searchName'>");
@@ -61,9 +57,7 @@ $(document).ready(function () {
 			let innerBox = $("<div class='innerBox'>");
 		
 		for(let i=0;i<deptArr.length;i++){
-			let dept_sum =0;
-//			console.log("부서 "+deptArr[i]);
-			
+			let dept_sum =0;	
 			let Box = $("<div class='Box'>");
 					let Box_1 = $("<div class='Title Box__title' >");
 						let naviIcon = $("<div class='naviIcon Toggle' toggleView='false'>");
@@ -91,8 +85,6 @@ $(document).ready(function () {
 				let contentBox = $("<div class='ContentBox Inner'>");
 			
 			for(let j=0;j<resp.length;j++){
-//				console.log("응답 "+resp[j].dept_name);
-				
 				if(deptArr[i] == resp[j].dept_name){
 					
 						let content = $("<div class='Content'>");
@@ -131,7 +123,6 @@ $(document).ready(function () {
 		$.ajax({
 			url:"/office/selectDeptEmpo"
 		}).done(function(resp){
-//			console.log(resp);
 
 			let dept = new Set(); //set으로 안겹치게 부서명
 		
@@ -191,16 +182,12 @@ $(document).ready(function () {
 	
 	// 부서 클릭하면
 	$(document).on("click",".Box__title",function(){
-		console.log($(this).find(".searchName").text());
-		
 		$.ajax({
 			url:"/office/selectByDeptName",
 			data: {
 				dept_name : $(this).find(".searchName").text()
 			}
 		}).done(function(resp){
-			console.log(resp);
-			
 			$(".members__Title").remove();
 			$(".member__unitBox").remove();
 			
@@ -254,16 +241,12 @@ $(document).ready(function () {
 
    // 팀명 클릭하면
    $(document).on("click",".Content",function(){
-	   console.log($(this).find(".searchName").text());
-	   
 	   $.ajax({
 		   url:"/office/selectByTaskName",
 		   data:{
 			   task_name: $(this).find(".searchName").text()
 		   }
 	   }).done(function(resp){
-		   console.log(resp);
-		   
 		   $(".members__Title").remove();
 			$(".member__unitBox").remove();
 			
@@ -319,15 +302,12 @@ $(document).ready(function () {
 
 	// 검색창
 	$(document).on("keyup",".em_search",function(){
-//		console.log($(this).val());
 		$.ajax({
 			url:"/office/searchByName",
 			data:{
 				name:$(this).val()
 			}
 		}).done(function(resp){
-			console.log(resp);
-			
 			$(".members__Title").remove();
 			$(".member__unitBox").remove();
 			$(".members__profile").remove();

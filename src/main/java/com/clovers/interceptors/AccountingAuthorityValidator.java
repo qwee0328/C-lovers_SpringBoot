@@ -27,12 +27,12 @@ public class AccountingAuthorityValidator implements HandlerInterceptor {
 			throws Exception {
 		session = request.getSession();
 		String loginID = (String) session.getAttribute("loginID");
-		boolean result = false;
-		boolean full = false;
-		boolean humanResource = false;
+		boolean result = false; // 회계 권한 결과
+		boolean full = false; // 총괄 정보
+		boolean humanResource = false; // 인사 정보
+		// 사용자가 가진 권한 정보 가져오기
 		List<String> permission = mservice.getAuthorityCategory(loginID);
 		for (String per : permission) {
-			System.out.println("회계 있?" + per);
 			if (per.equals("회계")) {
 				result= true;
 			} else if (per.equals("총괄")) {
@@ -42,12 +42,10 @@ public class AccountingAuthorityValidator implements HandlerInterceptor {
 				humanResource = true;
 			}
 		}
-		System.out.println(full + " " + result);
+		// 회계관리, 총괄 관리가 아니라면 접근하지 못하도록 차단
 		if (!full&&!result) {
-			System.out.println("메인으로 돌아가");
 			response.sendRedirect("/");
 		}
-
 		return result;
 	}
 }

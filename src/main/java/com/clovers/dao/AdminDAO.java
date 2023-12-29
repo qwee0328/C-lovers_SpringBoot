@@ -49,9 +49,4 @@ public class AdminDAO {
 	public int deleteById(int param) {
 		return db.delete("Admin.deleteById",param);
 	}
-	
-	
-	
-	
-
 }

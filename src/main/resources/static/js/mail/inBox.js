@@ -166,11 +166,6 @@ $(document).ready(function() {
 				divTag.append(iTag);
 				pagination.append(divTag);
 			}
-			
-			console.log("startNavi: " + startNavi);
-			console.log("needPrev: " + needPrev);
-			console.log("endNavi:" + endNavi);
-			console.log("pageTotalCount: " + pageTotalCount);
 	
 			if (needPrev) {
 				let divTag = $("<div>");

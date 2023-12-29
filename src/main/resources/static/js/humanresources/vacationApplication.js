@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
 	let rest_reason_type = [];
-	//let vacationDateBackup = [];
-	//let vacationTypeBackup = [];
 	let dateTypePairs = {};  // 추가: 날짜와 타입을 쌍으로 백업할 배열
 	$.ajax({
 		url: "/humanResources/selectRestReasonType",
@@ -29,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// input의 value가 변경될 때 선택한 날짜가 옆에 나오도록 설정
 	$("#date_selector").on("change", function() {
-		console.log($("#date_selector").val());
 		if ($("#date_selector").val() !== "") {
 			$(".appStatus").html("");
 			let dateArr = [];
@@ -95,9 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	// selector 커스텀 해서 만들기
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {
-		console.log(showSelector);
 		if (!showSelector) {
-			console.log("1");
 			$(this)
 				.parent()
 				.find(".selectorArrow")
@@ -115,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 			showSelector = true;
 		} else {
-			console.log("2");
 			$(this).parent().find(".selector__option").css("display", "none");
 			$(this)
 				.parent()
@@ -130,7 +124,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	$(document).on("click", function(event) {
 		let clickElement = $(event.target);
 		if (clickElement.closest(`.selectorType`).length > 0) {
-			console.log("4");
 			// 모든 .selector__option 숨기기
 			$(".selector__option").css("display", "none");
 			$(".selector__option")
@@ -140,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function() {
 				.attr("class", "fa-solid fa-chevron-down");
 			// 클릭된 .selectorType에 속한 .selector__option만 보이게 설정
 			if (showSelector) {
-				console.log("5");
 				clickElement
 					.closest(`.selectorType`)
 					.parent()
@@ -155,7 +147,6 @@ document.addEventListener("DOMContentLoaded", function() {
 				showSelector = true;
 			}
 		} else {
-			console.log("3");
 			$(".selector__option").css("display", "none");
 			$(".selector__option")
 				.parent()

@@ -27,15 +27,15 @@ public class FullAuthorityValidator implements HandlerInterceptor {
 			throws Exception {
 		session = request.getSession();
 		String loginID = (String) session.getAttribute("loginID");
-		System.out.println("총괄 유효성" + loginID);
+
 		boolean result = false;
 		boolean humanResource = false;
 		boolean accounting = false;
 		List<String> permission = mservice.getAuthorityCategory(loginID);
-		System.out.println(permission.toString());
+
 		if (permission.size() != 0) {
 			for (String per : permission) {
-				System.out.println("총괄 있?" + per);
+
 				if (per.equals("총괄")) {
 					return true;
 				} else if (per.equals("인사")) {
@@ -44,9 +44,8 @@ public class FullAuthorityValidator implements HandlerInterceptor {
 					accounting = true;
 				}
 			}
-			System.out.println(humanResource +" "+ accounting);
+	
 			if (!humanResource || !accounting) {
-				System.out.println("메인으로 돌아가");
 				response.sendRedirect("/");
 			}
 		}

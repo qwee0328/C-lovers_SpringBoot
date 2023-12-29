@@ -30,7 +30,6 @@ $(document).ready(function() {
 	let showSelector = false;
 	$(document).on("click", ".selectorType", function() {
 		if (!showSelector) {
-			console.log("1");
 			$(this)
 				.parent()
 				.find(".selectorArrow")
@@ -40,7 +39,6 @@ $(document).ready(function() {
 
 			showSelector = true;
 		} else {
-			console.log("2");
 			$(this).parent().find(".selector__option").css("display", "none");
 			$(this)
 				.parent()
@@ -67,7 +65,6 @@ $(document).ready(function() {
 			);
 			$("#expenseYear").val($("#year .typeName").text());
 			$("#expenseMonth").val($("#month .typeName").text());
-			console.log($("#expenseYear").val())
 		}
 		if ($(this).parent().parent().attr("id") === "preservationPeriod") {
 			if ($("#preservationPeriod .typeName").text() === "1년") {
@@ -91,7 +88,6 @@ $(document).ready(function() {
 	$(document).on("click", function(event) {
 		let clickElement = $(event.target);
 		if (clickElement.closest(`.selectorType`).length > 0) {
-			console.log("4");
 			// 모든 .selector__option 숨기기
 			$(".selector__option").css("display", "none");
 			$(".selector__option")
@@ -101,7 +97,6 @@ $(document).ready(function() {
 				.attr("class", "fa-solid fa-chevron-down");
 			// 클릭된 .selectorType에 속한 .selector__option만 보이게 설정
 			if (showSelector) {
-				console.log("5");
 				clickElement
 					.closest(`.selectorType`)
 					.parent()
@@ -116,7 +111,6 @@ $(document).ready(function() {
 				showSelector = true;
 			}
 		} else {
-			console.log("3");
 			$(".selector__option").css("display", "none");
 			$(".selector__option")
 				.parent()
@@ -149,7 +143,6 @@ $(document).ready(function() {
 
 	$("input[name='type']").on("change", function() {
 		$("#expense_category").val($("input[name='type']:checked").val());
-		console.log($("#expense_category").val())
 		if ($("input[name='type']:checked").val() === "개인") {
 			$("#accountInfo").css("display", "flex");
 			$("#corporationCard").css("display", "none");
@@ -188,7 +181,6 @@ $(document).ready(function() {
 				data: { keyword: $(this).val() },
 				type: "POST"
 			}).done(function(resp) {
-				console.log(resp);
 				$("#autoComplete").empty();
 				if (resp.length > 0) {
 					for (let i = 0; i < resp.length; i++) {
@@ -205,7 +197,7 @@ $(document).ready(function() {
 	$(document).on("click", ".userList__autoComplete", function() {
 		let searchId = $(this).attr("userid");
 		let userTaskName = $(this).attr("userTaskName");
-		console.log(searchId)
+
 		// 선택된 라디오 버튼의 값 가져오기
 		let selectedValue = $('input[name=type]:checked').val();
 		if (selectedValue === "개인") {
@@ -214,7 +206,6 @@ $(document).ready(function() {
 				data: { keyword: searchId },
 				type: "POST"
 			}).done(function(resp) {
-				console.log(resp);
 				if (resp.length > 0) {
 					$("#autoComplete").empty();
 					$("#searchUser").css("display", "none");
@@ -284,7 +275,6 @@ function validateForm() {
 }
 // 문서 종류에 따른 ui 구성 변경
 function formatByDocumentType() {
-	console.log($("#documentType").text().trim());
 	if ($("#documentType").text().trim() === "선택") {
 		$("#esDocumentType").val("");
 		$("#approvalLineBtn").css("display", "none");
@@ -296,7 +286,6 @@ function formatByDocumentType() {
 		$(".fileListBox").css("display", "none");
 	} else if ($("#documentType").text().trim() === "지출 결의서") {
 		$("#esDocumentType").val("지출 결의서");
-		console.log("지출결의");
 		basicForm();
 
 		$(".spendingResolution__table").css("display", "block");
@@ -305,7 +294,6 @@ function formatByDocumentType() {
 		$(".titleInput").prop("readonly", true)
 	} else if ($("#documentType").text().trim() === "업무 연락") {
 		$("#esDocumentType").val("업무 연락");
-		console.log("업무연락");
 		basicForm();
 		$(".titleInput").prop("readonly", false)
 		$(".titleInput").val("");
@@ -336,7 +324,6 @@ function spendingResolutionTitle() {
 // 회계기준 년도 동적 삽입
 function createYear() {
 	// 현재 연도 가져오기
-	console.log("현재 년도");
 	let currentYear = new Date().getFullYear();
 	$("#year .typeName").html(currentYear);
 	for (let i = 4; i >= 0; i--) {

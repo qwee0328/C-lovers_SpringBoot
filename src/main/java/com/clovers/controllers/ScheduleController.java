@@ -45,7 +45,6 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ScheduleDTO insert(ScheduleDTO dto) { // 일정 추가
-		System.out.println(dto);
 		dto.setEmp_id((String) session.getAttribute("loginID"));
 		sService.insert(dto);
 		return dto;
@@ -85,7 +84,6 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/selectByKeyword", method = RequestMethod.POST)
 	public List<HashMap<String,Object>> selectByKeyword(String keyword){
-		System.out.println(keyword);
 		return sService.selectByKeyword((String)session.getAttribute("loginID"), "%"+keyword+"%");
 	}
 	
@@ -143,11 +141,6 @@ public class ScheduleController {
 	@ResponseBody
 	@RequestMapping(value="/calendarInsert")
 	public int calendarInsert(String name, String color, int is_share, @RequestParam(value="empIds[]", required=false)List<String> empIds){
-//		if(empIds == null || empIds.isEmpty()) { // 권한이 비어있으면 개인 캘린더
-//			empIds = new ArrayList<>();
-//			empIds.add((String)session.getAttribute("loginID")); // 로그인한 사용자(등록한 사람)에 대하여 권한 추가
-//			return sService.calendarInsert(name, color, empIds);
-//		} // 개인 캘린더에 처음부터 자기자신 권한 배열에 추가해서 넘어옴.
 		return sService.calendarInsert(name, color, is_share, empIds);
 	}
 	

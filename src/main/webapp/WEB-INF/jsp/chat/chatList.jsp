@@ -280,7 +280,6 @@
         	    if (this.checked) {
         	        // 체크된 경우, 선택된 직원 목록에 추가
         	        selectedEmployees[empId] = empName;
-        	        console.log(selectedEmployees);
         	    } else {
         	        // 체크 해제된 경우, 선택된 직원 목록에서 제거
         	        delete selectedEmployees[empId];

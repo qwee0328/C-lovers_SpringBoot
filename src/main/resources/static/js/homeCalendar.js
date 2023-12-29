@@ -289,7 +289,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	function generateEvent() {
-		console.log("generateEvent")
 		let startDate = new Date($(".insertSchedule__startDate").val());
 		startDate.setHours((parseInt($(".insertSchedule__startTime").val().slice(0, 2)) + 9), $(".insertSchedule__startTime").val().slice(3, 5)); // +9 하는 이유는 한국 시간으로 변경하기 위함.
 		let startDateStr = startDate.toISOString().slice(0, 16);

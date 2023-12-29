@@ -92,11 +92,7 @@ public class ChatController {
 
 	    @SuppressWarnings("unchecked")
 	    List<String> selectedEmployees = (List<String>) payload.get("selectedEmployees");
-	    String chatRoomId = (String) payload.get("chatRoomId");
-	    
-	    System.out.println(selectedEmployees);
-	    System.out.println(chatRoomId);
-	    
+	    String chatRoomId = (String) payload.get("chatRoomId");	    
 	    
 	    return cgService.setAlreadyExistChatGroupInvite(selectedEmployees, chatRoomId, loginID);
 	}

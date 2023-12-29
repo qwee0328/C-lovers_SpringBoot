@@ -535,9 +535,6 @@ public class ElectronicSignatureController {
 	@ResponseBody
 	@RequestMapping("/selectEmpJobLevel")
 	public List<Map<String, Object>> selectEmpJobLevel(@RequestParam("userList[]") List<String> userList) {
-		// List<String> userList = requestBody.get("userIdList");
-		System.out.println(userList);
-		// return null;
 		return esservices.selectEmpJobLevel(userList);
 	}
 
@@ -558,11 +555,6 @@ public class ElectronicSignatureController {
 			String esDocumentType, int esPreservationPeriod, String esSecurityLevel, String esSpender,
 			String documentTitle, boolean temporary, String expense_category, String expenseYear, String expenseMonth,
 			String summary, String content, MultipartFile[] uploadFiles) throws Exception {
-		System.out.println("applicationEmployeeIDList" + applicationEmployeeIDList);
-		System.out.println("processEmployeeIDList" + processEmployeeIDList);
-		System.out.println("uploadFiles" + uploadFiles);
-		System.out.println("esPreservationPeriod" + esPreservationPeriod);
-		System.out.println("esSpender" + esSpender);
 		esservices.insertDocument(applicationEmployeeIDList, processEmployeeIDList, esDocumentType,
 				esPreservationPeriod, esSecurityLevel, esSpender, documentTitle, temporary, expense_category,
 				expenseYear, expenseMonth, summary, content, uploadFiles);
